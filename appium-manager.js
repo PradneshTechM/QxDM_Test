@@ -9,7 +9,7 @@ const PORT_START = 4723
 const PORT_END = PORT_START + MAX_DEVICES
 const CONTAINER_PREFIX = 'appium'
 
-const ADB_PATH_BIND = '/usr/bin/adb'
+const ADB_PATH_BIND = '/home/techm/Android/Sdk'
 const CRYPTO_PATH_BIND = '/lib/x86_64-linux-gnu/libcrypto.so.1.0.0'
 
 const docker = new Docker()
