@@ -21,12 +21,13 @@ module.exports = {
   , getServerRequest: getServerRequest
   , deleteServerRequest: deleteServerRequest
   , removeExistingServers: removeExistingServers
+  , getContainer: getContainer
 }
 
 /**
  * Automatically starts and stops Appium containers based upon device connection.
  * Upon start, removes any existing Appium containers.
- * 
+ *
  * Warning: if you start/stop containers manually, this app will not know.
  */
 function autoManage() {
@@ -53,7 +54,7 @@ async function removeExistingServers() {
 
 /**
  * Stops and removes existing container with name
- * @param {string} containerName 
+ * @param {string} containerName
  */
 function stopServerWithName(containerName) {
   let promise = new Promise((resolve, reject) => {
@@ -135,7 +136,7 @@ function stopServer(serial) {
     delete usedPorts[port]
     delete servers[serial]
   })
-  
+
   return promise
 }
 
@@ -165,17 +166,18 @@ function startServer(serial, containerName, availablePorts) {
       , name: containerName
     }).then(container => {
       container.start()
-      resolve()
+      resolve(container)
     }).catch(err => {
       logger.error(`Error while starting container: ${serial}\n${err.stack}`)
     })
   })
-  
+
   // Save newly started container info and port used
-  promise.then(() => {
+  promise.then((container) => {
     logger.info(`Started container for: ${serial}, name: ${containerName}, ` +
                 `port: ${port}, bootstrap port: ${bootstrapPort}`)
     servers[serial] = {
+      container: container,
       containerName : containerName,
       port: port,
       bootstrapPort: bootstrapPort
@@ -284,4 +286,12 @@ function deleteServerRequest(serial) {
       }
       return response
     }).catch(err => logger.error(err))
+}
+
+/**
+ * Returns the docker container for given serial number.
+ * @param {string} serial the serial number of the device
+ */
+function getContainer(serial) {
+  return servers[serial].container
 }
