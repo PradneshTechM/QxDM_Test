@@ -12,8 +12,10 @@
   "dependencies": {
     "adbkit": "^2.11.1",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dockerode": "^2.5.8",
     "express": "^4.16.4",
+    "socket.io": "^2.2.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.9.0"
   },

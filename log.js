@@ -6,7 +6,7 @@ const { colorize, combine, printf } = format
 //  Write all logs error (and below) to `error.log`.
 const transportError = new (winston.transports.DailyRotateFile)({
   dirname: 'logs',
-  filename: '%DATE%_error.log', 
+  filename: '%DATE%_error.json', 
   maxSize: '20m',
   maxFiles: '14d',
   level: 'error' 
@@ -15,7 +15,7 @@ const transportError = new (winston.transports.DailyRotateFile)({
 // Write to all logs with level `info` and below to `combined.log`
 const transportAll = new (winston.transports.DailyRotateFile)({
   dirname: 'logs',
-  filename: '%DATE%_combined.log', 
+  filename: '%DATE%_combined.json', 
   maxSize: '20m',
   maxFiles: '14d'
 })
