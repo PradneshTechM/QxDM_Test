@@ -10,16 +10,17 @@ module.exports = (io) => {
   /**
    * Get running Appium server information for given device serial
    */
-  router.get('/servers/:serial', function(req, res) {
+  router.get('/servers/:serial', async (req, res) => {
     const serial = req.params.serial
     logger.info('GET request for serial: %s', serial)
-    appiumManager.getServerRequest(serial).then(result => {
+    try {
+      const result = await appiumManager.getServerRequest(serial)
       let response = {
         type: 'GET',
         status: result.status,
         port: result.port,
         statusText: result.statusText,
-        serial: req.params.serial,
+        serial: serial,
         URL: result.status == 200 ? `${DOMAIN}:${result.port}/wd/hub` : null
       }
       logger.info({
@@ -27,34 +28,33 @@ module.exports = (io) => {
         response: response
       })
       res.send(response)
-    }).catch(err => {
+    } catch (err) {
       logger.error(`Error on GET request for serial: ${serial}\n${err.stack}`)
-    })
+    }
   })
 
   /**
    * Restart running Appium server for given device serial
    */
-  router.delete('/servers/:serial', function(req, res) {
+  router.delete('/servers/:serial', async (req, res) => {
     const serial = req.params.serial
     logger.info('DELETE request for serial: %s', serial)
-    appiumManager.deleteServerRequest(serial).then(result => {
+    try {
+      const result = await appiumManager.deleteServerRequest(serial)
       let response = {
         type: 'DELETE',
         status: result.status,
-        // port: result.port,
         statusText: result.statusText,
-        serial: req.params.serial,
-        // URL: 'placeholder'
+        serial: serial
       }
       logger.info({
         message: `${result.status} - ${result.statusText}`,
         response: response
       })
       res.send(response)
-    }).catch(err => {
+    } catch (err) {
       logger.error(`Error on DELETE request for serial: ${serial}\n${err.stack}`)
-    })
+    }
   })
 
   /**
