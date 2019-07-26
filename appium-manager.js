@@ -217,75 +217,64 @@ function generateContainerName(port) {
  * Returns Appium server information for given device serial
  * @param {string} serial the serial number of the device
  */
-function getServerRequest(serial) {
-  return client.listDevices()
-    // is device with serial connected?
-    .then(devices => {
-      let match = devices.find(device => device.id === serial)
-      return (match && match.type === 'device') ? match : null
-    }).then(device => {
-      let response = {
-        status: null,
-        statusText: '',
-        port: null
+async function getServerRequest(serial) {
+  try {
+    const devices = await client.listDevices()
+    const match = devices.find(device => device.id === serial)
+    const device = (match && match.type === 'device') ? match : null
+    let response = {}
+    if (device) {
+      if (servers[serial] && servers[serial].port) {  // already running server
+        response.port = servers[serial].port
+        response.status = 200
+        response.statusText = 'Found device with given serial number'
+      } else {  // not running yet, start
+        response.status = 400
+        response.statusText = 'Appium server not started yet'
+        startServer(serial)
       }
-      if (device) {
-        // does device with serial have running Appium server?
-        if (servers[serial]) {
-          // already running server
-          response.port = servers[serial].port
-          response.status = 200
-          response.statusText = 'Found device with given serial number'
-        } else {
-          // not running yet, start
-          response.status = 400
-          response.statusText = 'Appium server not started yet'
-          // startServer(serial)
-        }
-      } else {
-        response.statusText = 'No device with given serial number'
-        response.status = 404
-      }
-      return response
-    }).catch(err => logger.error(err))
+    } else {
+      response.statusText = 'No device with given serial number'
+      response.status = 404
+    }
+    return response
+  } catch (err) {
+    logger.error(err)
+  }
 }
 
 /**
  * Stops Appium server for given device serial.
  * @param {string} serial the serial number of the device
  */
-function deleteServerRequest(serial) {
-  return client.listDevices()
-    // is device with serial connected?
-    .then(devices => {
-      let match = devices.find(device => device.id === serial)
-      return (match && match.type === 'device') ? match : null
-    }).then(device => {
-      let response = {
-        status: null,
-        statusText: '',
-        port: null
-      }
-      if (device) {
-        // does device with serial have running Appium server?
-        if (servers[serial]) {
-          // already running server
-          response.port = servers[serial].port
-          response.status = 200
-          response.statusText = 'Restarted server for device with given serial number'
-          stopServers([serial], [])
-        } else {
-          // not running yet, start
-          response.status = 400
-          response.statusText = 'Server is not started for device with given serial number'
-          // startServer(serial)
-        }
+async function deleteServerRequest(serial) {
+  try {
+    const devices = await client.listDevices()
+    const match = devices.find(device => device.id === serial)
+    const device = (match && match.type === 'device') ? match : null
+    let response = {}
+    if (device) {
+      // does device with serial have running Appium server?
+      if (servers[serial]) {
+        // already running server
+        response.port = servers[serial].port
+        response.status = 200
+        response.statusText = 'Restarted server for device with given serial number'
+        stopServers([serial], [])
       } else {
-        response.statusText = 'No device with given serial number'
-        response.status = 404
+        // not running yet, start
+        response.status = 400
+        response.statusText = 'Server is not started for device with given serial number'
+        startServer(serial)
       }
-      return response
-    }).catch(err => logger.error(err))
+    } else {
+      response.statusText = 'No device with given serial number'
+      response.status = 404
+    }
+    return response
+  } catch (err) {
+    logger.error(err)
+  }
 }
 
 /**
@@ -293,5 +282,5 @@ function deleteServerRequest(serial) {
  * @param {string} serial the serial number of the device
  */
 function getContainer(serial) {
-  return servers[serial].container
+  return servers[serial] ? servers[serial].container : null
 }
