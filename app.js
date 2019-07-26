@@ -11,17 +11,17 @@ const logger = require('./log')
 const app = express()
 const port = 4000
 const address = '0.0.0.0'
-const frequency = (process.argv[2] != null ? process.argv[2] : 10)
+const frequency = (process.argv[2] != null ? process.argv[2] : 2)
 
-process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0 // REMOVE AFTER SSL CERT UPDATED
+// process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0 // REMOVE AFTER SSL CERT UPDATED
 
 const credentials = {
   cert: fs.readFileSync('/etc/nginx/SSL/ssl-bundle.crt'),
   key: fs.readFileSync('/etc/nginx/SSL/server.key')
 }
 
-// const server = https.createServer(credentials, app)
-const server = http.createServer(app)
+const server = https.createServer(credentials, app)
+// const server = http.createServer(app)
 const io = socket(server)
 
 app.use(cors())
