@@ -3,8 +3,10 @@ const router = express.Router()
 const appiumManager = require('../appium-manager')
 const { PassThrough } = require('stream')
 const logger = require('../log')
-
 const DOMAIN = `http://atas.techmlab.com`
+const TAIL_LOG_LINES = 1000
+const DATA_REFRESH_RATE = 50 // in ms
+const util = require('util')
 
 module.exports = (io) => {
   /**
@@ -17,11 +19,11 @@ module.exports = (io) => {
       const result = await appiumManager.getServerRequest(serial)
       let response = {
         type: 'GET',
-        status: result.status,
-        port: result.port,
-        statusText: result.statusText,
+        status: result && result.status || 400,
+        port: result && result.port || null,
+        statusText: result && result.statusText || null,
         serial: serial,
-        URL: result.status == 200 ? `${DOMAIN}:${result.port}/wd/hub` : null
+        URL: result && result.status == 200 ? `${DOMAIN}:${result.port}/wd/hub` : null
       }
       logger.info({
         message: `${response.status} - ${response.statusText}, URL: ${response.URL}`,
@@ -72,37 +74,41 @@ module.exports = (io) => {
 
       let data = []
       logStream.on('data', (chunk) => {
-        data.push(chunk.toString('utf8').replace(/\u001b\[\w+/g, '')) // remove muxed in header
+//console.log(util.inspect(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')))
+        data.push(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')) // remove muxed in header
       })
 
       const interval = setInterval(() => {
         if (data.length > 0) {
-          io.to(socket.id).emit('log message', { data: data, device: serial })
+          io.to(socket.id).emit('log message', { data, device: serial })
           data = []
         }
-      }, 100)
+      }, DATA_REFRESH_RATE)
 
       const container = appiumManager.getContainer(serial)
-      container.logs({
-        follow: true,
-        stdout: true,
-        stderr: true
-      }, (err, stream) => {
-        if (err) {
-          return logger.error(err.message)
-        }
-        container.modem.demuxStream(stream, logStream, logStream)
-        stream.on('end', () => {
-          logStream.end()
-        })
-
-        socket.on('stop', (stopSerial) => {
-          if (serial === stopSerial) {
-            stream.destroy()
-            clearInterval(interval)
+      if (container) {
+        container.logs({
+          follow: true,
+          stdout: true,
+          stderr: true,
+          tail: TAIL_LOG_LINES
+        }, (err, stream) => {
+          if (err) {
+            return logger.error(err.message)
           }
+          container.modem.demuxStream(stream, logStream, logStream)
+          stream.on('end', () => {
+            logStream.end()
+          })
+
+          socket.on('stop', (stopSerial) => {
+            if (serial === stopSerial) {
+              stream.destroy()
+              clearInterval(interval)
+            }
+          })
         })
-      })
+      }
     })
   })
 
