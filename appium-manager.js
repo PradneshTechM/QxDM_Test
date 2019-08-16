@@ -4,7 +4,7 @@ const logger = require('./log')
 const adb = require('adbkit')
 const client = adb.createClient()
 
-const MAX_DEVICES = 6
+const MAX_DEVICES = 7
 const PORT_START = 4723
 const PORT_END = PORT_START + MAX_DEVICES
 const CONTAINER_PREFIX = 'appium'
