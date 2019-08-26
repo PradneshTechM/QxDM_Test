@@ -16,8 +16,8 @@ const frequency = (process.argv[2] != null ? process.argv[2] : 2)
 // process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0 // REMOVE AFTER SSL CERT UPDATED
 
 const credentials = {
-  cert: fs.readFileSync('/etc/nginx/SSL/ssl-bundle.crt'),
-  key: fs.readFileSync('/etc/nginx/SSL/server.key')
+  cert: fs.readFileSync('/home/techm/stf-ssl-certs/ssl-bundle.crt'),
+  key: fs.readFileSync('/home/techm/stf-ssl-certs/server.key')
 }
 
 const server = https.createServer(credentials, app)
@@ -27,6 +27,13 @@ const io = socket(server)
 app.use(cors())
 app.use(bodyParser.json())
 app.use('/api', require('./routes/api')(io))
+
+fs.stat('device_container_map.txt', (err, stats) => {
+  if (err) {
+    return console.log(err);
+  }
+  fs.unlinkSync('device_container_map.txt')
+})
 
 // removes any existing Appium server on startup
 async function cleanUpExistingServers() {
