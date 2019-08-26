@@ -18,6 +18,13 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use('/api', require('./routes/api')(io))
 
+fs.stat('device_container_map.txt', (err, stats) => {
+  if (err) {
+    return console.log(err);
+  }
+  fs.unlinkSync('device_container_map.txt')
+})
+
 // removes any existing Appium server on startup
 async function cleanUpExistingServers() {
   await setTimeout(() => appiumManager.removeExistingServers(), 500)

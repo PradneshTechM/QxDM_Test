@@ -1,20 +1,26 @@
 const Promise = require('bluebird')
 const Docker = require('dockerode')
+const fs = require('fs')
 const logger = require('./log')
 const adb = require('adbkit')
 const client = adb.createClient()
 
-const MAX_DEVICES = 6
+const MAX_DEVICES = 15
 const PORT_START = 4723
 const PORT_END = PORT_START + MAX_DEVICES
+const IMAGE_NAME = 'techm/appium'
 const CONTAINER_PREFIX = 'appium'
 
-const ADB_PATH_BIND = '/home/techm/Android/Sdk'
+const ANDROID_SDK_PATH_BIND = '/usr/lib/android-sdk'
+const ANDROID_LIB_PATH_BIND = '/usr/lib/android/'
 const CRYPTO_PATH_BIND = '/lib/x86_64-linux-gnu/libcrypto.so.1.0.0'
+
+const DEVICE_CONTAINER_MAP_FILE_NAME = 'device_container_map.txt'
 
 const docker = new Docker()
 let servers = {}
 let usedPorts = {}
+let deviceToContainerMap = {}
 
 module.exports = {
   manage: autoManage
@@ -135,6 +141,7 @@ function stopServer(serial) {
                 `port: ${port}, bootstrap port: ${bootstrapPort}`)
     delete usedPorts[port]
     delete servers[serial]
+    removeFromMap(serial)
   })
 
   return promise
@@ -150,7 +157,7 @@ function startServer(serial, containerName, availablePorts) {
   let promise = new Promise((resolve, reject) => {
     //logger.info(`Trying to start container for: ${serial}`)
     docker.createContainer({
-      Image: 'appium/appium:local'
+      Image: IMAGE_NAME
       , Env: [
         `DEVICE_NAME=${serial}`,
         `APPIUM_PORT=${port}`,
@@ -158,7 +165,8 @@ function startServer(serial, containerName, availablePorts) {
       ]
       , HostConfig: {
         Binds: [
-          `${ADB_PATH_BIND}:${ADB_PATH_BIND}`,
+          `${ANDROID_SDK_PATH_BIND}:${ANDROID_SDK_PATH_BIND}`,
+          `${ANDROID_LIB_PATH_BIND}:${ANDROID_LIB_PATH_BIND}`,
           `${CRYPTO_PATH_BIND}:${CRYPTO_PATH_BIND}`
         ],
         NetworkMode: 'host'
@@ -183,9 +191,29 @@ function startServer(serial, containerName, availablePorts) {
       bootstrapPort: bootstrapPort
     }
     usedPorts[port] = bootstrapPort
+    addToMap(serial, containerName)
   })
 
   return promise
+}
+
+function addToMap(device, containerName) {
+  if (!deviceToContainerMap[device]) {
+    deviceToContainerMap[device] = containerName
+    saveMapToFile(deviceToContainerMap)
+  } 
+}
+
+function removeFromMap(device) {
+  if (deviceToContainerMap[device]) {
+    delete deviceToContainerMap[device]
+    saveMapToFile(deviceToContainerMap)
+  }
+}
+
+function saveMapToFile(mapping) {
+  const dataJSON = JSON.stringify(mapping)
+  fs.writeFileSync(DEVICE_CONTAINER_MAP_FILE_NAME, dataJSON)
 }
 
 /**
