@@ -2,13 +2,14 @@ const express = require('express')
 const router = express.Router()
 const appiumManager = require('../appium-manager')
 const { PassThrough } = require('stream')
+const util = require('util')
 const logger = require('../log')
-const DOMAIN = `http://localhost`
 const TAIL_LOG_LINES = 1000
 const DATA_REFRESH_RATE = 50 // in ms
-const util = require('util')
 
-module.exports = (io) => {
+module.exports = (io, address) => {
+  const DOMAIN = `http://${address}`
+
   /**
    * Get running Appium server information for given device serial
    */

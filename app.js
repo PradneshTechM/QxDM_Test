@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser')
 const express = require('express')
+const fs = require('fs')
 const http = require('http')
 const cors = require('cors')
 const socket = require('socket.io')
@@ -8,15 +9,22 @@ const logger = require('./log')
 
 const app = express()
 const port = 4000
-const address = '0.0.0.0'
-const frequency = (process.argv[2] != null ? process.argv[2] : 2)
-
 const server = http.createServer(app)
 const io = socket(server)
 
+if (!process.argv[2]) {
+  return logger.error('No address passed in')
+}
+const address = process.argv[2]
+
+if (!process.argv[3]) {
+  logger.info('No frequency passed in. Default value used.')
+}
+const frequency = (process.argv[3] != null ? process.argv[3] : 2)
+
 app.use(cors())
 app.use(bodyParser.json())
-app.use('/api', require('./routes/api')(io))
+app.use('/api', require('./routes/api')(io, address))
 
 fs.stat('device_container_map.txt', (err, stats) => {
   if (err) {
@@ -39,7 +47,7 @@ cleanUpExistingServers().then(() => manageServers())
 
 // listen for requests
 server.listen(port, address, function () {
-  logger.info(`Appium Manager Server now listening for requests at https://${address}:${port}`)
+  logger.info(`Appium Manager Server now listening for requests at http://${address}:${port}`)
   logger.info(`Appium Manager Server updating every ${frequency} seconds`)
 })
 
