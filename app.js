@@ -28,6 +28,7 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use('/api', require('./routes/api')(io))
 
+// removes existing device-container map file
 fs.stat('device_container_map.txt', (err, stats) => {
   if (err) {
     return console.log(err);

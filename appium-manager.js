@@ -167,7 +167,7 @@ function startServer(serial, containerName, availablePorts) {
         Binds: [
           `${ANDROID_SDK_PATH_BIND}:${ANDROID_SDK_PATH_BIND}`,
           `${ANDROID_LIB_PATH_BIND}:${ANDROID_LIB_PATH_BIND}`,
-          `${CRYPTO_PATH_BIND}:${CRYPTO_PATH_BIND}`
+          `${CRYPTO_PATH_BIND}:${CRYPTO_PATH_BIND}`,
         ],
         NetworkMode: 'host'
       }
@@ -312,3 +312,4 @@ async function deleteServerRequest(serial) {
 function getContainer(serial) {
   return servers[serial] ? servers[serial].container : null
 }
+
