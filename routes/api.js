@@ -15,7 +15,7 @@ module.exports = (io, address) => {
    */
   router.get('/servers/:serial', async (req, res) => {
     const serial = req.params.serial
-    logger.info('GET request for serial: %s', serial)
+    // logger.info('GET request for serial: %s', serial)
     try {
       const result = await appiumManager.getServerRequest(serial)
       let response = {
@@ -26,10 +26,10 @@ module.exports = (io, address) => {
         serial: serial,
         URL: result && result.status == 200 ? `${DOMAIN}:${result.port}/wd/hub` : null
       }
-      logger.info({
-        message: `${response.status} - ${response.statusText}, URL: ${response.URL}`,
-        response: response
-      })
+      // logger.info({
+      //   message: `${response.status} - ${response.statusText}, URL: ${response.URL}`,
+      //   response: response
+      // })
       res.send(response)
     } catch (err) {
       logger.error(`Error on GET request for serial: ${serial}\n${err.stack}`)
@@ -67,7 +67,7 @@ module.exports = (io, address) => {
     console.log('socket connected: ', socket.id)
 
     socket.on('disconnect', () => {
-      console.log('socket disconnected')
+      console.log('socket disconnected: ', socket.id)
     })
 
     socket.on('request logs', (serial) => {
@@ -76,7 +76,8 @@ module.exports = (io, address) => {
       let data = []
       logStream.on('data', (chunk) => {
 //console.log(util.inspect(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')))
-        data.push(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')) // remove muxed in header
+        // remove muxed in header
+        data.push(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')) 
       })
 
       const interval = setInterval(() => {
@@ -102,7 +103,8 @@ module.exports = (io, address) => {
             logStream.end()
           })
 
-          socket.on('stop', (stopSerial) => {
+          socket.once('stop', (stopSerial) => {
+            logger.info(`socket.id: ${socket.id} emitted 'stop'`)
             if (serial === stopSerial) {
               stream.destroy()
               clearInterval(interval)

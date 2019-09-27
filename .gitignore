@@ -3,3 +3,6 @@ logs/
 
 # Dependency directories
 node_modules/
+
+device_container_map.txt
+nohup.out
