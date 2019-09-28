@@ -2,19 +2,20 @@ const express = require('express')
 const router = express.Router()
 const appiumManager = require('../appium-manager')
 const { PassThrough } = require('stream')
+const util = require('util')
 const logger = require('../log')
-const DOMAIN = `http://atas.techmlab.com`
 const TAIL_LOG_LINES = 1000
 const DATA_REFRESH_RATE = 50 // in ms
-const util = require('util')
 
 module.exports = (io) => {
+  const DOMAIN = `http://atas.techmlab.com`
+
   /**
    * Get running Appium server information for given device serial
    */
   router.get('/servers/:serial', async (req, res) => {
     const serial = req.params.serial
-    logger.info('GET request for serial: %s', serial)
+    // logger.info('GET request for serial: %s', serial)
     try {
       const result = await appiumManager.getServerRequest(serial)
       let response = {
@@ -25,10 +26,10 @@ module.exports = (io) => {
         serial: serial,
         URL: result && result.status == 200 ? `${DOMAIN}:${result.port}/wd/hub` : null
       }
-      logger.info({
-        message: `${response.status} - ${response.statusText}, URL: ${response.URL}`,
-        response: response
-      })
+      // logger.info({
+      //   message: `${response.status} - ${response.statusText}, URL: ${response.URL}`,
+      //   response: response
+      // })
       res.send(response)
     } catch (err) {
       logger.error(`Error on GET request for serial: ${serial}\n${err.stack}`)
@@ -66,7 +67,7 @@ module.exports = (io) => {
     console.log('socket connected: ', socket.id)
 
     socket.on('disconnect', () => {
-      console.log('socket disconnected')
+      console.log('socket disconnected: ', socket.id)
     })
 
     socket.on('request logs', (serial) => {
@@ -75,7 +76,8 @@ module.exports = (io) => {
       let data = []
       logStream.on('data', (chunk) => {
 //console.log(util.inspect(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')))
-        data.push(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')) // remove muxed in header
+        // remove muxed in header
+        data.push(chunk.toString('utf8').replace(/\u001b\[\w{1,3}/g, '')) 
       })
 
       const interval = setInterval(() => {
@@ -101,7 +103,8 @@ module.exports = (io) => {
             logStream.end()
           })
 
-          socket.on('stop', (stopSerial) => {
+          socket.once('stop', (stopSerial) => {
+            logger.info(`socket.id: ${socket.id} emitted 'stop'`)
             if (serial === stopSerial) {
               stream.destroy()
               clearInterval(interval)
