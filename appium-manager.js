@@ -21,7 +21,6 @@ const DEVICE_CONTAINER_MAP_FILE_NAME = 'device_container_map.txt'
 const docker = new Docker()
 let servers = {}
 let usedPorts = {}
-let usedSystemPorts = {}
 let deviceToContainerMap = {}
 
 module.exports = {
@@ -107,9 +106,8 @@ async function startServers(containers, connectedDevices) {
   for (let i = 0; i < diff.length; i++) {
     let serial = diff[i]
     let availablePorts = getNextUnusedPort()
-    let availableSystemPorts = getNextUnusedSystemPort()
     let containerName = generateContainerName(availablePorts.port)
-    await startServer(serial, containerName, availablePorts, availableSystemPorts)
+    await startServer(serial, containerName, availablePorts)
   }
 }
 
@@ -138,14 +136,10 @@ function stopServer(serial) {
 
   // Remove stopped container info and port used
   promise.then(() => {
-    let containerName = servers[serial].containerName
-    let port = servers[serial].port
-    let bootstrapPort = servers[serial].bootstrapPort
-    let systemPort = servers[serial].systemPort
+    const { containerName, port, bootstrapPort } = servers[serial]
     logger.info(`Stopped container for: ${serial}, name: ${containerName}, ` +
                 `port: ${port}, bootstrap port: ${bootstrapPort}`)
     delete usedPorts[port]
-    delete usedSystemPorts[systemPort]
     delete servers[serial]
     removeFromMap(serial)
   })
@@ -157,10 +151,8 @@ function stopServer(serial) {
  * Starts an Appium container for device with given serial number.
  * @param {string} serial the serial number of the device
  */
-function startServer(serial, containerName, availablePorts, 
-                     systemPort) {
-  let port = availablePorts.port
-  let bootstrapPort = availablePorts.bootstrapPort
+function startServer(serial, containerName, availablePorts) {
+  const { port, bootstrapPort, systemPort } = availablePorts
   let promise = new Promise((resolve, reject) => {
     //logger.info(`Trying to start container for: ${serial}`)
     docker.createContainer({
@@ -175,7 +167,7 @@ function startServer(serial, containerName, availablePorts,
         Binds: [
           `${ANDROID_SDK_PATH_BIND}:${ANDROID_SDK_PATH_BIND}`,
           `${ANDROID_LIB_PATH_BIND}:${ANDROID_LIB_PATH_BIND}`,
-          `${CRYPTO_PATH_BIND}:${CRYPTO_PATH_BIND}`,
+          `${CRYPTO_PATH_BIND}:${CRYPTO_PATH_BIND}`
         ],
         NetworkMode: 'host'
       }
@@ -192,15 +184,9 @@ function startServer(serial, containerName, availablePorts,
   promise.then((container) => {
     logger.info(`Started container for: ${serial}, name: ${containerName}, ` +
                 `port: ${port}, bootstrap port: ${bootstrapPort}`)
-    servers[serial] = {
-      container: container,
-      containerName : containerName,
-      port: port,
-      bootstrapPort: bootstrapPort,
-      systemPort
-    }
-    usedPorts[port] = bootstrapPort
-    usedSystemPorts[systemPort] = systemPort
+    servers[serial] = { container, containerName, port, bootstrapPort, 
+      systemPort }
+    usedPorts[port] = true
     addToMap(serial, containerName)
   })
 
@@ -228,33 +214,20 @@ function saveMapToFile(mapping) {
 
 /**
  * Returns next available unused ports.
- * @return {number, number} the port and bootstrap port.
+ * @return {number, number, number} the port, bootstrap port, and system port.
  * @throws if no unused ports are available
  */
 function getNextUnusedPort() {
   for (let port = PORT_START; port < PORT_END; port++) {
     if (!usedPorts.hasOwnProperty(port)) {
       return {
-        port: port,
-        bootstrapPort: port + MAX_DEVICES
+        port,
+        bootstrapPort: port + MAX_DEVICES,
+        systemPort: SYSTEM_PORT_START + port - PORT_START
       }
     }
   }
   throw('MAX_DEVICE limit reached: no unused ports available')
-}
-
-/**
- * Returns next available unused system ports.
- * @return number the system port.
- * @throws if no unused system ports are available
- */
-function getNextUnusedSystemPort() {
-  for (let port = SYSTEM_PORT_START; port < SYSTEM_PORT_START + MAX_DEVICES; port++) {
-    if (!usedSystemPorts.hasOwnProperty(port)) {
-      return port
-    }
-  }
-  throw('MAX_DEVICE limit reached: no unused system ports available')
 }
 
 /**
@@ -372,4 +345,3 @@ async function deleteServerRequest(serial) {
 function getContainer(serial) {
   return servers[serial] ? servers[serial].container : null
 }
-
