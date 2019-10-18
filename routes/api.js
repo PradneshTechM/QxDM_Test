@@ -36,6 +36,22 @@ module.exports = (io) => {
     }
   })
 
+  router.get('/servers/:serial/capabilities', async (req, res) => {
+    const serial = req.params.serial
+    // logger.info('GET request for serial: %s', serial)
+    try {
+      const result = await appiumManager.getCapabilitiesRequest(serial)
+      let response = {
+        status: result && result.status || 400,
+        statusText: result && result.statusText || null,
+        capabilities: result && result.capabilities
+      }
+      res.send(response)
+    } catch (err) {
+      logger.error(`Error on capabilities request for serial: ${serial}\n${err.stack}`)
+    }
+  })
+
   /**
    * Restart running Appium server for given device serial
    */
