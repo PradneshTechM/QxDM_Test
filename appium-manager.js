@@ -8,6 +8,7 @@ const client = adb.createClient()
 const MAX_DEVICES = 15
 const PORT_START = 4723
 const PORT_END = PORT_START + MAX_DEVICES
+const SYSTEM_PORT_START = 8200
 const IMAGE_NAME = 'techm/appium'
 const CONTAINER_PREFIX = 'appium'
 
@@ -20,11 +21,13 @@ const DEVICE_CONTAINER_MAP_FILE_NAME = 'device_container_map.txt'
 const docker = new Docker()
 let servers = {}
 let usedPorts = {}
+let usedSystemPorts = {}
 let deviceToContainerMap = {}
 
 module.exports = {
   manage: autoManage
   , getServerRequest: getServerRequest
+  , getCapabilitiesRequest: getCapabilitiesRequest
   , deleteServerRequest: deleteServerRequest
   , removeExistingServers: removeExistingServers
   , getContainer: getContainer
@@ -104,8 +107,9 @@ async function startServers(containers, connectedDevices) {
   for (let i = 0; i < diff.length; i++) {
     let serial = diff[i]
     let availablePorts = getNextUnusedPort()
+    let availableSystemPorts = getNextUnusedSystemPort()
     let containerName = generateContainerName(availablePorts.port)
-    await startServer(serial, containerName, availablePorts)
+    await startServer(serial, containerName, availablePorts, availableSystemPorts)
   }
 }
 
@@ -137,9 +141,11 @@ function stopServer(serial) {
     let containerName = servers[serial].containerName
     let port = servers[serial].port
     let bootstrapPort = servers[serial].bootstrapPort
+    let systemPort = servers[serial].systemPort
     logger.info(`Stopped container for: ${serial}, name: ${containerName}, ` +
                 `port: ${port}, bootstrap port: ${bootstrapPort}`)
     delete usedPorts[port]
+    delete usedSystemPorts[systemPort]
     delete servers[serial]
     removeFromMap(serial)
   })
@@ -151,7 +157,8 @@ function stopServer(serial) {
  * Starts an Appium container for device with given serial number.
  * @param {string} serial the serial number of the device
  */
-function startServer(serial, containerName, availablePorts) {
+function startServer(serial, containerName, availablePorts, 
+                     systemPort) {
   let port = availablePorts.port
   let bootstrapPort = availablePorts.bootstrapPort
   let promise = new Promise((resolve, reject) => {
@@ -161,7 +168,8 @@ function startServer(serial, containerName, availablePorts) {
       , Env: [
         `DEVICE_NAME=${serial}`,
         `APPIUM_PORT=${port}`,
-        `BOOTSTRAP_PORT=${bootstrapPort}`
+        `BOOTSTRAP_PORT=${bootstrapPort}`,
+        `SYSTEM_PORT=${systemPort}`
       ]
       , HostConfig: {
         Binds: [
@@ -188,9 +196,11 @@ function startServer(serial, containerName, availablePorts) {
       container: container,
       containerName : containerName,
       port: port,
-      bootstrapPort: bootstrapPort
+      bootstrapPort: bootstrapPort,
+      systemPort
     }
     usedPorts[port] = bootstrapPort
+    usedSystemPorts[systemPort] = systemPort
     addToMap(serial, containerName)
   })
 
@@ -234,6 +244,20 @@ function getNextUnusedPort() {
 }
 
 /**
+ * Returns next available unused system ports.
+ * @return number the system port.
+ * @throws if no unused system ports are available
+ */
+function getNextUnusedSystemPort() {
+  for (let port = SYSTEM_PORT_START; port < SYSTEM_PORT_START + MAX_DEVICES; port++) {
+    if (!usedSystemPorts.hasOwnProperty(port)) {
+      return port
+    }
+  }
+  throw('MAX_DEVICE limit reached: no unused system ports available')
+}
+
+/**
  * Returns a container name based upon given port number.
  * @param {number} port the main Appium port
  */
@@ -254,6 +278,42 @@ async function getServerRequest(serial) {
     if (device) {
       if (servers[serial] && servers[serial].port) {  // already running server
         response.port = servers[serial].port
+        response.status = 200
+        response.statusText = 'Found device with given serial number'
+      } else {  // not running yet, start
+        response.status = 400
+        response.statusText = 'Appium server not started yet'
+        startServer(serial)
+      }
+    } else {
+      response.statusText = 'No device with given serial number'
+      response.status = 404
+    }
+    return response
+  } catch (err) {
+    logger.error(err)
+  }
+}
+
+/**
+ * Returns Appium server capabilities for given device serial
+ * @param {string} serial the serial number of the device
+ */
+async function getCapabilitiesRequest(serial) {
+  try {
+    const devices = await client.listDevices()
+    const match = devices.find(device => device.id === serial)
+    const device = (match && match.type === 'device') ? match : null
+    let response = {}
+    if (device) {
+      if (servers[serial] && servers[serial].port) {  // already running server
+        response.capabilities = {
+          'deviceName': serial,
+          'udid': serial,
+          'appPackage': 'com.android.settings',
+          'platformName': 'Android',
+          'appActivity': 'com.android.settings.Settings'
+        }
         response.status = 200
         response.statusText = 'Found device with given serial number'
       } else {  // not running yet, start

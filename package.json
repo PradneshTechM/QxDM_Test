@@ -4,7 +4,7 @@
   "description": "Manages Appium server instances",
   "main": "app.js",
   "scripts": {
-    "start": "node_modules/.bin/pm2 start app.js && node_modules/.bin/pm2 monit",
+    "start": "func() { node_modules/.bin/pm2 start app.js -- $1 $2 && node_modules/.bin/pm2 monit; }; func",
     "stop": "node_modules/.bin/pm2 stop app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
