@@ -36,6 +36,9 @@ module.exports = (io) => {
     }
   })
 
+  /**
+   * Get capabilities for a given device serial
+   */
   router.get('/servers/:serial/capabilities', async (req, res) => {
     const serial = req.params.serial
     // logger.info('GET request for serial: %s', serial)

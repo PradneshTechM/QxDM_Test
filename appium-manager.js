@@ -8,7 +8,6 @@ const client = adb.createClient()
 const MAX_DEVICES = 15
 const PORT_START = 4723
 const PORT_END = PORT_START + MAX_DEVICES
-const SYSTEM_PORT_START = 8200
 const IMAGE_NAME = 'techm/appium'
 const CONTAINER_PREFIX = 'appium'
 
@@ -152,7 +151,7 @@ function stopServer(serial) {
  * @param {string} serial the serial number of the device
  */
 function startServer(serial, containerName, availablePorts) {
-  const { port, bootstrapPort, systemPort } = availablePorts
+  const { port, bootstrapPort } = availablePorts
   let promise = new Promise((resolve, reject) => {
     //logger.info(`Trying to start container for: ${serial}`)
     docker.createContainer({
@@ -160,8 +159,7 @@ function startServer(serial, containerName, availablePorts) {
       , Env: [
         `DEVICE_NAME=${serial}`,
         `APPIUM_PORT=${port}`,
-        `BOOTSTRAP_PORT=${bootstrapPort}`,
-        `SYSTEM_PORT=${systemPort}`
+        `BOOTSTRAP_PORT=${bootstrapPort}`
       ]
       , HostConfig: {
         Binds: [
@@ -184,8 +182,7 @@ function startServer(serial, containerName, availablePorts) {
   promise.then((container) => {
     logger.info(`Started container for: ${serial}, name: ${containerName}, ` +
                 `port: ${port}, bootstrap port: ${bootstrapPort}`)
-    servers[serial] = { container, containerName, port, bootstrapPort, 
-      systemPort }
+    servers[serial] = { container, containerName, port, bootstrapPort }
     usedPorts[port] = true
     addToMap(serial, containerName)
   })
@@ -214,7 +211,7 @@ function saveMapToFile(mapping) {
 
 /**
  * Returns next available unused ports.
- * @return {number, number, number} the port, bootstrap port, and system port.
+ * @return {number, number} the port and bootstrap port.
  * @throws if no unused ports are available
  */
 function getNextUnusedPort() {
@@ -222,8 +219,7 @@ function getNextUnusedPort() {
     if (!usedPorts.hasOwnProperty(port)) {
       return {
         port,
-        bootstrapPort: port + MAX_DEVICES,
-        systemPort: SYSTEM_PORT_START + port - PORT_START
+        bootstrapPort: port + MAX_DEVICES
       }
     }
   }
