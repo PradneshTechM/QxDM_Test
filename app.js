@@ -28,6 +28,13 @@ app.use(cors())
 app.use(bodyParser.json())
 app.use('/api', require('./routes/api')(io))
 
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
+
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
+
 // removes existing device-container map file
 fs.stat('device_container_map.txt', (err, stats) => {
   if (err) {
