@@ -8,7 +8,7 @@ const TAIL_LOG_LINES = 1000
 const DATA_REFRESH_RATE = 50 // in ms
 
 module.exports = (io) => {
-  const DOMAIN = `http://atas.techmlab.com`
+  const DOMAIN = `http://${process.env.DOMAIN}`
 
   /**
    * Get running Appium server information for given device serial
