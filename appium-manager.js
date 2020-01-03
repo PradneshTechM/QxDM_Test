@@ -159,7 +159,8 @@ function startServer(serial, containerName, availablePorts) {
       , Env: [
         `DEVICE_NAME=${serial}`,
         `APPIUM_PORT=${port}`,
-        `BOOTSTRAP_PORT=${bootstrapPort}`
+        `BOOTSTRAP_PORT=${bootstrapPort}`,
+        'RELAXED_SECURITY=true'
       ]
       , HostConfig: {
         Binds: [
