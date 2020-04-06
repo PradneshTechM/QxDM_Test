@@ -1,0 +1,89 @@
+
+syntax = "proto3";
+
+// The QXDM service definition.
+service QXDM {
+
+  // Launches an QXDM process
+  rpc LaunchApp(LaunchAppRequest) returns (LaunchAppResponse) {}
+
+  // Connects a device to the QXDM process
+  rpc ConnectDevice(ConnectDeviceRequest) returns (ConnectDeviceResponse) {}
+
+  // Disconnects a device from the QXDM process
+  rpc DisconnectDevice(DisconnectDeviceRequest) returns (DisconnectDeviceResponse) {}
+
+  // Start logging on a QXDM process  
+  rpc StartLog(StartLogRequest) returns (StartLogResponse) {}
+
+  // Save logs on a QXDM process
+  rpc SaveLog(SaveLogRequest) returns (stream SaveLogResponse) {}
+
+  // Quit a running QXDM process
+  rpc QuitApp(QuitAppRequest) returns (QuitAppResponse) {}
+
+}
+
+enum ConnectionState {
+  DISCONNECTED = 0;
+  CONNECTED = 1;
+}
+
+// A LaunchAppRequest is sent as request to a LaunchApp rpc.
+message LaunchAppRequest {
+}
+
+// A LaunchAppResponse is received in response to a LaunchApp rpc.
+message LaunchAppResponse {
+  string client_id = 1;
+}
+
+// A LaunchAppRequest is sent as request to a LaunchApp rpc.
+message ConnectDeviceRequest {
+  string client_id = 1;
+  uint32 device_index = 2;
+}
+
+// A ConnectDeviceResponse is received in response to a ConnectDevice rpc.
+message ConnectDeviceResponse {
+  ConnectionState state = 1;
+}
+
+// A DisconnectDeviceRequest is sent as request to a DisconnectDevice rpc.
+message DisconnectDeviceRequest {
+  string client_id = 1;
+}
+
+// A DisconnectDeviceResponse is received in response to a DisconnectDevice rpc.
+message DisconnectDeviceResponse {
+  ConnectionState state = 1;
+}
+
+// A StartLogRequest is sent as request to a StartLog rpc.
+message StartLogRequest {
+  string client_id = 1;
+}
+
+// A StartLogResponse is received in response to a StartLog rpc.
+message StartLogResponse {
+}
+
+// A SaveLogRequest is sent as request to a SaveLog rpc.
+message SaveLogRequest {
+  string client_id = 1;
+  string log_name = 2;
+}
+
+// A SaveLogResponse is received in response to a SaveLog rpc.
+message SaveLogResponse {
+  bytes data = 1;
+}
+
+// A QuitAppRequest is sent as request to a QuitApp rpc.
+message QuitAppRequest {
+  string client_id = 1;
+}
+
+// A QuitAppResponse is received in response to a QuitApp rpc.
+message QuitAppResponse {
+}
