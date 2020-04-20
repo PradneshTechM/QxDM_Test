@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\nqxdm.proto\"\x12\n\x10LaunchAppRequest\"&\n\x11LaunchAppResponse\x12\x11\n\tclient_id\x18\x01 \x01(\t\"?\n\x14\x43onnectDeviceRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x14\n\x0c\x64\x65vice_index\x18\x02 \x01(\r\"8\n\x15\x43onnectDeviceResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\",\n\x17\x44isconnectDeviceRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\";\n\x18\x44isconnectDeviceResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\"$\n\x0fStartLogRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\"\x12\n\x10StartLogResponse\"5\n\x0eSaveLogRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\x12\x10\n\x08log_name\x18\x02 \x01(\t\"\x1f\n\x0fSaveLogResponse\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"#\n\x0eQuitAppRequest\x12\x11\n\tclient_id\x18\x01 \x01(\t\"\x11\n\x0fQuitAppResponse*2\n\x0f\x43onnectionState\x12\x10\n\x0c\x44ISCONNECTED\x10\x00\x12\r\n\tCONNECTED\x10\x01\x32\xde\x02\n\x04QXDM\x12\x34\n\tLaunchApp\x12\x11.LaunchAppRequest\x1a\x12.LaunchAppResponse\"\x00\x12@\n\rConnectDevice\x12\x15.ConnectDeviceRequest\x1a\x16.ConnectDeviceResponse\"\x00\x12I\n\x10\x44isconnectDevice\x12\x18.DisconnectDeviceRequest\x1a\x19.DisconnectDeviceResponse\"\x00\x12\x31\n\x08StartLog\x12\x10.StartLogRequest\x1a\x11.StartLogResponse\"\x00\x12\x30\n\x07SaveLog\x12\x0f.SaveLogRequest\x1a\x10.SaveLogResponse\"\x00\x30\x01\x12.\n\x07QuitApp\x12\x0f.QuitAppRequest\x1a\x10.QuitAppResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\nqxdm.proto\"\x12\n\x10LaunchAppRequest\"&\n\x11LaunchAppResponse\x12\x11\n\tclient_id\x18\x01 \x01(\r\"?\n\x14\x43onnectDeviceRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\x12\x14\n\x0c\x64\x65vice_index\x18\x02 \x01(\r\"8\n\x15\x43onnectDeviceResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\",\n\x17\x44isconnectDeviceRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\";\n\x18\x44isconnectDeviceResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\"$\n\x0fStartLogRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\"\x12\n\x10StartLogResponse\"5\n\x0eSaveLogRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\x12\x10\n\x08log_name\x18\x02 \x01(\t\"\x1f\n\x0fSaveLogResponse\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"#\n\x0eQuitAppRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\"\x11\n\x0fQuitAppResponse*2\n\x0f\x43onnectionState\x12\x10\n\x0c\x44ISCONNECTED\x10\x00\x12\r\n\tCONNECTED\x10\x01\x32\xde\x02\n\x04QXDM\x12\x34\n\tLaunchApp\x12\x11.LaunchAppRequest\x1a\x12.LaunchAppResponse\"\x00\x12@\n\rConnectDevice\x12\x15.ConnectDeviceRequest\x1a\x16.ConnectDeviceResponse\"\x00\x12I\n\x10\x44isconnectDevice\x12\x18.DisconnectDeviceRequest\x1a\x19.DisconnectDeviceResponse\"\x00\x12\x31\n\x08StartLog\x12\x10.StartLogRequest\x1a\x11.StartLogResponse\"\x00\x12\x30\n\x07SaveLog\x12\x0f.SaveLogRequest\x1a\x10.SaveLogResponse\"\x00\x30\x01\x12.\n\x07QuitApp\x12\x0f.QuitAppRequest\x1a\x10.QuitAppResponse\"\x00\x62\x06proto3')
 )
 
 _CONNECTIONSTATE = _descriptor.EnumDescriptor(
@@ -85,8 +85,8 @@ _LAUNCHAPPRESPONSE = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='client_id', full_name='LaunchAppResponse.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -116,8 +116,8 @@ _CONNECTDEVICEREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='client_id', full_name='ConnectDeviceRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -185,8 +185,8 @@ _DISCONNECTDEVICEREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='client_id', full_name='DisconnectDeviceRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -247,8 +247,8 @@ _STARTLOGREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='client_id', full_name='StartLogRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -302,8 +302,8 @@ _SAVELOGREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='client_id', full_name='SaveLogRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
@@ -371,8 +371,8 @@ _QUITAPPREQUEST = _descriptor.Descriptor(
   fields=[
     _descriptor.FieldDescriptor(
       name='client_id', full_name='QuitAppRequest.client_id', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=_b("").decode('utf-8'),
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),

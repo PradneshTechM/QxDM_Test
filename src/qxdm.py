@@ -21,7 +21,6 @@ class QXDM(object):
   def __init__(self):
     self.port = None
     self.intf = None            # D-bus interface
-    self.session = None         # D-bus qxdm session
     self.bus = None
     self.qxdm_process = None
     self.vdisplay = None
@@ -32,10 +31,6 @@ class QXDM(object):
     self.vdisplay.start()
 
     self.bus = dbus.SessionBus()
-    
-    # # start Xvfb server and set DISPLAY env to server's
-    # self.xvfb_process = Popen('Xvfb :987 -screen 0 2x2x8'.split(' '))
-    # os.environ['DISPLAY'] = ':987'
 
     # start QXDM process
     self.qxdm_process = Popen(QXDM.PROCESS_PATH)
@@ -44,53 +39,56 @@ class QXDM(object):
 
     # connect to D-bus session
     self.bus = dbus.SessionBus()
+
+
+  def get_session(self):
     obj = self.bus.get_object(QXDM.PROG_NAME, QXDM.OBJ_PATH)
     self.intf = dbus.Interface(obj, QXDM.INTF_NAME)
+    session = obj.getQXDMSession(False)
+    
+    SetVisible = self.intf.get_dbus_method('SetVisible')
+    SetVisible(False, session)
 
-    self.session = obj.getQXDMSession(False)
-
-    # SetVisible = self.intf.get_dbus_method('SetVisible')
-    # SetVisible(False, self.session)
-
-    print('QXDM session :', self.session)
+    print('QXDM session :', session)
     print('QXDM version :', obj.AppVersion())
+    return session
 
 
-  def connect(self, port_number):
+  def connect(self, session, port_number):
     ConnectDevice = self.intf.get_dbus_method('ConnectDevice')
     GetConnectionState = self.intf.get_dbus_method('GetConnectionState')
-    ConnectDevice(port_number, self.session)
+    ConnectDevice(port_number, session)
     # Wait until DIAG server state transitions to connected
     # (we do this for up to five seconds)
     wait_count = 0
     server_state = QXDM.SERVER_DISCONNECTED
     while server_state != QXDM.SERVER_CONNECTED and wait_count < 5:
       sleep(1)
-      server_state = GetConnectionState(self.session)
+      server_state = GetConnectionState(session)
       wait_count += 1
     
     if server_state == QXDM.SERVER_CONNECTED:
-      print('QXDM connected to device', port_number)
+      print(f'{session} connected to device {port_number}')
       self.port = port_number
       return True
     else:
-      print('QXDM unable to connect to device', port_number)
+      print(f'{session} unable to connect to device {port_number}')
       self.port = None
       return False
 
 
-  def disconnect(self):
+  def disconnect(self, session):
     DisconnectDevice = self.intf.get_dbus_method('DisconnectDevice')
     GetConnectionState = self.intf.get_dbus_method('GetConnectionState')
 
-    DisconnectDevice(self.session)
+    DisconnectDevice(session)
     # wait until DIAG server state transitions to disconnected
     # (we do this for up to five seconds)
     wait_count = 0
     server_state = QXDM.SERVER_CONNECTED
     while server_state != QXDM.SERVER_DISCONNECTED and wait_count < 5:
       sleep(1)
-      server_state = GetConnectionState(self.session)
+      server_state = GetConnectionState(session)
       wait_count += 1
 
     if server_state == QXDM.SERVER_DISCONNECTED:
@@ -102,32 +100,32 @@ class QXDM(object):
       return False
 
 
-  def start_logs(self):
+  def start_logs(self, session):
     SaveItemStore = self.intf.get_dbus_method('SaveItemStore')
 
     now = datetime.now()
     path = f'{os.getcwd()}/temp/temp_{now.strftime("%y%m%d_%H%M%S_%f")}.isf'
     print(path)
-    SaveItemStore(path, self.session)
+    SaveItemStore(path, session)
     os.remove(path)
     print('QXDM Start Logs - New logs started')
 
 
-  def save_logs(self, folder_path, log_name):
+  def save_logs(self, session, folder_path, log_name):
     SaveItemStore = self.intf.get_dbus_method('SaveItemStore')
 
     path = folder_path + '/' + log_name + '.isf'
     print("Path of isf file : ", path)
-    SaveItemStore(path, self.session)
+    SaveItemStore(path, session)
     print('QXDM Save Logs - Log saved :', path)
 
 
-  def quit(self):
+  def quit(self, session):
     QuitApplication = self.intf.get_dbus_method('QuitApplication')
 
-    QuitApplication(self.session)
+    QuitApplication(session)
     # close before terminating otherwise next time doesn't work
-    self.bus.close()   
+    self.bus.close()
     # self.terminate_processes()
     self.vdisplay.stop()
     print('QXDM Quit - QXDM Closed')

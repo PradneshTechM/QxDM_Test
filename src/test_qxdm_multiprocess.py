@@ -6,28 +6,48 @@ import concurrent.futures
 import sys
 import os
 
-from qxdmUtils_new import QXDM
+import pickle
 
-def worker(name, device_index):
+from qxdm_new_v2 import QXDM
+
+def worker(device_index):
+  info('worker function')
   qxdm = QXDM()
-  logging.info('Process %s: launching QXDM', name)
+  logging.info('launching QXDM %s', device_index)
   qxdm.launch()
-  time.sleep(5)
-  logging.info('Process %s: connecting %s', name, device_index)
+
+  pickled_qxdm = pickle.dumps(qxdm)
+  qxdm = None
+  time.sleep(2)
+  qxdm = pickle.loads(pickled_qxdm)
+
+  logging.info('connecting %s', device_index)
   qxdm.connect(device_index)
-  logging.info('Process %s: connected %s', name, device_index)
-  time.sleep(5)
+
+  time.sleep(2)
+
+  pickled_qxdm = pickle.dumps(qxdm)
+  qxdm = None
+  time.sleep(2)
+  qxdm = pickle.loads(pickled_qxdm)
+
+  qxdm.disconnect()
+
+  time.sleep(2)
   qxdm.quit()
 
-def get_pid():
-  if hasattr(os, 'getppid')
+def info(title):
+  print(title)
+  print('module name:', __name__)
+  print('parent process:', os.getpid())
+  print('process id:', os.getpid())
+
 
 if __name__ == '__main__':
   format = '%(asctime)s: %(message)s'
   logging.basicConfig(format=format, level=logging.INFO, datefmt='%H:%M:%S')
 
-  p = Pool(2)
-  p.map(worker, [0, 1], [0, 1])
+  info('main line')
+  with Pool(2) as p:
+    p.map(worker, (0, 1))
 
-  with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-    executor.map(thread_function, range(2), range(2))
