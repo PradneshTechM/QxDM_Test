@@ -7,7 +7,7 @@ _r = redis.Redis(host='localhost', port=5041, db=0)
 Redis structure
 - qxdm:initialized (string): true if qxdm keys are initialized, false otherwise
 
-- qxdm:
+- qxdm:id (int): the id number of a process within the db
 
 - qxdm:process:ID (hash)
   is_connected:   STRING
