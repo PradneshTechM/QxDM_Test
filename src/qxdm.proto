@@ -40,8 +40,7 @@ message LaunchAppResponse {
 
 // A LaunchAppRequest is sent as request to a LaunchApp rpc.
 message ConnectDeviceRequest {
-  uint32 client_id = 1;
-  uint32 device_index = 2;
+  uint32 device_index = 1;
 }
 
 // A ConnectDeviceResponse is received in response to a ConnectDevice rpc.
@@ -51,7 +50,7 @@ message ConnectDeviceResponse {
 
 // A DisconnectDeviceRequest is sent as request to a DisconnectDevice rpc.
 message DisconnectDeviceRequest {
-  uint32 client_id = 1;
+  uint32 device_index = 1;
 }
 
 // A DisconnectDeviceResponse is received in response to a DisconnectDevice rpc.
@@ -71,7 +70,6 @@ message StartLogResponse {
 // A SaveLogRequest is sent as request to a SaveLog rpc.
 message SaveLogRequest {
   uint32 client_id = 1;
-  string log_name = 2;
 }
 
 // A SaveLogResponse is received in response to a SaveLog rpc.
