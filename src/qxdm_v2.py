@@ -21,46 +21,18 @@ class QXDM(object):
 
   def __init__(self):
     self.port = None
-    self.qxdm_process_pid = None
-    self.xvfb_process_pid = None
     self.session = None
-
-  # def launch(self):
-  #   self.vdisplay = Xvfb(width=2, height=2, colordepth=8)
-  #   self.vdisplay.start()
-    
-  #   # connect to D-bus session
-  #   # self.bus = dbus.SessionBus()
-  #   sleep(2)
-
-  #   self.session = "QXDM1"
-  #   print('QXDM session :', self.session)
-  #   print('bus :', self.bus)
-
-  
-  # def connect(self, port_number):
-  #   self.port = port_number
-  #   print('QXDM connected to device', port_number)
-  #   return True
-
-  # def disconnect(self):
-  #   self.port = None
-  #   print('QXDM successfully disconnected')
-  #   return True
-  
-  # def quit(self):
-  #   # close before terminating otherwise next time doesn't work
-  #   self.bus.close()
-  #   self.vdisplay.stop()
-  #   print('QXDM Quit - QXDM Closed')
+    self.qxdm_process_pid = None
+    self.logging = False
+    # self.xvfb_process_pid = None
 
 
   def launch(self):
     # start Xvfb server and set DISPLAY env to server's
-    disp = randint(10000, 20000)
-    xvfb_process = subprocess.Popen(f'Xvfb :{disp} -screen 0 2x2x8'.split(' '))
-    self.xvfb_process_pid = xvfb_process.pid
-    os.environ['DISPLAY'] = f':{disp}'
+    # disp = randint(10000, 20000)
+    # xvfb_process = subprocess.Popen(f'Xvfb :{disp} -screen 0 2x2x8'.split(' '))
+    # self.xvfb_process_pid = xvfb_process.pid
+    # os.environ['DISPLAY'] = f':{disp}'
 
     sleep(1)
 
@@ -77,13 +49,13 @@ class QXDM(object):
     obj = bus.get_object(QXDM.PROG_NAME, QXDM.OBJ_PATH)
     intf = dbus.Interface(obj, QXDM.INTF_NAME)
 
-    self.session = obj.getQXDMSession(False)
+    self.session = obj.getQXDMSession(True)
     
     SetVisible = intf.get_dbus_method('SetVisible')
     SetVisible(False, self.session)
 
     print('QXDM session :', self.session)
-    print('QXDM version :', obj.AppVersion())
+    # print('QXDM version :', obj.AppVersion())
 
 
 
@@ -105,11 +77,11 @@ class QXDM(object):
       wait_count += 1
     
     if server_state == QXDM.SERVER_CONNECTED:
-      print(f'{self.session} connected to device {port_number}')
+      print(f'{self.session} connected to device: {port_number}')
       self.port = port_number
       return True
     else:
-      print(f'{self.session} unable to connect to device {port_number}')
+      print(f'{self.session} unable to connect to device: {port_number}')
       self.port = None
       return False
 
@@ -133,11 +105,11 @@ class QXDM(object):
       wait_count += 1
 
     if server_state == QXDM.SERVER_DISCONNECTED:
-      print('QXDM successfully disconnected')
+      print(f'{self.session} disconnected from device: {self.port}')
       self.port = None
       return True
     else:
-      print('QXDM unable to disconnect')
+      print(f'{self.session} unable to disconnect from device: {self.port}')
       return False
 
 
@@ -153,20 +125,24 @@ class QXDM(object):
     print(path)
     SaveItemStore(path, self.session)
     os.remove(path)
+    self.logging = True
     print('QXDM Start Logs - New logs started')
 
 
-  def save_logs(self, folder_path, log_name):
+  def save_logs(self):
     bus = dbus.SessionBus()
     obj = bus.get_object(QXDM.PROG_NAME, QXDM.OBJ_PATH)
     intf = dbus.Interface(obj, QXDM.INTF_NAME)
 
     SaveItemStore = intf.get_dbus_method('SaveItemStore')
 
-    path = folder_path + '/' + log_name + '.isf'
+    now = datetime.now()
+    path = f'{os.getcwd()}/temp/log_{now.strftime("%y%m%d_%H%M%S_%f")}.isf'
+
     print("Path of isf file : ", path)
     SaveItemStore(path, self.session)
     print('QXDM Save Logs - Log saved :', path)
+    return path
 
 
   def quit(self):
@@ -179,7 +155,7 @@ class QXDM(object):
 
     try:
       QuitApplication(self.session)
-      subprocess.Popen(f'kill {self.xvfb_process_pid}'.split())
+      # subprocess.Popen(f'kill {self.xvfb_process_pid}'.split())
     except Exception as e:
       subprocess.Popen(f'kill {self.qxdm_process_pid}'.split())
 
@@ -192,6 +168,11 @@ class QXDM(object):
     self.disconnect()
     self.connect(port_number)
 
+  def connected_to(self):
+    return self.port
+  
+  def is_logging(self):
+    return self.logging
 
 
 
