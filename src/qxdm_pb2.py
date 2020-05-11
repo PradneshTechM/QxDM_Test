@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\nqxdm.proto\"\x12\n\x10LaunchAppRequest\"&\n\x11LaunchAppResponse\x12\x11\n\tclient_id\x18\x01 \x01(\r\",\n\x14\x43onnectDeviceRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"8\n\x15\x43onnectDeviceResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\"/\n\x17\x44isconnectDeviceRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\";\n\x18\x44isconnectDeviceResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\"$\n\x0fStartLogRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\"\x12\n\x10StartLogResponse\"#\n\x0eSaveLogRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\"\x1f\n\x0fSaveLogResponse\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"#\n\x0eQuitAppRequest\x12\x11\n\tclient_id\x18\x01 \x01(\r\"\x11\n\x0fQuitAppResponse*2\n\x0f\x43onnectionState\x12\x10\n\x0c\x44ISCONNECTED\x10\x00\x12\r\n\tCONNECTED\x10\x01\x32\xde\x02\n\x04QXDM\x12\x34\n\tLaunchApp\x12\x11.LaunchAppRequest\x1a\x12.LaunchAppResponse\"\x00\x12@\n\rConnectDevice\x12\x15.ConnectDeviceRequest\x1a\x16.ConnectDeviceResponse\"\x00\x12I\n\x10\x44isconnectDevice\x12\x18.DisconnectDeviceRequest\x1a\x19.DisconnectDeviceResponse\"\x00\x12\x31\n\x08StartLog\x12\x10.StartLogRequest\x1a\x11.StartLogResponse\"\x00\x12\x30\n\x07SaveLog\x12\x0f.SaveLogRequest\x1a\x10.SaveLogResponse\"\x00\x30\x01\x12.\n\x07QuitApp\x12\x0f.QuitAppRequest\x1a\x10.QuitAppResponse\"\x00\x62\x06proto3')
+  serialized_pb=_b('\n\nqxdm.proto\"&\n\x0e\x43onnectRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"2\n\x0f\x43onnectResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\")\n\x11\x44isconnectRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"5\n\x12\x44isconnectResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\"\'\n\x0fStartLogRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"\x12\n\x10StartLogResponse\"&\n\x0eSaveLogRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"\x1f\n\x0fSaveLogResponse\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c*2\n\x0f\x43onnectionState\x12\x10\n\x0c\x44ISCONNECTED\x10\x00\x12\r\n\tCONNECTED\x10\x01\x32\xd4\x01\n\x04QXDM\x12.\n\x07\x43onnect\x12\x0f.ConnectRequest\x1a\x10.ConnectResponse\"\x00\x12\x37\n\nDisconnect\x12\x12.DisconnectRequest\x1a\x13.DisconnectResponse\"\x00\x12\x31\n\x08StartLog\x12\x10.StartLogRequest\x1a\x11.StartLogResponse\"\x00\x12\x30\n\x07SaveLog\x12\x0f.SaveLogRequest\x1a\x10.SaveLogResponse\"\x00\x30\x01\x62\x06proto3')
 )
 
 _CONNECTIONSTATE = _descriptor.EnumDescriptor(
@@ -41,8 +41,8 @@ _CONNECTIONSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=472,
-  serialized_end=522,
+  serialized_start=338,
+  serialized_end=388,
 )
 _sym_db.RegisterEnumDescriptor(_CONNECTIONSTATE)
 
@@ -52,13 +52,20 @@ CONNECTED = 1
 
 
 
-_LAUNCHAPPREQUEST = _descriptor.Descriptor(
-  name='LaunchAppRequest',
-  full_name='LaunchAppRequest',
+_CONNECTREQUEST = _descriptor.Descriptor(
+  name='ConnectRequest',
+  full_name='ConnectRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
+    _descriptor.FieldDescriptor(
+      name='device_index', full_name='ConnectRequest.device_index', index=0,
+      number=1, type=13, cpp_type=3, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
   ],
   extensions=[
   ],
@@ -72,81 +79,19 @@ _LAUNCHAPPREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=14,
-  serialized_end=32,
+  serialized_end=52,
 )
 
 
-_LAUNCHAPPRESPONSE = _descriptor.Descriptor(
-  name='LaunchAppResponse',
-  full_name='LaunchAppResponse',
+_CONNECTRESPONSE = _descriptor.Descriptor(
+  name='ConnectResponse',
+  full_name='ConnectResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='client_id', full_name='LaunchAppResponse.client_id', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=34,
-  serialized_end=72,
-)
-
-
-_CONNECTDEVICEREQUEST = _descriptor.Descriptor(
-  name='ConnectDeviceRequest',
-  full_name='ConnectDeviceRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='device_index', full_name='ConnectDeviceRequest.device_index', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=74,
-  serialized_end=118,
-)
-
-
-_CONNECTDEVICERESPONSE = _descriptor.Descriptor(
-  name='ConnectDeviceResponse',
-  full_name='ConnectDeviceResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='state', full_name='ConnectDeviceResponse.state', index=0,
+      name='state', full_name='ConnectResponse.state', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -164,20 +109,20 @@ _CONNECTDEVICERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=120,
-  serialized_end=176,
+  serialized_start=54,
+  serialized_end=104,
 )
 
 
-_DISCONNECTDEVICEREQUEST = _descriptor.Descriptor(
-  name='DisconnectDeviceRequest',
-  full_name='DisconnectDeviceRequest',
+_DISCONNECTREQUEST = _descriptor.Descriptor(
+  name='DisconnectRequest',
+  full_name='DisconnectRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='device_index', full_name='DisconnectDeviceRequest.device_index', index=0,
+      name='device_index', full_name='DisconnectRequest.device_index', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -195,20 +140,20 @@ _DISCONNECTDEVICEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=178,
-  serialized_end=225,
+  serialized_start=106,
+  serialized_end=147,
 )
 
 
-_DISCONNECTDEVICERESPONSE = _descriptor.Descriptor(
-  name='DisconnectDeviceResponse',
-  full_name='DisconnectDeviceResponse',
+_DISCONNECTRESPONSE = _descriptor.Descriptor(
+  name='DisconnectResponse',
+  full_name='DisconnectResponse',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='state', full_name='DisconnectDeviceResponse.state', index=0,
+      name='state', full_name='DisconnectResponse.state', index=0,
       number=1, type=14, cpp_type=8, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -226,8 +171,8 @@ _DISCONNECTDEVICERESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=227,
-  serialized_end=286,
+  serialized_start=149,
+  serialized_end=202,
 )
 
 
@@ -239,7 +184,7 @@ _STARTLOGREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='client_id', full_name='StartLogRequest.client_id', index=0,
+      name='device_index', full_name='StartLogRequest.device_index', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -257,8 +202,8 @@ _STARTLOGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=288,
-  serialized_end=324,
+  serialized_start=204,
+  serialized_end=243,
 )
 
 
@@ -281,8 +226,8 @@ _STARTLOGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=326,
-  serialized_end=344,
+  serialized_start=245,
+  serialized_end=263,
 )
 
 
@@ -294,7 +239,7 @@ _SAVELOGREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='client_id', full_name='SaveLogRequest.client_id', index=0,
+      name='device_index', full_name='SaveLogRequest.device_index', index=0,
       number=1, type=13, cpp_type=3, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -312,8 +257,8 @@ _SAVELOGREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=346,
-  serialized_end=381,
+  serialized_start=265,
+  serialized_end=303,
 )
 
 
@@ -343,123 +288,50 @@ _SAVELOGRESPONSE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=383,
-  serialized_end=414,
+  serialized_start=305,
+  serialized_end=336,
 )
 
-
-_QUITAPPREQUEST = _descriptor.Descriptor(
-  name='QuitAppRequest',
-  full_name='QuitAppRequest',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='client_id', full_name='QuitAppRequest.client_id', index=0,
-      number=1, type=13, cpp_type=3, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=416,
-  serialized_end=451,
-)
-
-
-_QUITAPPRESPONSE = _descriptor.Descriptor(
-  name='QuitAppResponse',
-  full_name='QuitAppResponse',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  serialized_options=None,
-  is_extendable=False,
-  syntax='proto3',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=453,
-  serialized_end=470,
-)
-
-_CONNECTDEVICERESPONSE.fields_by_name['state'].enum_type = _CONNECTIONSTATE
-_DISCONNECTDEVICERESPONSE.fields_by_name['state'].enum_type = _CONNECTIONSTATE
-DESCRIPTOR.message_types_by_name['LaunchAppRequest'] = _LAUNCHAPPREQUEST
-DESCRIPTOR.message_types_by_name['LaunchAppResponse'] = _LAUNCHAPPRESPONSE
-DESCRIPTOR.message_types_by_name['ConnectDeviceRequest'] = _CONNECTDEVICEREQUEST
-DESCRIPTOR.message_types_by_name['ConnectDeviceResponse'] = _CONNECTDEVICERESPONSE
-DESCRIPTOR.message_types_by_name['DisconnectDeviceRequest'] = _DISCONNECTDEVICEREQUEST
-DESCRIPTOR.message_types_by_name['DisconnectDeviceResponse'] = _DISCONNECTDEVICERESPONSE
+_CONNECTRESPONSE.fields_by_name['state'].enum_type = _CONNECTIONSTATE
+_DISCONNECTRESPONSE.fields_by_name['state'].enum_type = _CONNECTIONSTATE
+DESCRIPTOR.message_types_by_name['ConnectRequest'] = _CONNECTREQUEST
+DESCRIPTOR.message_types_by_name['ConnectResponse'] = _CONNECTRESPONSE
+DESCRIPTOR.message_types_by_name['DisconnectRequest'] = _DISCONNECTREQUEST
+DESCRIPTOR.message_types_by_name['DisconnectResponse'] = _DISCONNECTRESPONSE
 DESCRIPTOR.message_types_by_name['StartLogRequest'] = _STARTLOGREQUEST
 DESCRIPTOR.message_types_by_name['StartLogResponse'] = _STARTLOGRESPONSE
 DESCRIPTOR.message_types_by_name['SaveLogRequest'] = _SAVELOGREQUEST
 DESCRIPTOR.message_types_by_name['SaveLogResponse'] = _SAVELOGRESPONSE
-DESCRIPTOR.message_types_by_name['QuitAppRequest'] = _QUITAPPREQUEST
-DESCRIPTOR.message_types_by_name['QuitAppResponse'] = _QUITAPPRESPONSE
 DESCRIPTOR.enum_types_by_name['ConnectionState'] = _CONNECTIONSTATE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
-LaunchAppRequest = _reflection.GeneratedProtocolMessageType('LaunchAppRequest', (_message.Message,), {
-  'DESCRIPTOR' : _LAUNCHAPPREQUEST,
+ConnectRequest = _reflection.GeneratedProtocolMessageType('ConnectRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CONNECTREQUEST,
   '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:LaunchAppRequest)
+  # @@protoc_insertion_point(class_scope:ConnectRequest)
   })
-_sym_db.RegisterMessage(LaunchAppRequest)
+_sym_db.RegisterMessage(ConnectRequest)
 
-LaunchAppResponse = _reflection.GeneratedProtocolMessageType('LaunchAppResponse', (_message.Message,), {
-  'DESCRIPTOR' : _LAUNCHAPPRESPONSE,
+ConnectResponse = _reflection.GeneratedProtocolMessageType('ConnectResponse', (_message.Message,), {
+  'DESCRIPTOR' : _CONNECTRESPONSE,
   '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:LaunchAppResponse)
+  # @@protoc_insertion_point(class_scope:ConnectResponse)
   })
-_sym_db.RegisterMessage(LaunchAppResponse)
+_sym_db.RegisterMessage(ConnectResponse)
 
-ConnectDeviceRequest = _reflection.GeneratedProtocolMessageType('ConnectDeviceRequest', (_message.Message,), {
-  'DESCRIPTOR' : _CONNECTDEVICEREQUEST,
+DisconnectRequest = _reflection.GeneratedProtocolMessageType('DisconnectRequest', (_message.Message,), {
+  'DESCRIPTOR' : _DISCONNECTREQUEST,
   '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:ConnectDeviceRequest)
+  # @@protoc_insertion_point(class_scope:DisconnectRequest)
   })
-_sym_db.RegisterMessage(ConnectDeviceRequest)
+_sym_db.RegisterMessage(DisconnectRequest)
 
-ConnectDeviceResponse = _reflection.GeneratedProtocolMessageType('ConnectDeviceResponse', (_message.Message,), {
-  'DESCRIPTOR' : _CONNECTDEVICERESPONSE,
+DisconnectResponse = _reflection.GeneratedProtocolMessageType('DisconnectResponse', (_message.Message,), {
+  'DESCRIPTOR' : _DISCONNECTRESPONSE,
   '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:ConnectDeviceResponse)
+  # @@protoc_insertion_point(class_scope:DisconnectResponse)
   })
-_sym_db.RegisterMessage(ConnectDeviceResponse)
-
-DisconnectDeviceRequest = _reflection.GeneratedProtocolMessageType('DisconnectDeviceRequest', (_message.Message,), {
-  'DESCRIPTOR' : _DISCONNECTDEVICEREQUEST,
-  '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:DisconnectDeviceRequest)
-  })
-_sym_db.RegisterMessage(DisconnectDeviceRequest)
-
-DisconnectDeviceResponse = _reflection.GeneratedProtocolMessageType('DisconnectDeviceResponse', (_message.Message,), {
-  'DESCRIPTOR' : _DISCONNECTDEVICERESPONSE,
-  '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:DisconnectDeviceResponse)
-  })
-_sym_db.RegisterMessage(DisconnectDeviceResponse)
+_sym_db.RegisterMessage(DisconnectResponse)
 
 StartLogRequest = _reflection.GeneratedProtocolMessageType('StartLogRequest', (_message.Message,), {
   'DESCRIPTOR' : _STARTLOGREQUEST,
@@ -489,20 +361,6 @@ SaveLogResponse = _reflection.GeneratedProtocolMessageType('SaveLogResponse', (_
   })
 _sym_db.RegisterMessage(SaveLogResponse)
 
-QuitAppRequest = _reflection.GeneratedProtocolMessageType('QuitAppRequest', (_message.Message,), {
-  'DESCRIPTOR' : _QUITAPPREQUEST,
-  '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:QuitAppRequest)
-  })
-_sym_db.RegisterMessage(QuitAppRequest)
-
-QuitAppResponse = _reflection.GeneratedProtocolMessageType('QuitAppResponse', (_message.Message,), {
-  'DESCRIPTOR' : _QUITAPPRESPONSE,
-  '__module__' : 'qxdm_pb2'
-  # @@protoc_insertion_point(class_scope:QuitAppResponse)
-  })
-_sym_db.RegisterMessage(QuitAppResponse)
-
 
 
 _QXDM = _descriptor.ServiceDescriptor(
@@ -511,40 +369,31 @@ _QXDM = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=525,
-  serialized_end=875,
+  serialized_start=391,
+  serialized_end=603,
   methods=[
   _descriptor.MethodDescriptor(
-    name='LaunchApp',
-    full_name='QXDM.LaunchApp',
+    name='Connect',
+    full_name='QXDM.Connect',
     index=0,
     containing_service=None,
-    input_type=_LAUNCHAPPREQUEST,
-    output_type=_LAUNCHAPPRESPONSE,
+    input_type=_CONNECTREQUEST,
+    output_type=_CONNECTRESPONSE,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
-    name='ConnectDevice',
-    full_name='QXDM.ConnectDevice',
+    name='Disconnect',
+    full_name='QXDM.Disconnect',
     index=1,
     containing_service=None,
-    input_type=_CONNECTDEVICEREQUEST,
-    output_type=_CONNECTDEVICERESPONSE,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='DisconnectDevice',
-    full_name='QXDM.DisconnectDevice',
-    index=2,
-    containing_service=None,
-    input_type=_DISCONNECTDEVICEREQUEST,
-    output_type=_DISCONNECTDEVICERESPONSE,
+    input_type=_DISCONNECTREQUEST,
+    output_type=_DISCONNECTRESPONSE,
     serialized_options=None,
   ),
   _descriptor.MethodDescriptor(
     name='StartLog',
     full_name='QXDM.StartLog',
-    index=3,
+    index=2,
     containing_service=None,
     input_type=_STARTLOGREQUEST,
     output_type=_STARTLOGRESPONSE,
@@ -553,19 +402,10 @@ _QXDM = _descriptor.ServiceDescriptor(
   _descriptor.MethodDescriptor(
     name='SaveLog',
     full_name='QXDM.SaveLog',
-    index=4,
+    index=3,
     containing_service=None,
     input_type=_SAVELOGREQUEST,
     output_type=_SAVELOGRESPONSE,
-    serialized_options=None,
-  ),
-  _descriptor.MethodDescriptor(
-    name='QuitApp',
-    full_name='QXDM.QuitApp',
-    index=5,
-    containing_service=None,
-    input_type=_QUITAPPREQUEST,
-    output_type=_QUITAPPRESPONSE,
     serialized_options=None,
   ),
 ])

@@ -4,23 +4,17 @@ syntax = "proto3";
 // The QXDM service definition.
 service QXDM {
 
-  // Launches an QXDM process
-  rpc LaunchApp(LaunchAppRequest) returns (LaunchAppResponse) {}
-
   // Connects a device to the QXDM process
-  rpc ConnectDevice(ConnectDeviceRequest) returns (ConnectDeviceResponse) {}
+  rpc Connect(ConnectRequest) returns (ConnectResponse) {}
 
   // Disconnects a device from the QXDM process
-  rpc DisconnectDevice(DisconnectDeviceRequest) returns (DisconnectDeviceResponse) {}
+  rpc Disconnect(DisconnectRequest) returns (DisconnectResponse) {}
 
   // Start logging on a QXDM process  
   rpc StartLog(StartLogRequest) returns (StartLogResponse) {}
 
   // Save logs on a QXDM process
   rpc SaveLog(SaveLogRequest) returns (stream SaveLogResponse) {}
-
-  // Quit a running QXDM process
-  rpc QuitApp(QuitAppRequest) returns (QuitAppResponse) {}
 
 }
 
@@ -29,38 +23,29 @@ enum ConnectionState {
   CONNECTED = 1;
 }
 
-// A LaunchAppRequest is sent as request to a LaunchApp rpc.
-message LaunchAppRequest {
-}
-
-// A LaunchAppResponse is received in response to a LaunchApp rpc.
-message LaunchAppResponse {
-  uint32 client_id = 1;
-}
-
-// A LaunchAppRequest is sent as request to a LaunchApp rpc.
-message ConnectDeviceRequest {
+// A ConnectRequest is sent as request to a Connect rpc.
+message ConnectRequest {
   uint32 device_index = 1;
 }
 
-// A ConnectDeviceResponse is received in response to a ConnectDevice rpc.
-message ConnectDeviceResponse {
+// A ConnectResponse is received in response to a Connect rpc.
+message ConnectResponse {
   ConnectionState state = 1;
 }
 
-// A DisconnectDeviceRequest is sent as request to a DisconnectDevice rpc.
-message DisconnectDeviceRequest {
+// A DisconnectRequest is sent as request to a Disconnect rpc.
+message DisconnectRequest {
   uint32 device_index = 1;
 }
 
-// A DisconnectDeviceResponse is received in response to a DisconnectDevice rpc.
-message DisconnectDeviceResponse {
+// A DisconnectResponse is received in response to a Disconnect rpc.
+message DisconnectResponse {
   ConnectionState state = 1;
 }
 
 // A StartLogRequest is sent as request to a StartLog rpc.
 message StartLogRequest {
-  uint32 client_id = 1;
+  uint32 device_index = 1;
 }
 
 // A StartLogResponse is received in response to a StartLog rpc.
@@ -69,19 +54,10 @@ message StartLogResponse {
 
 // A SaveLogRequest is sent as request to a SaveLog rpc.
 message SaveLogRequest {
-  uint32 client_id = 1;
+  uint32 device_index = 1;
 }
 
 // A SaveLogResponse is received in response to a SaveLog rpc.
 message SaveLogResponse {
   bytes data = 1;
-}
-
-// A QuitAppRequest is sent as request to a QuitApp rpc.
-message QuitAppRequest {
-  uint32 client_id = 1;
-}
-
-// A QuitAppResponse is received in response to a QuitApp rpc.
-message QuitAppResponse {
 }

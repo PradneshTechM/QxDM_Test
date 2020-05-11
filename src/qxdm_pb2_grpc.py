@@ -14,20 +14,15 @@ class QXDMStub(object):
     Args:
       channel: A grpc.Channel.
     """
-    self.LaunchApp = channel.unary_unary(
-        '/QXDM/LaunchApp',
-        request_serializer=qxdm__pb2.LaunchAppRequest.SerializeToString,
-        response_deserializer=qxdm__pb2.LaunchAppResponse.FromString,
+    self.Connect = channel.unary_unary(
+        '/QXDM/Connect',
+        request_serializer=qxdm__pb2.ConnectRequest.SerializeToString,
+        response_deserializer=qxdm__pb2.ConnectResponse.FromString,
         )
-    self.ConnectDevice = channel.unary_unary(
-        '/QXDM/ConnectDevice',
-        request_serializer=qxdm__pb2.ConnectDeviceRequest.SerializeToString,
-        response_deserializer=qxdm__pb2.ConnectDeviceResponse.FromString,
-        )
-    self.DisconnectDevice = channel.unary_unary(
-        '/QXDM/DisconnectDevice',
-        request_serializer=qxdm__pb2.DisconnectDeviceRequest.SerializeToString,
-        response_deserializer=qxdm__pb2.DisconnectDeviceResponse.FromString,
+    self.Disconnect = channel.unary_unary(
+        '/QXDM/Disconnect',
+        request_serializer=qxdm__pb2.DisconnectRequest.SerializeToString,
+        response_deserializer=qxdm__pb2.DisconnectResponse.FromString,
         )
     self.StartLog = channel.unary_unary(
         '/QXDM/StartLog',
@@ -39,32 +34,20 @@ class QXDMStub(object):
         request_serializer=qxdm__pb2.SaveLogRequest.SerializeToString,
         response_deserializer=qxdm__pb2.SaveLogResponse.FromString,
         )
-    self.QuitApp = channel.unary_unary(
-        '/QXDM/QuitApp',
-        request_serializer=qxdm__pb2.QuitAppRequest.SerializeToString,
-        response_deserializer=qxdm__pb2.QuitAppResponse.FromString,
-        )
 
 
 class QXDMServicer(object):
   """The QXDM service definition.
   """
 
-  def LaunchApp(self, request, context):
-    """Launches an QXDM process
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
-  def ConnectDevice(self, request, context):
+  def Connect(self, request, context):
     """Connects a device to the QXDM process
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def DisconnectDevice(self, request, context):
+  def Disconnect(self, request, context):
     """Disconnects a device from the QXDM process
     """
     context.set_code(grpc.StatusCode.UNIMPLEMENTED)
@@ -85,30 +68,18 @@ class QXDMServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
-  def QuitApp(self, request, context):
-    """Quit a running QXDM process
-    """
-    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
-    context.set_details('Method not implemented!')
-    raise NotImplementedError('Method not implemented!')
-
 
 def add_QXDMServicer_to_server(servicer, server):
   rpc_method_handlers = {
-      'LaunchApp': grpc.unary_unary_rpc_method_handler(
-          servicer.LaunchApp,
-          request_deserializer=qxdm__pb2.LaunchAppRequest.FromString,
-          response_serializer=qxdm__pb2.LaunchAppResponse.SerializeToString,
+      'Connect': grpc.unary_unary_rpc_method_handler(
+          servicer.Connect,
+          request_deserializer=qxdm__pb2.ConnectRequest.FromString,
+          response_serializer=qxdm__pb2.ConnectResponse.SerializeToString,
       ),
-      'ConnectDevice': grpc.unary_unary_rpc_method_handler(
-          servicer.ConnectDevice,
-          request_deserializer=qxdm__pb2.ConnectDeviceRequest.FromString,
-          response_serializer=qxdm__pb2.ConnectDeviceResponse.SerializeToString,
-      ),
-      'DisconnectDevice': grpc.unary_unary_rpc_method_handler(
-          servicer.DisconnectDevice,
-          request_deserializer=qxdm__pb2.DisconnectDeviceRequest.FromString,
-          response_serializer=qxdm__pb2.DisconnectDeviceResponse.SerializeToString,
+      'Disconnect': grpc.unary_unary_rpc_method_handler(
+          servicer.Disconnect,
+          request_deserializer=qxdm__pb2.DisconnectRequest.FromString,
+          response_serializer=qxdm__pb2.DisconnectResponse.SerializeToString,
       ),
       'StartLog': grpc.unary_unary_rpc_method_handler(
           servicer.StartLog,
@@ -119,11 +90,6 @@ def add_QXDMServicer_to_server(servicer, server):
           servicer.SaveLog,
           request_deserializer=qxdm__pb2.SaveLogRequest.FromString,
           response_serializer=qxdm__pb2.SaveLogResponse.SerializeToString,
-      ),
-      'QuitApp': grpc.unary_unary_rpc_method_handler(
-          servicer.QuitApp,
-          request_deserializer=qxdm__pb2.QuitAppRequest.FromString,
-          response_serializer=qxdm__pb2.QuitAppResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
