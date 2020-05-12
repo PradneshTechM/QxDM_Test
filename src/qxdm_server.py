@@ -2,9 +2,8 @@
 
 from concurrent import futures
 import logging
-import multiprocessing
 from xvfbwrapper import Xvfb
-import threading
+from threading import Lock
 import datetime
 import sys
 import time
@@ -12,7 +11,7 @@ import shutil
 from pathlib import Path
 import os
 
-from qxdm_new_v2 import QXDM
+from qxdm_lib import QXDM
 import db
 
 import grpc
@@ -20,7 +19,7 @@ import qxdm_pb2
 import qxdm_pb2_grpc
 
 qxdm = None
-lock = threading.Lock()
+lock = Lock()
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
@@ -141,8 +140,6 @@ def main():
       os.mkdir(_TEMP_FOLDER_PATH)
 
       server.wait_for_termination()
-
-
 
 
 if __name__ == '__main__':

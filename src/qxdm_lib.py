@@ -1,4 +1,3 @@
-from pydbus import SessionBus
 import datetime
 import os
 import subprocess
@@ -8,6 +7,7 @@ import collections
 import dataclasses
 import pathlib
 
+from pydbus import SessionBus
 
 _BASE_PATH = pathlib.Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
@@ -33,7 +33,7 @@ class QXDM(object):
 
   def __init__(self):
     self.sessions = collections.defaultdict(Session)
-    self.qxdm_process_pid = None
+    self.process_pid = None
 
     self._launch()
 
@@ -41,7 +41,7 @@ class QXDM(object):
   def _launch(self):
     # start QXDM process
     qxdm_process = subprocess.Popen(QXDM.PROCESS_PATH)
-    self.qxdm_process_pid = qxdm_process.pid
+    self.process_pid = qxdm_process.pid
     print("QXDM launched")
     time.sleep(5)    # must wait until D-bus is available
 
@@ -157,7 +157,7 @@ class QXDM(object):
       session = self._get_new_session(bus)
       qxdm.QuitApplication(session.session_id)
     except Exception:
-      subprocess.Popen(f'kill {self.qxdm_process_pid}'.split())
+      subprocess.Popen(f'kill {self.process_pid}'.split())
     
     print('QXDM Quit - QXDM Closed')
 
