@@ -28,6 +28,13 @@ SAVE_FILE_PATH_3 = CLIENT_TEST_FOLDER / 'saved_test_3.isf'
 SAVE_FILE_PATH_4 = CLIENT_TEST_FOLDER / 'saved_test_4.isf'
 
 
+def test_status():
+  logging.info('Status request')
+  response = _worker_stub_singleton.Status(qxdm_pb2.StatusRequest())
+  logging.info(f'Status ready: {response.ready}')
+  return response.ready
+
+
 def test_connect(device_index):
   logging.info('Connect request')
   response = _worker_stub_singleton.Connect(
@@ -89,6 +96,8 @@ def test_connect_e2e(device_index):
 
 
 def test_log_e2e(device_index, log_path):
+  if not test_status():
+    return
   test_connect(device_index)
   sleep(2)
   test_start_log(device_index)
@@ -100,13 +109,15 @@ def test_log_e2e(device_index, log_path):
 
 def main():
   server_address = 'localhost:40041'
-  
+
   # remove files in client_test folder
   if CLIENT_TEST_FOLDER.exists() and CLIENT_TEST_FOLDER.is_dir():
     shutil.rmtree(CLIENT_TEST_FOLDER)
   os.mkdir(CLIENT_TEST_FOLDER)
   
   # _run_multiprocess_test(server_address, test_connect_e2e, [[0], [1], [2], [3], [4]])
+
+  _run_multiprocess_test(server_address, test_status, [[]])
   
   _run_multiprocess_test(server_address, test_log_e2e, [
     [0, SAVE_FILE_PATH_1],

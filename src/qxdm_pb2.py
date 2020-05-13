@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=_b('\n\nqxdm.proto\"&\n\x0e\x43onnectRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"2\n\x0f\x43onnectResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\")\n\x11\x44isconnectRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"5\n\x12\x44isconnectResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\"\'\n\x0fStartLogRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"\x12\n\x10StartLogResponse\"&\n\x0eSaveLogRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"\x1f\n\x0fSaveLogResponse\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c*2\n\x0f\x43onnectionState\x12\x10\n\x0c\x44ISCONNECTED\x10\x00\x12\r\n\tCONNECTED\x10\x01\x32\xd4\x01\n\x04QXDM\x12.\n\x07\x43onnect\x12\x0f.ConnectRequest\x1a\x10.ConnectResponse\"\x00\x12\x37\n\nDisconnect\x12\x12.DisconnectRequest\x1a\x13.DisconnectResponse\"\x00\x12\x31\n\x08StartLog\x12\x10.StartLogRequest\x1a\x11.StartLogResponse\"\x00\x12\x30\n\x07SaveLog\x12\x0f.SaveLogRequest\x1a\x10.SaveLogResponse\"\x00\x30\x01\x62\x06proto3')
+  serialized_pb=_b('\n\nqxdm.proto\"&\n\x0e\x43onnectRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"2\n\x0f\x43onnectResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\")\n\x11\x44isconnectRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"5\n\x12\x44isconnectResponse\x12\x1f\n\x05state\x18\x01 \x01(\x0e\x32\x10.ConnectionState\"\'\n\x0fStartLogRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"\x12\n\x10StartLogResponse\"&\n\x0eSaveLogRequest\x12\x14\n\x0c\x64\x65vice_index\x18\x01 \x01(\r\"\x1f\n\x0fSaveLogResponse\x12\x0c\n\x04\x64\x61ta\x18\x01 \x01(\x0c\"\x0f\n\rStatusRequest\"\x1f\n\x0eStatusResponse\x12\r\n\x05ready\x18\x01 \x01(\x08*2\n\x0f\x43onnectionState\x12\x10\n\x0c\x44ISCONNECTED\x10\x00\x12\r\n\tCONNECTED\x10\x01\x32\x81\x02\n\x04QXDM\x12.\n\x07\x43onnect\x12\x0f.ConnectRequest\x1a\x10.ConnectResponse\"\x00\x12\x37\n\nDisconnect\x12\x12.DisconnectRequest\x1a\x13.DisconnectResponse\"\x00\x12\x31\n\x08StartLog\x12\x10.StartLogRequest\x1a\x11.StartLogResponse\"\x00\x12\x30\n\x07SaveLog\x12\x0f.SaveLogRequest\x1a\x10.SaveLogResponse\"\x00\x30\x01\x12+\n\x06Status\x12\x0e.StatusRequest\x1a\x0f.StatusResponse\"\x00\x62\x06proto3')
 )
 
 _CONNECTIONSTATE = _descriptor.EnumDescriptor(
@@ -41,8 +41,8 @@ _CONNECTIONSTATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   serialized_options=None,
-  serialized_start=338,
-  serialized_end=388,
+  serialized_start=388,
+  serialized_end=438,
 )
 _sym_db.RegisterEnumDescriptor(_CONNECTIONSTATE)
 
@@ -292,6 +292,61 @@ _SAVELOGRESPONSE = _descriptor.Descriptor(
   serialized_end=336,
 )
 
+
+_STATUSREQUEST = _descriptor.Descriptor(
+  name='StatusRequest',
+  full_name='StatusRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=338,
+  serialized_end=353,
+)
+
+
+_STATUSRESPONSE = _descriptor.Descriptor(
+  name='StatusResponse',
+  full_name='StatusResponse',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ready', full_name='StatusResponse.ready', index=0,
+      number=1, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=355,
+  serialized_end=386,
+)
+
 _CONNECTRESPONSE.fields_by_name['state'].enum_type = _CONNECTIONSTATE
 _DISCONNECTRESPONSE.fields_by_name['state'].enum_type = _CONNECTIONSTATE
 DESCRIPTOR.message_types_by_name['ConnectRequest'] = _CONNECTREQUEST
@@ -302,6 +357,8 @@ DESCRIPTOR.message_types_by_name['StartLogRequest'] = _STARTLOGREQUEST
 DESCRIPTOR.message_types_by_name['StartLogResponse'] = _STARTLOGRESPONSE
 DESCRIPTOR.message_types_by_name['SaveLogRequest'] = _SAVELOGREQUEST
 DESCRIPTOR.message_types_by_name['SaveLogResponse'] = _SAVELOGRESPONSE
+DESCRIPTOR.message_types_by_name['StatusRequest'] = _STATUSREQUEST
+DESCRIPTOR.message_types_by_name['StatusResponse'] = _STATUSRESPONSE
 DESCRIPTOR.enum_types_by_name['ConnectionState'] = _CONNECTIONSTATE
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -361,6 +418,20 @@ SaveLogResponse = _reflection.GeneratedProtocolMessageType('SaveLogResponse', (_
   })
 _sym_db.RegisterMessage(SaveLogResponse)
 
+StatusRequest = _reflection.GeneratedProtocolMessageType('StatusRequest', (_message.Message,), {
+  'DESCRIPTOR' : _STATUSREQUEST,
+  '__module__' : 'qxdm_pb2'
+  # @@protoc_insertion_point(class_scope:StatusRequest)
+  })
+_sym_db.RegisterMessage(StatusRequest)
+
+StatusResponse = _reflection.GeneratedProtocolMessageType('StatusResponse', (_message.Message,), {
+  'DESCRIPTOR' : _STATUSRESPONSE,
+  '__module__' : 'qxdm_pb2'
+  # @@protoc_insertion_point(class_scope:StatusResponse)
+  })
+_sym_db.RegisterMessage(StatusResponse)
+
 
 
 _QXDM = _descriptor.ServiceDescriptor(
@@ -369,8 +440,8 @@ _QXDM = _descriptor.ServiceDescriptor(
   file=DESCRIPTOR,
   index=0,
   serialized_options=None,
-  serialized_start=391,
-  serialized_end=603,
+  serialized_start=441,
+  serialized_end=698,
   methods=[
   _descriptor.MethodDescriptor(
     name='Connect',
@@ -406,6 +477,15 @@ _QXDM = _descriptor.ServiceDescriptor(
     containing_service=None,
     input_type=_SAVELOGREQUEST,
     output_type=_SAVELOGRESPONSE,
+    serialized_options=None,
+  ),
+  _descriptor.MethodDescriptor(
+    name='Status',
+    full_name='QXDM.Status',
+    index=4,
+    containing_service=None,
+    input_type=_STATUSREQUEST,
+    output_type=_STATUSRESPONSE,
     serialized_options=None,
   ),
 ])

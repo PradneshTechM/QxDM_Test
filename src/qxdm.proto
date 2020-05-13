@@ -16,6 +16,9 @@ service QXDM {
   // Save logs on a QXDM process
   rpc SaveLog(SaveLogRequest) returns (stream SaveLogResponse) {}
 
+  // Get status of QXDM process
+  rpc Status(StatusRequest) returns (StatusResponse) {}
+
 }
 
 enum ConnectionState {
@@ -60,4 +63,12 @@ message SaveLogRequest {
 // A SaveLogResponse is received in response to a SaveLog rpc.
 message SaveLogResponse {
   bytes data = 1;
+}
+
+// A StatusRequest is sent as request to a Status rpc.
+message StatusRequest {}
+
+// A StatusResponse is received in response to a Status rpc.
+message StatusResponse {
+  bool ready = 1;
 }

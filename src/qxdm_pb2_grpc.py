@@ -34,6 +34,11 @@ class QXDMStub(object):
         request_serializer=qxdm__pb2.SaveLogRequest.SerializeToString,
         response_deserializer=qxdm__pb2.SaveLogResponse.FromString,
         )
+    self.Status = channel.unary_unary(
+        '/QXDM/Status',
+        request_serializer=qxdm__pb2.StatusRequest.SerializeToString,
+        response_deserializer=qxdm__pb2.StatusResponse.FromString,
+        )
 
 
 class QXDMServicer(object):
@@ -68,6 +73,13 @@ class QXDMServicer(object):
     context.set_details('Method not implemented!')
     raise NotImplementedError('Method not implemented!')
 
+  def Status(self, request, context):
+    """Get status of QXDM process
+    """
+    context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+    context.set_details('Method not implemented!')
+    raise NotImplementedError('Method not implemented!')
+
 
 def add_QXDMServicer_to_server(servicer, server):
   rpc_method_handlers = {
@@ -90,6 +102,11 @@ def add_QXDMServicer_to_server(servicer, server):
           servicer.SaveLog,
           request_deserializer=qxdm__pb2.SaveLogRequest.FromString,
           response_serializer=qxdm__pb2.SaveLogResponse.SerializeToString,
+      ),
+      'Status': grpc.unary_unary_rpc_method_handler(
+          servicer.Status,
+          request_deserializer=qxdm__pb2.StatusRequest.FromString,
+          response_serializer=qxdm__pb2.StatusResponse.SerializeToString,
       ),
   }
   generic_handler = grpc.method_handlers_generic_handler(
