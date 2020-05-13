@@ -14,9 +14,9 @@ _BASE_PATH = pathlib.Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
 
 """
-A running QXDM process is abstracted by a QXDM object which launches a QXDM process and keeps track of the pid (process id) and active sessions in a dictionary of (key: ports, values: Session).
+A running QXDM process is abstracted by a QXDM object which launches a QXDM process and keeps track of the process and active sessions in a dictionary of (key: ports, values: Session).
 
-Library users should call process_running() before any other library functions, otherwise a NotRunningException will be thrown if the QXDM process is not running.
+Library users should check process_running() before any other library functions, otherwise a NotRunningException will be thrown if the QXDM process is not running.
 """
 
 @dataclasses.dataclass
@@ -42,7 +42,7 @@ class QXDM:
 
   def __init__(self):
     self.sessions = collections.defaultdict(Session)
-    self.pid = None
+    self.process = None
     self.bus = None
     self.qxdm = None  # qxdm dbus object
 
@@ -51,7 +51,7 @@ class QXDM:
 
   def _launch(self):
     # start QXDM process
-    self.pid = subprocess.Popen(QXDM.PROCESS_PATH).pid
+    self.process = subprocess.Popen(QXDM.PROCESS_PATH)
     print("QXDM launched")
     time.sleep(5)    # must wait until D-bus is available
     self.bus = SessionBus()
@@ -60,13 +60,14 @@ class QXDM:
 
   def process_running(self) -> bool:
     '''Returns false if process doesn't exist or is a zombie'''
-    exists = psutil.pid_exists(self.pid)
-    return exists and psutil.Process(self.pid).status() != psutil.STATUS_ZOMBIE
+    if not psutil.pid_exists(self.process.pid):
+      return False
+    return psutil.Process(self.process.pid).status() != psutil.STATUS_ZOMBIE
 
 
   def _get_new_session(self) -> Session:
     if not self.process_running():
-      raise NotRunningException('QXDM is not running')
+      raise NotRunningException('QXDM is not running.')
 
     session_id = self.qxdm.getQXDMSession(True)
     self.qxdm.SetVisible(False, session_id)
@@ -168,9 +169,9 @@ class QXDM:
       session = self._get_new_session()
       self.qxdm.QuitApplication(session.session_id)
     except Exception:
-      subprocess.Popen(f'kill {self.pid}'.split())
+      self.proc.terminate()
     
-    self.pid = None
+    self.process = None
     print('QXDM Quit - QXDM Closed')
 
   

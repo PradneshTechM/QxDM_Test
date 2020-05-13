@@ -12,6 +12,7 @@ from pathlib import Path
 import os
 
 import qxdm_lib
+from gi.repository import GLib, Gio
 
 import grpc
 import qxdm_pb2
@@ -175,11 +176,14 @@ def launch_qxdm_if_not_running(log = 'QXDM re-launched.'):
   with launching_lock:
     # qxdm hasn't been started before, or it was running but not anymore
     if not qxdm or (qxdm and not qxdm.process_running()):
-      qxdm = qxdm_lib.QXDM()
-      if qxdm.process_running():
-        logging.info(log)
-      else:
-        logging.info('QXDM could not be re-launched.')
+      try:
+        qxdm = qxdm_lib.QXDM()
+        if qxdm.process_running():
+          logging.info(log)
+        else:
+          logging.info('QXDM could not be re-launched.')
+      except GLib.Error:
+        logging.info('Could not connect to QXDM Dbus. Check license.')
 
 
 def main():
