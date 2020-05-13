@@ -7,10 +7,17 @@ import collections
 import dataclasses
 import pathlib
 
+import psutil
 from pydbus import SessionBus
 
 _BASE_PATH = pathlib.Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
+
+"""
+A running QXDM process is abstracted by a QXDM object which launches a QXDM process and keeps track of the pid (process id) and active sessions in a dictionary of (key: ports, values: Session).
+
+Library users should call process_running() before any other library functions, otherwise a NotRunningException will be thrown if the QXDM process is not running.
+"""
 
 @dataclasses.dataclass
 class Session:
@@ -19,8 +26,10 @@ class Session:
   port: int = None
   logging: bool = False
 
+class NotRunningException(Exception):
+  pass
 
-class QXDM(object):
+class QXDM:
   # DIAG server states
   SERVER_DISCONNECTED = 0
   SERVER_CONNECTED = 1
@@ -33,43 +42,57 @@ class QXDM(object):
 
   def __init__(self):
     self.sessions = collections.defaultdict(Session)
-    self.process_pid = None
+    self.pid = None
+    self.bus = None
+    self.qxdm = None  # qxdm dbus object
 
     self._launch()
 
 
   def _launch(self):
     # start QXDM process
-    qxdm_process = subprocess.Popen(QXDM.PROCESS_PATH)
-    self.process_pid = qxdm_process.pid
+    self.pid = subprocess.Popen(QXDM.PROCESS_PATH).pid
     print("QXDM launched")
     time.sleep(5)    # must wait until D-bus is available
+    self.bus = SessionBus()
+    self.qxdm = self.bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
 
 
-  def _get_new_session(self, bus):
-    qxdm = bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
-    session_id = qxdm.getQXDMSession(True)
-    qxdm.SetVisible(False, session_id)
+  def process_running(self) -> bool:
+    '''Returns false if process doesn't exist or is a zombie'''
+    exists = psutil.pid_exists(self.pid)
+    return exists and psutil.Process(self.pid).status() != psutil.STATUS_ZOMBIE
+
+
+  def _get_new_session(self) -> Session:
+    if not self.process_running():
+      raise NotRunningException('QXDM is not running')
+
+    session_id = self.qxdm.getQXDMSession(True)
+    self.qxdm.SetVisible(False, session_id)
 
     print('QXDM session :', session_id)
     # print('QXDM version :', qxdm.AppVersion())
     return Session(session_id)
 
 
-  def connect(self, port):
-    bus = SessionBus()
-    session = self._get_new_session(bus)
-
-    qxdm = bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
+  def connect(self, port: int) -> bool:
+    try:
+      """
+      A new session should be retrieved with qxdm.getQXDMSession(True) before each connect attempt.  If multiple sessions are retrieved before a connect attempt, then only the last session is able to connect.
+      """
+      session = self._get_new_session()
+    except Exception:
+      raise
     
-    qxdm.ConnectDevice(port, session.session_id)
+    self.qxdm.ConnectDevice(port, session.session_id)
     # Wait until DIAG server state transitions to connected
     # (we do this for up to five seconds)
     wait_count = 0
     server_state = QXDM.SERVER_DISCONNECTED
     while server_state != QXDM.SERVER_CONNECTED and wait_count < 5:
       time.sleep(1)
-      server_state = qxdm.GetConnectionState(session.session_id)
+      server_state = self.qxdm.GetConnectionState(session.session_id)
       wait_count += 1
     
     if server_state == QXDM.SERVER_CONNECTED:
@@ -82,24 +105,21 @@ class QXDM(object):
       return False
 
 
-  def disconnect(self, port):
+  def disconnect(self, port: int) -> bool:
     session = self.sessions[port]
     # if port is not connected ...
     if not session:
       print('Could not find connected port')
       return
 
-    bus = SessionBus()
-    qxdm = bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
-
-    qxdm.DisconnectDevice(session.session_id)
+    self.qxdm.DisconnectDevice(session.session_id)
     # wait until DIAG server state transitions to disconnected
     # (we do this for up to five seconds)
     wait_count = 0
     server_state = QXDM.SERVER_CONNECTED
     while server_state != QXDM.SERVER_DISCONNECTED and wait_count < 5:
       time.sleep(1)
-      server_state = qxdm.GetConnectionState(session.session_id)
+      server_state = self.qxdm.GetConnectionState(session.session_id)
       wait_count += 1
 
     if server_state == QXDM.SERVER_DISCONNECTED:
@@ -112,61 +132,53 @@ class QXDM(object):
       return False
 
 
-  def start_logs(self, port):
+  def start_logs(self, port: int) -> None:
     session = self.sessions[port]
     # if port is not connected ...
     if not session:
       print('Could not find connected port')
       return
 
-    bus = SessionBus()
-    qxdm = bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
-
     now = datetime.datetime.now()
     path = f'{_TEMP_FOLDER_PATH}/temp_{now.strftime("%y%m%d_%H%M%S_%f")}.isf'
-    qxdm.SaveItemStore(path, session.session_id)
+    self.qxdm.SaveItemStore(path, session.session_id)
     os.remove(path)
     session.logging = True
     print(f'{session.session_id} Start Logs - New logs started')
 
 
-  def save_logs(self, port):
+  def save_logs(self, port: int) -> str:
     session = self.sessions[port]
     # if port is not connected ...
     if not session:
       print('Could not find connected port')
       return
-
-    bus = SessionBus()
-    qxdm = bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
     
     now = datetime.datetime.now()
     path = f'{_TEMP_FOLDER_PATH}/log_{now.strftime("%y%m%d_%H%M%S_%f")}_{port}.isf'
 
-    qxdm.SaveItemStore(path, session.session_id)
+    self.qxdm.SaveItemStore(path, session.session_id)
     session.logging = False
     print(f'{session.session_id} Save Logs - Log saved : {path}')
     return path
 
 
-  def quit(self):
-    bus = SessionBus()
-    qxdm = bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
-
+  def quit(self) -> None:
     try:
-      session = self._get_new_session(bus)
-      qxdm.QuitApplication(session.session_id)
+      session = self._get_new_session()
+      self.qxdm.QuitApplication(session.session_id)
     except Exception:
-      subprocess.Popen(f'kill {self.process_pid}'.split())
+      subprocess.Popen(f'kill {self.pid}'.split())
     
+    self.pid = None
     print('QXDM Quit - QXDM Closed')
 
   
-  def is_connected(self, port):
+  def is_connected(self, port: int) -> bool:
     return port in self.sessions
   
   
-  def is_logging(self, port):
+  def is_logging(self, port: int) -> bool:
     if port in self.sessions:
       return self.sessions[port].logging
     return False
