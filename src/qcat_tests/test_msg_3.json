@@ -1,0 +1,38 @@
+{
+    "packet_types": [
+        "0xB0EE",
+        "0xB0ED",
+        "0xB0EC",
+        "0xB0C0",
+        "0xB0E2",
+        "0xB0E3"
+    ],
+    "messages": [
+        {
+            "packet_type": "0xB0C0",
+            "subtitle": "DL_CCCH / RRCConnectionSetup",
+            "fields": [
+                {
+                    "field_name": "srb-Identity",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "rlc-Config explicitValue",
+                    "field_type": "VALUE",
+                    "get_value": false
+                },
+                {
+                    "field_name": "mac-MainConfig explicitValue",
+                    "field_type": "VALUE",
+                    "get_value": false
+                },
+                {
+                    "field_name": "physicalConfigDedicated",
+                    "field_type": "VALUE",
+                    "get_value": false
+                }
+            ]
+        }
+    ]
+}

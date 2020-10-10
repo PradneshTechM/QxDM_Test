@@ -1,0 +1,101 @@
+{
+    "packet_types": [
+        "0xB0EE",
+        "0xB0ED",
+        "0xB0EC",
+        "0xB0C0",
+        "0xB0E2",
+        "0xB0E3"
+    ],
+    "messages": [
+        {
+            "packet_type": "0xB0ED",
+            "subtitle": "Attach request Msg",
+            "fields": [
+                {
+                    "field_name": "att_type",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "id_type",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "",
+                    "regex": "esm_msg_container(?:.|\n)*(msg_type.*)",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "pdn_type",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "req_type",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "esm_info_trans_flag",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "GEA/1",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "GEA/2",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "GEA/3",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "ISR support",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "a5_1_alg_sup",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "a5_3_alg_sup",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "bitmap[1]",
+                    "regex": "codecs\\[0](?:.|\n)*(bitmap\\[1].*)(?:.|\n)*codecs\\[1]",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "bitmap[0]",
+                    "regex": "codecs\\[1](?:.|\n)*(bitmap\\[0].*)",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "voice_domain_pref_incl",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "voice_domain_pref_for_EUTRAN",
+                    "field_type": "VALUE",
+                    "get_value": true
+                }
+            ]
+        }
+    ]
+}

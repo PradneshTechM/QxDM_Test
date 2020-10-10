@@ -1,0 +1,28 @@
+{
+    "packet_types": [
+        "0xB0EE",
+        "0xB0ED",
+        "0xB0EC",
+        "0xB0C0",
+        "0xB0E2",
+        "0xB0E3"
+    ],
+    "messages": [
+        {
+            "packet_type": "0xB0C0",
+            "subtitle": "UL_CCCH / RRCConnectionRequest",
+            "fields": [
+                {
+                    "field_name": "ue-Identity",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "establishmentCause",
+                    "field_type": "VALUE",
+                    "get_value": true
+                }
+            ]
+        }
+    ]
+}

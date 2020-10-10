@@ -1,0 +1,29 @@
+{
+    "packet_types": [
+        "0xB0EE",
+        "0xB0ED",
+        "0xB0EC",
+        "0xB0C0",
+        "0xB0E2",
+        "0xB0E3"
+    ],
+    "messages": [
+        {
+            "packet_type": "0xB0C0",
+            "subtitle": "DL_DCCH / UECapabilityEnquiry",
+            "fields": [
+                {
+                    "field_name": "ue-CapabilityRequest",
+                    "regex": "ue-CapabilityRequest(?:.|\n)*{\n((?:.|\n)*?).*}",
+                    "field_type": "COLLECTION",
+                    "get_value": true
+                },
+                {
+                    "field_name": "trans_id",
+                    "field_type": "VALUE",
+                    "get_value": true
+                }
+            ]
+        }
+    ]
+}
