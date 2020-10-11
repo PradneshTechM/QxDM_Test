@@ -118,11 +118,20 @@ class QCAT:
                     # for each field of message, apply regex or normal search
                     for field in msg.fields:
                         if field.regex:
+                            text = packet.Text()  # for debugging
                             result = re.search(field.regex, packet.Text())
-                            if result:
+                            if result and len(result.groups()) >= 1:
                                 if field.field_type == FieldType.COLLECTION:
                                     matched.append(field.field_name)
-                                matched.append(result.group(1).strip())
+                                    # split by '\r\n' and remove whitespace from start and end
+                                    elements = [el.strip() for el in result.group(1).split('\r\n')]
+                                    # remove empty strings
+                                    elements = [el for el in elements if el != '']
+                                    # remove ',' at end
+                                    elements = [el if el[-1] != ',' else el[:-1] for el in elements]
+                                    matched.append(elements)
+                                else:
+                                    matched.append(result.group(1).strip())
                         else:
                             match = None
                             if field.get_value:
@@ -191,7 +200,12 @@ class QCAT:
         if data[3]:
             f.write('Matches:\n')
             for match in data[3]:
-                f.write(f'\t{match}\n')
+                if type(match) == list:
+                    f.write('\t[\n')
+                    f.writelines('\t\t' + '\n\t\t'.join(match))
+                    f.write('\n\t]\n')
+                else:
+                    f.write(f'\t{match}\n')
         f.write('\n')
 
 
@@ -231,8 +245,8 @@ if __name__ == '__main__':
     qcat = QCAT()
 
     print('Test case 1 ')
-    test_filename = 'qcat_tests/test_msg_7.json'
-    output_filename = 'qcat_tests/result_test_msg_7.txt'
+    test_filename = 'src/qcat_tests/test_msg_8.json'
+    output_filename = 'src/qcat_tests/result_test_msg_8.txt'
     packet_types, messages = parse_json(test_filename)
     qcat.set_packet_filter(packet_types)
     parsed_data = qcat.parse(input_filename, messages)
