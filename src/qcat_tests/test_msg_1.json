@@ -23,7 +23,7 @@
                     "get_value": true
                 },
                 {
-                    "field_name": "",
+                    "field_name": "msg_type",
                     "regex": "esm_msg_container(?:.|\n)*(msg_type.*)",
                     "field_type": "VALUE",
                     "get_value": true

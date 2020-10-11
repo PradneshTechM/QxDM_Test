@@ -1,0 +1,66 @@
+{
+    "packet_types": [
+        "0xB0EE",
+        "0xB0ED",
+        "0xB0EC",
+        "0xB0C0",
+        "0xB0E2",
+        "0xB0E3"
+    ],
+    "messages": [
+        {
+            "packet_type": "0xB0C0",
+            "subtitle": "UL_DCCH / UECapabilityInformation",
+            "fields": [
+                {
+                    "field_name": "accessStratumRelease",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "ue-Category",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "supportedBandListEUTRA",
+                    "regex": "supportedBandListEUTRA",
+                    "field_type": "COLLECTION",
+                    "get_value": true
+                },
+                {
+                    "field_name": "supportedBandListUTRA-FDD",
+                    "regex": "supportedBandListUTRA-FDD(?:.|\n)*?{((?:.|\n)*?)}",
+                    "field_type": "COLLECTION",
+                    "get_value": true
+                },
+                {
+                    "field_name": "supportedBandListGERAN",
+                    "regex": "supportedBandListGERAN(?:.|\n)*?{((?:.|\n)*?)}",
+                    "field_type": "COLLECTION",
+                    "get_value": true
+                },
+                {
+                    "field_name": "DTM-R9",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "e-RedirectionGERAN-R9",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "e-RedirectionUTRA-r9",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "featureGroupIndicators",
+                    "field_type": "VALUE",
+                    "get_value": true
+                }
+            ]
+        }
+    ]
+}

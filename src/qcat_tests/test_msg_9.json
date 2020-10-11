@@ -10,12 +10,11 @@
     "messages": [
         {
             "packet_type": "0xB0C0",
-            "subtitle": "DL_DCCH / UECapabilityEnquiry",
+            "subtitle": "DL_DCCH / RRCConnectionReconfiguration",
             "fields": [
                 {
-                    "field_name": "ue-CapabilityRequest",
-                    "regex": "ue-CapabilityRequest(?:.|\n)*?{((?:.|\n)*?)}",
-                    "field_type": "COLLECTION",
+                    "field_name": "eps-BearerIdentity",
+                    "field_type": "VALUE",
                     "get_value": true
                 }
             ]

@@ -9,12 +9,12 @@
     ],
     "messages": [
         {
-            "packet_type": "0xB0C0",
-            "subtitle": "DL_DCCH / UECapabilityEnquiry",
+            "packet_type": "0xB0EC",
+            "subtitle": "Attach accept Msg",
             "fields": [
                 {
-                    "field_name": "ue-CapabilityRequest",
-                    "regex": "ue-CapabilityRequest(?:.|\n)*?{((?:.|\n)*?)}",
+                    "field_name": "access_point",
+                    "regex": "access_point(?:.|\n)((?:.|\n)*?).*pdn_addr",
                     "field_type": "COLLECTION",
                     "get_value": true
                 }
