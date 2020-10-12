@@ -1,0 +1,26 @@
+{
+    "test_name": "Test Case 1",
+    "packet_types": [
+        "0xB0EE",
+        "0xB0ED",
+        "0xB0EC",
+        "0xB0C0",
+        "0xB0E2",
+        "0xB0E3"
+    ],
+    "tests": [
+        "qcat_tests/test_msg_0.json",
+        "qcat_tests/test_msg_1.json",
+        "qcat_tests/test_msg_2.json",
+        "qcat_tests/test_msg_3.json",
+        "qcat_tests/test_msg_4.json",
+        "qcat_tests/test_msg_5.json",
+        "qcat_tests/test_msg_6.json",
+        "qcat_tests/test_msg_7.json",
+        "qcat_tests/test_msg_8.json",
+        "qcat_tests/test_msg_9.json",
+        "qcat_tests/test_msg_10.json",
+        "qcat_tests/test_msg_11.json",
+        "qcat_tests/test_msg_12.json"
+    ]
+}

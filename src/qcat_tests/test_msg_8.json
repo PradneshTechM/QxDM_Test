@@ -1,12 +1,4 @@
 {
-    "packet_types": [
-        "0xB0EE",
-        "0xB0ED",
-        "0xB0EC",
-        "0xB0C0",
-        "0xB0E2",
-        "0xB0E3"
-    ],
     "messages": [
         {
             "packet_type": "0xB0C0",
@@ -24,7 +16,8 @@
                 },
                 {
                     "field_name": "supportedBandListEUTRA",
-                    "regex": "supportedBandListEUTRA",
+                    "regex": "supportedBandListEUTRA(?:.|\n)*?{(?:.|\n)*?({(?:.|\n)*?})\r\n",
+                    "search_2": "bandEUTRA",
                     "field_type": "COLLECTION",
                     "get_value": true
                 },
@@ -57,6 +50,12 @@
                 },
                 {
                     "field_name": "featureGroupIndicators",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "Msg Length",
+                    "regex": "(Msg Length.*)",
                     "field_type": "VALUE",
                     "get_value": true
                 }

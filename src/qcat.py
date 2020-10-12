@@ -27,6 +27,7 @@ class FieldType(Enum):
 class Field:
     field_name: str
     regex: str
+    search_2: str
     field_type: FieldType
     get_value: bool
 
@@ -129,6 +130,9 @@ class QCAT:
                                     elements = [el for el in elements if el != '']
                                     # remove ',' at end
                                     elements = [el if el[-1] != ',' else el[:-1] for el in elements]
+                                    # do additional parsing using search_2
+                                    if field.search_2:
+                                        elements = [el.strip() for el in elements if field.search_2 in el]
                                     matched.append(elements)
                                 else:
                                     matched.append(result.group(1).strip())
@@ -138,6 +142,7 @@ class QCAT:
                                 for line in packet.Text().split('\r\n'):
                                     if field.field_name in line:
                                         match = line.strip()
+                                        match = match if match[-1] != ',' else match[:-1]
                                         break
                             else:
                                 if field.field_name in packet.Text():
@@ -206,35 +211,42 @@ class QCAT:
                     f.write('\n\t]\n')
                 else:
                     f.write(f'\t{match}\n')
-        f.write('\n')
+        f.write('\n\n')
 
 
-def parse_json(filename):
+def parse_json_config(filename):
+    print('Loading test config:', test_filename)
     with open(filename) as f:
         TC_json = json.load(f)
 
     # print(json.dumps(TC_json, indent=2))
 
+    test_name = TC_json['test_name']
     packet_types = [int(packet, 16) for packet in TC_json['packet_types']]
     messages = []
-    for json_msg in TC_json['messages']:
-        fields = []
-        for json_field in json_msg['fields']:
-            field = Field(
-                field_name=json_field.get('field_name', None),
-                regex=json_field.get('regex', None),
-                field_type=FieldType[json_field['field_type']],
-                get_value=json_field['get_value']
-            )
-            fields.append(field)
+    for test_file in TC_json['tests']:
+        with open(test_file) as f:
+            test_json = json.load(f)
 
-        msg = Message(
-            packet_type=int(json_msg['packet_type'], 16),
-            subtitle=json_msg['subtitle'],
-            fields=fields
-        )
-        messages.append(msg)
-    return packet_types, messages
+        for json_msg in test_json['messages']:
+            fields = []
+            for json_field in json_msg['fields']:
+                field = Field(
+                    field_name=json_field.get('field_name', None),
+                    regex=json_field.get('regex', None),
+                    search_2=json_field.get('search_2', None),
+                    field_type=FieldType[json_field['field_type']],
+                    get_value=json_field['get_value']
+                )
+                fields.append(field)
+
+            msg = Message(
+                packet_type=int(json_msg['packet_type'], 16),
+                subtitle=json_msg['subtitle'],
+                fields=fields
+            )
+            messages.append(msg)
+    return test_name, packet_types, messages
 
 
 if __name__ == '__main__':
@@ -244,10 +256,13 @@ if __name__ == '__main__':
     print('QXDM log analysis started')
     qcat = QCAT()
 
-    print('Test case 1 ')
-    test_filename = 'src/qcat_tests/test_msg_8.json'
-    output_filename = 'src/qcat_tests/result_test_msg_8.txt'
-    packet_types, messages = parse_json(test_filename)
+    test_filename = 'qcat_tests/Test_case_1.json'
+    output_filename = 'qcat_tests/result_Test_case_1.txt'
+
+    test_name, packet_types, messages = parse_json_config(test_filename)
+
+    print('Parsing:', test_name)
+
     qcat.set_packet_filter(packet_types)
     parsed_data = qcat.parse(input_filename, messages)
 
