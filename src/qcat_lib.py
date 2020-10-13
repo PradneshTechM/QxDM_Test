@@ -1,3 +1,4 @@
+import argparse
 from pydbus import SessionBus
 import random
 import subprocess
@@ -119,13 +120,13 @@ class QCAT:
                     # for each field of message, apply regex or normal search
                     for field in msg.fields:
                         if field.regex:
-                            text = packet.Text()  # for debugging
-                            result = re.search(field.regex, packet.Text())
-                            if result and len(result.groups()) >= 1:
+                            # text = packet.Text()  # for debugging
+                            match = re.findall(field.regex, packet.Text())
+                            if match:
                                 if field.field_type == FieldType.COLLECTION:
                                     matched.append(field.field_name)
                                     # split by '\r\n' and remove whitespace from start and end
-                                    elements = [el.strip() for el in result.group(1).split('\r\n')]
+                                    elements = [el.strip() for el in match[0].split('\r\n')]
                                     # remove empty strings
                                     elements = [el for el in elements if el != '']
                                     # remove ',' at end
@@ -135,7 +136,13 @@ class QCAT:
                                         elements = [el.strip() for el in elements if field.search_2 in el]
                                     matched.append(elements)
                                 else:
-                                    matched.append(result.group(1).strip())
+                                    if type(match[0]) == str:
+                                        matched.append(match[0].strip())
+                                    # handle non-collection multi-line multi-group regex match
+                                    else:
+                                        elements = [el.strip() for el in match[0]]
+                                        elements = [el for el in elements if el != '']
+                                        matched.append('\n\t'.join(elements))
                         else:
                             match = None
                             if field.get_value:
@@ -215,7 +222,7 @@ class QCAT:
 
 
 def parse_json_config(filename):
-    print('Loading test config:', test_filename)
+    print('Loading test config:', filename)
     with open(filename) as f:
         TC_json = json.load(f)
 
@@ -249,16 +256,8 @@ def parse_json_config(filename):
     return test_name, packet_types, messages
 
 
-if __name__ == '__main__':
-    input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')
-    # output_filename = os.path.abspath('/home/techm/Desktop/parsed_QCAT.txt')
-
+def parse_log(input_filename, test_filename, output_filename, qcat):
     print('QXDM log analysis started')
-    qcat = QCAT()
-
-    test_filename = 'qcat_tests/Test_case_1.json'
-    output_filename = 'qcat_tests/result_Test_case_1.txt'
-
     test_name, packet_types, messages = parse_json_config(test_filename)
 
     print('Parsing:', test_name)
@@ -270,7 +269,14 @@ if __name__ == '__main__':
         for data in parsed_data:
             qcat.write_parsed_data(data, f)
 
-    # print('Test case 2')
-    # TC2_packet_types = [0x156E]
+    return True
 
+
+if __name__ == '__main__':
+    input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')
+    test_filename = 'src/qcat_tests/Test_case_2.json'
+    output_filename = 'src/qcat_tests/result_Test_case_2.txt'
+
+    qcat = QCAT()
+    parse_log(input_filename, test_filename, output_filename, qcat)
     qcat.quit()
