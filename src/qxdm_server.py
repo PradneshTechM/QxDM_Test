@@ -12,6 +12,7 @@ from pathlib import Path
 import os
 
 import qxdm_lib
+import qcat_lib
 from gi.repository import GLib, Gio
 
 import grpc
@@ -45,6 +46,8 @@ following exception is raised:
 qxdm = None
 qxdm_lock = threading.Lock()
 launching_lock = threading.Lock()
+
+qcat = None
 
 _PROCESS_CHECK_INTERVAL = 60
 _BASE_PATH = Path(__file__).parent.resolve()
@@ -137,7 +140,7 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
         return qxdm_pb2.StartLogResponse()
 
     def SaveLog(self, request, context):
-        logging.info(f'[SaveLog] request on device_index: {request.device_index}')
+        logging.info(f'[SaveLog] request on device_index: {request.device_index}, send_file: {request.send_file}')
 
         if not qxdm.process_running():
             context.abort(code=grpc.StatusCode.FAILED_PRECONDITION,
@@ -146,12 +149,43 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
 
         filepath = qxdm.save_logs(request.device_index)
 
-        # open file and send data in chunks
-        with open(filepath, 'rb') as file_content:
-            for rec in read_bytes(file_content, _CHUNK_SIZE):
-                yield qxdm_pb2.SaveLogResponse(data=rec)
+        if request.send_file:
+            # open file and send data in chunks
+            with open(filepath, 'rb') as file_content:
+                for rec in read_bytes(file_content, _CHUNK_SIZE):
+                    yield qxdm_pb2.SaveLogResponse(data=rec)
 
-        logging.info(f'[SaveLog] Sent logs: {request.device_index}')
+            logging.info(f'[SaveLog] Sent logs: {request.device_index}')
+        else:
+            logging.info(f'[SaveLog] Sent filename: {filepath}')
+            yield qxdm_pb2.SaveLogResponse(filename=filepath)
+
+    def ParseLog(self, request, context):
+        logging.info(f'[ParseLog] request on log file: {request.input_filename}, using test config: {request.test_config_filename}')
+
+        # set name and path of parsed results file
+        path, filename = os.path.split(request.input_filename)
+        filename = os.path.splitext(filename)[0]
+        parsed_filename = f'result_{filename}.txt'
+        parsed_filepath = os.path.join(path, parsed_filename)
+
+        # call QCAT library on the log file which needs parsing
+        parsed = qcat_lib.parse_log(request.input_filename,
+                                    request.test_config_filename,
+                                    parsed_filepath,
+                                    qcat)
+
+        # failed for some reason
+        if not parsed:
+            context.abort(code=grpc.StatusCode.FAILED_PRECONDITION,
+                          details='QCAT parsing failed.')
+
+        # open file and send data in chunks
+        with open(parsed_filepath, 'rb') as file_content:
+            for rec in read_bytes(file_content, _CHUNK_SIZE):
+                yield qxdm_pb2.ParseLogResponse(data=rec)
+
+        logging.info('[ParseLog] parsed log sent')
 
     def Status(self, request, context):
         ready = qxdm.process_running()
@@ -165,10 +199,12 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
 
 
 def launch_qxdm_if_not_running(log='QXDM re-launched.'):
-    global qxdm, launching_lock
+    global qxdm, qcat, launching_lock
 
     # only 1 thread with launching_lock can execute below
     with launching_lock:
+        if not qcat:
+            qcat = qcat_lib.QCAT()
         # qxdm hasn't been started before, or it was running but not anymore
         if not qxdm or (qxdm and not qxdm.process_running()):
             try:
@@ -186,7 +222,7 @@ def main():
 
     with Xvfb(width=2, height=2, colordepth=8):
         with HiddenPrints():
-            launch_qxdm_if_not_running('QXDM launched.')
+            launch_qxdm_if_not_running('QXDM launched')
 
             server = grpc.server(futures.ThreadPoolExecutor(
                 max_workers=10,

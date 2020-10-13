@@ -27,6 +27,12 @@ SAVE_FILE_PATH_2 = CLIENT_TEST_FOLDER / 'saved_test_2.isf'
 SAVE_FILE_PATH_3 = CLIENT_TEST_FOLDER / 'saved_test_3.isf'
 SAVE_FILE_PATH_4 = CLIENT_TEST_FOLDER / 'saved_test_4.isf'
 
+QCAT_TEST_CONFIG_1 = _BASE_PATH / 'qcat_tests/Test_case_1.json'
+QCAT_TEST_CONFIG_2 = _BASE_PATH / 'qcat_tests/Test_case_2.json'
+
+SAVE_PARSED_FILE_PATH_1 = CLIENT_TEST_FOLDER / 'parsed_test_case_1.txt'
+SAVE_PARSED_FILE_PATH_2 = CLIENT_TEST_FOLDER / 'parsed_test_case_2.txt'
+
 
 def test_status():
     logging.info('Status request')
@@ -55,15 +61,37 @@ def test_start_log(device_index):
         qxdm_pb2.StartLogRequest(device_index=device_index))
 
 
-def test_stop_log(device_index, log_path):
+def test_stop_log_send_file(device_index, log_path):
     logging.info('Stop log request')
     responses = _worker_stub_singleton.SaveLog(
-        qxdm_pb2.SaveLogRequest(device_index=device_index))
+        qxdm_pb2.SaveLogRequest(device_index=device_index,
+                                send_file=True))
 
     with open(log_path, 'wb') as file_:
         for response in responses:
             file_.write(response.data)
     logging.info(f'Saved log to {log_path}')
+
+
+def test_stop_log(device_index):
+    logging.info('Stop log request')
+    responses = _worker_stub_singleton.SaveLog(
+        qxdm_pb2.SaveLogRequest(device_index=device_index,
+                                send_file=False))
+    return responses.next().filename
+
+
+def test_parse_log(input_path, test_config_path, output_path):
+
+    logging.info(f'Parse log request on: {input_path}')
+    responses = _worker_stub_singleton.ParseLog(
+        qxdm_pb2.ParseLogRequest(input_filename=input_path,
+                                 test_config_filename=str(test_config_path)))
+
+    with open(output_path, 'wb') as file_:
+        for response in responses:
+            file_.write(response.data)
+    logging.info(f'Saved parsed log to {output_path}')
 
 
 def _shutdown_worker():
@@ -95,16 +123,30 @@ def test_connect_e2e(device_index):
     test_disconnect(device_index)
 
 
-def test_log_e2e(device_index, log_path):
+def test_log_no_parse_e2e(device_index, log_path):
     if not test_status():
         return
     test_connect(device_index)
     sleep(2)
     test_start_log(device_index)
     sleep(2)
-    test_stop_log(device_index, log_path)
+    test_stop_log_send_file(device_index, log_path)
     sleep(2)
     test_disconnect(device_index)
+
+
+def test_log_parse_e2e(device_index, test_config_path, output_path):
+    if not test_status():
+        return
+    test_connect(device_index)
+    sleep(2)
+    test_start_log(device_index)
+    sleep(2)
+    filename = test_stop_log(device_index)
+    logging.info(f'log path: {filename}')
+    sleep(2)
+    test_disconnect(device_index)
+    test_parse_log(filename, test_config_path, output_path)
 
 
 def main():
@@ -115,17 +157,22 @@ def main():
         shutil.rmtree(CLIENT_TEST_FOLDER)
     os.mkdir(CLIENT_TEST_FOLDER)
 
+    _run_multiprocess_test(server_address, test_log_parse_e2e, [
+        [0, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
+    ])
+
+
     # _run_multiprocess_test(server_address, test_connect_e2e,
     #                        [[0], [1], [2], [3], [4]])
 
-    _run_multiprocess_test(server_address, test_status, [[]])
+    # _run_multiprocess_test(server_address, test_status, [[]])
 
-    _run_multiprocess_test(server_address, test_log_e2e, [
-        [0, SAVE_FILE_PATH_1],
-        [1, SAVE_FILE_PATH_2],
-        # [2, SAVE_FILE_PATH_3],
-        # [3, SAVE_FILE_PATH_4]
-    ])
+    # _run_multiprocess_test(server_address, test_log_no_parse_e2e, [
+    #     [0, SAVE_FILE_PATH_1],
+    #     # [1, SAVE_FILE_PATH_2],
+    #     # [2, SAVE_FILE_PATH_3],
+    #     # [3, SAVE_FILE_PATH_4]
+    # ])
 
 
 if __name__ == '__main__':
