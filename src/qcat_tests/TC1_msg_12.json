@@ -1,9 +1,15 @@
 {
     "messages": [
         {
-            "packet_type": "0xB0ED",
-            "subtitle": "Attach complete Msg",
-            "fields": []
+            "packet_type": "0xB0E2",
+            "subtitle": "PDN connectivity request Msg",
+            "fields": [
+                {
+                    "field_name": "pdn_type",
+                    "field_type": "VALUE",
+                    "get_value": true
+                }
+            ]
         }
     ]
 }
