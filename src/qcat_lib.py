@@ -35,8 +35,15 @@ class Field:
 
 @dataclasses.dataclass
 class Message:
+    '''
+    exact_match: boolean used to indicate that a message MUST contain fields,
+        otherwise, message should not be added. Used to handle cases like
+        'LTE NAS EMM State' message which should have specific field and value:
+        'EMM state = EMM_REGISTERED_INITIATED'
+    '''
     packet_type: int
     subtitle: str
+    exact_match: bool
     fields: [Field]
 
 
@@ -147,7 +154,8 @@ class QCAT:
                             match = None
                             if field.get_value:
                                 for line in packet.Text().split('\r\n'):
-                                    if field.field_name in line:
+                                    # case-insensitive search for non-regex
+                                    if field.field_name.lower() in line.lower():
                                         match = line.strip()
                                         match = match if match[-1] != ',' else match[:-1]
                                         break
@@ -156,6 +164,10 @@ class QCAT:
                                     match = field.field_name
                             if match:
                                 matched.append(match)
+
+                    # do not add message if there's no match and field is expected
+                    if not matched and msg.exact_match:
+                        continue
 
                     # add parsed data to output
                     parsed_data.append([
@@ -250,6 +262,7 @@ def parse_json_config(filename):
             msg = Message(
                 packet_type=int(json_msg['packet_type'], 16),
                 subtitle=json_msg['subtitle'],
+                exact_match=json_msg.get('exact_match', None),
                 fields=fields
             )
             messages.append(msg)
