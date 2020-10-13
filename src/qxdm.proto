@@ -16,6 +16,9 @@ service QXDM {
   // Save logs on a QXDM process
   rpc SaveLog(SaveLogRequest) returns (stream SaveLogResponse) {}
 
+  // Parse saved logs using QCAT
+  rpc ParseLog(ParseLogRequest) returns (stream ParseLogResponse) {}
+
   // Get status of QXDM process
   rpc Status(StatusRequest) returns (StatusResponse) {}
 
@@ -58,10 +61,25 @@ message StartLogResponse {
 // A SaveLogRequest is sent as request to a SaveLog rpc.
 message SaveLogRequest {
   uint32 device_index = 1;
+  bool send_file = 2;
 }
 
 // A SaveLogResponse is received in response to a SaveLog rpc.
 message SaveLogResponse {
+  oneof filename_or_data {
+    string filename = 1;
+    bytes data = 2;
+  }
+}
+
+// A ParseLogRequest is sent as request to a ParseLog rpc.
+message ParseLogRequest {
+  string input_filename = 1;
+  string test_config_filename = 2;
+}
+
+// A ParseLogResponse is received in response to a ParseLog rpc.
+message ParseLogResponse {
   bytes data = 1;
 }
 
