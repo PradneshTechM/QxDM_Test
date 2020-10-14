@@ -94,6 +94,8 @@ class ParsedMessage:
                     lines.append('\n\t]\n')
                 elif not field.get_value:
                     lines.append(f'\t{field.field_name}\n')
+                elif type(field.value) == list:
+                    lines.append('\t' + '\n\t'.join(field.value) + '\n')
                 else:
                     lines.append(f'\t{field.value}\n')
         lines.append('\n')
@@ -158,7 +160,7 @@ class Message:
                         val = match[0].strip()
                         parsed_field = ParsedField(field, val)
                     else:  # match[0] contains a tuple of strings
-                        vals = [val.strip() for v in match[0]]
+                        vals = [v.strip() for v in match[0]]
                         vals = [v for v in vals if v != '']
                         parsed_field = ParsedField(field, vals)
             else:
