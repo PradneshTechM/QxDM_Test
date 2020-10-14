@@ -1,50 +1,18 @@
-import argparse
 from pydbus import SessionBus
 import random
 import subprocess
 import time
 import os
-import dataclasses
-from enum import Enum
 import json
-import re
-
 from gi.repository import GLib, Gio
+
+import message
 
 '''
 For reference, see following files:
  * /opt/qcom/QCAT/Script/QCATDBus.pm - launch app, packet filter, packets
  * /opt/qcom/QCAT/Script/FilterSample.pl - set packet filter
 '''
-
-
-# specifies whether the field is a value or a collection of values
-class FieldType(Enum):
-    VALUE = 1
-    COLLECTION = 2
-
-
-@dataclasses.dataclass
-class Field:
-    field_name: str
-    regex: str
-    search_2: str
-    field_type: FieldType
-    get_value: bool
-
-
-@dataclasses.dataclass
-class Message:
-    '''
-    exact_match: boolean used to indicate that a message MUST contain fields,
-        otherwise, message should not be added. Used to handle cases like
-        'LTE NAS EMM State' message which should have specific field and value:
-        'EMM state = EMM_REGISTERED_INITIATED'
-    '''
-    packet_type: int
-    subtitle: str
-    exact_match: bool
-    fields: [Field]
 
 
 class QCAT:
@@ -102,7 +70,6 @@ class QCAT:
         return dbus_obj
 
     def parse(self, input, messages):
-        parsed_data = []
         print('Opening log file: ' + input)
         self.qcat.OpenLog(input)
 
@@ -117,70 +84,29 @@ class QCAT:
 
         print('Loading log packets from log file...')
 
+        validated_messages, parsed_messages = [], []
         count = 0
+        messages_iter = iter(messages)
+        msg = None
+
         while packet:
-            for msg in messages:
-                # search by subtitle if there is one, otherwise search by packet_type
-                if (msg.subtitle and packet.Subtitle() == msg.subtitle) or \
-                        (not msg.subtitle and packet.Type() == msg.packet_type):
-                    matched = []
-                    # for each field of message, apply regex or normal search
-                    for field in msg.fields:
-                        if field.regex:
-                            # text = packet.Text()  # for debugging
-                            match = re.findall(field.regex, packet.Text())
-                            if match:
-                                if field.field_type == FieldType.COLLECTION:
-                                    matched.append(field.field_name)
-                                    # split by '\r\n' and remove whitespace from start and end
-                                    elements = [el.strip() for el in match[0].split('\r\n')]
-                                    # remove empty strings
-                                    elements = [el for el in elements if el != '']
-                                    # remove ',' at end
-                                    elements = [el if el[-1] != ',' else el[:-1] for el in elements]
-                                    # do additional parsing using search_2
-                                    if field.search_2:
-                                        elements = [el.strip() for el in elements if field.search_2 in el]
-                                    matched.append(elements)
-                                else:
-                                    if type(match[0]) == str:
-                                        matched.append(match[0].strip())
-                                    # handle non-collection multi-line multi-group regex match
-                                    else:
-                                        elements = [el.strip() for el in match[0]]
-                                        elements = [el for el in elements if el != '']
-                                        matched.append('\n\t'.join(elements))
-                        else:
-                            match = None
-                            if field.get_value:
-                                for line in packet.Text().split('\r\n'):
-                                    # case-insensitive search for non-regex
-                                    if field.field_name.lower() in line.lower():
-                                        match = line.strip()
-                                        match = match if match[-1] != ',' else match[:-1]
-                                        break
-                            else:
-                                if field.field_name in packet.Text():
-                                    match = field.field_name
-                            if match:
-                                matched.append(match)
-
-                    # do not add message if there's no match and field is expected
-                    if not matched and msg.exact_match:
-                        continue
-
-                    # add parsed data to output
-                    parsed_data.append([
-                        packet.TimestampAsString(),
-                        packet.Name(),
-                        packet.Subtitle(),
-                        matched,
-                    ])
-                    count += 1
-
+            if not msg:
+                msg = next(messages_iter)
+            if msg.is_same_message_type(packet.Subtitle(),
+                                        packet.Type(),
+                                        packet.Text()):
+                parsed_msg = msg.parse(packet.Name(),
+                                       packet.TimestampAsString(),
+                                       packet.Text())
+                parsed_messages.append(parsed_msg)
+                # validated_messages.append(parsed_message.validate())
+                count += 1
+                msg = None
             if not packet.Next():
-                print(count, 'packets loaded.')
-                return parsed_data
+                break
+
+        print(count, 'packets loaded.')
+        return parsed_messages, validated_messages
 
     def set_packet_filter(self, packet_types):
         # get the filter
@@ -250,36 +176,44 @@ def parse_json_config(filename):
         for json_msg in test_json['messages']:
             fields = []
             for json_field in json_msg['fields']:
-                field = Field(
+                field = message.Field(
                     field_name=json_field.get('field_name', None),
                     regex=json_field.get('regex', None),
                     search_2=json_field.get('search_2', None),
-                    field_type=FieldType[json_field['field_type']],
-                    get_value=json_field['get_value']
+                    field_type=message.FieldType[json_field['field_type']],
+                    get_value=json_field['get_value'],
+                    validation_type=json_field.get('validation_type', None)
                 )
                 fields.append(field)
 
-            msg = Message(
+            msg = message.Message(
                 packet_type=int(json_msg['packet_type'], 16),
                 subtitle=json_msg['subtitle'],
-                exact_match=json_msg.get('exact_match', None),
-                fields=fields
+                fields=fields,
+                must_match_field=json_msg.get('must_match_field', None)
             )
             messages.append(msg)
     return test_name, packet_types, messages
 
 
-def parse_log(input_filename, test_filename, output_filename, qcat):
+def parse_log(input_filename, test_filename, parsed_filename,
+              validated_filename, qcat):
     print('QXDM log analysis started')
     test_name, packet_types, messages = parse_json_config(test_filename)
 
     print('Parsing:', test_name)
 
     qcat.set_packet_filter(packet_types)
-    parsed_data = qcat.parse(input_filename, messages)
+    parsed_messages, validated_messages = qcat.parse(input_filename, messages)
 
-    with open(output_filename, 'w') as f:
-        for data in parsed_data:
+    with open(parsed_filename, 'w') as f:
+        for parsed_msg in parsed_messages:
+            parsed_msg_str = parsed_msg.to_string()
+            f.write(parsed_msg_str)
+            # print(parsed_msg_str)
+
+    with open(validated_filename, 'w') as f:
+        for data in validated_messages:
             qcat.write_parsed_data(data, f)
 
     return True
@@ -288,8 +222,13 @@ def parse_log(input_filename, test_filename, output_filename, qcat):
 if __name__ == '__main__':
     input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')
     test_filename = 'src/qcat_tests/Test_case_2.json'
-    output_filename = 'src/qcat_tests/result_Test_case_2.txt'
+
+    filename = (test_filename.split('/')[-1]).split('.')[0]
+    parsed_filename = f'src/qcat_tests/parsed_{filename}.txt'
+    validated_filename = f'src/qcat_tests/validated_{filename}.txt'
 
     qcat = QCAT()
-    parse_log(input_filename, test_filename, output_filename, qcat)
+    parse_log(input_filename, test_filename, parsed_filename,
+              validated_filename, qcat)
+
     qcat.quit()
