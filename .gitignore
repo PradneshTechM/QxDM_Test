@@ -5,3 +5,4 @@ __pycache__/
 
 client_test
 temp
+src/qcat_tests/result_*
