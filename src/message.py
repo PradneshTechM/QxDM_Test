@@ -7,7 +7,8 @@ class ValidationType(Enum):
     FIRST_WORD_ONE_OF = auto()   # TODO: prepend "one of: " to output for clarity
     FOUND_MATCH = auto()
     ANY_SUBSTRING = auto()
-    CHECK_SAVED = auto()         # TODO: implement checking, FIRST_SAVE may be useful to track when first value saved
+    FIRST_SAVE = auto()
+    CHECK_SAVED = auto()
     CONCAT_AND_COMPARE = auto()
     COLLECTION = auto()          # TODO: prepend "contains all: " to output for clarity
     NUMBER_COMPARISON = auto()   # TODO: prepend how comparison is done to output for clarity
@@ -201,13 +202,21 @@ class ParsedMessage:
                     result = FieldResult.VALUE_MATCH
                 else:
                     result = FieldResult.FIELD_MISSING
+            elif field.validation_type == ValidationType.FIRST_SAVE:
+                value = remove_prefix(field.value, field.field_name)
+                value = remove_space_equals_prefix(value)
+                value = value.split(' ')[0]
+                if field.field_name in self.saved_values:
+                    result = FieldResult.VALUE_MISMATCH
+                else:
+                    self.saved_values[field.field_name] = value
+                    result = FieldResult.VALUE_MATCH
             elif field.validation_type == ValidationType.CHECK_SAVED:
                 value = remove_prefix(field.value, field.field_name)
                 value = remove_space_equals_prefix(value)
                 value = value.split(' ')[0]
-                if field.field_name not in self.saved_values:
-                    self.saved_values[field.field_name] = value
-                if value == self.saved_values[field.field_name]:
+                saved_value = self.saved_values.get(field.field_name, None)
+                if saved_value and value == saved_value:
                     result = FieldResult.VALUE_MATCH
                 else:
                     result = FieldResult.VALUE_MISMATCH
@@ -331,7 +340,7 @@ class RawMessage:
 
 class Message:
     def __init__(self, packet_type: str, subtitle: str, fields: [Field],
-                 must_match_field: bool):
+                 must_match_field: bool, saved_values: dict):
         '''
         must_match_field: boolean used to indicate that a message MUST contain
             the first field, otherwise, message should not be added. Used to
@@ -342,6 +351,7 @@ class Message:
         self.subtitle = subtitle
         self.fields = fields
         self.must_match_field = must_match_field
+        self.saved_values = saved_values
 
     def is_same_message_type(self, subtitle: str, packet_type: str,
                              packet_text: str) -> bool:
@@ -358,10 +368,10 @@ class Message:
         return RawMessage(name, self.subtitle, datetime, packet_text)
 
     def parse(self, name: str, datetime: str,
-              packet_text: str, saved_values: dict) -> ParsedMessage:
+              packet_text: str) -> ParsedMessage:
         '''parses the message and returns a ParsedMessage'''
         parsed_message = ParsedMessage(name, self.subtitle, datetime,
-                                       saved_values)
+                                       self.saved_values)
 
         # for each field of message, apply regex or normal search
         for field in self.fields:

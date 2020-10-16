@@ -1,5 +1,6 @@
 {
     "test_name": "Test Case 1",
+    "device_specs": "src/qcat_tests/device_specs_Pixel4_XL.json",
     "packet_types": [
         "0xB0EE",
         "0xB0ED",
@@ -21,6 +22,7 @@
         "qcat_tests/TC1_msg_9.json",
         "qcat_tests/TC1_msg_10.json",
         "qcat_tests/TC1_msg_11.json",
-        "qcat_tests/TC1_msg_12.json"
+        "qcat_tests/TC1_msg_12.json",
+        "qcat_tests/TC1_msg_13.json"
     ]
 }

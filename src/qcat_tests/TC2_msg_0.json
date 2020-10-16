@@ -13,7 +13,7 @@
                 },
                 {
                     "field_name": "CM Call ID",
-                    "validation_type": "CHECK_SAVED",
+                    "validation_type": "FIRST_SAVE",
                     "field_type": "VALUE",
                     "get_value": true
                 },

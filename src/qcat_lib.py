@@ -111,7 +111,7 @@ class QCAT:
                 raw_msg = msg.get_contents(name, datetime, text)
                 self.raw_messages.append(raw_msg)
 
-                parsed_msg = msg.parse(name, datetime, text, self.saved_values)
+                parsed_msg = msg.parse(name, datetime, text)
                 self.parsed_messages.append(parsed_msg)
 
                 self.validated_messages.append(parsed_msg.validate())
@@ -154,6 +154,15 @@ def parse_json_config(filename):
 
     test_name = TC_json['test_name']
     packet_types = [int(packet, 16) for packet in TC_json['packet_types']]
+
+    # load device specs
+    device_specs = {}
+    with open(TC_json['device_specs']) as f:
+        device_spec_json = json.load(f)
+        for key, value in device_spec_json.items():
+            device_specs[key] = value
+
+    # build message requirements
     messages = []
     for test_file in TC_json['tests']:
         with open(test_file) as f:
@@ -172,27 +181,32 @@ def parse_json_config(filename):
                     validation_regex=json_field.get('validation_regex', None),
                     validation_type=message.ValidationType[json_field['validation_type']]
                 )
+                device_spec = device_specs.get(field.field_name, None)
+                if device_spec:
+                    field.expected_value = device_spec
                 fields.append(field)
 
             msg = message.Message(
                 packet_type=int(json_msg['packet_type'], 16),
                 subtitle=json_msg['subtitle'],
                 fields=fields,
-                must_match_field=json_msg.get('must_match_field', None)
+                must_match_field=json_msg.get('must_match_field', None),
+                saved_values=device_specs
             )
             messages.append(msg)
-    return test_name, packet_types, messages
+    return test_name, packet_types, messages, device_specs
 
 
 def parse_log(input_filename, test_filename, raw_filename,
               parsed_filename, validated_filename, qcat):
     print('QXDM log analysis started')
-    test_name, packet_types, messages = parse_json_config(test_filename)
+    test_name, packet_types, messages, device_specs = parse_json_config(test_filename)
 
     print('Parsing:', test_name)
 
     qcat.set_packet_filter(packet_types)
     qcat.parse(input_filename, messages)
+    qcat.saved_values = device_specs
 
     with open(raw_filename, 'w') as f:
         for raw_msg in qcat.raw_messages:
