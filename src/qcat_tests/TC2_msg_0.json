@@ -1,0 +1,31 @@
+{
+    "messages": [
+        {
+            "packet_type": "0x156E",
+            "subtitle": "IMS_SIP_INVITE/INFORMAL_RESPONSE",
+            "fields": [
+                {
+                    "field_name": "SDP Presence",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "CM Call ID",
+                    "validation_type": "CHECK_SAVED",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "codecs",
+                    "regex": "(a=rtpmap:\\d+ EVS\/.*)(?:.|\n)a=fmtp:\\d+ (br=(?:.|\n)*?)ch|(a=rtpmap:\\d+ AMR-WB\/.*)(?:.|\n)*?(a=rtpmap:\\d+ AMR-NB\/.*)",
+                    "expected_value": "(a=rtpmap:\\d+ EVS/.*)(?:.|\n)*?(br=5\\.9-24\\.4;bw=nb-swb;)|(a=rtpmap:\\d+ AMR-WB\/.*)(?:.|\n)*?(a=rtpmap:\\d+ AMR-NB\/.*)",
+                    "validation_type": "STRING_MATCH_ONE_OF",
+                    "field_type": "VALUE",
+                    "get_value": true
+                }
+            ]
+        }
+    ]
+}

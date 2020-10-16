@@ -1,0 +1,30 @@
+{
+    "messages": [
+        {
+            "packet_type": "0x156E",
+            "subtitle": "IMS_SIP_BYE/INFORMAL_RESPONSE",
+            "fields": [
+                {
+                    "field_name": "Message ID",
+                    "expected_value": "IMS_SIP_BYE",
+                    "validation_type": "FIRST_WORD_EXACT",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "Response Code",
+                    "expected_value": "INFORMAL_RESPONSE",
+                    "validation_type": "FIRST_WORD_EXACT",
+                    "field_type": "VALUE",
+                    "get_value": true
+                },
+                {
+                    "field_name": "CM Call ID",
+                    "validation_type": "CHECK_SAVED",
+                    "field_type": "VALUE",
+                    "get_value": true
+                }
+            ]
+        }
+    ]
+}
