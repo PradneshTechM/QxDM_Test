@@ -1,12 +1,13 @@
 {
     "messages": [
         {
-            "packet_type": "0xB0ED",
-            "subtitle": "Attach complete Msg",
+            "packet_type": "0xB0E2",
+            "subtitle": "PDN connectivity request Msg",
             "fields": [
                 {
-                    "field_name": "msg_type",
-                    "regex": "esm_msg_container(?:.|\n)*(msg_type.*)",
+                    "field_name": "pdn_type",
+                    "expected_value": "IPv4",
+                    "validation_type": "DOES_NOT_CONTAIN",
                     "field_type": "VALUE",
                     "get_value": true
                 }

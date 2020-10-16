@@ -6,11 +6,16 @@
             "fields": [
                 {
                     "field_name": "pdn_type",
+                    "expected_value": "IPv6",
+                    "validation_type": "ANY_SUBSTRING",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "esm_cause",
+                    "regex": "esm_cause(?:.|\n)*(esm_cause.*)",
+                    "expected_value": "51",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 }

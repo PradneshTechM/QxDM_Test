@@ -7,6 +7,7 @@
             "fields": [
                 {
                     "field_name": "EMM state = EMM_REGISTERED_INITIATED",
+                    "validation_type": "FOUND_MATCH",
                     "field_type": "VALUE",
                     "get_value": true
                 }

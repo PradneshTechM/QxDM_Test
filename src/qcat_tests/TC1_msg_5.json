@@ -6,11 +6,14 @@
             "fields": [
                 {
                     "field_name": "eps_bearer_id_or_skip_id",
+                    "expected_value": "0",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "trans_id",
+                    "validation_type": "CHECK_SAVED",
                     "field_type": "VALUE",
                     "get_value": true
                 }

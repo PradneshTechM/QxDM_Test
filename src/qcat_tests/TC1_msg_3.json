@@ -6,21 +6,26 @@
             "fields": [
                 {
                     "field_name": "srb-Identity",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "rlc-Config explicitValue",
+                    "validation_type": "FOUND_MATCH",
                     "field_type": "VALUE",
                     "get_value": false
                 },
                 {
                     "field_name": "mac-MainConfig explicitValue",
+                    "validation_type": "FOUND_MATCH",
                     "field_type": "VALUE",
                     "get_value": false
                 },
                 {
                     "field_name": "physicalConfigDedicated",
+                    "validation_type": "FOUND_MATCH",
                     "field_type": "VALUE",
                     "get_value": false
                 }

@@ -6,6 +6,8 @@
             "fields": [
                 {
                     "field_name": "eps-BearerIdentity",
+                    "expected_value": "5",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 }

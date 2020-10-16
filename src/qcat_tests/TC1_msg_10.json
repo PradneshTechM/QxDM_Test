@@ -7,6 +7,9 @@
                 {
                     "field_name": "access_point",
                     "regex": "access_point(?:.|\n)((?:.|\n)*?).*pdn_addr",
+                    "expected_value": "everywhere",
+                    "validation_regex": "\\((\\w)\\)|\\((?:length)\\)",
+                    "validation_type": "CONCAT_AND_COMPARE",
                     "field_type": "COLLECTION",
                     "get_value": true
                 }

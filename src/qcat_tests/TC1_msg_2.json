@@ -6,11 +6,18 @@
             "fields": [
                 {
                     "field_name": "ue-Identity",
+                    "expected_value": [
+                        "randomValue",
+                        "s-TMSI"
+                    ],
+                    "validation_type": "FIRST_WORD_ONE_OF",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "establishmentCause",
+                    "expected_value": "mo-Signalling",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 }

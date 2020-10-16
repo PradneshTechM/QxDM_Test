@@ -6,17 +6,27 @@
             "fields": [
                 {
                     "field_name": "accessStratumRelease",
+                    "validation_type": "CHECK_SAVED",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "ue-Category",
+                    "validation_type": "CHECK_SAVED",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "supportedBandListEUTRA",
                     "regex": "supportedBandListEUTRA(?:.|\n)*?{(?:.|\n)*?({(?:.|\n)*?})\r\n",
+                    "expected_value": [
+                        "bandEUTRA 3",
+                        "bandEUTRA 7",
+                        "bandEUTRA 20",
+                        "bandEUTRA 1",
+                        "bandEUTRA 38"
+                    ],
+                    "validation_type": "COLLECTION",
                     "search_2": "bandEUTRA",
                     "field_type": "COLLECTION",
                     "get_value": true
@@ -24,37 +34,61 @@
                 {
                     "field_name": "supportedBandListUTRA-FDD",
                     "regex": "supportedBandListUTRA-FDD(?:.|\n)*?{((?:.|\n)*?)}",
+                    "expected_value": [
+                        "bandI",
+                        "bandII",
+                        "bandV",
+                        "bandVIII"
+                    ],
+                    "validation_type": "COLLECTION",
                     "field_type": "COLLECTION",
                     "get_value": true
                 },
                 {
                     "field_name": "supportedBandListGERAN",
                     "regex": "supportedBandListGERAN(?:.|\n)*?{((?:.|\n)*?)}",
+                    "expected_value": [
+                        "gsm850",
+                        "gsm900",
+                        "gsm1800",
+                        "gsm1900"
+                    ],
+                    "validation_type": "COLLECTION",
                     "field_type": "COLLECTION",
                     "get_value": true
                 },
                 {
                     "field_name": "DTM-R9",
+                    "expected_value": "supported",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "e-RedirectionGERAN-R9",
+                    "expected_value": "supported",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "e-RedirectionUTRA-r9",
+                    "expected_value": "supported",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "featureGroupIndicators",
+                    "expected_value": "01011101 00001111 11111110 10000000 11000000 1000000 00000000 000000000",
+                    "validation_type": "ANY_SUBSTRING",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "Msg Length",
+                    "expected_value": "2000",
+                    "validation_type": "NUMBER_COMPARISON",
                     "regex": "(Msg Length.*)",
                     "field_type": "VALUE",
                     "get_value": true

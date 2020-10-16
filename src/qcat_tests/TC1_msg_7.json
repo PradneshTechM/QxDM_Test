@@ -6,6 +6,14 @@
             "fields": [
                 {
                     "field_name": "ue-CapabilityRequest",
+                    "expected_value": [
+                        "eutra",
+                        "utra",
+                        "geran-cs",
+                        "geran-ps",
+                        "CDMA2000-1XRTT"
+                    ],
+                    "validation_type": "COLLECTION",
                     "regex": "ue-CapabilityRequest(?:.|\n)*?{((?:.|\n)*?)}",
                     "field_type": "COLLECTION",
                     "get_value": true

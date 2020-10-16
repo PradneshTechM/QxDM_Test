@@ -6,84 +6,119 @@
             "fields": [
                 {
                     "field_name": "att_type",
+                    "expected_value": "2",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "id_type",
+                    "expected_value": [
+                        "1",
+                        "6"
+                    ],
+                    "validation_type": "FIRST_WORD_ONE_OF",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "msg_type",
                     "regex": "esm_msg_container(?:.|\n)*(msg_type.*)",
+                    "expected_value": "208",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "pdn_type",
+                    "expected_value": "3",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "req_type",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "esm_info_trans_flag",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "GEA/1",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "GEA/2",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "GEA/3",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "ISR support",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "a5_1_alg_sup",
+                    "expected_value": "0",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "a5_3_alg_sup",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "bitmap[1]",
                     "regex": "codecs\\[0](?:.|\n)*(bitmap\\[1].*)(?:.|\n)*codecs\\[1]",
+                    "expected_value": "4",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "bitmap[0]",
                     "regex": "codecs\\[1](?:.|\n)*(bitmap\\[0].*)",
+                    "expected_value": "31",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "voice_domain_pref_incl",
+                    "expected_value": "1",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "voice_domain_pref_for_EUTRAN",
+                    "expected_value": "2",
+                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 }
