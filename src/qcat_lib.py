@@ -30,6 +30,10 @@ class QCAT:
         self.process = None
         self.bus = None
         self.qcat = None  # QCAT dbus object
+        self.raw_messages = []
+        self.parsed_messages = []
+        self.validated_messages = []
+        self.saved_values = {}
 
         self._launch()
 
@@ -84,29 +88,39 @@ class QCAT:
 
         print('Loading log packets from log file...')
 
-        validated_messages, parsed_messages = [], []
+        self.raw_messages = []
+        self.parsed_messages = []
+        self.validated_messages = []
+        self.saved_values = {}
+
         count = 0
-        messages_iter = iter(messages)
+        i = 0
         msg = None
 
         while packet:
             if not msg:
-                msg = next(messages_iter)
-            if msg.is_same_message_type(packet.Subtitle(),
-                                        packet.Type(),
-                                        packet.Text()):
-                parsed_msg = msg.parse(packet.Name(),
-                                       packet.TimestampAsString(),
-                                       packet.Text())
-                parsed_messages.append(parsed_msg)
-                # validated_messages.append(parsed_message.validate())
+                msg = messages[i % len(messages)]
+                i += 1
+            name = packet.Name()
+            subtitle = packet.Subtitle()
+            datetime = packet.TimestampAsString()
+            packet_type = packet.Type()
+            text = packet.Text()
+
+            if msg.is_same_message_type(subtitle, packet_type, text):
+                raw_msg = msg.get_contents(name, datetime, text)
+                self.raw_messages.append(raw_msg)
+
+                parsed_msg = msg.parse(name, datetime, text, self.saved_values)
+                self.parsed_messages.append(parsed_msg)
+
+                self.validated_messages.append(parsed_msg.validate())
                 count += 1
                 msg = None
             if not packet.Next():
                 break
 
         print(count, 'packets loaded.')
-        return parsed_messages, validated_messages
 
     def set_packet_filter(self, packet_types):
         # get the filter
@@ -129,34 +143,6 @@ class QCAT:
         self.qcat.closeFile()
         self.qcat.Exit()
         print('QCAT Quit - QCAT Closed')
-
-    def print_data(self, data):
-        print('Type:', data[1])
-        print('Name:', data[2])
-        print('Subtitle:', data[5])
-        print(f'Text:\n{data[6]}')
-
-    def write_data(self, data, f):
-        f.write(f'Type: {data[1]}\n')
-        f.write(f'Name: {data[2]}\n')
-        f.write(f'Subtitle: {data[5]}\n')
-        f.write(f'Text:\n{data[6]}\n')
-
-    def write_parsed_data(self, data, f):
-        f.write(f'Datetime: {data[0]}\n')
-        f.write(f'Name: {data[1]}\n')
-        if data[2]:
-            f.write(f'Subtitle: {data[2]}\n')
-        if data[3]:
-            f.write('Matches:\n')
-            for match in data[3]:
-                if type(match) == list:
-                    f.write('\t[\n')
-                    f.writelines('\t\t' + '\n\t\t'.join(match))
-                    f.write('\n\t]\n')
-                else:
-                    f.write(f'\t{match}\n')
-        f.write('\n\n')
 
 
 def parse_json_config(filename):
@@ -182,7 +168,9 @@ def parse_json_config(filename):
                     search_2=json_field.get('search_2', None),
                     field_type=message.FieldType[json_field['field_type']],
                     get_value=json_field['get_value'],
-                    validation_type=json_field.get('validation_type', None)
+                    expected_value=json_field.get('expected_value', None),
+                    validation_regex=json_field.get('validation_regex', None),
+                    validation_type=message.ValidationType[json_field['validation_type']]
                 )
                 fields.append(field)
 
@@ -196,39 +184,49 @@ def parse_json_config(filename):
     return test_name, packet_types, messages
 
 
-def parse_log(input_filename, test_filename, parsed_filename,
-              validated_filename, qcat):
+def parse_log(input_filename, test_filename, raw_filename,
+              parsed_filename, validated_filename, qcat):
     print('QXDM log analysis started')
     test_name, packet_types, messages = parse_json_config(test_filename)
 
     print('Parsing:', test_name)
 
     qcat.set_packet_filter(packet_types)
-    parsed_messages, validated_messages = qcat.parse(input_filename, messages)
+    qcat.parse(input_filename, messages)
+
+    with open(raw_filename, 'w') as f:
+        for raw_msg in qcat.raw_messages:
+            f.write(raw_msg.to_string())
+    print('raw messages:', raw_filename)
 
     with open(parsed_filename, 'w') as f:
-        for parsed_msg in parsed_messages:
+        for parsed_msg in qcat.parsed_messages:
             parsed_msg_str = parsed_msg.to_string()
             f.write(parsed_msg_str)
             # print(parsed_msg_str)
+    print('parsed messages:', parsed_filename)
 
     with open(validated_filename, 'w') as f:
-        for data in validated_messages:
-            qcat.write_parsed_data(data, f)
+        for validated_msg in qcat.validated_messages:
+            validated_msg_str = validated_msg.to_string()
+            f.write(validated_msg_str)
+    print('validated messages:', validated_filename)
 
     return True
 
 
 if __name__ == '__main__':
     input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')
+    # input_filename = os.path.abspath('/home/techm/Desktop/TC1/saved_test_2.isf')
     test_filename = 'src/qcat_tests/Test_case_2.json'
+    output_filename = 'TC2_att'
 
-    filename = (test_filename.split('/')[-1]).split('.')[0]
-    parsed_filename = f'src/qcat_tests/parsed_{filename}.txt'
-    validated_filename = f'src/qcat_tests/validated_{filename}.txt'
+    raw_filename = f'src/qcat_tests/result_raw_{output_filename}.txt'
+    parsed_filename = f'src/qcat_tests/result_parsed_{output_filename}.txt'
+    validated_filename = f'src/qcat_tests/result_validated_{output_filename}.txt'
 
     qcat = QCAT()
-    parse_log(input_filename, test_filename, parsed_filename,
+    parse_log(input_filename, test_filename, raw_filename, parsed_filename,
               validated_filename, qcat)
 
     qcat.quit()
