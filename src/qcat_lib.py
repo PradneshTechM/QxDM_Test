@@ -1,9 +1,13 @@
+#!/usr/bin/env python3.7
+
+from xvfbwrapper import Xvfb
 from pydbus import SessionBus
 import random
 import subprocess
 import time
 import os
 import json
+import csv
 from gi.repository import GLib, Gio
 
 import message
@@ -196,7 +200,7 @@ def parse_json_config(filename):
 
 
 def parse_log(input_filename, test_filename, raw_filename,
-              parsed_filename, validated_filename, qcat):
+              parsed_filename, validated_filename, validated_csv, qcat):
     print('QXDM log analysis started')
     TC_json, messages, device_specs = parse_json_config(test_filename)
 
@@ -234,21 +238,38 @@ def parse_log(input_filename, test_filename, raw_filename,
             f.write(validated_msg_str)
     print('validated messages:', validated_filename)
 
+    # save csv
+    with open(validated_csv, 'w', newline='') as f:
+        fieldnames = [
+            'Parameter Name', 'Pass/Fail', 'Expected Value', 'Actual Value'
+        ]
+
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for validated_msg in qcat.validated_messages:
+            validated_msg.save_to_csv(writer)
+    print('validated csv:', validated_csv)
+
+
+
     return True
 
 
 if __name__ == '__main__':
-    input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')
-    # input_filename = os.path.abspath('/home/techm/Desktop/TC1/saved_test_2.isf')
-    test_filename = 'qcat_tests/Test_case_1.json'
-    output_filename = 'TC1_att'
+    with Xvfb(width=2, height=2, colordepth=8):
+        input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')
+        # input_filename = os.path.abspath('/home/techm/Desktop/TC1/saved_test_2.isf')
+        test_filename = 'qcat_tests/Test_case_2.json'
+        output_filename = 'TC2_att'
 
-    raw_filename = f'qcat_tests/result_raw_{output_filename}.txt'
-    parsed_filename = f'qcat_tests/result_parsed_{output_filename}.txt'
-    validated_filename = f'qcat_tests/result_validated_{output_filename}.txt'
+        raw_filename = f'qcat_tests/result_raw_{output_filename}.txt'
+        parsed_filename = f'qcat_tests/result_parsed_{output_filename}.txt'
+        validated_filename = f'qcat_tests/result_validated_{output_filename}.txt'
+        validated_csv = f'qcat_tests/result_validated_{output_filename}.csv'
 
-    qcat = QCAT()
-    parse_log(input_filename, test_filename, raw_filename, parsed_filename,
-              validated_filename, qcat)
+        qcat = QCAT()
+        parse_log(input_filename, test_filename, raw_filename, parsed_filename,
+                validated_filename, validated_csv, qcat)
 
-    qcat.quit()
+        qcat.quit()

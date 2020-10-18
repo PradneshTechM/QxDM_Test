@@ -144,6 +144,79 @@ class ValidatedMessage:
                     lines.append(f'\t{field.original_value}\n')
         return ''.join(lines)
 
+    def save_to_csv(self, writer):
+        '''Saves processed messages to a CSV file.'''
+
+        # write validation criteria
+        writer.writerow({
+            'Parameter Name': '\n'.join(self.description),
+            'Pass/Fail': '',
+            'Expected Value': '',
+            'Actual Value': '',
+        })
+
+        # write message heading
+        message_heading = f'Datetime: {self.datetime}\nName: {self.name}'
+        if self.subtitle:
+            message_heading += f'\nSubtitle: {self.subtitle}'
+        writer.writerow({
+            'Parameter Name': message_heading,
+            'Pass/Fail': '',
+            'Expected Value': '',
+            'Actual Value': ''
+        })
+
+        # write fields
+        for field in self.fields:
+            if field.result == FieldResult.VALUE_MATCH:
+                pass_fail = 'PASS'
+            else:
+                pass_fail = 'FAIL'
+
+            expected, actual = field.expected_value, field.field_value
+
+            if type(field.expected_value) == list:
+                expected = '\n'.join(field.expected_value)
+            if type(field.field_value) == list:
+                actual = '\n'.join(field.field_value)
+
+            if field.result == FieldResult.FIELD_MISSING:
+                writer.writerow({
+                    'Parameter Name': field.field_name,
+                    'Pass/Fail': pass_fail,
+                    'Expected Value': expected,
+                    'Actual Value': '<Parameter missing>',
+                })
+            elif field.field_type == FieldType.COLLECTION:
+                writer.writerow({
+                    'Parameter Name': field.field_name,
+                    'Pass/Fail': pass_fail,
+                    'Expected Value': expected,
+                    'Actual Value': actual,
+                })
+            elif not field.get_value:
+                writer.writerow({
+                    'Parameter Name': field.field_name,
+                    'Pass/Fail': pass_fail,
+                    'Expected Value': field.field_name,
+                    'Actual Value': field.field_name,
+                })
+            else:
+                writer.writerow({
+                    'Parameter Name': field.field_name,
+                    'Pass/Fail': pass_fail,
+                    'Expected Value': expected,
+                    'Actual Value': actual,
+                })
+
+        # write blank row
+        writer.writerow({
+            'Parameter Name': '',
+            'Pass/Fail': '',
+            'Expected Value': '',
+            'Actual Value': ''
+        })
+
 
 def remove_prefix(s, prefix):
     return s[len(prefix):] if s.startswith(prefix) else s
@@ -215,6 +288,7 @@ class ParsedMessage:
                 else:
                     self.saved_values[field.field_name] = value
                     result = FieldResult.VALUE_MATCH
+                field.expected_value = '<Refer to later>'
             elif field.validation_type == ValidationType.CHECK_SAVED:
                 value = remove_prefix(field.value, field.field_name)
                 value = remove_space_equals_prefix(value)
@@ -224,6 +298,7 @@ class ParsedMessage:
                     result = FieldResult.VALUE_MATCH
                 else:
                     result = FieldResult.VALUE_MISMATCH
+                field.expected_value = saved_value
             elif field.validation_type == ValidationType.CONCAT_AND_COMPARE:
                 match = re.findall(field.validation_regex, ''.join(field.value))
                 words = []

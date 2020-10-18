@@ -172,6 +172,8 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
         parsed_filepath = os.path.join(path, parsed_filename)
         validated_filename = f'result_validated_{filename}.txt'
         validated_filepath = os.path.join(path, validated_filename)
+        validated_csv_filename = f'result_validated_{filename}.csv'
+        validated_csv_filepath = os.path.join(path, validated_csv_filename)
 
         # call QCAT library on the log file which needs parsing
         parsed = qcat_lib.parse_log(request.input_filename,
@@ -179,6 +181,7 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
                                     raw_filepath,
                                     parsed_filepath,
                                     validated_filepath,
+                                    validated_csv_filepath,
                                     qcat)
 
         # failed for some reason
@@ -187,7 +190,7 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
                           details='QCAT parsing failed.')
 
         # open file and send data in chunks
-        with open(validated_filepath, 'rb') as file_content:
+        with open(validated_csv_filepath, 'rb') as file_content:
             for rec in read_bytes(file_content, _CHUNK_SIZE):
                 yield qxdm_pb2.ParseLogResponse(data=rec)
 

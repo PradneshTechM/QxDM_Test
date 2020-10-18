@@ -34,8 +34,8 @@ SAVE_FILE_PATH_4 = CLIENT_TEST_FOLDER / 'saved_test_4.isf'
 QCAT_TEST_CONFIG_1 = _BASE_PATH / 'qcat_tests/Test_case_1.json'
 QCAT_TEST_CONFIG_2 = _BASE_PATH / 'qcat_tests/Test_case_2.json'
 
-SAVE_PARSED_FILE_PATH_1 = CLIENT_TEST_FOLDER / 'parsed_test_case_1.txt'
-SAVE_PARSED_FILE_PATH_2 = CLIENT_TEST_FOLDER / 'parsed_test_case_2.txt'
+SAVE_PARSED_FILE_PATH_1 = CLIENT_TEST_FOLDER / 'validated_test_case_1.csv'
+SAVE_PARSED_FILE_PATH_2 = CLIENT_TEST_FOLDER / 'validated_test_case_2.csv'
 
 
 def test_status():
