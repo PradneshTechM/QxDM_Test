@@ -49,7 +49,7 @@ launching_lock = threading.Lock()
 
 qcat = None
 
-_PROCESS_CHECK_INTERVAL = 60
+_PROCESS_CHECK_INTERVAL = 10
 _BASE_PATH = Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
 _CHUNK_SIZE = 1024
@@ -166,13 +166,19 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
         # set name and path of parsed results file
         path, filename = os.path.split(request.input_filename)
         filename = os.path.splitext(filename)[0]
-        parsed_filename = f'result_{filename}.txt'
+        raw_filename = f'result_raw_{filename}.txt'
+        raw_filepath = os.path.join(path, raw_filename)
+        parsed_filename = f'result_parsed_{filename}.txt'
         parsed_filepath = os.path.join(path, parsed_filename)
+        validated_filename = f'result_validated_{filename}.txt'
+        validated_filepath = os.path.join(path, validated_filename)
 
         # call QCAT library on the log file which needs parsing
         parsed = qcat_lib.parse_log(request.input_filename,
                                     request.test_config_filename,
+                                    raw_filepath,
                                     parsed_filepath,
+                                    validated_filepath,
                                     qcat)
 
         # failed for some reason
@@ -181,7 +187,7 @@ class QXDMServicer(qxdm_pb2_grpc.QXDMServicer):
                           details='QCAT parsing failed.')
 
         # open file and send data in chunks
-        with open(parsed_filepath, 'rb') as file_content:
+        with open(validated_filepath, 'rb') as file_content:
             for rec in read_bytes(file_content, _CHUNK_SIZE):
                 yield qxdm_pb2.ParseLogResponse(data=rec)
 
