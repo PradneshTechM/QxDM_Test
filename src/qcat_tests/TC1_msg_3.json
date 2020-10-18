@@ -1,6 +1,13 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in Log for \"RRC Connection Setup\" message.",
+                "Check srb-Identity 1",
+                "Check rlc-Config explicitValue is included",
+                "Check mac-mainConfig explicitvalue is included",
+                "Check physicalConfigDedicated is included"
+            ],
             "packet_type": "0xB0C0",
             "subtitle": "DL_CCCH / RRCConnectionSetup",
             "fields": [

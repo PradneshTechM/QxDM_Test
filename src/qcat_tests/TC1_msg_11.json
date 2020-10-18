@@ -1,6 +1,11 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in the ACTIVATE DEFAULT EPS BEARER CONTEXT REQUEST message sent to the UE,",
+                "the network shall set the PDN type value to IPv6, ESM cause value to #51",
+                "\"PDN type IPv6 only allowed\" and EPS bearers are established successfully"
+            ],
             "packet_type": "0xB0E2",
             "subtitle": "Activate default EPS bearer context request Msg",
             "fields": [

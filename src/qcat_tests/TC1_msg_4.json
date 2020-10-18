@@ -1,6 +1,9 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in Log for \"RRC Connection Setup Complete\" message."
+            ],
             "packet_type": "0xB0C0",
             "subtitle": "UL_DCCH / RRCConnectionSetupComplete",
             "fields": []

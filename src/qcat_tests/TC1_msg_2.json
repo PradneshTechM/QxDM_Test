@@ -1,6 +1,10 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in Log for \"RRC Connection Request\" message. Check establishmenetCause = Mo Signalling",
+                "Check ue-Identity= RandomValue or s-TMSI"
+            ],
             "packet_type": "0xB0C0",
             "subtitle": "UL_CCCH / RRCConnectionRequest",
             "fields": [

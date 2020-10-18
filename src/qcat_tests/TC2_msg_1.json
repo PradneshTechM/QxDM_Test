@@ -1,6 +1,11 @@
 {
     "messages": [
         {
+            "description": [
+                "Verify that dedicated bearer with QCI 1 is setup, preconditions are enabled",
+                " * Check msg_type = 197 (0xc5) (Activate dedicated EPS bearer context request)",
+                " * Check qci = 1 (0x1) (QC1)"
+            ],
             "packet_type": "0xB0E2",
             "subtitle": "Activate dedicated EPS bearer context request Msg",
             "fields": [

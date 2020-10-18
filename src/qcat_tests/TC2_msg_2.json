@@ -1,6 +1,9 @@
 {
     "messages": [
         {
+            "description": [
+                "Verify msg_type = 198 (0xc6) (Activate dedicated EPS bearer context accept)"
+            ],
             "packet_type": "0xB0E3",
             "subtitle": "Activate dedicated EPS bearer context accept Msg",
             "fields": [

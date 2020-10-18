@@ -1,6 +1,14 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in Log for \"ESM information response\" message.",
+                "Check eps_bearer_id_or_skip_id = 0",
+                "Check trans_id parameter is same as above.",
+                "Check APN is \"everywhere\"",
+                "Check prot_config_incl = 1",
+                "Check protocol_id = PAP"
+            ],
             "packet_type": "0xB0E2",
             "subtitle": "ESM information response Msg",
             "fields": [

@@ -1,6 +1,16 @@
 {
-    "test_name": "Test Case 2",
-    "device_specs": "src/qcat_tests/device_specs_Pixel4_XL.json",
+    "name": "VoLTE MO to VoLTE MT",
+    "preconditions": [
+        "DUT with EE Consumer SIM card",
+        "Another IMS capable device to be used as (B-Party)",
+        "4G coverage"
+    ],
+    "description": [
+        "1) Power ON DUT",
+        "2) Attach on EE 4G network",
+        "3) Verify Attach Procedure and signalling"
+    ],
+    "device_specs": "qcat_tests/device_specs_Pixel4_XL.json",
     "packet_types": [
         "0x156E",
         "0xB0E2",

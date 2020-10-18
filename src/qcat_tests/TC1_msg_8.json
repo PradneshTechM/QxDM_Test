@@ -1,6 +1,23 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in log for \"ueCapabilityInformation\" message.",
+                "Check AccessStratumRelease =  must match with device spec",
+                "Check 'UE-Category = must match with device spec",
+                "Check supportedBandListEUTRA",
+                "Confirm bandEUTRA 3, bandEUTRA 7, bandEUTRA 20, bandEUTRA 1, bandEUTRA 38 is available.",
+                "Check supportedBandListUTRA-FDD",
+                "Confirm bandI, bandII,band V, bandVIII are available.",
+                "Check supportedBandListGERAN",
+                "Confirm gsm850, gsm900, gsm1800 and gsm1900  are avialbale.",
+                "Check InterRAT-PS-HO-GERAN = FALSE",
+                "Check DTM-R9 = supported",
+                "Check e-RedirectionGERAN-R9 = supported",
+                "Check e-RedirectionUTRA-R9 = supported",
+                "Check Feature Group indicator value is  \"01011101 00001111 11111110 10000000 11000000 1000000 00000000 000000000\".",
+                "Make sure UE capability info message size do not exceed 2000 bytes"
+            ],
             "packet_type": "0xB0C0",
             "subtitle": "UL_DCCH / UECapabilityInformation",
             "fields": [

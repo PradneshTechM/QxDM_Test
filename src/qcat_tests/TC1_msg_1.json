@@ -1,6 +1,22 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in Log for \"Attach Request\" message. Check att_type = 2 ( Combined EPS/ IMSI attach).",
+                "Check id_type = 1 (IMSI)  OR 6 (GUTI)",
+                "Within \"Attach request\" under esm_msg_container message check  \"PDN Connectivity Request\".",
+                "Check PDN_type = ipv4v6",
+                "Check req_type = 1 (initial attach)",
+                "Check esm_info_trans_flag = 1",
+                "Under ms_network_capability container check GEA/1= 1, GEA/2=1 and GEA/3=1",
+                "Check ISR supported = 1",
+                "Under ms_class_mark2 container check a5_1_alg_sup = 0, a5_3_alg_sup = 1",
+                "Check voice_domain_pref_incl=1",
+                "Check voice_domain_pref_for-EUTRAN = 2 (IMS PS Voice Preferred and CS secondary)",
+                "Check WB-AMR is supported by checking below codecs",
+                "Under codecs [0], check bitmap[1] = 4",
+                "Under codecs [1], check bitmap[0] = 31"
+            ],
             "packet_type": "0xB0ED",
             "subtitle": "Attach request Msg",
             "fields": [

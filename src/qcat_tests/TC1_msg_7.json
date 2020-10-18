@@ -1,6 +1,11 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in log for \"ueCapabilityEnquiry\" message.",
+                "Check in log for \"ueCapabilityEnquiry\" message.",
+                "Check \"ue-CapabilityRequest\" includes EUTRA, UTRA, GERAN CS, GERAN PS and CDMA2000-1XRTT."
+            ],
             "packet_type": "0xB0C0",
             "subtitle": "DL_DCCH / UECapabilityEnquiry",
             "fields": [

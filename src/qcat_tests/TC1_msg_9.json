@@ -1,6 +1,10 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in Log for \"RRCConnectionReconfiguration\" message.",
+                "Check eps Bearer Identity =5"
+            ],
             "packet_type": "0xB0C0",
             "subtitle": "DL_DCCH / RRCConnectionReconfiguration",
             "fields": [

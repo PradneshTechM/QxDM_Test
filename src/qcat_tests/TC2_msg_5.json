@@ -1,6 +1,12 @@
 {
     "messages": [
         {
+            "description": [
+                "Verify call disconnected successfully",
+                " * Check Message ID = IMS_SIP_BYE",
+                " * Check Response Code = OK (200)",
+                " * Check CM Call ID is same as one from IMS_SIP_INVITE/INFORMAL_RESPONSE message"
+            ],
             "packet_type": "0x156E",
             "subtitle": "IMS_SIP_BYE/OK",
             "fields": [

@@ -1,6 +1,9 @@
 {
     "messages": [
         {
+            "description": [
+                "Verify that the device does not send PDN connection request again for IPv4 only"
+            ],
             "packet_type": "0xB0E2",
             "subtitle": "PDN connectivity request Msg",
             "fields": [

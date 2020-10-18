@@ -1,6 +1,10 @@
 {
     "messages": [
         {
+            "description": [
+                "Check in log for \"Attach Complete\" message.",
+                "Verify \"msg_type = 194 (0xc2) (Activate default EPS bearer context accept)\""
+            ],
             "packet_type": "0xB0ED",
             "subtitle": "Attach complete Msg",
             "fields": [
