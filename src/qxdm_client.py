@@ -153,45 +153,47 @@ def test_log_parse_e2e(device_index, test_config_path, output_path):
     test_parse_log(filename, test_config_path, output_path)
 
 
+def tc1(device_index, test_config_path, output_path):
+    if not test_status():
+        return
+    test_connect(device_index)
+    sleep(2)
+    test_start_log(device_index)
+    sleep(2)
+
+    tc1_lte_latch()
+
+    filename = test_stop_log(device_index)
+    logging.info(f'log path: {filename}')
+    sleep(2)
+    test_disconnect(device_index)
+    test_parse_log(filename, test_config_path, output_path)
+
+
 def tc1_e2e(server_address):
-    def tc_1(device_index, test_config_path, output_path):
-        if not test_status():
-            return
-        test_connect(device_index)
-        sleep(2)
-        test_start_log(device_index)
-        sleep(2)
-
-        tc1_lte_latch()
-
-        filename = test_stop_log(device_index)
-        logging.info(f'log path: {filename}')
-        sleep(2)
-        test_disconnect(device_index)
-        test_parse_log(filename, test_config_path, output_path)
-
-    _run_multiprocess_test(server_address, tc1_1, [
-        [1, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
+    _run_multiprocess_test(server_address, tc1, [
+        [0, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
     ])
 
 
+def tc2_setup(device_index):
+    if not test_status():
+        return
+    test_connect(device_index)
+    sleep(2)
+    test_start_log(device_index)
+    sleep(2)
+
+
+def tc2_finish(device_index, test_config_path, output_path):
+    filename = test_stop_log(device_index)
+    logging.info(f'log path: {filename}')
+    sleep(2)
+    test_disconnect(device_index)
+    test_parse_log(filename, test_config_path, output_path)
+
 
 def tc2_e2e(server_address):
-    def tc2_setup(device_index):
-        if not test_status():
-            return
-        test_connect(device_index)
-        sleep(2)
-        test_start_log(device_index)
-        sleep(2)
-
-    def tc2_finish(device_index, test_config_path, output_path):
-        filename = test_stop_log(device_index)
-        logging.info(f'log path: {filename}')
-        sleep(2)
-        test_disconnect(device_index)
-        test_parse_log(filename, test_config_path, output_path)
-
     _run_multiprocess_test(server_address, tc2_setup, [
         [0],
         [1]
@@ -203,6 +205,7 @@ def tc2_e2e(server_address):
         [0, QCAT_TEST_CONFIG_2, SAVE_PARSED_FILE_PATH_1],
         [1, QCAT_TEST_CONFIG_2, SAVE_PARSED_FILE_PATH_2]
     ])
+    
 
 
 def main():
@@ -215,7 +218,7 @@ def main():
 
     tc1_e2e(server_address)
 
-    tc2_e2e(server_address)
+    #tc2_e2e(server_address)
 
     #_run_multiprocess_test(server_address, test_log_parse_e2e, [
     #    [1, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
