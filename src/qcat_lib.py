@@ -152,9 +152,6 @@ def parse_json_config(filename):
 
     # print(json.dumps(TC_json, indent=2))
 
-    test_name = TC_json['test_name']
-    packet_types = [int(packet, 16) for packet in TC_json['packet_types']]
-
     # load device specs
     device_specs = {}
     with open(TC_json['device_specs']) as f:
@@ -187,6 +184,7 @@ def parse_json_config(filename):
                 fields.append(field)
 
             msg = message.Message(
+                description=json_msg['description'],
                 packet_type=int(json_msg['packet_type'], 16),
                 subtitle=json_msg['subtitle'],
                 fields=fields,
@@ -194,15 +192,20 @@ def parse_json_config(filename):
                 saved_values=device_specs
             )
             messages.append(msg)
-    return test_name, packet_types, messages, device_specs
+    return TC_json, messages, device_specs
 
 
 def parse_log(input_filename, test_filename, raw_filename,
               parsed_filename, validated_filename, qcat):
     print('QXDM log analysis started')
-    test_name, packet_types, messages, device_specs = parse_json_config(test_filename)
+    TC_json, messages, device_specs = parse_json_config(test_filename)
 
-    print('Parsing:', test_name)
+    name = TC_json['name']
+    preconditions = TC_json['preconditions']
+    description = TC_json['description']
+    packet_types = [int(packet, 16) for packet in TC_json['packet_types']]
+
+    print('Parsing:', name)
 
     qcat.set_packet_filter(packet_types)
     qcat.parse(input_filename, messages)
@@ -221,6 +224,11 @@ def parse_log(input_filename, test_filename, raw_filename,
     print('parsed messages:', parsed_filename)
 
     with open(validated_filename, 'w') as f:
+        f.write('================================================================================\n\n')
+        f.write(f'Test Case Name:\n{name}\n\n')
+        f.write('Preconditions:\n' + '\n'.join(preconditions) + '\n\n')
+        f.write('Test Description:\n' + '\n'.join(description) + '\n\n')
+        f.write('================================================================================\n\n')
         for validated_msg in qcat.validated_messages:
             validated_msg_str = validated_msg.to_string()
             f.write(validated_msg_str)
@@ -232,12 +240,12 @@ def parse_log(input_filename, test_filename, raw_filename,
 if __name__ == '__main__':
     input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')
     # input_filename = os.path.abspath('/home/techm/Desktop/TC1/saved_test_2.isf')
-    test_filename = 'src/qcat_tests/Test_case_2.json'
-    output_filename = 'TC2_att'
+    test_filename = 'qcat_tests/Test_case_1.json'
+    output_filename = 'TC1_att'
 
-    raw_filename = f'src/qcat_tests/result_raw_{output_filename}.txt'
-    parsed_filename = f'src/qcat_tests/result_parsed_{output_filename}.txt'
-    validated_filename = f'src/qcat_tests/result_validated_{output_filename}.txt'
+    raw_filename = f'qcat_tests/result_raw_{output_filename}.txt'
+    parsed_filename = f'qcat_tests/result_parsed_{output_filename}.txt'
+    validated_filename = f'qcat_tests/result_validated_{output_filename}.txt'
 
     qcat = QCAT()
     parse_log(input_filename, test_filename, raw_filename, parsed_filename,

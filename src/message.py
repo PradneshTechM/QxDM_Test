@@ -30,8 +30,8 @@ class FieldType(Enum):
 
 
 class Field:
-    def __init__(self, field_name: str, regex: str, search_2: str,
-                 field_type: FieldType, get_value: str,
+    def __init__(self, field_name: str, regex: str,
+                 search_2: str, field_type: FieldType, get_value: str,
                  validation_type: ValidationType, expected_value: str,
                  validation_regex: str):
         self.field_name = field_name
@@ -78,7 +78,9 @@ class ValidatedField:
 
 
 class ValidatedMessage:
-    def __init__(self, name: str, subtitle: str, datetime: str):
+    def __init__(self, description: str, name: str, subtitle: str,
+                 datetime: str):
+        self.description = description
         self.name = name
         self.subtitle = subtitle
         self.datetime = datetime
@@ -95,6 +97,8 @@ class ValidatedMessage:
         missing_fields = list(filter(
             lambda x: x.result == FieldResult.FIELD_MISSING, self.fields))
 
+        lines.append('\n--------------------------------------------------------------------------------\n\n')
+        lines.append('\n'.join(self.description) + '\n\n')
         if not (not_matching_fields or missing_fields):
             lines.append('PASS: All fields and expected values found\n')
         else:
@@ -138,7 +142,6 @@ class ValidatedMessage:
                     lines.append('\t' + '\n\t'.join(field.original_value) + '\n')
                 else:
                     lines.append(f'\t{field.original_value}\n')
-        lines.append('\n\n\n')
         return ''.join(lines)
 
 
@@ -155,8 +158,9 @@ def remove_parens(s):
 
 
 class ParsedMessage:
-    def __init__(self, name: str, subtitle: str, datetime: str,
-                 saved_values: dict):
+    def __init__(self, description: str, name: str, subtitle: str,
+                 datetime: str, saved_values: dict):
+        self.description = description
         self.name = name
         self.subtitle = subtitle
         self.datetime = datetime
@@ -169,8 +173,8 @@ class ParsedMessage:
     def validate(self) -> ValidatedMessage:
         '''validates the message and returns a ValidatedMessage'''
         # compare each ParsedField against the validation rules for that field
-        validated_message = ValidatedMessage(self.name, self.subtitle,
-                                             self.datetime)
+        validated_message = ValidatedMessage(self.description, self.name,
+                                             self.subtitle, self.datetime)
 
         for field in self.fields:
             validated_field, value, result = None, None, None
@@ -262,7 +266,20 @@ class ParsedMessage:
                     value = [el for el in match[0] if el != '']
                     result = FieldResult.VALUE_MATCH
                 else:
+                    # hardcoded validation if values do not match
                     result = FieldResult.VALUE_MISMATCH
+                    if 'EVS' in field.value[0]:
+                        evs = re.findall('EVS.*', field.value[0])[0]
+                        br = re.findall('br=[0-9.-]*', field.value[1])[0]
+                        bw = re.findall('bw=[a-zA-Z-]*', field.value[1])[0]
+                        field.expected_value = ['EVS', 'br=5.9-24.4', 'bw=nb-swb']
+                        value = [evs, br, bw]
+                    else:
+                        # check AMR-WB and AMR-NB used
+                        amr_wb = re.findall('AMR-WB.*', field.value[0])[0]
+                        amr_nb = re.findall('AMR-NB.*', field.value[1])[0]
+                        field.expected_value = ['AMR-WB', 'AMR-NB']
+                        value = [amr_wb, amr_nb]
             elif field.validation_type == ValidationType.DOES_NOT_CONTAIN:
                 value = remove_prefix(field.value, field.field_name)
                 value = remove_space_equals_prefix(value)
@@ -339,14 +356,15 @@ class RawMessage:
 
 
 class Message:
-    def __init__(self, packet_type: str, subtitle: str, fields: [Field],
-                 must_match_field: bool, saved_values: dict):
+    def __init__(self, description: str, packet_type: str, subtitle: str,
+                 fields: [Field], must_match_field: bool, saved_values: dict):
         '''
         must_match_field: boolean used to indicate that a message MUST contain
             the first field, otherwise, message should not be added. Used to
             handle cases like 'LTE NAS EMM State' message which should have
             specific field and value: 'EMM state = EMM_REGISTERED_INITIATED'
         '''
+        self.description = description
         self.packet_type = packet_type
         self.subtitle = subtitle
         self.fields = fields
@@ -370,8 +388,8 @@ class Message:
     def parse(self, name: str, datetime: str,
               packet_text: str) -> ParsedMessage:
         '''parses the message and returns a ParsedMessage'''
-        parsed_message = ParsedMessage(name, self.subtitle, datetime,
-                                       self.saved_values)
+        parsed_message = ParsedMessage(self.description, name, self.subtitle,
+                                       datetime, self.saved_values)
 
         # for each field of message, apply regex or normal search
         for field in self.fields:
