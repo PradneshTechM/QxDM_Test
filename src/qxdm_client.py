@@ -1,4 +1,4 @@
-#!/usr/local/bin/python3.7
+#!/usr/bin/env python3.7
 
 import logging
 from time import sleep
@@ -9,6 +9,10 @@ import multiprocessing
 import atexit
 import shutil
 import os
+
+from qcat_tests.tc1_lte_latch import main as tc1_lte_latch
+from qcat_tests.tc2_VoLTE_Call import main as tc2_volte_call
+
 
 import grpc
 
@@ -149,6 +153,58 @@ def test_log_parse_e2e(device_index, test_config_path, output_path):
     test_parse_log(filename, test_config_path, output_path)
 
 
+def tc1_e2e(server_address):
+    def tc_1(device_index, test_config_path, output_path):
+        if not test_status():
+            return
+        test_connect(device_index)
+        sleep(2)
+        test_start_log(device_index)
+        sleep(2)
+
+        tc1_lte_latch()
+
+        filename = test_stop_log(device_index)
+        logging.info(f'log path: {filename}')
+        sleep(2)
+        test_disconnect(device_index)
+        test_parse_log(filename, test_config_path, output_path)
+
+    _run_multiprocess_test(server_address, tc1_1, [
+        [1, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
+    ])
+
+
+
+def tc2_e2e(server_address):
+    def tc2_setup(device_index):
+        if not test_status():
+            return
+        test_connect(device_index)
+        sleep(2)
+        test_start_log(device_index)
+        sleep(2)
+
+    def tc2_finish(device_index, test_config_path, output_path):
+        filename = test_stop_log(device_index)
+        logging.info(f'log path: {filename}')
+        sleep(2)
+        test_disconnect(device_index)
+        test_parse_log(filename, test_config_path, output_path)
+
+    _run_multiprocess_test(server_address, tc2_setup, [
+        [0],
+        [1]
+    ])
+
+    tc2_volte_call()
+
+    _run_multiprocess_test(server_address, tc2_finish, [
+        [0, QCAT_TEST_CONFIG_2, SAVE_PARSED_FILE_PATH_1],
+        [1, QCAT_TEST_CONFIG_2, SAVE_PARSED_FILE_PATH_2]
+    ])
+
+
 def main():
     server_address = 'localhost:40041'
 
@@ -157,9 +213,13 @@ def main():
         shutil.rmtree(CLIENT_TEST_FOLDER)
     os.mkdir(CLIENT_TEST_FOLDER)
 
-    _run_multiprocess_test(server_address, test_log_parse_e2e, [
-        [0, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
-    ])
+    tc1_e2e(server_address)
+
+    tc2_e2e(server_address)
+
+    #_run_multiprocess_test(server_address, test_log_parse_e2e, [
+    #    [1, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
+    #])
 
 
     # _run_multiprocess_test(server_address, test_connect_e2e,
@@ -167,12 +227,12 @@ def main():
 
     # _run_multiprocess_test(server_address, test_status, [[]])
 
-    # _run_multiprocess_test(server_address, test_log_no_parse_e2e, [
-    #     [0, SAVE_FILE_PATH_1],
-    #     # [1, SAVE_FILE_PATH_2],
-    #     # [2, SAVE_FILE_PATH_3],
-    #     # [3, SAVE_FILE_PATH_4]
-    # ])
+    #_run_multiprocess_test(server_address, test_log_no_parse_e2e, [
+         # [1, SAVE_FILE_PATH_1],
+         # [1, SAVE_FILE_PATH_2],
+         # [2, SAVE_FILE_PATH_3],
+         # [3, SAVE_FILE_PATH_4]
+    #])
 
 
 if __name__ == '__main__':
