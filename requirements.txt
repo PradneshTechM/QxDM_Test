@@ -6,3 +6,4 @@ PyGObject==3.30.0
 grpcio
 grpcio-tools
 Appium-Python-Client
+requests
