@@ -49,7 +49,7 @@ launching_lock = threading.Lock()
 
 qcat = None
 
-_PROCESS_CHECK_INTERVAL = 10
+_PROCESS_CHECK_INTERVAL = 5
 _BASE_PATH = Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
 _CHUNK_SIZE = 1024
@@ -227,6 +227,10 @@ def launch_qxdm_if_not_running(log='QXDM re-launched.'):
 
 
 def main():
+    format_str = '[%(threadName)s %(asctime)s.%(msecs)03d]: %(message)s'
+    logging.basicConfig(format=format_str,
+                        level=logging.INFO,
+                        datefmt='%Y-%m-%d %H:%M:%S')
     bind_address = 'localhost:40041'
 
     with Xvfb(width=2, height=2, colordepth=8):
@@ -254,8 +258,4 @@ def main():
 
 
 if __name__ == '__main__':
-    format_str = '[%(threadName)s %(asctime)s.%(msecs)03d]: %(message)s'
-    logging.basicConfig(format=format_str,
-                        level=logging.INFO,
-                        datefmt='%Y-%m-%d %H:%M:%S')
     main()

@@ -53,8 +53,8 @@ class QXDM:
     # start QXDM process
     self.process = subprocess.Popen(QXDM.PROCESS_PATH)
     print("QXDM launched")
-    time.sleep(5)    # must wait until D-bus is available
     self.bus = SessionBus()
+    time.sleep(7)    # must wait until D-bus is available
     self.qxdm = self.bus.get(QXDM.PROG_NAME, QXDM.OBJ_PATH)
 
 

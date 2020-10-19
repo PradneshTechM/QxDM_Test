@@ -35,7 +35,7 @@ QCAT_TEST_CONFIG_1 = _BASE_PATH / 'qcat_tests/Test_case_1.json'
 QCAT_TEST_CONFIG_2 = _BASE_PATH / 'qcat_tests/Test_case_2.json'
 
 SAVE_PARSED_FILE_PATH_1 = CLIENT_TEST_FOLDER / 'validated_test_case_1.csv'
-SAVE_PARSED_FILE_PATH_2 = CLIENT_TEST_FOLDER / 'validated_test_case_2.csv'
+SAVE_PARSED_FILE_PATH_2 = CLIENT_TEST_FOLDER / 'validated_test_case_2_MO.csv'
 
 
 def test_status():
@@ -193,22 +193,26 @@ def tc2_finish(device_index, test_config_path, output_path):
     test_parse_log(filename, test_config_path, output_path)
 
 
-def tc2_e2e(server_address):
+def tc2_e2e(server_address, device_index, parsed_filepath):
     _run_multiprocess_test(server_address, tc2_setup, [
-        [0],
-        [1]
+        [device_index]
     ])
 
     tc2_volte_call()
 
     _run_multiprocess_test(server_address, tc2_finish, [
-        [0, QCAT_TEST_CONFIG_2, SAVE_PARSED_FILE_PATH_1],
-        [1, QCAT_TEST_CONFIG_2, SAVE_PARSED_FILE_PATH_2]
+        [device_index, QCAT_TEST_CONFIG_2, parsed_filepath]
     ])
     
 
 
 def main():
+    handler = logging.StreamHandler(sys.stdout)
+    format = '[PID %(process)d %(asctime)s.%(msecs)03d]: %(message)s'
+    logging.basicConfig(format=format,
+                        level=logging.INFO,
+                        datefmt='%Y-%m-%d %H:%M:%S')
+
     server_address = 'localhost:40041'
 
     # remove files in client_test folder
@@ -216,9 +220,9 @@ def main():
         shutil.rmtree(CLIENT_TEST_FOLDER)
     os.mkdir(CLIENT_TEST_FOLDER)
 
-    tc1_e2e(server_address)
+    #tc1_e2e(server_address)
 
-    #tc2_e2e(server_address)
+    tc2_e2e(server_address, 0, SAVE_PARSED_FILE_PATH_1)
 
     #_run_multiprocess_test(server_address, test_log_parse_e2e, [
     #    [1, QCAT_TEST_CONFIG_1, SAVE_PARSED_FILE_PATH_1]
@@ -239,9 +243,4 @@ def main():
 
 
 if __name__ == '__main__':
-    handler = logging.StreamHandler(sys.stdout)
-    format = '[PID %(process)d %(asctime)s.%(msecs)03d]: %(message)s'
-    logging.basicConfig(format=format,
-                        level=logging.INFO,
-                        datefmt='%Y-%m-%d %H:%M:%S')
     main()
