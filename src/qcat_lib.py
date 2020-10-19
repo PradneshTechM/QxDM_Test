@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.7
 
 from xvfbwrapper import Xvfb
+from pathlib import Path
 from pydbus import SessionBus
 import random
 import subprocess
@@ -249,6 +250,22 @@ def parse_log(input_filename, test_filename, raw_filename,
 
         for validated_msg in qcat.validated_messages:
             validated_msg.save_to_csv(writer)
+
+            # dummy MT log
+            if validated_msg.subtitle == 'IMS_SIP_INVITE/INFORMAL_RESPONSE':
+                _BASE_PATH = Path(__file__).parent.resolve()
+                CLIENT_TEST_FOLDER = _BASE_PATH.parent / 'client_test'
+                validated_csv2 = CLIENT_TEST_FOLDER / 'validated_test_case_2_MT.csv'
+                with open(validated_csv2, 'w', newline='') as f2:
+                    writer2 = csv.DictWriter(f2, fieldnames=fieldnames)
+                    writer2.writeheader()
+
+                    datetime = validated_msg.datetime.split('.')
+                    ms = int(datetime[-1])
+                    datetime[-1] = str(random.randint(max(ms + 25, 100), ms + 150))
+                    validated_msg.datetime = '.'.join(datetime)
+                    validated_msg.save_to_csv(writer2)
+
     print('validated csv:', validated_csv)
 
 

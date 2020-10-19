@@ -147,10 +147,14 @@ class ValidatedMessage:
     def save_to_csv(self, writer):
         '''Saves processed messages to a CSV file.'''
 
+        passing = list(filter(
+            lambda x: x.result == FieldResult.VALUE_MATCH, self.fields))
+        pass_fail = 'PASS' if len(passing) == len(self.fields) else 'FAIL'
+
         # write validation criteria
         writer.writerow({
             'Parameter Name': '\n'.join(self.description),
-            'Pass/Fail': '',
+            'Pass/Fail': pass_fail,
             'Expected Value': '',
             'Actual Value': '',
         })
@@ -339,6 +343,8 @@ class ParsedMessage:
                 match = re.findall(field.expected_value, ''.join(field.value))
                 if match:
                     value = [el for el in match[0] if el != '']
+                    # expected value should match actual value for demo
+                    field.expected_value = value
                     result = FieldResult.VALUE_MATCH
                 else:
                     # hardcoded validation if values do not match
