@@ -15,7 +15,7 @@ import requests
 
 #from driverInitialization import Driver
 
-dut1 = '96031FFBA001J1'
+dut1 = '96071FFBA00048'
 
 
 def init_driver():
@@ -23,10 +23,10 @@ def init_driver():
     print("Test Location: Redmond")
     print("HeadSpin Hostname: proxy-us-pnw-1.headspin.io")
     print("Test Device Model: Google - Pixel4 XL")
-    print("Creating a driver for Settings Apps on Pixel 4 Device - 96031FFBA001J1")
+    print("Creating a driver for Settings Apps on Pixel 4 Device - 96071FFBA00048")
     desired_caps = {
         "deviceName": "Pixel 4 XL",
-        "udid": "96031FFBA001J1",
+        "udid": "96071FFBA00048",
         "automationName": "UiAutomator2",
         "appPackage": "com.android.settings",
         "platformName": "Android",
@@ -53,7 +53,7 @@ def init_driver():
 
 def enabled_root():
     subprocess.call(
-        "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96031FFBA001J1/shell -d \"root\"",
+        "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96071FFBA00048/shell -d \"root\"",
         shell=True)
     time.sleep(15)
 
@@ -62,10 +62,10 @@ def enable_airplane_mode():
     
     print("Turning on Airplane mode..........")
     subprocess.call(
-        "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96031FFBA001J1/shell -d \"settings put global airplane_mode_on 1\"",
+        "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96071FFBA00048/shell -d \"settings put global airplane_mode_on 1\"",
         shell=True)
 
-    cmd = "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96031FFBA001J1/shell -d \"am broadcast -a android.intent.action.AIRPLANE_MODE\""
+    cmd = "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96071FFBA00048/shell -d \"am broadcast -a android.intent.action.AIRPLANE_MODE\""
     status, output = subprocess.getstatusoutput(cmd)
     #print("+++++++++++************+++++" + output + "+++++++++++++**************+++")
     if (output.__contains__("Broadcast completed")):
@@ -81,10 +81,10 @@ def disable_airplane_mode():
     print("Turning off Airplane mode..........")
 
     subprocess.call(
-        "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96031FFBA001J1/shell -d \"settings put global airplane_mode_on 0\"",
+        "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96071FFBA00048/shell -d \"settings put global airplane_mode_on 0\"",
         shell=True)
 
-    cmd1 = "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96031FFBA001J1/shell -d \"am broadcast -a android.intent.action.AIRPLANE_MODE\""
+    cmd1 = "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96071FFBA00048/shell -d \"am broadcast -a android.intent.action.AIRPLANE_MODE\""
     status, output = subprocess.getstatusoutput(cmd1)
     #print("+++++++++++************+++++" + output + "+++++++++++++**************+++")
     if (output.__contains__("Broadcast completed")):
@@ -96,7 +96,7 @@ def disable_airplane_mode():
 
 def verifyLTE():
     print("Checking if LTE is latched........")
-    cmd1 = "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96031FFBA001J1/shell -d \"dumpsys telephony.registry\""
+    cmd1 = "curl -X POST https://7bfc56fb456d447e9337209c889d211e@api-dev.headspin.io/v0/adb/96071FFBA00048/shell -d \"dumpsys telephony.registry\""
     status, output = subprocess.getstatusoutput(cmd1)
     #print("+++++++++++************+++++" + output + "+++++++++++++**************+++")
     for i in range(10):
