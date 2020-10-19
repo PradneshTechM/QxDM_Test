@@ -3,24 +3,15 @@
         {
             "description": [
                 "Check in the ACTIVATE DEFAULT EPS BEARER CONTEXT REQUEST message sent to the UE,",
-                "the network shall set the PDN type value to IPv6, ESM cause value to #51",
-                "\"PDN type IPv6 only allowed\" and EPS bearers are established successfully"
+                "the network shall set the PDN type value to IPv4v6 and EPS bearers are established successfully"
             ],
             "packet_type": "0xB0E2",
             "subtitle": "Activate default EPS bearer context request Msg",
             "fields": [
                 {
                     "field_name": "pdn_type",
-                    "expected_value": "IPv6",
+                    "expected_value": "IPv4v6",
                     "validation_type": "ANY_SUBSTRING",
-                    "field_type": "VALUE",
-                    "get_value": true
-                },
-                {
-                    "field_name": "esm_cause",
-                    "regex": "esm_cause(?:.|\n)*(esm_cause.*)",
-                    "expected_value": "51",
-                    "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
                 }

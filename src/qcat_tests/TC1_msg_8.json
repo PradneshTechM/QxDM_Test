@@ -6,17 +6,12 @@
                 "Check AccessStratumRelease =  must match with device spec",
                 "Check 'UE-Category = must match with device spec",
                 "Check supportedBandListEUTRA",
-                "Confirm bandEUTRA 3, bandEUTRA 7, bandEUTRA 20, bandEUTRA 1, bandEUTRA 38 is available.",
+                "Confirm bandEUTRA 2, bandEUTRA 4, bandEUTRA 30, bandEUTRA 25, bandEUTRA 64 is available.",
                 "Check supportedBandListUTRA-FDD",
                 "Confirm bandI, bandII,band V, bandVIII are available.",
-                "Check supportedBandListGERAN",
-                "Confirm gsm850, gsm900, gsm1800 and gsm1900  are avialbale.",
-                "Check InterRAT-PS-HO-GERAN = FALSE",
-                "Check DTM-R9 = supported",
-                "Check e-RedirectionGERAN-R9 = supported",
                 "Check e-RedirectionUTRA-R9 = supported",
-                "Check Feature Group indicator value is  \"01011101 00001111 11111110 10000000 11000000 1000000 00000000 000000000\".",
-                "Make sure UE capability info message size do not exceed 2000 bytes"
+                "Check Feature Group indicator value is  \"01111111 00001111 11111100 10111010\".",
+                "Make sure UE capability info message size do not exceed 4000 bytes"
             ],
             "packet_type": "0xB0C0",
             "subtitle": "UL_DCCH / UECapabilityInformation",
@@ -37,11 +32,11 @@
                     "field_name": "supportedBandListEUTRA",
                     "regex": "supportedBandListEUTRA(?:.|\n)*?{(?:.|\n)*?({(?:.|\n)*?})\r\n",
                     "expected_value": [
-                        "bandEUTRA 3",
-                        "bandEUTRA 7",
-                        "bandEUTRA 20",
-                        "bandEUTRA 1",
-                        "bandEUTRA 38"
+                        "bandEUTRA 2",
+                        "bandEUTRA 4",
+                        "bandEUTRA 30",
+                        "bandEUTRA 25",
+                        "bandEUTRA 64"
                     ],
                     "validation_type": "COLLECTION",
                     "search_2": "bandEUTRA",
@@ -62,33 +57,6 @@
                     "get_value": true
                 },
                 {
-                    "field_name": "supportedBandListGERAN",
-                    "regex": "supportedBandListGERAN(?:.|\n)*?{((?:.|\n)*?)}",
-                    "expected_value": [
-                        "gsm850",
-                        "gsm900",
-                        "gsm1800",
-                        "gsm1900"
-                    ],
-                    "validation_type": "COLLECTION",
-                    "field_type": "COLLECTION",
-                    "get_value": true
-                },
-                {
-                    "field_name": "DTM-R9",
-                    "expected_value": "supported",
-                    "validation_type": "FIRST_WORD_EXACT",
-                    "field_type": "VALUE",
-                    "get_value": true
-                },
-                {
-                    "field_name": "e-RedirectionGERAN-R9",
-                    "expected_value": "supported",
-                    "validation_type": "FIRST_WORD_EXACT",
-                    "field_type": "VALUE",
-                    "get_value": true
-                },
-                {
                     "field_name": "e-RedirectionUTRA-r9",
                     "expected_value": "supported",
                     "validation_type": "FIRST_WORD_EXACT",
@@ -97,14 +65,14 @@
                 },
                 {
                     "field_name": "featureGroupIndicators",
-                    "expected_value": "01011101 00001111 11111110 10000000 11000000 1000000 00000000 000000000",
+                    "expected_value": "01111111 00001111 11111100 10111010",
                     "validation_type": "ANY_SUBSTRING",
                     "field_type": "VALUE",
                     "get_value": true
                 },
                 {
                     "field_name": "Msg Length",
-                    "expected_value": "2000",
+                    "expected_value": "4000",
                     "validation_type": "NUMBER_COMPARISON",
                     "regex": "(Msg Length.*)",
                     "field_type": "VALUE",

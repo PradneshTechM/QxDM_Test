@@ -2,7 +2,8 @@
     "messages": [
         {
             "description": [
-                "Check in Log for \"Lte Nas EMM State\" message. Check EMM State = EMM REGISTERED_INITIATED"
+                "Check in Log for \"Lte Nas EMM State\" message.",
+                "Check EMM State = EMM REGISTERED_INITIATED"
             ],
             "packet_type": "0xB0EE",
             "subtitle": "",

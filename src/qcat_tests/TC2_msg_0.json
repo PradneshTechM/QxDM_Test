@@ -10,7 +10,7 @@
                 "       EVS-WB: 5.9 VBR, 7.2, 8.0, 9.6, 13.2, 16.4, 24.4",
                 "       EVS-NB: 5.9 VBR, 7.2, 8.0, 9.6, 13.2, 16.4, 24.4",
                 "   If device supports SWB, then SWB Bit rates are also sent in the Initial INVITE message.",
-                " * Verify that the call on both MO and MT are EVS.",
+                "   Verify that the call on both MO and MT are EVS.",
                 " * Verify that if device does not support EVS, device used WB-AMR & NB-AMR and",
                 "   network assigned WB-AMR codec for the call"
             ],
@@ -32,9 +32,9 @@
                 },
                 {
                     "field_name": "codecs",
-                    "regex": "(a=rtpmap:\\d+ EVS\/.*)(?:.|\n)a=fmtp:\\d+ (br=(?:.|\n)*?)ch|(a=rtpmap:\\d+ AMR-WB\/.*)(?:.|\n)*?(a=rtpmap:\\d+ AMR-NB\/.*)",
+                    "regex": "(a=rtpmap:\\d+ AMR-WB\/.*)(?:.|\n)*?(a=rtpmap:\\d+ AMR\/.*)",
                     "description": "EVS codecs with ",
-                    "expected_value": "(a=rtpmap:\\d+ EVS/.*)(?:.|\n)*?(br=5\\.9-24\\.4;bw=nb-swb;)|(a=rtpmap:\\d+ AMR-WB\/.*)(?:.|\n)*?(a=rtpmap:\\d+ AMR-NB\/.*)",
+                    "expected_value": "(a=rtpmap:\\d+ AMR-WB\/.*)(?:.|\n)*?(a=rtpmap:\\d+ AMR\/.*)",
                     "validation_type": "STRING_MATCH_ONE_OF",
                     "field_type": "VALUE",
                     "get_value": true

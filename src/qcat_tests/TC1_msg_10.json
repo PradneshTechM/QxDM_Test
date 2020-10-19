@@ -2,7 +2,7 @@
     "messages": [
         {
             "description": [
-                "Check in log for \"Attach accept\" message. Check  APN is \"everywhere\""
+                "Check in log for \"Attach accept\" message. Check  APN is \"firstnet\""
             ],
             "packet_type": "0xB0EC",
             "subtitle": "Attach accept Msg",
@@ -10,7 +10,7 @@
                 {
                     "field_name": "access_point",
                     "regex": "access_point(?:.|\n)((?:.|\n)*?).*pdn_addr",
-                    "expected_value": "everywhere",
+                    "expected_value": "firstnet",
                     "validation_regex": "\\((\\w)\\)|\\((?:length)\\)",
                     "validation_type": "CONCAT_AND_COMPARE",
                     "field_type": "COLLECTION",

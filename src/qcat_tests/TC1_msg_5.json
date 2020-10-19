@@ -2,7 +2,7 @@
     "messages": [
         {
             "description": [
-                "Check in Log for \"ESM information request\"message.",
+                "Check in Log for \"ESM information request\" message.",
                 "Check eps_bearer_id_or_skip_id = 0",
                 "Check trans_id parameter is included.Note the value."
             ],

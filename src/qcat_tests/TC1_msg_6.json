@@ -5,9 +5,8 @@
                 "Check in Log for \"ESM information response\" message.",
                 "Check eps_bearer_id_or_skip_id = 0",
                 "Check trans_id parameter is same as above.",
-                "Check APN is \"everywhere\"",
-                "Check prot_config_incl = 1",
-                "Check protocol_id = PAP"
+                "Check APN is \"firstnet\"",
+                "Check prot_config_incl = 0"
             ],
             "packet_type": "0xB0E2",
             "subtitle": "ESM information response Msg",
@@ -28,7 +27,7 @@
                 {
                     "field_name": "access_point_name",
                     "regex": "access_point_name(?:.|\n)((?:.|\n)*?).*prot_config_incl",
-                    "expected_value": "everywhere",
+                    "expected_value": "firstnet",
                     "validation_regex": "\\((\\w)\\)|\\((?:length)\\)",
                     "validation_type": "CONCAT_AND_COMPARE",
                     "field_type": "COLLECTION",
@@ -36,14 +35,7 @@
                 },
                 {
                     "field_name": "prot_config_incl",
-                    "expected_value": "1",
-                    "validation_type": "FIRST_WORD_EXACT",
-                    "field_type": "VALUE",
-                    "get_value": true
-                },
-                {
-                    "field_name": "protocol_id",
-                    "expected_value": "PAP",
+                    "expected_value": "0",
                     "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true

@@ -2,7 +2,8 @@
     "messages": [
         {
             "description": [
-                "Check in Log for \"RRC Connection Request\" message. Check establishmenetCause = Mo Signalling",
+                "Check in Log for \"RRC Connection Request\" message.",
+                "Check establishmenetCause = highPriorityAccess",
                 "Check ue-Identity= RandomValue or s-TMSI"
             ],
             "packet_type": "0xB0C0",
@@ -20,7 +21,7 @@
                 },
                 {
                     "field_name": "establishmentCause",
-                    "expected_value": "mo-Signalling",
+                    "expected_value": "highPriorityAccess",
                     "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true

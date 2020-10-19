@@ -3,8 +3,7 @@
         {
             "description": [
                 "Check in log for \"ueCapabilityEnquiry\" message.",
-                "Check in log for \"ueCapabilityEnquiry\" message.",
-                "Check \"ue-CapabilityRequest\" includes EUTRA, UTRA, GERAN CS, GERAN PS and CDMA2000-1XRTT."
+                "Check \"ue-CapabilityRequest\" includes EUTRA, UTRA."
             ],
             "packet_type": "0xB0C0",
             "subtitle": "DL_DCCH / UECapabilityEnquiry",
@@ -13,10 +12,7 @@
                     "field_name": "ue-CapabilityRequest",
                     "expected_value": [
                         "eutra",
-                        "utra",
-                        "geran-cs",
-                        "geran-ps",
-                        "CDMA2000-1XRTT"
+                        "utra"
                     ],
                     "validation_type": "COLLECTION",
                     "regex": "ue-CapabilityRequest(?:.|\n)*?{((?:.|\n)*?)}",
