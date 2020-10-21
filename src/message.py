@@ -283,6 +283,7 @@ class ParsedMessage:
                     result = FieldResult.VALUE_MATCH
                 else:
                     result = FieldResult.FIELD_MISSING
+                value = field.expected_value
             elif field.validation_type == ValidationType.FIRST_SAVE:
                 value = remove_prefix(field.value, field.field_name)
                 value = remove_space_equals_prefix(value)
