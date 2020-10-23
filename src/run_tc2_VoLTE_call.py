@@ -12,14 +12,15 @@ import qxdm_lib
 import qcat_lib
 from qcat_tests.tc2_VoLTE_Call import main as tc2_volte_call
 
-qcat = None
-qxdm = None
-device_index_MO = 1
-device_index_MT = 1 if device_index_MO == 0 else 0
-
 _BASE_PATH = Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
-_TC1_TEST_CONFIG = _BASE_PATH / 'qcat_tests/Test_case_1.json'
+_FINAL_FOLDER_PATH = (_BASE_PATH.parent / 'TC2_VoLTE_call_logs')
+_TC2_TEST_CONFIG = _BASE_PATH / 'qcat_tests/Test_case_2.json'
+
+qcat = None
+qxdm = None
+device_index_MO = 0
+device_index_MT = 1 if device_index_MO == 0 else 0
 
 
 
@@ -47,23 +48,24 @@ def launch_qxdm_qcat_if_not_running():
                 logging.info('QXDM could not be re-launched')
             time.sleep(5)
         except GLib.Error:
-            logging.info('Could not connect to QXDM Dbus. Check license.')
+            #logging.info('Could not connect to QXDM Dbus. Check license.')
+            pass
 
 
-def connect(device_index, device):
+def connect(device_index):
     connected = qxdm.connect(device_index)
     if connected:
-        logging.info(f'Connected device: {device}')
+        logging.info(f'Connected device')
     else:
-        return logging.info('Could not connect: ')
+        return logging.info('Could not connect')
 
 
-def disconnect(device_index, device):
+def disconnect(device_index):
     disconnected = qxdm.disconnect(device_index)
     if disconnected:
-        logging.info(f'Disconnected device: {device}')
+        logging.info(f'Disconnected device')
     else:
-        return logging.info('Could not disconnect: ')
+        return logging.info('Could not disconnect')
 
 
 def main():
@@ -76,31 +78,32 @@ def main():
                 shutil.rmtree(_TEMP_FOLDER_PATH)
             os.mkdir(_TEMP_FOLDER_PATH)
 
+            # remove files in client_test folder
+            if _FINAL_FOLDER_PATH.exists() and _FINAL_FOLDER_PATH.is_dir():
+                shutil.rmtree(_FINAL_FOLDER_PATH)
+
             # connect to device index
             connect(device_index_MO)
-            connect(device_index_MT)
 
             # start logging
             logging.info('Started logging')
 
-            qxdm.start_logs(device_index_MO, 'MO')
-            qxdm.start_logs(device_index_MT, 'MT')
+            qxdm.start_logs(device_index_MO)
 
         tc2_volte_call()
 
         # stop logging
         with HiddenPrints():
-            logging.info('Stopped logging')
+            logging.info('Saved log')
             filepath = qxdm.save_logs(device_index_MO)
-            logging.info(f'Log saved to: {filepath}')
+            #logging.info(f'Log saved to: {filepath}')
 
             # disconnect from device index
-            disconnect(device_index_MO, 'MO')
-            disconnect(device_index_MT, 'MT')
+            disconnect(device_index_MO)
 
             # set name and path of parsed results file
             path, filename = os.path.split(filepath)
-            filename = 'tc1_lte_latch'
+            filename = 'tc2_VoLTE_call'
             raw_filename = f'result_raw_{filename}.txt'
             raw_filepath = os.path.join(path, raw_filename)
             parsed_filename = f'result_parsed_{filename}.txt'
@@ -113,7 +116,7 @@ def main():
             # call QCAT library on the log file which needs parsing
             logging.info('QCAT parsing log file')
             parsed = qcat_lib.parse_log(filepath,
-                                        _TC1_TEST_CONFIG,
+                                        _TC2_TEST_CONFIG,
                                         raw_filepath,
                                         parsed_filepath,
                                         validated_filepath,
@@ -128,6 +131,8 @@ def main():
             logging.info('Quit QXDM and QCAT')
             qxdm.quit()
             qcat.quit()
+
+            shutil.move(str(_TEMP_FOLDER_PATH), str(_FINAL_FOLDER_PATH))
 
 
 if __name__ == '__main__':

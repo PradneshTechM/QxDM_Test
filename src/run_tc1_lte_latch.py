@@ -14,10 +14,12 @@ from qcat_tests.tc1_lte_latch import main as tc1_lte_latch
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _TEMP_FOLDER_PATH = (_BASE_PATH.parent / 'temp')
+_FINAL_FOLDER_PATH = (_BASE_PATH.parent / 'TC1_lte_latch_logs')
+_TC1_TEST_CONFIG = _BASE_PATH / 'qcat_tests/Test_case_1.json'
 
 qcat = None
 qxdm = None
-device_index = 1
+device_index = 0
 
 
 class HiddenPrints:
@@ -44,7 +46,8 @@ def launch_qxdm_qcat_if_not_running():
                 logging.info('QXDM could not be re-launched')
             time.sleep(5)
         except GLib.Error:
-            logging.info('Could not connect to QXDM Dbus. Check license.')
+            #logging.info('Could not connect to QXDM Dbus. Check license.')
+            pass
 
 
 def main():
@@ -56,6 +59,10 @@ def main():
             if _TEMP_FOLDER_PATH.exists() and _TEMP_FOLDER_PATH.is_dir():
                 shutil.rmtree(_TEMP_FOLDER_PATH)
             os.mkdir(_TEMP_FOLDER_PATH)
+
+            # remove files in client_test folder
+            if _FINAL_FOLDER_PATH.exists() and _FINAL_FOLDER_PATH.is_dir():
+                shutil.rmtree(_FINAL_FOLDER_PATH)
 
             # connect to device index
             connected = qxdm.connect(device_index)
@@ -73,9 +80,9 @@ def main():
 
         # stop logging
         with HiddenPrints():
-            logging.info('Stopped logging')
+            logging.info('Saved log')
             filepath = qxdm.save_logs(device_index)
-            logging.info(f'Log saved to: {filepath}')
+            #logging.info(f'Log saved to: {filepath}')
 
             # disconnect from device index
             disconnected = qxdm.disconnect(device_index)
@@ -114,6 +121,8 @@ def main():
             logging.info('Quit QXDM and QCAT')
             qxdm.quit()
             qcat.quit()
+
+            shutil.move(str(_TEMP_FOLDER_PATH), str(_FINAL_FOLDER_PATH))
 
 
 if __name__ == '__main__':
