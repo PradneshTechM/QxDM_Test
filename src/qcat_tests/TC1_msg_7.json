@@ -3,7 +3,7 @@
         {
             "description": [
                 "Check in log for \"ueCapabilityEnquiry\" message.",
-                "Check \"ue-CapabilityRequest\" includes EUTRA, UTRA."
+                "Check \"ue-CapabilityRequest\" includes EUTRA, geran-cs."
             ],
             "packet_type": "0xB0C0",
             "subtitle": "DL_DCCH / UECapabilityEnquiry",
@@ -12,7 +12,7 @@
                     "field_name": "ue-CapabilityRequest",
                     "expected_value": [
                         "eutra",
-                        "utra"
+                        "geran-cs"
                     ],
                     "validation_type": "COLLECTION",
                     "regex": "ue-CapabilityRequest(?:.|\n)*?{((?:.|\n)*?)}",

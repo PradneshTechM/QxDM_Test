@@ -10,7 +10,7 @@
                 "Check supportedBandListUTRA-FDD",
                 "Confirm bandI, bandII,band V, bandVIII are available.",
                 "Check e-RedirectionUTRA-R9 = supported",
-                "Check Feature Group indicator value is  \"01111111 00001111 11111100 10111010\".",
+                "Check Feature Group indicator value is  \"11111111 11001111 11111110 10111110\".",
                 "Make sure UE capability info message size do not exceed 4000 bytes"
             ],
             "packet_type": "0xB0C0",
@@ -65,7 +65,7 @@
                 },
                 {
                     "field_name": "featureGroupIndicators",
-                    "expected_value": "01111111 00001111 11111100 10111010",
+                    "expected_value": "11111111 11001111 11111110 10111110",
                     "validation_type": "ANY_SUBSTRING",
                     "field_type": "VALUE",
                     "get_value": true

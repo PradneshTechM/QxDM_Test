@@ -3,14 +3,14 @@
         {
             "description": [
                 "Check in the ACTIVATE DEFAULT EPS BEARER CONTEXT REQUEST message sent to the UE,",
-                "the network shall set the PDN type value to IPv4v6 and EPS bearers are established successfully"
+                "the network shall set the PDN type value to IPv6 and EPS bearers are established successfully"
             ],
             "packet_type": "0xB0E2",
             "subtitle": "Activate default EPS bearer context request Msg",
             "fields": [
                 {
                     "field_name": "pdn_type",
-                    "expected_value": "IPv4v6",
+                    "expected_value": "IPv6",
                     "validation_type": "ANY_SUBSTRING",
                     "field_type": "VALUE",
                     "get_value": true

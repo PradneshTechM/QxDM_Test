@@ -6,12 +6,12 @@
                 "Check att_type = 2 ( Combined EPS/ IMSI attach).",
                 "Check id_type = 1 (IMSI)  OR 6 (GUTI)",
                 "Within \"Attach request\" under esm_msg_container message check  \"PDN Connectivity Request\".",
-                "Check PDN_type = ipv4v6",
+                "Check PDN_type = ipv6",
                 "Check req_type = 1 (initial attach)",
                 "Check esm_info_trans_flag = 1",
-                "Under ms_network_capability container check GEA/1= 1, GEA/2=1 and GEA/3=1",
+                "Under ms_network_capability container check GEA/1= 1, GEA/2=1 and GEA/3=0",
                 "Check ISR supported = 1",
-                "Under ms_class_mark2 container check a5_1_alg_sup = 1, a5_3_alg_sup = 1",
+                "Under ms_class_mark2 container check a5_1_alg_sup = 0, a5_3_alg_sup = 1",
                 "Check voice_domain_pref_incl=1",
                 "Check voice_domain_pref_for-EUTRAN = 3 (IMS PS Voice Preferred and CS secondary)",
                 "Check WB-AMR is supported by checking below codecs",
@@ -48,7 +48,7 @@
                 },
                 {
                     "field_name": "pdn_type",
-                    "expected_value": "3",
+                    "expected_value": "2",
                     "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
@@ -83,7 +83,7 @@
                 },
                 {
                     "field_name": "GEA/3",
-                    "expected_value": "1",
+                    "expected_value": "0",
                     "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
@@ -97,7 +97,7 @@
                 },
                 {
                     "field_name": "a5_1_alg_sup",
-                    "expected_value": "1",
+                    "expected_value": "0",
                     "validation_type": "FIRST_WORD_EXACT",
                     "field_type": "VALUE",
                     "get_value": true
