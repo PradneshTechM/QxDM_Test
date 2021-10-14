@@ -1,7 +1,7 @@
 const Promise = require('bluebird')
 const Docker = require('dockerode')
 const fs = require('fs')
-const logger = require('./log')
+const logger = require('./utils/logger')
 const adb = require('adbkit')
 const client = adb.createClient()
 

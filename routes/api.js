@@ -3,13 +3,13 @@ const router = express.Router()
 const appiumManager = require('../appium-manager')
 const { PassThrough } = require('stream')
 const util = require('util')
-const logger = require('../log')
+const logger = require('../utils/logger')
+const config = require('../utils/config')
+
 const TAIL_LOG_LINES = 1000
 const DATA_REFRESH_RATE = 50 // in ms
 
 module.exports = (io) => {
-  const DOMAIN = `http://${process.env.DOMAIN}`
-
   /**
    * Get running Appium server information for given device serial
    */
@@ -24,7 +24,7 @@ module.exports = (io) => {
         port: result && result.port || null,
         statusText: result && result.statusText || null,
         serial: serial,
-        URL: result && result.status == 200 ? `${DOMAIN}:${result.port}/wd/hub` : null
+        URL: result && result.status == 200 ? `${config.DOMAIN}:${result.port}/wd/hub` : null
       }
       // logger.info({
       //   message: `${response.status} - ${response.statusText}, URL: ${response.URL}`,

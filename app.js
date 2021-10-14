@@ -1,27 +1,32 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const fs = require('fs')
-const http = require('http')
-const https = require('https')
 const cors = require('cors')
 const socket = require('socket.io')
 const appiumManager = require('./appium-manager')
-const logger = require('./log')
+const logger = require('./utils/logger')
+const config = require('./utils/config')
 
 const app = express()
-const port = 4000
-const address = '0.0.0.0'
-const frequency = (process.argv[2] != null ? process.argv[2] : 2)
 
 // process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0 // REMOVE AFTER SSL CERT UPDATED
 
-const credentials = {
-  cert: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/ssl-bundle.crt'),
-  key: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/server.key')
+let server;
+
+if (config.NODE_ENV === 'development') {
+  const http = require('http')
+
+  server = http.createServer(app)
+} else {
+  const https = require('https')
+
+  const credentials = {
+    cert: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/ssl-bundle.crt'),
+    key: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/server.key')
+  }
+  server = https.createServer(credentials, app)
 }
 
-const server = https.createServer(credentials, app)
-// const server = http.createServer(app)
 const io = socket(server)
 
 app.use(cors())
@@ -50,14 +55,13 @@ async function cleanUpExistingServers() {
 
 // manages Appium server every frequency seconds
 function manageServers() {
-  setInterval(() => appiumManager.manage(), frequency * 1000)
+  setInterval(() => appiumManager.manage(), config.FREQUENCY * 1000)
 }
 
 cleanUpExistingServers().then(() => manageServers())
 
 // listen for requests
-server.listen(port, address, function () {
-  logger.info(`Appium Manager Server now listening for requests at https://${address}:${port}`)
-  logger.info(`Appium Manager Server updating every ${frequency} seconds`)
+server.listen(config.PORT, config.ADDRESS, function () {
+  logger.info(`Appium Manager Server now listening for requests at ${config.PROTOCOL}://${config.ADDRESS}:${config.PORT}`)
+  logger.info(`Appium Manager Server updating every ${config.FREQUENCY} seconds`)
 })
-

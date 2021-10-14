@@ -46,12 +46,8 @@ function devFormat() {
   return combine(colorize(), printf(format))
 }
 
-// If we're not in production then **ALSO** log to the `console`
-// with the colorized simple format.
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new transports.Console({ 
-    format: devFormat()
-  }))
-}
+logger.add(new transports.Console({ 
+  format: devFormat()
+}))
 
 module.exports = logger;
