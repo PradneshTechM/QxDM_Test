@@ -16,10 +16,13 @@ const FREQUENCY = process.env.FREQUENCY != undefined
 const PROTOCOL = NODE_ENV === 'development'
   ? 'http'
   : 'https'
+const STF_LOCAL_API_PORT = 7106
 
-const SWAGGER_URL = `${PROTOCOL}://${DOMAIN}/api/v1/swagger.json`
+const SWAGGER_URL = NODE_ENV === 'production'
+  ? `${PROTOCOL}://${DOMAIN}/api/v1/swagger.json`
+  : `${PROTOCOL}://${DOMAIN}:${STF_LOCAL_API_PORT}/api/v1/swagger.json`
 const APPIUM_SERVER = `${PROTOCOL}://${DOMAIN}:4000/api`
 
 module.exports = {
-  NODE_ENV, PORT, ADDRESS, FREQUENCY, PROTOCOL, SWAGGER_URL, APPIUM_SERVER
+  NODE_ENV, PORT, ADDRESS, DOMAIN, FREQUENCY, PROTOCOL, SWAGGER_URL, APPIUM_SERVER
 }

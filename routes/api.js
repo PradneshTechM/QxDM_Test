@@ -24,7 +24,7 @@ module.exports = (io) => {
         port: result && result.port || null,
         statusText: result && result.statusText || null,
         serial: serial,
-        URL: result && result.status == 200 ? `${config.DOMAIN}:${result.port}/wd/hub` : null
+        URL: result && result.status == 200 ? `${config.PROTOCOL}://${config.DOMAIN}:${result.port}/wd/hub` : null
       }
       // logger.info({
       //   message: `${response.status} - ${response.statusText}, URL: ${response.URL}`,
