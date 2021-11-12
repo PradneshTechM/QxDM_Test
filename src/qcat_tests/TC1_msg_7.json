@@ -11,8 +11,7 @@
                 {
                     "field_name": "ue-CapabilityRequest",
                     "expected_value": [
-                        "eutra",
-                        "geran-cs"
+                        "eutra"
                     ],
                     "validation_type": "COLLECTION",
                     "regex": "ue-CapabilityRequest(?:.|\n)*?{((?:.|\n)*?)}",
