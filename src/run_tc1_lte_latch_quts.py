@@ -28,78 +28,90 @@ class HiddenPrints:
 
 
 def main():
-  quts = quts_lib.QUTS("lte_latch")
-  logging.info('Started QUTS')
+  quts = None
+  diag_service = None
 
-  # remove files in client_test folder
-  if _TEMP_FOLDER_PATH.exists() and _TEMP_FOLDER_PATH.is_dir():
-      shutil.rmtree(_TEMP_FOLDER_PATH)
-  os.mkdir(_TEMP_FOLDER_PATH)
+  with HiddenPrints():
+    quts = quts_lib.QUTS("lte_latch")
+    logging.info('Started QUTS')
 
-  # remove files in client_test folder
-  if _FINAL_FOLDER_PATH.exists() and _FINAL_FOLDER_PATH.is_dir():
-      shutil.rmtree(_FINAL_FOLDER_PATH)
+    # remove files in client_test folder
+    if _TEMP_FOLDER_PATH.exists() and _TEMP_FOLDER_PATH.is_dir():
+        shutil.rmtree(_TEMP_FOLDER_PATH)
+    os.mkdir(_TEMP_FOLDER_PATH)
 
-  # connect to device diag
-  diag_service = quts.diag_connect(DUT)
-  
-  if diag_service:
-    logging.info(f'Connected {DUT} diag')
-  else:
-    raise Exception(f'Could not connect {DUT} diag')
+    # remove files in client_test folder
+    if _FINAL_FOLDER_PATH.exists() and _FINAL_FOLDER_PATH.is_dir():
+        shutil.rmtree(_FINAL_FOLDER_PATH)
 
-  logging.info('Started logging')
-  quts.diag_log_start()
+    # connect to device diag
+    diag_service = quts.diag_connect(DUT)
+
+    if diag_service:
+      logging.info(f'Connected {DUT} diag')
+    else:
+      raise Exception(f'Could not connect {DUT} diag')
+
+    logging.info('Started logging')
+    quts.diag_log_start()
+
+  logging.info('Automation script output:')
 
   # run automation script
   tc1_lte_latch(DUT)
 
-  log_files = quts.diag_log_save(DUT)
-  logging.info('Saved logs')
+  sys.stdout.flush()
+  sys.stderr.flush()
 
-  disconnected = quts.diag_disconnect(diag_service)
-  if disconnected:
-    logging.info(f'Disconnected {DUT} diag')
-  else:
-    raise Exception(f'Could not disconnect {DUT} diag')
-  
-  quts.stop()
-  logging.info('Stopped QUTS client')
+  with HiddenPrints():
+    log_files = quts.diag_log_save(DUT)
+    logging.info('Saved logs')
 
-  qcat = qcat_lib.QCAT()
-  logging.info('Started QCAT client')
+    disconnected = quts.diag_disconnect(diag_service)
+    if disconnected:
+      logging.info(f'Disconnected {DUT} diag')
+    else:
+      raise Exception(f'Could not disconnect {DUT} diag')
 
-  # set name and path of parsed results file
-  path, filename = os.path.split(log_files[0])  # USE FIRST LOG FILE
-  filename = 'tc1_lte_latch'
-  raw_filename = f'result_raw_{filename}.txt'
-  raw_filepath = os.path.join(path, raw_filename)
-  parsed_filename = f'result_parsed_{filename}.txt'
-  parsed_filepath = os.path.join(path, parsed_filename)
-  validated_filename = f'result_validated_{filename}.txt'
-  validated_filepath = os.path.join(path, validated_filename)
-  validated_csv_filename = f'result_validated_{filename}.csv'
-  validated_csv_filepath = os.path.join(path, validated_csv_filename)
+    quts.stop()
+    logging.info('Stopped QUTS client')
 
-  # call QCAT library on the log file which needs parsing
-  logging.info('QCAT parsing log file')
-  parsed = qcat_lib.parse_log(log_files[0],
-                              _TC1_TEST_CONFIG,
-                              raw_filepath,
-                              parsed_filepath,
-                              validated_filepath,
-                              validated_csv_filepath,
-                              qcat)
+    qcat = qcat_lib.QCAT()
+    logging.info('Started QCAT client')
 
-  if not parsed:
-      raise Exception('QCAT parsing failed')
+    # set name and path of parsed results file
+    path, filename = os.path.split(log_files[0])  # USE FIRST LOG FILE
+    filename = 'tc1_lte_latch'
+    raw_filename = f'result_raw_{filename}.txt'
+    raw_filepath = os.path.join(path, raw_filename)
+    parsed_filename = f'result_parsed_{filename}.txt'
+    parsed_filepath = os.path.join(path, parsed_filename)
+    validated_filename = f'result_validated_{filename}.txt'
+    validated_filepath = os.path.join(path, validated_filename)
+    validated_csv_filename = f'result_validated_{filename}.csv'
+    validated_csv_filepath = os.path.join(path, validated_csv_filename)
 
-  logging.info('QCAT parsed log file')
-  
-  logging.info('Quit QCAT')
-  qcat.quit()
+    # call QCAT library on the log file which needs parsing
+    logging.info('QCAT parsing log file')
+    parsed = qcat_lib.parse_log(log_files[0],
+                                _TC1_TEST_CONFIG,
+                                raw_filepath,
+                                parsed_filepath,
+                                validated_filepath,
+                                validated_csv_filepath,
+                                qcat)
 
-  shutil.move(str(_TEMP_FOLDER_PATH), str(_FINAL_FOLDER_PATH))
+    if not parsed:
+        raise Exception('QCAT parsing failed')
+
+    logging.info('QCAT parsed log file')
+
+    logging.info('Quit QCAT')
+    qcat.quit()
+
+    shutil.move(str(_TEMP_FOLDER_PATH), str(_FINAL_FOLDER_PATH))
+
+    logging.info(f'Validated CSV: {validated_csv_filename}')
 
 
 if __name__ == '__main__':

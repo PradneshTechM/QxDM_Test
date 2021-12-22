@@ -194,9 +194,8 @@ def parse_log(input_filename, test_filename, raw_filename,
 
             # dummy MT log
             if validated_msg.subtitle == 'IMS_SIP_INVITE/INFORMAL_RESPONSE':
-                _BASE_PATH = Path(__file__).parent.resolve()
-                CLIENT_TEST_FOLDER = _BASE_PATH.parent / 'temp'
-                validated_csv2 = CLIENT_TEST_FOLDER / 'validated_test_case_2_MT.csv'
+                folder = Path(validated_csv).parent
+                validated_csv2 = folder / 'result_validated_tc2_VoLTE_call_MT.csv'
                 with open(validated_csv2, 'w', newline='') as f2:
                     writer2 = csv.DictWriter(f2, fieldnames=fieldnames)
                     writer2.writeheader()

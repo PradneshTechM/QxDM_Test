@@ -57,8 +57,7 @@ def enabled_root(dut):
 def enable_airplane_mode(dut):
     print("Turning on Airplane mode..........")
     subprocess.call(
-        f"curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut}/shell -d \"settings put global airplane_mode_on 1\"",
-        shell=True)
+        f"curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut}/shell -d \"settings put global airplane_mode_on 1\"", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
     cmd = f"curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut}/shell -d \"am broadcast -a android.intent.action.AIRPLANE_MODE\""
     output = subprocess.getstatusoutput(cmd)[1]
@@ -69,16 +68,15 @@ def enable_airplane_mode(dut):
         output = subprocess.getstatusoutput(cmd)[1]
         i += 1
     if 'Broadcast completed' in output:
-        print('\nAirplane mode on')
+        print('Airplane mode on')
     else:
-        print("\nError: Unable to change airplane mode to on")
+        print("Error: Unable to change airplane mode to on")
 
 
 def disable_airplane_mode(dut):
     print("Turning off Airplane mode..........")
     subprocess.call(
-        f"curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut}/shell -d \"settings put global airplane_mode_on 0\"",
-        shell=True)
+        f"curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut}/shell -d \"settings put global airplane_mode_on 0\"", stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
     cmd1 = f"curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut}/shell -d \"am broadcast -a android.intent.action.AIRPLANE_MODE\""
     output = subprocess.getstatusoutput(cmd1)[1]
@@ -89,9 +87,9 @@ def disable_airplane_mode(dut):
         output = subprocess.getstatusoutput(cmd1)[1]
         i += 1
     if 'Broadcast completed' in output:
-        print('\nAirplane mode off')
+        print('Airplane mode off')
     else:
-        print("\nError: Unable to change airplane mode to on")
+        print("Error: Unable to change airplane mode to on")
 
 
 def verifyLTE(dut):
@@ -112,6 +110,7 @@ def verifyLTE(dut):
 def main(dut=DUT):
     requests.packages.urllib3.disable_warnings()
     driver = init_driver(dut)
+    time.sleep(2)
     enable_airplane_mode(dut)
     time.sleep(1)
     disable_airplane_mode(dut)

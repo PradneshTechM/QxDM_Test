@@ -29,80 +29,94 @@ class HiddenPrints:
 
 
 def main():
-    quts = quts_lib.QUTS("volte_call")
-    logging.info('Started QUTS')
-
-    # remove files in client_test folder
-    if _TEMP_FOLDER_PATH.exists() and _TEMP_FOLDER_PATH.is_dir():
-        shutil.rmtree(_TEMP_FOLDER_PATH)
-    os.mkdir(_TEMP_FOLDER_PATH)
-
-    # remove files in client_test folder
-    if _FINAL_FOLDER_PATH.exists() and _FINAL_FOLDER_PATH.is_dir():
-        shutil.rmtree(_FINAL_FOLDER_PATH)
-
-    diag_service_1 = quts.diag_connect(DUT_MO)
-    diag_service_2 = quts.diag_connect(DUT_MT)
-    if not diag_service_1 or not diag_service_2:
-        raise Exception(f'Could not connect {not diag_service_1 or not diag_service_2} diag')
-    logging.info(f'Connected {DUT_MO} diag')
-    logging.info(f'Connected {DUT_MT} diag')
+    quts = None
+    diag_service_1 = None
+    diag_service_2 = None
     
-    # start logging
-    logging.info('Started logging')
-    quts.diag_log_start()
+    with HiddenPrints():
+        quts = quts_lib.QUTS("volte_call")
+        logging.info('Started QUTS')
 
+        # remove files in client_test folder
+        if _TEMP_FOLDER_PATH.exists() and _TEMP_FOLDER_PATH.is_dir():
+            shutil.rmtree(_TEMP_FOLDER_PATH)
+        os.mkdir(_TEMP_FOLDER_PATH)
+
+        # remove files in client_test folder
+        if _FINAL_FOLDER_PATH.exists() and _FINAL_FOLDER_PATH.is_dir():
+            shutil.rmtree(_FINAL_FOLDER_PATH)
+
+        diag_service_1 = quts.diag_connect(DUT_MO)
+        diag_service_2 = quts.diag_connect(DUT_MT)
+        if not diag_service_1 or not diag_service_2:
+            raise Exception(f'Could not connect {not diag_service_1 or not diag_service_2} diag')
+        logging.info(f'Connected {DUT_MO} diag')
+        logging.info(f'Connected {DUT_MT} diag')
+
+        # start logging
+        logging.info('Started logging')
+        quts.diag_log_start()
+
+    logging.info('Automation script output:')
     # run automation script
     tc2_volte_call()
 
-    log_files = quts.diag_log_save(DUT_MO)
-    logging.info('Saved logs')
+    sys.stdout.flush()
+    sys.stderr.flush()
 
-    # disconnected each device
-    for device, diag_service in [(DUT_MO, diag_service_1), (DUT_MT, diag_service_2)]:
-        disconnected = quts.diag_disconnect(diag_service)
-        if disconnected:
-            logging.info(f'Disconnected {device} diag')
-        else:
-            raise Exception(f'Could not disconnect {device} diag')
+    with HiddenPrints():
 
-    quts.stop()
-    logging.info('Stopped QUTS client')
+        log_files = quts.diag_log_save(DUT_MO)
+        logging.info('Saved logs')
 
-    qcat = qcat_lib.QCAT()
-    logging.info('Started QCAT client')
+        # disconnected each device
+        for device, diag_service in [(DUT_MO, diag_service_1), (DUT_MT, diag_service_2)]:
+            disconnected = quts.diag_disconnect(diag_service)
+            if disconnected:
+                logging.info(f'Disconnected {device} diag')
+            else:
+                raise Exception(f'Could not disconnect {device} diag')
 
-    # set name and path of parsed results file
-    path, filename = os.path.split(log_files[0])
-    filename = 'tc2_VoLTE_call'
-    raw_filename = f'result_raw_{filename}.txt'
-    raw_filepath = os.path.join(path, raw_filename)
-    parsed_filename = f'result_parsed_{filename}.txt'
-    parsed_filepath = os.path.join(path, parsed_filename)
-    validated_filename = f'result_validated_{filename}.txt'
-    validated_filepath = os.path.join(path, validated_filename)
-    validated_csv_filename = f'result_validated_{filename}.csv'
-    validated_csv_filepath = os.path.join(path, validated_csv_filename)
+        quts.stop()
+        logging.info('Stopped QUTS client')
 
-    # call QCAT library on the log file which needs parsing
-    logging.info('QCAT parsing log file')
-    parsed = qcat_lib.parse_log(log_files[0],
-                                _TC2_TEST_CONFIG,
-                                raw_filepath,
-                                parsed_filepath,
-                                validated_filepath,
-                                validated_csv_filepath,
-                                qcat)
+        qcat = qcat_lib.QCAT()
+        logging.info('Started QCAT client')
 
-    if not parsed:
-        raise Exception('QCAT parsing failed')
+        # set name and path of parsed results file
+        path, filename = os.path.split(log_files[0])
+        filename = 'tc2_VoLTE_call_MO'
+        raw_filename = f'result_raw_{filename}.txt'
+        raw_filepath = os.path.join(path, raw_filename)
+        parsed_filename = f'result_parsed_{filename}.txt'
+        parsed_filepath = os.path.join(path, parsed_filename)
+        validated_filename = f'result_validated_{filename}.txt'
+        validated_filepath = os.path.join(path, validated_filename)
+        validated_csv_filename = f'result_validated_{filename}.csv'
+        validated_csv_filepath = os.path.join(path, validated_csv_filename)
 
-    logging.info('QCAT parsed log file')
-    
-    logging.info('Quit QCAT')
-    qcat.quit()
+        # call QCAT library on the log file which needs parsing
+        logging.info('QCAT parsing log file')
+        parsed = qcat_lib.parse_log(log_files[0],
+                                    _TC2_TEST_CONFIG,
+                                    raw_filepath,
+                                    parsed_filepath,
+                                    validated_filepath,
+                                    validated_csv_filepath,
+                                    qcat)
 
-    shutil.move(str(_TEMP_FOLDER_PATH), str(_FINAL_FOLDER_PATH))
+        if not parsed:
+            raise Exception('QCAT parsing failed')
+
+        logging.info('QCAT parsed log file')
+
+        logging.info('Quit QCAT')
+        qcat.quit()
+
+        shutil.move(str(_TEMP_FOLDER_PATH), str(_FINAL_FOLDER_PATH))
+
+        logging.info(f'Validated CSV: {validated_csv_filename}')
+        logging.info(f'Validated CSV: result_validated_tc2_VoLTE_call_MT.csv')
 
 
 if __name__ == '__main__':

@@ -9,7 +9,7 @@ DUT_MT_MSISDN = '14258295821'
 
 
 def init_driver_MO(dut_MO):
-    print("*****************Test2 - VoLTE MO to VoLTE MT -  Started*******************************\n")
+    print("*****************Test2 - VoLTE MO to VoLTE MT -  Started*******************************")
     print("Creating MO Device Dialer App Driver")
     desired_caps = {
         "udid": dut_MO,
@@ -79,7 +79,7 @@ def callingFunctionality(dut_MO_serial, dut_MT_serial, dut_MT_MSISDN):
         raise Exception('MT device did not receive the call')
     
     print('Accepting the call on MT device')
-    subprocess.call(f'curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut_MT_serial}/shell -d \"input keyevent 5\"', shell=True)
+    subprocess.call(f'curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut_MT_serial}/shell -d \"input keyevent 5\"', stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
     cmd = f'curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut_MT_serial}/shell -d \"dumpsys telephony.registry | grep mCallState\"'
     
@@ -88,7 +88,7 @@ def callingFunctionality(dut_MO_serial, dut_MT_serial, dut_MT_MSISDN):
         # print(output)
 
         if 'mCallState=2' in output:
-            print('\nCall connected...')
+            print('Call connected...')
             break
         time.sleep(5)
         print('Checking call status ...')
@@ -113,13 +113,13 @@ def callingFunctionality(dut_MO_serial, dut_MT_serial, dut_MT_MSISDN):
         time.sleep(1)
        
     # time.sleep(60)
-    subprocess.call(f'curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut_MO_serial}/shell -d \"input keyevent 6\"',
-        shell=True)
+    subprocess.call(f'curl -X POST http://localhost:5000/v1/ce3d5da3adc64f6397383bae8f11fd59bef2f941cd9e463f87dbc89ecdb04de0/adb/{dut_MO_serial}/shell -d \"input keyevent 6\"', stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 
 def main(dut_MO=DUT_MO_SERIAL, dut_MT=DUT_MT_SERIAL, MSISDN_MT=DUT_MT_MSISDN):
     driver_MO = init_driver_MO(dut_MO)
     driver_MT = init_driver_MT(dut_MT)
+    time.sleep(2)
     callingFunctionality(dut_MO, dut_MT, MSISDN_MT)
     driver_MO.quit()
     driver_MT.quit()
