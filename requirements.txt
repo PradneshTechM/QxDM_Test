@@ -7,3 +7,4 @@ grpcio
 grpcio-tools
 Appium-Python-Client
 requests
+python-socketio
