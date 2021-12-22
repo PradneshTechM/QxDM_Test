@@ -4,7 +4,7 @@ const process = require('process')
 const NODE_ENV = process.env.NODE_ENV
 const PORT = process.env.PORT !== undefined
   ? process.env.PORT
-  : 6000
+  : 2000
 const ADDRESS = process.env.ADDRESS !== undefined
   ? process.env.ADDRESS
   : '0.0.0.0'

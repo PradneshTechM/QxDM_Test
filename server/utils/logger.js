@@ -30,7 +30,7 @@ const logger = createLogger({
     format.splat(),
     format.json(),
   ),
-  defaultMeta: { service: 'stf-proxy' },
+  defaultMeta: { service: 'qConnect-API' },
   transports: [
     transportError,
     transportAll,

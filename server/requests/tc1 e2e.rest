@@ -1,0 +1,54 @@
+@hostname = localhost
+@port = 2000
+@host = {{hostname}}:{{port}}
+@device = 96041FFBA0007B
+@test_case = TC1
+###
+
+# @name connect
+
+POST http://{{host}}/api/diag
+Content-Type: application/json
+
+{
+  "serial": "{{device}}"
+}
+
+###
+
+@id = {{connect.response.body.data.id}}
+
+# @name start_log
+
+POST http://{{host}}/api/diag/{{id}}/log
+
+###
+
+@log_id = {{start_log.response.body.data.log_id}}
+
+# @name stop_log
+
+DELETE http://{{host}}/api/diag/{{id}}/log/{{log_id}}
+
+###
+
+# @name disconnect
+
+DELETE http://{{host}}/api/diag/{{id}}
+
+###
+
+# @name process_log
+
+POST http://{{host}}/api/logs/{{log_id}}/process
+Content-Type: application/json
+
+{
+  "test_case": "{{test_case}}"
+}
+
+###
+
+# @name get_log
+
+GET http://{{host}}/api/logs/{{log_id}}

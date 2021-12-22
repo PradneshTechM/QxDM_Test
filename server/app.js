@@ -1,14 +1,16 @@
 const express = require('express')
-
+const middleware = require('./utils/middleware')
 const app = express()
+const swaggerUI = require('swagger-ui-express')
+const docs = require('./docs')
+
+app.use(express.json())
+app.use(middleware.requestLogger)
 
 // need cors?
 app.use('/api', require('./controllers/demo'))
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs))
 
-const unknownEndpoint = (req, res) => {
-  res.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
+app.use(middleware.unknownEndpoint)
 
 module.exports = app

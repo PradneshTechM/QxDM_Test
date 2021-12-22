@@ -1,0 +1,47 @@
+@hostname = localhost
+@port = 2000
+@host = {{hostname}}:{{port}}
+@device = 96041FFBA0007B
+
+###
+
+# @name connect
+
+POST http://{{host}}/api/AT
+Content-Type: application/json
+
+{
+  "serial": "{{device}}"
+}
+###
+
+@id = {{connect.response.body.data.id}}
+
+# @name send_1
+
+POST http://{{host}}/api/AT/{{id}}
+Content-Type: application/json
+
+{
+  "commands": [
+    "AT",
+    "ATI"
+  ]
+}
+###
+
+# @name send_2
+
+GET http://{{host}}/api/AT/{{id}}/send
+Content-Type: application/json
+
+{
+  "commands": [
+    "AT+CGSN"
+  ]
+}
+###
+
+# @name disconnect
+
+DELETE http://{{host}}/api/AT/{{id}}

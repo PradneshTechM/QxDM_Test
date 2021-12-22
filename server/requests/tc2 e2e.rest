@@ -1,0 +1,73 @@
+@hostname = localhost
+@port = 2000
+@host = {{hostname}}:{{port}}
+@DUT_MO = 94KBA0090A
+@DUT_MT = 96041FFBA0007B
+@test_case = TC2
+###
+
+# @name connect_MO
+
+POST http://{{host}}/api/diag
+Content-Type: application/json
+
+{
+  "serial": "{{DUT_MO}}"
+}
+
+###
+
+# @name connect_MT
+
+POST http://{{host}}/api/diag
+Content-Type: application/json
+
+{
+  "serial": "{{DUT_MT}}"
+}
+
+###
+
+@id_MO = {{connect_MO.response.body.data.id}}
+@id_MT = {{connect_MT.response.body.data.id}}
+
+# @name start_log
+
+POST http://{{host}}/api/diag/{{id_MO}}/log
+
+###
+
+@log_id = {{start_log.response.body.data.log_id}}
+
+# @name stop_log
+
+DELETE http://{{host}}/api/diag/{{id_MO}}/log/{{log_id}}
+
+###
+
+# @name disconnect_MO
+
+DELETE http://{{host}}/api/diag/{{id_MO}}
+
+###
+
+# @name disconnect_MT
+
+DELETE http://{{host}}/api/diag/{{id_MT}}
+
+###
+
+# @name process_log
+
+POST http://{{host}}/api/logs/{{log_id}}/process
+Content-Type: application/json
+
+{
+  "test_case": "{{test_case}}"
+}
+
+###
+
+# @name get_log
+
+GET http://{{host}}/api/logs/{{log_id}}
