@@ -10,6 +10,6 @@ sudo apt install xvfb
 pip3 install virtualenv --user
 
 # create virtual env, activate it, and install dependencies
-virtualenv -p python3 venv
+python3.8 -m virtualenv venv
 . venv/bin/activate
 pip3 install -r requirements.txt
