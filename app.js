@@ -22,8 +22,8 @@ if (config.NODE_ENV === 'development') {
   const https = require('https')
 
   const credentials = {
-    cert: fs.readFileSync(path.resolve(__dirname+'../stf-ssl-certs/fullchain.pem')),
-    key: fs.readFileSync(path.resolve(__dirname+'../stf-ssl-certs/private.pem'))
+    cert: fs.readFileSync(path.resolve(__dirname+'./../stf-ssl-certs/fullchain.pem')),
+    key: fs.readFileSync(path.resolve(__dirname+'./../stf-ssl-certs/private.pem'))
   }
   server = https.createServer(credentials, app)
 }
