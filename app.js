@@ -6,6 +6,7 @@ const socket = require('socket.io')
 const appiumManager = require('./appium-manager')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
+const path = require('path')
 
 const app = express()
 
@@ -21,8 +22,8 @@ if (config.NODE_ENV === 'development') {
   const https = require('https')
 
   const credentials = {
-    cert: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/ssl-bundle.crt'),
-    key: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/server.key')
+    cert: fs.readFileSync(path.resolve(__dirname+'../stf-ssl-certs/fullchain.pem')),
+    key: fs.readFileSync(path.resolve(__dirname+'../stf-ssl-certs/private.pem'))
   }
   server = https.createServer(credentials, app)
 }
