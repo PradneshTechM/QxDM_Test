@@ -8,6 +8,7 @@
     "prodstart": "NODE_ENV=production node -r dotenv/config app.js",
     "start": "NODE_ENV=production node_modules/.bin/pm2 start pm2.config.js && node_modules/.bin/pm2 monit",
     "dev": "NODE_ENV=development node_modules/.bin/pm2 start pm2.config.js && node_modules/.bin/pm2 monit",
+    "dev-master": "cross-env NODE_ENV=development MASTER_DOMAIN= ADB_HOST= ADB_PORT= node -r dotenv/config app.js",
     "monitor": "node_modules/.bin/pm2 monit",
     "stop": "node_modules/.bin/pm2 stop app.js",
     "delete": "node_modules/.bin/pm2 delete all",
@@ -27,5 +28,7 @@
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.9.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "cross-env": "^7.0.3"
+  }
 }
