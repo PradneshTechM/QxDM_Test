@@ -34,10 +34,12 @@ demoRouter.post('/diag', (request, response) => {
   if (request.body.serial === undefined) {
     return response.status(400).send({ error : 'missing serial' })
   }
-  console.log(request.body)
   const data = {
     id: generateShortId(8),
     serial: request.body.serial,
+  }
+  if(request.body.mask) {
+    data.mask = request.body.mask
   }
 
   const socket = request.app.get('socketio')

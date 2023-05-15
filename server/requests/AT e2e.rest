@@ -1,7 +1,7 @@
 @hostname = localhost
 @port = 2000
 @host = {{hostname}}:{{port}}
-@device = 96041FFBA0007B
+@device = NDZA150120
 
 ###
 

@@ -7,3 +7,6 @@ client_test
 temp
 src/qcat_tests/result_*
 logs/
+
+venv
+node_modules

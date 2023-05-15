@@ -76,7 +76,11 @@ def QUTS_start(sid, data):
 def QUTS_diag_connect(sid, data):
     try:
       id, serial = data['id'], data['serial']
-      diag_service = quts.diag_connect(serial)
+      
+      if 'mask' in data and data['mask'] is not None:
+        diag_service = quts.diag_connect(serial, data['mask'])
+      else:
+        diag_service = quts.diag_connect(serial)
 
       if diag_service:
         logging.info(f'Connected {serial} diag')
@@ -167,11 +171,13 @@ def QUTS_log_stop(sid, data):
     logging.info('Saved logs')
 
     log_sessions[log_id].raw_logs = log_files
+    logging.info(log_sessions[log_id].raw_logs)
 
     return {
       'data': {
         'id': log_sessions[log_id].id,
         'log_id': log_id,
+        'logFile': log_sessions[log_id].raw_logs[0],
         'status': 'saved log',
       }
     }

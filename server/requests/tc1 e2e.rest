@@ -1,7 +1,7 @@
 @hostname = localhost
 @port = 2000
 @host = {{hostname}}:{{port}}
-@device = 96041FFBA0007B
+@device = NDZA150120
 @test_case = TC1
 ###
 
@@ -20,7 +20,12 @@ Content-Type: application/json
 
 # @name start_log
 
-POST http://{{host}}/api/diag/{{id}}/log
+POST http://{{host}}/api/logs
+Content-Type: application/json
+
+{
+  "id": "{{id}}"
+}
 
 ###
 
@@ -28,7 +33,7 @@ POST http://{{host}}/api/diag/{{id}}/log
 
 # @name stop_log
 
-DELETE http://{{host}}/api/diag/{{id}}/log/{{log_id}}
+DELETE http://{{host}}/api/logs/{{log_id}}
 
 ###
 
@@ -48,6 +53,7 @@ Content-Type: application/json
 }
 
 ###
+# not implemented
 
 # @name get_log
 
