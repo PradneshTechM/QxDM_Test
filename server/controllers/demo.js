@@ -159,6 +159,21 @@ demoRouter.get('/logs/:log_id/process', (request, response) => {
   })
 })
 
+demoRouter.post('/logs/:log_id/parse', (request, response) => {
+  // parses the entire log file
+  const data = {
+    log_id: request.params.log_id,
+  }
+
+  const socket = request.app.get('socketio')
+  socket.emit('QCAT_parse_all', data, (res) => {
+    if (res.error) {
+      return response.status(400).send(res)
+    }
+    response.send(res)
+  })
+})
+
 demoRouter.post('/AT', (request, response) => {
   console.log(request.body)
   if (request.body.serial === undefined) {

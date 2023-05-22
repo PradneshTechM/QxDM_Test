@@ -1,0 +1,19 @@
+{
+    "name": "4G Attach Procedure",
+    "preconditions": [
+        "DUT inserted with EE Consumer SIM card",
+        "4G EE Coverage"
+    ],
+    "description": [
+        "1) Power ON DUT",
+        "2) Attach on EE 4G network",
+        "3) Verify Attach Procedure and signalling"
+    ],
+    "device_specs": "qcat_tests/device_specs_Pixel4_XL.json",
+    "packet_types": [
+      "0x147B"
+    ],
+    "tests": [
+        "qcat_tests/TC1_msg_0.json"
+    ]
+}

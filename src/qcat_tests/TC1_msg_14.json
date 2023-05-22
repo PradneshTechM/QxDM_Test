@@ -1,0 +1,20 @@
+{
+  "messages": [
+    {
+      "description": [
+        "GNSS CD DB Report"
+      ],
+      "packet_type": "0x147B",
+      "subtitle": "",
+      "must_match_field": true,
+      "fields": [
+        {
+          "field_name": "Version = 20",
+          "validation_type": "FOUND_MATCH",
+          "field_type": "VALUE",
+          "get_value": false
+        }
+      ]
+    }
+  ]
+}

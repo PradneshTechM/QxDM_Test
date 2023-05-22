@@ -4,10 +4,10 @@ import logging
 from typing import List, Any
 from pathlib import Path
 from enum import Enum
+from datetime import datetime
 import sys
 import signal
 import dataclasses
-import json
 import socketio
 import eventlet
 
@@ -40,6 +40,8 @@ class Session:
   id: str
   serial: str
   service: Any
+  start_log_timestamp: datetime = None
+  end_log_timestamp: datetime = None
 
 class LogSession(Session):
   log_id: str = None
@@ -144,6 +146,7 @@ def QUTS_log_start(sid, data):
     logging.info('Started logging')
 
     session.log_id = log_id
+    session.start_log_timestamp = get_current_timestamp()
     log_sessions[log_id] = session
 
     return {
@@ -171,6 +174,7 @@ def QUTS_log_stop(sid, data):
     logging.info('Saved logs')
 
     log_sessions[log_id].raw_logs = log_files
+    log_sessions[log_id].end_log_timestamp = get_current_timestamp()
     logging.info(log_sessions[log_id].raw_logs)
 
     return {
@@ -283,6 +287,54 @@ def QCAT_process(sid, data):
       'data': {
         'id': log_sessions[log_id].id,
         'log_id': log_id,
+        'status': 'successfully processed log',
+      }
+    }
+  except Exception as e:
+    logging.error(e)
+    return { 'error': str(e) }
+
+@sio.event
+def QCAT_parse_all(sid, data):
+  try:
+    log_id = data['log_id']
+    if log_id not in log_sessions:
+      raise Exception(f'log_id not found: {log_id}')
+    
+    log_session = log_sessions[log_id]
+
+    log_file = log_session.raw_logs[0]  # USE FIRST LOG FILE
+
+    filename = Path(log_file).stem
+    folder = Path(log_file).parent
+    raw_filepath = str(folder / f'parsed_raw_{filename}.txt')
+    json_filepath = str(folder / f'parsed_json_{filename}.json')
+
+    # call QCAT library on the log file which needs parsing
+    logging.info('QCAT parsing log file')
+    
+    # DISABLE TEXT PARSING for now
+    # parsedText = qcat_lib.parse_raw_log(log_file,
+    #                             raw_filepath,
+    #                             qcat)
+    # if not parsedText:
+    #   raise Exception(f'QCAT raw text parsing failed for log_id: {log_id}')
+      
+    parsedJson = qcat_lib.parse_raw_log_json(log_file,
+                                json_filepath,
+                                qcat)
+    if not parsedJson:
+      raise Exception(f'QCAT raw JSON parsing failed for log_id: {log_id}')
+
+    logging.info('QCAT parsed log file')
+
+    return {
+      'data': {
+        'id': log_sessions[log_id].id,
+        'log_id': log_id,
+        'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
+        'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
+        'jsonFile': json_filepath,
         'status': 'successfully processed log',
       }
     }
@@ -441,6 +493,10 @@ def disconnect(sid):
   # print('disconnect ', sid)
   pass
 
+
+
+def get_current_timestamp():
+  return datetime.now()
 
 def signal_handler(sig, frame):
   logging.info('Ctrl+C detected')

@@ -58,3 +58,12 @@ Content-Type: application/json
 # @name get_log
 
 GET http://{{host}}/api/logs/{{log_id}}
+
+###
+
+# @name parse_log
+
+POST http://{{host}}/api/logs/{{log_id}}/parse
+Content-Type: application/json
+
+###

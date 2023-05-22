@@ -1,14 +1,13 @@
 #!/usr/bin/env python3.7
 from pathlib import Path
 import random
-import subprocess
-import time
 import os
 import json
 import csv
 import win32com.client
 
 import message
+from message import ParsedRawMessage
 
 
 class QCAT:
@@ -39,6 +38,7 @@ class QCAT:
         print('Loading log packets from log file...')
 
         self.raw_messages = []
+        self.parsed_raw_messages = []
         self.parsed_messages = []
         self.validated_messages = []
         self.saved_values = {}
@@ -66,6 +66,36 @@ class QCAT:
                 self.validated_messages.append(parsed_msg.validate())
                 count += 1
                 msg = None
+            if not packet.Next():
+                break
+
+        print(count, 'packets loaded.')
+        
+    def parse_raw(self, input):
+        print('Opening log file: ' + input)
+        self.qcat.OpenLog(input)
+
+        packet = self.qcat.FirstPacket
+        if not packet:
+            print('ERROR: Unable to get Packet object')
+
+        print('Loading log packets from log file...')
+
+        self.parsed_raw_messages = []
+
+        count = 0
+        while packet:
+            name = packet.Name
+            subtitle = packet.Subtitle
+            datetime = packet.TimestampAsString
+            packet_type = packet.Type
+            packet_length = packet.Length
+            text = packet.Text
+            
+            raw_msg = ParsedRawMessage(count, packet_type, packet_length, name, subtitle, datetime, text)
+            self.parsed_raw_messages.append(raw_msg)
+
+            count += 1
             if not packet.Next():
                 break
 
@@ -209,6 +239,32 @@ def parse_log(input_filename, test_filename, raw_filename,
     print('validated csv:', validated_csv)
     return True
 
+def parse_raw_log(input_filename, raw_filename, qcat):
+    print('QCAT raw log parsing started')
+
+    qcat.parse_raw(input_filename)
+
+    with open(raw_filename, 'w') as f:
+        for raw_msg in qcat.parsed_raw_messages:
+            f.write(raw_msg.to_string())
+    print('raw messages:', raw_filename)
+
+    return True
+
+def parse_raw_log_json(input_filename, json_filename, qcat):
+    print('QCAT json log parsing started')
+
+    qcat.parse_raw(input_filename)
+
+    with open(json_filename, 'w') as f:
+        json_arr = []
+        for raw_msg in qcat.parsed_raw_messages:
+            json_arr.append(raw_msg.to_json())
+        json.dump(json_arr, f, indent = 2) 
+            
+    print('JSON file path:', json_filename)
+
+    return True
 
 if __name__ == '__main__':
     input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')

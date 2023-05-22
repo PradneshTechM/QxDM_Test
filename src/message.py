@@ -1,5 +1,9 @@
 from enum import Enum, auto
 import re
+import logging
+import sys
+import traceback
+from typing import List, Tuple, Any
 
 
 class ValidationType(Enum):
@@ -435,6 +439,319 @@ class RawMessage:
         lines.append(self.packet_text)
         lines.append('\n')
         return ''.join(lines)
+    
+
+class ParsedRawMessage:
+    VERSION = 1
+    
+    INT_REGEX = r'^[-+]?\d+$'
+    FLOAT_REGEX = r'^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$'
+    
+    def __init__(self, index: int, packet_type: str, packet_length: int, name: str, subtitle: str, datetime: str, packet_text: str):
+        self.index = index
+        self.packet_type = packet_type
+        self.packet_length = packet_length
+        self.name = name
+        self.subtitle = subtitle
+        self.datetime = datetime
+        self.packet_text = packet_text
+
+    def to_string(self):
+        lines = []
+        lines.append(f'Index: {self.index}\n')
+        lines.append(f'Packet type: {self.packet_type}\n')
+        lines.append(f'Name: {self.name}\n')
+        lines.append(f'Datetime: {self.datetime}\n')
+        lines.append(f'Length: {self.packet_length}\n')
+        if self.subtitle:
+            lines.append(f'Subtitle: {self.subtitle}\n')
+        lines.append('Text:\n')
+        lines.append(self.packet_text)
+        lines.append('\n')
+        return ''.join(lines)
+    
+    def to_json(self):
+        header, parsedPayload = self.parse_payload()
+        return {
+            "index": self.index,
+            "packetType": hex(int(self.packet_type)),
+            "name": self.name,
+            "datetime": self.datetime,
+            "length": self.packet_length,
+            "subtitle": self.subtitle if self.subtitle else "",
+            "payloadHeader": header,
+            "payload": parsedPayload,
+            "rawPayload": self.packet_text,
+            "parserVersion": ParsedRawMessage.VERSION,
+        }
+    
+    def parse_payload(self):
+        payload = {}
+        header = {}
+        
+        #################################
+        # HELPER METHODS
+        #################################
+        
+        # remove extra whitespaces
+        def _clean(val: str):
+            val = re.sub(r'[^\S\n]+', ' ', val).strip()
+            return val
+        
+        # clean and parse values into primitives, turn duplicate keys to contain array of values
+        def _insert_cleaned(_obj: dict, _key: str, _val: str):
+            key = _clean(_key)
+            val = _clean(_val)
+            val = _parse_val_primitive(val)
+            
+            if key not in _obj:
+                _obj[key] = val
+            else:
+                if isinstance(_obj[key], list):
+                    _obj[key] = [*_obj[key], val]
+                else:
+                    _obj[key] = [_obj[key], val]
+                    
+        # parse primitive data types if any
+        def _parse_val_primitive(val: str):
+            if(val.lower() == 'true'):
+                return True
+            elif(val.lower() == 'false'):
+                return False
+            elif(re.match(ParsedRawMessage.INT_REGEX, val)):
+                return int(val)
+            elif(re.match(ParsedRawMessage.FLOAT_REGEX, val)):
+                return float(val)
+            else:
+                return val
+            
+        # find the first occurance of an assignment symbol (equals, colon)
+        # to split line on that to key-value pair 
+        def _find_splitter(line: str):
+            symbols = [":", "="]
+            indices = [line.find(symbol) for symbol in symbols]
+            
+            if not any(indices):
+                return None
+            
+            filtered_indices = list(filter(lambda x: x >= 0, indices))
+            if not any(filtered_indices):
+                return None
+            
+            first_symbol = symbols[indices.index(min(filtered_indices))]
+    
+            return first_symbol
+                
+        def _is_struct_end(line: str):
+            line = line.strip()
+            return line.endswith('}') and '{' not in line
+        
+        #####
+        
+        def _try_parse_multiline(lines: list[str], _obj: dict):
+            i = 0
+            while i < len(lines):
+                if i + 1 < len(lines):
+                    j = i + 1
+                    key_splitter = _find_splitter(lines[i])
+                    splitter = _find_splitter(lines[j])
+                    if splitter is None:
+                        # multiline array-like data
+                        # walk each line until the next splitable line is encountered
+                        # parse everything inbetween as a multiline value
+                        while splitter is None and j < len(lines):
+                            j += 1
+                            if j < len(lines):
+                                splitter = _find_splitter(lines[j])
+                        multiline_val = _multiline_parse(lines[i:j], _obj)
+                        if isinstance(multiline_val, list):
+                            generic_start_key = lines[i].split(key_splitter)
+                            _obj[generic_start_key] = multiline_val
+                        i = j
+                        continue
+                    else: 
+                        _key_value_parse([lines[i]], _obj)
+                else: 
+                    _key_value_parse([lines[i]], _obj)
+                
+                i += 1
+                
+                
+                
+        #################################
+        # PARSERS
+        #################################
+        
+        # generic key-value pair parsing 
+        def _key_value_parse(lines: list[str], _obj: dict):
+            for line in lines:
+                generic_splitter = _find_splitter(line)
+                if generic_splitter == None:
+                    _insert_cleaned(_obj, line, "")
+                else:
+                    key, val = line.split(generic_splitter, 1)
+                    # split { ... } type values into array
+                    if val.strip().startswith('{') and val.strip().endswith('}'):
+                        val = [_parse_val_primitive(_clean(entry)) for entry in val.strip()[1:-1].strip().split(',')]
+                        _obj[key] = val
+                    else: _insert_cleaned(_obj, key, val)
+            
+        # multiline value parsing 
+        def _multiline_parse(lines: list[str], _obj: dict):
+            # split first line
+            splitter = _find_splitter(lines[0])
+            
+            # if array type
+            if splitter is None:
+                block = " ".join(lines)
+                return [_parse_val_primitive(_clean(entry)) for entry in block.split(",")]
+            else:
+                # else join lines by \n character
+                key, val = lines[0].split(splitter, 1)
+                
+                key = _clean(key)
+                val = val + "\n" + "\n".join(lines[1:])
+                val = _parse_val_primitive(_clean(val))
+                _obj[key] = val
+               
+        def _struct_or_generic_parse(lines: list[str], _obj: dict):
+            try: 
+                has_structs = False
+                
+                # do deep parsing of class/struct type data
+                def _deep(lines: list[str]):
+                    stack: List[Tuple[str, Any]] = []
+                    i = 0
+                    while i < len(lines):
+                        line = lines[i]
+                        line = line.strip()
+                        if line.endswith('{'):
+                            # push parent key and new empty object to top of the stack
+                            key = line[:-1].strip().replace(':', "").replace('=', "").strip()
+                            stack.append((key, {}))
+                        elif _is_struct_end(line):
+                            # found end of parent object, pop the last element
+                            # and assign its key and value to the previous (parent) object 
+                            deep_key, deep_obj = stack.pop()
+                            if any(stack):
+                                stack[-1][1][deep_key] = deep_obj
+                            # if stack is empty, we are done deep parsing
+                            else: return deep_key, deep_obj
+                        else:
+                            # Process key-value pairs
+                            if i + 1 < len(lines):
+                                j = i + 1
+                                if not _is_struct_end(lines[j]):
+                                    splitter = _find_splitter(lines[j])
+                                    if splitter is None:
+                                        # multiline array-like data
+                                        while splitter is None and j < len(lines):
+                                            if lines[j].endswith('{') or _is_struct_end(lines[j]):
+                                                break
+                                            j += 1
+                                            splitter = _find_splitter(lines[j])
+                                        multiline_val = _multiline_parse(lines[i:j], stack[-1][1])
+                                        if isinstance(multiline_val, list):
+                                            # convert the tuple to a list, 
+                                            # change the 2nd index (object) to the resulting array 
+                                            # and convert the list back to a tuple
+                                            last_entry = list(stack.pop())
+                                            last_entry[1] = multiline_val
+                                            stack.append((last_entry[0], last_entry[1]))
+                                        i = j
+                                        continue
+                                        
+                                    else:
+                                        _key_value_parse([line], stack[-1][1])
+                                else:
+                                    _key_value_parse([line], stack[-1][1])
+                            else:
+                                _key_value_parse([line], stack[-1][1])
+                        i += 1
+                            
+                    deep_key, deep_obj = stack.pop()
+                    return deep_key, deep_obj
+
+                if len(lines) > 0:
+                    i = 0
+                    generic_start = 0
+                    brackets = 0
+                    
+                    # loop over payload to find struct {} blocks 
+                    while i < len(lines):
+                        line = lines[i].strip()
+                        if line.endswith("{"):
+                            brackets += 1
+                            j = i + 1
+                            # find and contain the parent struct block
+                            while j < len(lines) and brackets > 0:
+                                if _is_struct_end(lines[j]):
+                                    brackets -= 1
+                                if brackets == 0: break
+                                if lines[j].strip().endswith("{"): 
+                                    brackets += 1
+                                j += 1
+                            
+                            # found start and end of struct block,
+                            # do deep parsing
+                            key, content = _deep(lines[i:j+1])
+                            
+                            # if we have generic key-value pairs in between struct blocks,
+                            # add them to the parent object before assigning the deep-parsed obj
+                            if i > generic_start:
+                                _key_value_parse(lines[generic_start:i], _obj)
+                                
+                            _obj[key] = content
+                            
+                            i = j
+                            generic_start = j + 1
+                            has_structs = True
+                        i += 1
+                        
+                    # parse the remainder of generic lines
+                    if i > generic_start and not _is_struct_end(lines[i - 1]):
+                        _try_parse_multiline(lines[generic_start:i], _obj)
+                        
+                return has_structs
+            
+            except:
+                # catch any faulty block parsing
+                traceback.print_exc()
+                logging.info(self.index)
+                sys.stdout.flush()
+                sys.stderr.flush()
+                
+        # parse payloads that are encoded in hex
+        def _hex_payload(lines: list[str]):
+            if len(lines) > 0 and lines[0] == "Payload:":
+                payload["Payload"] = " ".join(lines[1:]) if len(lines[1:]) > 0 else ""
+                return True
+            return False
+                    
+        # START PARSING
+        def _PARSE(lines: list[str], _obj: dict):
+            # parse payloads that are encoded in hex
+            if _hex_payload(lines):
+               return 
+            # else parse class/struct type data and generic key-value pairs
+            return _struct_or_generic_parse(lines, _obj)
+        
+        # start here
+    
+        # remove empty (only whitespace) lines
+        raw_lines = [s for s in self.packet_text.splitlines() if s.strip() != ""]
+            
+        # parse payload      
+        # skip first line, because first line content is main content 
+        # (packet type, length, etc), and is already parsed  
+        # also skip 2nd line because it is payload header
+        _PARSE(raw_lines[2:], payload)
+                    
+        # parse payload header
+        if len(raw_lines) >= 2:
+            _key_value_parse([raw_lines[1]], header)
+          
+        return header, payload
 
 
 class Message:
