@@ -1,18 +1,20 @@
 from collections import defaultdict
 import os
 import logging
-from typing import List, Any
 from pathlib import Path
-from enum import Enum
 from datetime import datetime
 import sys
 import signal
-import dataclasses
 import socketio
 import eventlet
+from asyncio import Future
+import asyncio
 
 import quts_lib
 import qcat_lib_win as qcat_lib
+
+from db import DB
+from session import Session, LogSession, ATSession, TestCase
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _LOG_FOLDER_PATH = Path(_BASE_PATH.parent / 'logs')
@@ -29,30 +31,6 @@ class HiddenPrints:
     sys.stdout.close()
     sys.stdout = self._original_stdout
 
-
-class TestCase(Enum):
-  TC1 = 0
-  TC2 = 1
-
-
-@dataclasses.dataclass
-class Session:
-  id: str
-  serial: str
-  service: Any
-  start_log_timestamp: datetime = None
-  end_log_timestamp: datetime = None
-
-class LogSession(Session):
-  log_id: str = None
-  raw_logs: List[str] = None
-  validated_logs: List[str] = None
-  test_case: TestCase = None
-
-class ATSession(Session):
-  pass
-
-
 sio = socketio.Server()
 app = socketio.WSGIApp(sio)
 quts = None
@@ -61,6 +39,7 @@ qcat = None
 sessions = defaultdict(Session)
 log_sessions = defaultdict(LogSession)
 
+db = DB()
 
 @sio.event
 def QUTS_start(sid, data):
@@ -77,10 +56,12 @@ def QUTS_start(sid, data):
 @sio.event
 def QUTS_diag_connect(sid, data):
     try:
-      id, serial = data['id'], data['serial']
+      id, serial, user, app_url = data['id'], data['serial'], data['user'], data['appUrl']
       
       if 'mask' in data and data['mask'] is not None:
-        diag_service = quts.diag_connect(serial, data['mask'])
+        mask_file = data['mask']
+        logging.info(f'Using mask file {mask_file}')
+        diag_service = quts.diag_connect(serial, mask_file)
       else:
         diag_service = quts.diag_connect(serial)
 
@@ -89,7 +70,11 @@ def QUTS_diag_connect(sid, data):
       else:
         raise Exception(f'Could not connect {serial} diag')
       
-      sessions[id] = LogSession(id, serial, service=diag_service)
+      sessions[id] = LogSession(id, serial, service=diag_service, user=user, app_url=app_url)
+      if 'mask' in data and data['mask'] is not None:
+        mask_file = data['mask']
+        sessions[id].mask_file = mask_file
+      
       return {
         'data': {
           'id': id,
@@ -108,8 +93,6 @@ def QUTS_diag_disconnect(sid, data):
     if id not in sessions:
       raise Exception(f'id not found: {id}')
     
-    print(sessions[id])
-
     if not sessions[id].service:
       raise Exception(f'Device not connected for id: {id}')
 
@@ -152,7 +135,8 @@ def QUTS_log_start(sid, data):
     return {
       'data': {
         'id': id,
-        'log_id': log_id,
+        'logId': log_id,
+        'startLogTimestamp': session.start_log_timestamp.isoformat(),
         'status': 'started logging',
       }
     }
@@ -180,8 +164,10 @@ def QUTS_log_stop(sid, data):
     return {
       'data': {
         'id': log_sessions[log_id].id,
-        'log_id': log_id,
+        'logId': log_id,
         'logFile': log_sessions[log_id].raw_logs[0],
+        'startLogTimestamp': log_sessions[log_id].start_log_timestamp.isoformat(),
+        'endLogTimestamp': log_sessions[log_id].end_log_timestamp.isoformat(),
         'status': 'saved log',
       }
     }
@@ -215,13 +201,17 @@ def QUTS_stop(sid, data):
 @sio.event
 def QCAT_start(sid, data):
   global qcat
-  qcat = qcat_lib.QCAT()
-  logging.info('Started QCAT client')
-  return {
-    'data': {
-      'status': 'started QCAT',
+  try:
+    qcat = qcat_lib.QCAT()
+    logging.info('Started QCAT client')
+    return {
+      'data': {
+        'status': 'started QCAT',
+      }
     }
-  }
+  except Exception as e:
+    logging.error("Could not start QCAT client")
+    logging.error(e)
 
 
 @sio.event
@@ -300,6 +290,9 @@ def QCAT_parse_all(sid, data):
     log_id = data['log_id']
     if log_id not in log_sessions:
       raise Exception(f'log_id not found: {log_id}')
+      
+    if not qcat:
+      raise Exception('QCAT not running...')
     
     log_session = log_sessions[log_id]
 
@@ -313,21 +306,35 @@ def QCAT_parse_all(sid, data):
     # call QCAT library on the log file which needs parsing
     logging.info('QCAT parsing log file')
     
-    # DISABLE TEXT PARSING for now
-    # parsedText = qcat_lib.parse_raw_log(log_file,
-    #                             raw_filepath,
-    #                             qcat)
-    # if not parsedText:
-    #   raise Exception(f'QCAT raw text parsing failed for log_id: {log_id}')
-      
-    parsedJson = qcat_lib.parse_raw_log_json(log_file,
+    def parse(future: Future):
+      parsedJsonArr = qcat_lib.parse_raw_log_json(log_file,
                                 json_filepath,
                                 qcat)
-    if not parsedJson:
-      raise Exception(f'QCAT raw JSON parsing failed for log_id: {log_id}')
-
-    logging.info('QCAT parsed log file')
-
+      if not parsedJsonArr:
+        raise Exception(f'QCAT raw JSON parsing failed for log_id: {log_id}')
+      print('QCAT parsed log file')
+      
+      insertLogsResult = db.insert_logs(parsedJsonArr, log_session)
+      print(f'Inserted {len(insertLogsResult.inserted_ids)} to db')
+      
+      sio.emit("QCAT_parse_done", {
+        'data': {
+          'id': log_sessions[log_id].id,
+          'log_id': log_id,
+          'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
+          'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
+          'jsonFile': json_filepath,
+          'packetCount': len(parsedJsonArr),
+          'insertedCount': len(insertLogsResult.inserted_ids),
+          'status': 'Parsing success',
+        }
+      })
+      
+      future.set_result(True)
+      
+    parse_future = Future()
+    asyncio.create_task(parse(parse_future))
+    
     return {
       'data': {
         'id': log_sessions[log_id].id,
@@ -335,9 +342,17 @@ def QCAT_parse_all(sid, data):
         'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
         'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
         'jsonFile': json_filepath,
-        'status': 'successfully processed log',
+        'status': 'Parsing started',
       }
     }
+    
+    # DISABLE TEXT PARSING 
+    # parsedText = qcat_lib.parse_raw_log(log_file,
+    #                             raw_filepath,
+    #                             qcat)
+    # if not parsedText:
+    #   raise Exception(f'QCAT raw text parsing failed for log_id: {log_id}')
+      
   except Exception as e:
     logging.error(e)
     return { 'error': str(e) }
@@ -478,19 +493,19 @@ def stop_all(sid, data):
 
 @sio.on('*')
 def catch_all(event, sid, data):
-  # print('catch_all', event, sid, data)
+  print('catch_all', event, sid, data)
   pass
 
 
 @sio.event
 def connect(sid, environ, auth):
-  # print('connect ', sid)
+  print('connect ', sid)
   pass
 
 
 @sio.event
 def disconnect(sid):
-  # print('disconnect ', sid)
+  print('disconnect ', sid)
   pass
 
 

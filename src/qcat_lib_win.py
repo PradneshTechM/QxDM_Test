@@ -264,7 +264,7 @@ def parse_raw_log_json(input_filename, json_filename, qcat):
             
     print('JSON file path:', json_filename)
 
-    return True
+    return json_arr
 
 if __name__ == '__main__':
     input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')

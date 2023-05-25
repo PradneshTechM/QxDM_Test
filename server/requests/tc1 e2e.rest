@@ -3,6 +3,9 @@
 @host = {{hostname}}:{{port}}
 @device = NDZA150120
 @test_case = TC1
+@username = xyz
+@email = ry@techm.com
+@appUrl = http://tm-wind01.oasisofsolution.com/
 ###
 
 # @name connect
@@ -11,7 +14,12 @@ POST http://{{host}}/api/diag
 Content-Type: application/json
 
 {
-  "serial": "{{device}}"
+  "serial": "{{device}}",
+  "user": {
+    "name": "{{username}}",
+    "email": "{{email}}"
+  },
+  "appUrl": "{{appUrl}}",
 }
 
 ###

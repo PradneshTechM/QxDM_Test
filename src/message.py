@@ -470,11 +470,22 @@ class ParsedRawMessage:
         lines.append('\n')
         return ''.join(lines)
     
+    def test(self):
+        header, parsed = self.parse_payload()
+        print(header)
+        print(parsed)
+        logging.info(header)
+        logging.info(parsed)
+        sys.stdout.flush()
+        sys.stderr.flush()
+        return header, parsed
+        
     def to_json(self):
         header, parsedPayload = self.parse_payload()
         return {
             "index": self.index,
             "packetType": hex(int(self.packet_type)),
+            "packetTypeInt": int(self.packet_type),
             "name": self.name,
             "datetime": self.datetime,
             "length": self.packet_length,
@@ -519,7 +530,11 @@ class ParsedRawMessage:
             elif(val.lower() == 'false'):
                 return False
             elif(re.match(ParsedRawMessage.INT_REGEX, val)):
-                return int(val)
+                int_val = int(val)
+                if int_val < -9223372036854775808 or int_val > 9223372036854775807:
+                    print(f'Huge {self.index}: {val}')
+                    return val
+                return int_val
             elif(re.match(ParsedRawMessage.FLOAT_REGEX, val)):
                 return float(val)
             else:
@@ -587,7 +602,11 @@ class ParsedRawMessage:
             for line in lines:
                 generic_splitter = _find_splitter(line)
                 if generic_splitter == None:
-                    _insert_cleaned(_obj, line, "")
+                    if "," in line:
+                        arr = [_parse_val_primitive(_clean(entry)) for entry in line.split(",")]
+                        return arr
+                    else:
+                        _insert_cleaned(_obj, line, "")
                 else:
                     key, val = line.split(generic_splitter, 1)
                     # split { ... } type values into array
@@ -618,11 +637,20 @@ class ParsedRawMessage:
             try: 
                 has_structs = False
                 
+                def _obj_to_arr(stack: List[Tuple[str, Any]], val):
+                    # convert the tuple to a list, 
+                    # change the 2nd index (object) to the resulting array 
+                    # and convert the list back to a tuple
+                    last_entry = list(stack.pop())
+                    last_entry[1] = val
+                    stack.append((last_entry[0], last_entry[1]))
+                
                 # do deep parsing of class/struct type data
                 def _deep(lines: list[str]):
                     stack: List[Tuple[str, Any]] = []
                     i = 0
                     while i < len(lines):
+                        parse_value = None
                         line = lines[i]
                         line = line.strip()
                         if line.endswith('{'):
@@ -652,21 +680,19 @@ class ParsedRawMessage:
                                             splitter = _find_splitter(lines[j])
                                         multiline_val = _multiline_parse(lines[i:j], stack[-1][1])
                                         if isinstance(multiline_val, list):
-                                            # convert the tuple to a list, 
-                                            # change the 2nd index (object) to the resulting array 
-                                            # and convert the list back to a tuple
-                                            last_entry = list(stack.pop())
-                                            last_entry[1] = multiline_val
-                                            stack.append((last_entry[0], last_entry[1]))
+                                            _obj_to_arr(stack, multiline_val)
                                         i = j
                                         continue
                                         
                                     else:
-                                        _key_value_parse([line], stack[-1][1])
+                                        parse_value = _key_value_parse([line], stack[-1][1])
                                 else:
-                                    _key_value_parse([line], stack[-1][1])
+                                   parse_value = _key_value_parse([line], stack[-1][1])
                             else:
-                                _key_value_parse([line], stack[-1][1])
+                               parse_value = _key_value_parse([line], stack[-1][1])
+                               
+                        if parse_value is not None:
+                            _obj_to_arr(stack, parse_value)
                         i += 1
                             
                     deep_key, deep_obj = stack.pop()
@@ -830,3 +856,14 @@ class Message:
             parsed_message.add_parsed_field(parsed_field)
 
         return parsed_message
+
+
+# MANUAL PARSING TEST
+# msg = ParsedRawMessage(index = 0, packet_type = "0xAAAA", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+# """2023 May 23  07:32:52.592  [EC]  0x1FF0  Diagnostic Response Status  --  Invalid Command Error Response
+# Cmd Code: 19
+# Data = { 
+#    0x4B, 0x12, 0x33, 0x08, 0x01, 0x01, 0x00, 0x00
+# }""")
+
+# msg.test()

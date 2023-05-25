@@ -27,6 +27,10 @@ server.listen(config.PORT, config.ADDRESS, () => {
 const socket = io('http://localhost:6001')
 app.set('socketio', socket)
 
+socket.on("QCAT_parse_done", (result) => {
+  logger.info('QCAT_parse_done: ' + result)
+})
+
 // listen for SIGINT, SIGTERM on windows: https://stackoverflow.com/a/14861513
 if (process.platform === 'win32') {
   const rl = require('readline').createInterface({
