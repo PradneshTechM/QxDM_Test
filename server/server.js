@@ -28,7 +28,7 @@ const socket = io('http://localhost:6001')
 app.set('socketio', socket)
 
 socket.on("QCAT_parse_done", (result) => {
-  logger.info('QCAT_parse_done: ' + result)
+  logger.info('QCAT_parse_done: ' + result.data.status)
 })
 
 // listen for SIGINT, SIGTERM on windows: https://stackoverflow.com/a/14861513
@@ -52,4 +52,6 @@ function stopHandler() {
   socket.emit('stop_all', null, (res) => {
     server.close(() => process.exit(0))
   })
+  
+  setTimeout(() => process.exit(0), 3000)
 }

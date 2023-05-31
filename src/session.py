@@ -16,6 +16,7 @@ class Session:
   end_log_timestamp: datetime = None
   user: Any = None
   app_url: str = None
+  device: Any = None
 
 class LogSession(Session):
   log_id: str = None

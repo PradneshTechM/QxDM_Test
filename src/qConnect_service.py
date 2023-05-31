@@ -70,7 +70,7 @@ def QUTS_diag_connect(sid, data):
       else:
         raise Exception(f'Could not connect {serial} diag')
       
-      sessions[id] = LogSession(id, serial, service=diag_service, user=user, app_url=app_url)
+      sessions[id] = LogSession(id, serial, service=diag_service, user=user, app_url=app_url, device=device)
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']
         sessions[id].mask_file = mask_file

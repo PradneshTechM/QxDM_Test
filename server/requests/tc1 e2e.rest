@@ -3,8 +3,8 @@
 @host = {{hostname}}:{{port}}
 @device = NDZA150120
 @test_case = TC1
-@username = xyz
-@email = ry@techm.com
+@username = "xyz"
+@email = "ry@techm.com"
 @appUrl = http://tm-wind01.oasisofsolution.com/
 ###
 
@@ -15,11 +15,7 @@ Content-Type: application/json
 
 {
   "serial": "{{device}}",
-  "user": {
-    "name": "{{username}}",
-    "email": "{{email}}"
-  },
-  "appUrl": "{{appUrl}}",
+  "appUrl": "{{appUrl}}"
 }
 
 ###
@@ -37,7 +33,7 @@ Content-Type: application/json
 
 ###
 
-@log_id = {{start_log.response.body.data.log_id}}
+@log_id = {{start_log.response.body.data.logId}}
 
 # @name stop_log
 

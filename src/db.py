@@ -1,4 +1,5 @@
-from pymongo import MongoClient
+import sys
+from pymongo import MongoClient, GEO2D
 from pymongo.errors import BulkWriteError
 
 from session import LogSession
@@ -19,6 +20,11 @@ class DB:
       DB._DB_INSTANCE = DB._DB_CLIENT[DB._DB_NAME]
     print('Initialized database instance!')
     
+    self._create_indexes()
+    
+  def _create_indexes(self): 
+    DB._DB_INSTANCE["logs"].create_index([("_server.location", GEO2D)])
+    
   def get_instance():
     return DB._DB_INSTANCE
 
@@ -26,17 +32,27 @@ class DB:
     logs_collection = DB._DB_INSTANCE["logs"]
     
     def deserialize(log): 
-      log["logID"] = log_session.log_id
-      log["serial"] = log_session.serial
-      log["startLogTimestamp"] = log_session.start_log_timestamp
-      log["endLogTimestamp"] = log_session.end_log_timestamp
-      log["maskFile"] = log_session.mask_file
-      log["url"] = log_session.app_url
-      log["user"] = {
-        "name": log_session.user.name,
-        "email": log_session.user.email
+      metadata = {}
+      metadata["_logID"] = log_session.log_id
+      metadata["_device"] = {
+        "serial": log_session.serial,
+        "manufacturer": log_session.device["manufacturer"] if log_session.device else "",
+        "model": log_session.device["model"] if log_session.device else "",
+        "software": f'{log_session.device["platform"]} {log_session.device["sdk"]}' if log_session.device else "",
+        "imei": log_session.device["phone"]["imei"] if log_session.device else "",
       }
-      return log
+      metadata["_startLogTimestamp"] = log_session.start_log_timestamp
+      metadata["_endLogTimestamp"] = log_session.end_log_timestamp
+      metadata["_maskFile"] = log_session.mask_file
+      metadata["_server"] = {
+        "url": log_session.app_url,
+        "location": [log_session.device["location"]["longitude"], log_session.device["location"]["latitude"]]
+      }
+      metadata["_user"] = {
+        "name": log_session.user["name"] if log_session.user["name"] else "",
+        "email": log_session.user["email"] if log_session.user["email"] else ""
+      }
+      return { **metadata, **log }
     
     deserialized_logs = list(map(deserialize, logs))
     
@@ -48,6 +64,9 @@ class DB:
       print(bwe.details)
       print(bwe.details['writeErrors'])
       raise
+    finally:
+      sys.stdout.flush()
+      sys.stderr.flush()
       
     
     

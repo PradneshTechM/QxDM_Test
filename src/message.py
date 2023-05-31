@@ -483,17 +483,16 @@ class ParsedRawMessage:
     def to_json(self):
         header, parsedPayload = self.parse_payload()
         return {
-            "index": self.index,
-            "packetType": hex(int(self.packet_type)),
-            "packetTypeInt": int(self.packet_type),
-            "name": self.name,
-            "datetime": self.datetime,
-            "length": self.packet_length,
-            "subtitle": self.subtitle if self.subtitle else "",
-            "payloadHeader": header,
-            "payload": parsedPayload,
-            "rawPayload": self.packet_text,
-            "parserVersion": ParsedRawMessage.VERSION,
+            "_index": self.index,
+            "_packetType": hex(int(self.packet_type)),
+            "_packetTypeInt": int(self.packet_type),
+            "_name": self.name,
+            "_datetime": self.datetime,
+            "_length": self.packet_length,
+            "_subtitle": self.subtitle if self.subtitle else "",
+            "_rawPayload": self.packet_text,
+            "_parserVersion": ParsedRawMessage.VERSION,
+            **header, **parsedPayload
         }
     
     def parse_payload(self):

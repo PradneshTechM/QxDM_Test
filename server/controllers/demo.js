@@ -37,8 +37,12 @@ demoRouter.post('/diag', (request, response) => {
   const data = {
     id: generateShortId(8),
     serial: request.body.serial,
-    user: request.body.user,
-    appUrl: request.body.appUrl
+    user: request.body.user? request.body.user: {
+      name: "unknown",
+      email: "unknown"
+    },
+    appUrl: request.body.appUrl,
+    device: request.body.device ? request.body.device: {}
   }
   if(request.body.mask) {
     data.mask = request.body.mask
