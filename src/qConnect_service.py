@@ -56,7 +56,7 @@ def QUTS_start(sid, data):
 @sio.event
 def QUTS_diag_connect(sid, data):
     try:
-      id, serial, user, app_url = data['id'], data['serial'], data['user'], data['appUrl']
+      id, serial, user, app_url, device = data['id'], data['serial'], data['user'], data['appUrl'], data['device']
       
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']

@@ -11,3 +11,4 @@ python-socketio
 eventlet
 pywin32
 pymongo
+python-dotenv

@@ -1,24 +1,30 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 import sys
+import os
 from pymongo import MongoClient, GEO2D
 from pymongo.errors import BulkWriteError
 
 from session import LogSession
 
 class DB:
-  _DB_NAME = "QXDM"
-  _DB_HOST = 'localhost'
-  _DB_PORT = 27017
+  _DB_NAME = os.environ.get("DB_NAME")
+  _DB_HOST = os.environ.get("DB_HOST")
+  _DB_USER = os.environ.get("DB_USER")
+  _DB_PASS = os.environ.get("DB_PASS")
+  _DB_PORT = os.environ.get("DB_PORT")
   
   _DB_CLIENT = None
   _DB_INSTANCE = None
 
   def __init__(self):
-    print(f'Initializing database instance @{DB._DB_HOST}:{DB._DB_PORT }')
+    print(f'Initializing database instance @{DB._DB_HOST}:{DB._DB_PORT}')
     if not DB._DB_CLIENT:
-      DB._DB_CLIENT = MongoClient(DB._DB_HOST, DB._DB_PORT)
+      DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT), username=DB._DB_USER, password=DB._DB_PASS, authSource=DB._DB_NAME)
     if not DB._DB_INSTANCE:
       DB._DB_INSTANCE = DB._DB_CLIENT[DB._DB_NAME]
-    print('Initialized database instance!')
+    print(f'Initialized database instance {DB._DB_NAME}')
     
     self._create_indexes()
     
