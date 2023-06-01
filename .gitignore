@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.env
 client_test
 temp
 src/qcat_tests/result_*
