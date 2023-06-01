@@ -14,7 +14,9 @@ const DOMAIN = process.env.DOMAIN !== undefined
 const PROTOCOL = NODE_ENV === 'development'
   ? 'http'
   : 'https'
+const KEY_PATH = process.env.KEY_PATH
+const CERT_PATH = process.env.CERT_PATH
 
 module.exports = {
-  NODE_ENV, PORT, ADDRESS, DOMAIN, PROTOCOL
+  NODE_ENV, PORT, ADDRESS, DOMAIN, PROTOCOL, KEY_PATH, CERT_PATH
 }

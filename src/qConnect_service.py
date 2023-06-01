@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from collections import defaultdict
 import os
 import logging
@@ -9,6 +12,7 @@ import socketio
 import eventlet
 from asyncio import Future
 import asyncio
+import argparse
 
 import quts_lib
 import qcat_lib_win as qcat_lib
@@ -20,6 +24,8 @@ _BASE_PATH = Path(__file__).parent.resolve()
 _LOG_FOLDER_PATH = Path(_BASE_PATH.parent / 'logs')
 _TC1_TEST_CONFIG = _BASE_PATH / 'qcat_tests/Test_case_1.json'
 _TC2_TEST_CONFIG = _BASE_PATH / 'qcat_tests/Test_case_2.json'
+_CERT_PATH = os.environ.get("CERT_PATH")
+_KEY_PATH = os.environ.get("KEY_PATH")
 
 
 class HiddenPrints:
@@ -306,7 +312,7 @@ def QCAT_parse_all(sid, data):
     # call QCAT library on the log file which needs parsing
     logging.info('QCAT parsing log file')
     
-    def parse(future: Future):
+    def parse():
       parsedJsonArr = qcat_lib.parse_raw_log_json(log_file,
                                 json_filepath,
                                 qcat)
@@ -330,10 +336,14 @@ def QCAT_parse_all(sid, data):
         }
       })
       
-      future.set_result(True)
+      # future.set_result(True)
       
-    parse_future = Future()
-    asyncio.create_task(parse(parse_future))
+    # parse_future = Future()
+    # asyncio.create_task(parse(parse_future))
+    
+    # asyncio.create_task(parse())
+    
+    parse()
     
     return {
       'data': {
@@ -519,14 +529,31 @@ def signal_handler(sig, frame):
   QCAT_stop(None, None)
   sys.exit(0)
 
+def parse_args():
+  parser = argparse.ArgumentParser("qConnect_service")
+  parser.add_argument("--env", help="The running environment of the server (dev/prod).", type=str, default="development")
+  return parser.parse_args()
 
 def main():
+  args = parse_args()
   QUTS_start(None, None)
   QCAT_start(None, None)
   signal.signal(signal.SIGINT, signal_handler)
   signal.signal(signal.SIGTERM, signal_handler)
-  eventlet.wsgi.server(eventlet.listen(('', 6001)), app)
-
+  
+  # init websocket server and wrap it in ssl config if running in prod environment
+  logging.info(f'Service running in {args.env} mode')
+  listen = eventlet.listen(('', 6001))
+  eventlet.wsgi.server(
+    (
+      listen if args.env == "development" else ( eventlet.wrap_ssl(
+        listen, 
+        certfile=_CERT_PATH,
+        keyfile=_KEY_PATH,
+        server_side=True
+      ))
+    ), app
+  )
 
 if __name__ == '__main__':
   format_str = '[%(asctime)s.%(msecs)03d]: %(message)s'

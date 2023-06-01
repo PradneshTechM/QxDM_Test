@@ -1,7 +1,9 @@
-@hostname = localhost
+# replace @hostname with the current server domain name
+@hostname = tm-reddemo08.oasisofsolution.com
 @port = 2000
+@protocol = https
 @host = {{hostname}}:{{port}}
-@device = NDZA150120
+@device = N0NADA0108
 @test_case = TC1
 @username = "xyz"
 @email = "ry@techm.com"
@@ -10,7 +12,7 @@
 
 # @name connect
 
-POST http://{{host}}/api/diag
+POST {{protocol}}://{{host}}/api/diag
 Content-Type: application/json
 
 {
@@ -24,7 +26,7 @@ Content-Type: application/json
 
 # @name start_log
 
-POST http://{{host}}/api/logs
+POST {{protocol}}://{{host}}/api/logs
 Content-Type: application/json
 
 {
@@ -37,19 +39,28 @@ Content-Type: application/json
 
 # @name stop_log
 
-DELETE http://{{host}}/api/logs/{{log_id}}
+DELETE {{protocol}}://{{host}}/api/logs/{{log_id}}
 
 ###
 
 # @name disconnect
 
-DELETE http://{{host}}/api/diag/{{id}}
+DELETE {{protocol}}://{{host}}/api/diag/{{id}}
+
+###
+
+###
+
+# @name parse_log
+
+POST {{protocol}}://{{host}}/api/logs/{{log_id}}/parse
+Content-Type: application/json
 
 ###
 
 # @name process_log
 
-POST http://{{host}}/api/logs/{{log_id}}/process
+POST {{protocol}}://{{host}}/api/logs/{{log_id}}/process
 Content-Type: application/json
 
 {
@@ -61,13 +72,4 @@ Content-Type: application/json
 
 # @name get_log
 
-GET http://{{host}}/api/logs/{{log_id}}
-
-###
-
-# @name parse_log
-
-POST http://{{host}}/api/logs/{{log_id}}/parse
-Content-Type: application/json
-
-###
+GET {{protocol}}://{{host}}/api/logs/{{log_id}}

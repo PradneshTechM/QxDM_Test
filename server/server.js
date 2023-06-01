@@ -1,6 +1,7 @@
 const app = require('./app')
 const io = require('socket.io-client')
 const logger = require('./utils/logger')
+const path = require('path')
 const config = require('./utils/config')
 
 let server
@@ -14,8 +15,8 @@ if (config.NODE_ENV === 'development') {
   const fs = require('fs')
 
   const credentials = {
-    cert: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/ssl-bundle.crt'),
-    key: fs.readFileSync('/home/techm/tmdc/stf-ssl-certs/server.key'),
+    cert: fs.readFileSync(path.resolve(config.CERT_PATH)),
+    key: fs.readFileSync(path.resolve(config.KEY_PATH))
   }
   server = https.createServer(credentials, app)
 }
@@ -24,11 +25,11 @@ server.listen(config.PORT, config.ADDRESS, () => {
   logger.info(`qConnect server now listening for requests at ${config.PROTOCOL}://${config.ADDRESS}:${config.PORT}`)
 })
 
-const socket = io('http://localhost:6001')
+const socket = io(`${config.PROTOCOL}://${config.ADDRESS}:6001`)
 app.set('socketio', socket)
 
 socket.on("QCAT_parse_done", (result) => {
-  logger.info('QCAT_parse_done: ' + result.data.status)
+  logger.info('QCAT_parse_done: ' + JSON.stringify(result.data, null, 2))
 })
 
 // listen for SIGINT, SIGTERM on windows: https://stackoverflow.com/a/14861513

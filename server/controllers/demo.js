@@ -4,6 +4,7 @@ const { spawn } = require('child_process')
 const crypto = require('crypto')
 const AdmZip = require('adm-zip')
 const logger = require('../utils/logger')
+const config = require('../utils/config')
 
 
 const generateUUID = () => {
@@ -17,7 +18,7 @@ const generateShortId = (bytes) => {
 const pythonServicePath = path.join(__dirname, '..', '..', 'src', 'qConnect_service.py')
 
 const defaults = { cwd: path.parse(pythonServicePath).dir }
-const pythonProgram = spawn('python', [pythonServicePath], defaults)
+const pythonProgram = spawn('python', [pythonServicePath, "--env", config.NODE_ENV], defaults)
 
 pythonProgram.stdout.on('data', (data) => {
   logger.info('python_service: ' + data.toString())
@@ -101,16 +102,37 @@ demoRouter.delete('/logs/:log_id', (request, response) => {
   const data = {
     log_id: request.params.log_id,
   }
-
+  
   const socket = request.app.get('socketio')
-
-  socket.emit('QUTS_log_stop', data, (res) => {
+  
+  socket.emit('QUTS_log_stop', data, async (res) => {
     if (res.error) {
       return response.status(400).send(res)
     }
     response.send(res)
+    
+    setTimeout(() => autoParse(request, response), 100)
   })
 })
+
+async function autoParse(request, response) {
+  logger.info("Auto parse")
+  await new Promise(resolve => setTimeout(resolve, 100))
+  
+  const data = {
+    log_id: request.params.log_id,
+  }
+  
+  const socket = request.app.get('socketio')
+  
+  socket.emit('QCAT_parse_all', data, (res) => {
+    if (res.error) {
+      logger.error(`Could not parse ${res.error}`)
+    } else {
+      logger.info(res.data.status)
+    }
+  })
+}
 
 demoRouter.post('/logs/:log_id/process', (request, response) => {
   // processes log
