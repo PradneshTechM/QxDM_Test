@@ -6,6 +6,7 @@ const AdmZip = require('adm-zip')
 const logger = require('../utils/logger')
 const config = require('../utils/config')
 
+const DEFAULT_LOG_REQUEST_TIMEOUT = 5000
 
 const generateUUID = () => {
   return crypto.randomUUID()
@@ -21,17 +22,29 @@ const defaults = { cwd: path.parse(pythonServicePath).dir }
 const pythonProgram = spawn('python', [pythonServicePath, "--env", config.NODE_ENV], defaults)
 
 pythonProgram.stdout.on('data', (data) => {
-  logger.info('python_service: ' + data.toString())
+  const message = data.toString()
+  logger.info('stdout python_service: ' + message)
+  handleErrors(message)
 })
 
 pythonProgram.stderr.on('data', (data) => {
-  logger.info('python_service: ' + data.toString())
+  const message = data.toString()
+  logger.info('stderr python_service: ' + message)
+  handleErrors(message)
 })
+
+const handleErrors = (message) => {
+  if (/^ERROR/.test(message)) {
+    
+  }
+}
 
 
 demoRouter.post('/diag', (request, response) => {
   // starts logging
   // socket.io usage: https://stackoverflow.com/a/43685951
+  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
+  
   if (request.body.serial === undefined) {
     return response.status(400).send({ error : 'missing serial' })
   }
@@ -60,7 +73,8 @@ demoRouter.post('/diag', (request, response) => {
 })
 
 demoRouter.delete('/diag/:id', (request, response) => {
-  console.log(request.body)
+  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
+
   const data = {
     id: request.params.id,
   }
@@ -77,6 +91,8 @@ demoRouter.delete('/diag/:id', (request, response) => {
 
 demoRouter.post('/logs', (request, response) => {
   // starts logging
+  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
+
   if (request.body.id === undefined) {
     return response.status(400).send({ error : 'missing id' })
   }
@@ -98,7 +114,8 @@ demoRouter.post('/logs', (request, response) => {
 
 demoRouter.delete('/logs/:log_id', (request, response) => {
   // stops logging
-  console.log(request.body)
+  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
+
   const data = {
     log_id: request.params.log_id,
   }
@@ -111,7 +128,8 @@ demoRouter.delete('/logs/:log_id', (request, response) => {
     }
     response.send(res)
     
-    setTimeout(() => autoParse(request, response), 100)
+    // background parse is called from stf-proxy for now
+    // setTimeout(() => autoParse(request, response), 100)
   })
 })
 

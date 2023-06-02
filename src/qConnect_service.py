@@ -19,6 +19,7 @@ import qcat_lib_win as qcat_lib
 
 from db import DB
 from session import Session, LogSession, ATSession, TestCase
+from exception import QConnectException
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _LOG_FOLDER_PATH = Path(_BASE_PATH.parent / 'logs')
@@ -49,18 +50,25 @@ db = DB()
 
 @sio.event
 def QUTS_start(sid, data):
-  global quts
-  quts = quts_lib.QUTS('qConnect service')
-  logging.info('Started QUTS client')
-  return {
-    'data': {
-      'status': 'started QUTS',
+  try:
+    global quts
+    quts = quts_lib.QUTS('qConnect service')
+    logging.info('Started QUTS client')
+    return {
+      'data': {
+        'status': 'started QUTS',
+      }
     }
-  }
+  except Exception as e:
+    raise QConnectException(QConnectException.Codes.QUTS, f"Could not start QUTS client: {e}")
+    
 
 
 @sio.event
 def QUTS_diag_connect(sid, data):
+    if not quts:
+      return { 'error': str(QConnectException(QConnectException.Codes.QUTS, "QUTS not running")) }
+    
     try:
       id, serial, user, app_url, device = data['id'], data['serial'], data['user'], data['appUrl'], data['device']
       
@@ -85,6 +93,7 @@ def QUTS_diag_connect(sid, data):
         'data': {
           'id': id,
           'status': 'connected diag',
+          'services': get_services_status()
         }
       }
     except Exception as e:
@@ -113,6 +122,7 @@ def QUTS_diag_disconnect(sid, data):
       'data': {
         'id': id,
         'status': 'disconnected diag',
+        'services': get_services_status()
       }
     }
   except Exception as e:
@@ -144,6 +154,7 @@ def QUTS_log_start(sid, data):
         'logId': log_id,
         'startLogTimestamp': session.start_log_timestamp.isoformat(),
         'status': 'started logging',
+        'services': get_services_status()
       }
     }
   except Exception as e:
@@ -175,6 +186,7 @@ def QUTS_log_stop(sid, data):
         'startLogTimestamp': log_sessions[log_id].start_log_timestamp.isoformat(),
         'endLogTimestamp': log_sessions[log_id].end_log_timestamp.isoformat(),
         'status': 'saved log',
+        'services': get_services_status()
       }
     }
   except Exception as e:
@@ -216,8 +228,7 @@ def QCAT_start(sid, data):
       }
     }
   except Exception as e:
-    logging.error("Could not start QCAT client")
-    logging.error(e)
+    raise QConnectException(QConnectException.Codes.QCAT, f"Could not start QCAT client: {e}")
 
 
 @sio.event
@@ -292,14 +303,14 @@ def QCAT_process(sid, data):
 
 @sio.event
 def QCAT_parse_all(sid, data):
+  if not qcat:
+    return { 'error': str(QConnectException(QConnectException.Codes.QCAT, "QCAT not running")) }
+  
   try:
     log_id = data['log_id']
     if log_id not in log_sessions:
       raise Exception(f'log_id not found: {log_id}')
       
-    if not qcat:
-      raise Exception('QCAT not running...')
-    
     log_session = log_sessions[log_id]
 
     log_file = log_session.raw_logs[0]  # USE FIRST LOG FILE
@@ -323,7 +334,7 @@ def QCAT_parse_all(sid, data):
       insertLogsResult = db.insert_logs(parsedJsonArr, log_session)
       print(f'Inserted {len(insertLogsResult.inserted_ids)} to db')
       
-      sio.emit("QCAT_parse_done", {
+      return_val = {
         'data': {
           'id': log_sessions[log_id].id,
           'log_id': log_id,
@@ -334,27 +345,24 @@ def QCAT_parse_all(sid, data):
           'insertedCount': len(insertLogsResult.inserted_ids),
           'status': 'Parsing success',
         }
-      })
+      }
+      sio.emit("QCAT_parse_done", return_val)
+      return return_val
       
-      # future.set_result(True)
-      
-    # parse_future = Future()
-    # asyncio.create_task(parse(parse_future))
-    
     # asyncio.create_task(parse())
     
-    parse()
+    return parse()
     
-    return {
-      'data': {
-        'id': log_sessions[log_id].id,
-        'log_id': log_id,
-        'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
-        'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
-        'jsonFile': json_filepath,
-        'status': 'Parsing started',
-      }
-    }
+    # return {
+    #   'data': {
+    #     'id': log_sessions[log_id].id,
+    #     'log_id': log_id,
+    #     'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
+    #     'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
+    #     'jsonFile': json_filepath,
+    #     'status': 'Parsing started',
+    #   }
+    # }
     
     # DISABLE TEXT PARSING 
     # parsedText = qcat_lib.parse_raw_log(log_file,
@@ -523,6 +531,12 @@ def disconnect(sid):
 def get_current_timestamp():
   return datetime.now()
 
+def get_services_status():
+  return {
+    "QUTS": not not quts,
+    "QCAT": not not qcat
+  }
+
 def signal_handler(sig, frame):
   logging.info('Ctrl+C detected')
   QUTS_stop(None, None)
@@ -536,8 +550,20 @@ def parse_args():
 
 def main():
   args = parse_args()
-  QUTS_start(None, None)
-  QCAT_start(None, None)
+  
+  try:
+    QUTS_start(None, None)
+  except QConnectException as quts_exception:
+    logging.error(f"ERROR QUTS_start {quts_exception}")
+    sys.stdout.flush()
+    sys.stderr.flush()
+  try:
+    QCAT_start(None, None)
+  except QConnectException as qcat_exception:
+    logging.error(f"ERROR QCAT_start {qcat_exception}")
+    sys.stdout.flush()
+    sys.stderr.flush()
+    
   signal.signal(signal.SIGINT, signal_handler)
   signal.signal(signal.SIGTERM, signal_handler)
   

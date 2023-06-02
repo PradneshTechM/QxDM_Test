@@ -21,11 +21,13 @@ if (config.NODE_ENV === 'development') {
   server = https.createServer(credentials, app)
 }
 
-server.listen(config.PORT, config.ADDRESS, () => {
-  logger.info(`qConnect server now listening for requests at ${config.PROTOCOL}://${config.ADDRESS}:${config.PORT}`)
+const serverAddr = config.NODE_ENV === 'development' ? "localhost" : config.ADDRESS
+server.listen(config.PORT, serverAddr, () => {
+  logger.info(`qConnect server now listening for requests at ${config.PROTOCOL}://${serverAddr}:${config.PORT}`)
 })
 
-const socket = io(`${config.PROTOCOL}://${config.ADDRESS}:6001`)
+const socketAddr = config.NODE_ENV == 'development' ? `http://localhost:6001` : `${config.PROTOCOL}://${config.ADDRESS}:6001`
+const socket = io(socketAddr)
 app.set('socketio', socket)
 
 socket.on("QCAT_parse_done", (result) => {

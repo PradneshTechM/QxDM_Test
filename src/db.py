@@ -6,7 +6,7 @@ from pymongo.errors import BulkWriteError
 from session import LogSession
 
 class DB:
-  _DB_NAME = os.environ.get("DB_NAME")
+  _DB_NAME = os.environ.get("DB_NAME") if os.environ.get("DB_NAME") else "qxdm_dev"
   _DB_HOST = os.environ.get("DB_HOST")
   _DB_USER = os.environ.get("DB_USER")
   _DB_PASS = os.environ.get("DB_PASS")
@@ -16,9 +16,14 @@ class DB:
   _DB_INSTANCE = None
 
   def __init__(self):
-    print(f'Initializing database instance @{DB._DB_HOST}:{DB._DB_PORT}')
     if not DB._DB_CLIENT:
-      DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT), username=DB._DB_USER, password=DB._DB_PASS, authSource=DB._DB_NAME)
+      if not DB._DB_HOST:
+        # remote db not defined, use local db
+        print(f'Initializing database instance @localhost:27017')
+        DB._DB_CLIENT = MongoClient("localhost", 27017)
+      else:
+        print(f'Initializing database instance @{DB._DB_HOST}:{DB._DB_PORT}')
+        DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT), username=DB._DB_USER, password=DB._DB_PASS, authSource=DB._DB_NAME)
     if not DB._DB_INSTANCE:
       DB._DB_INSTANCE = DB._DB_CLIENT[DB._DB_NAME]
     print(f'Initialized database instance {DB._DB_NAME}')
