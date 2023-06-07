@@ -31,7 +31,8 @@ import QXDMService.ttypes
 
 
 _BASE_PATH = Path(__file__).parent.resolve()
-_LOG_FOLDER_PATH = (_BASE_PATH.parent / 'logs')
+_STORAGE_PATH = os.environ.get("STORAGE_PATH")
+_LOG_FOLDER_PATH = _STORAGE_PATH if _STORAGE_PATH else (_BASE_PATH.parent / 'logs')
 LOGMASK_FILEPATH = _BASE_PATH.parent / 'default.dmc'
 
 
@@ -179,14 +180,19 @@ class QUTS:
     self.device_manager.startLogging()
 
 
-  def diag_log_save(self, *args: str) -> List[str]:
+  def diag_log_save(self, user_id, log_id, *args: str) -> List[str]:
     '''Saves separate log files for given serial numbers passed .'''
-    filenames = {}  # maps (key: protocol handle, value: file path)
+    file_paths_map = {}  # maps (key: protocol handle, value: file path)
+    file_names = []
+    if not user_id:
+      user_id = "unknown_user"
     for serial in args:
       now = datetime.datetime.now()
-      dt_format = now.strftime("%y%m%d_%H%M%S.%f")
-      prefix = f'{dt_format}_{serial}'
-      path = f'{_LOG_FOLDER_PATH}/{prefix}/{prefix}.hdf'
+      dt_format = now.strftime("%Y-%m-%d_%H%M%S")
+      dt_format_folder = now.strftime("%Y-%m-%d")
+      prefix = f'{dt_format}_{log_id}_{serial}'
+      filename = f'{prefix}.hdf'
+      path = f'{_LOG_FOLDER_PATH}/{dt_format_folder}/{user_id}/qxdm_logs/{filename}'
 
       protocol_handle = None
       for protocol in self._get_device_protocols(serial):
@@ -196,15 +202,19 @@ class QUTS:
       else:
         raise Exception(f'Could not find {serial} diag')
 
-      filenames[protocol_handle] = path
+      file_paths_map[protocol_handle] = path
+      file_names.append(filename)
 
-    files = self.device_manager.saveLogFilesWithFilenames(filenames)
+    file_paths = self.device_manager.saveLogFilesWithFilenames(file_paths_map)
     
     print('Log(s) saved:')
-    for fn in files:
+    for fn in file_paths:
       print(f'\t{fn}')
+      
+    sys.stderr.flush()
+    sys.stdout.flush()
 
-    return files
+    return file_paths, file_names 
 
 
   def diag_log_reset(self):

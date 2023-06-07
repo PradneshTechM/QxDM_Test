@@ -171,10 +171,12 @@ def QUTS_log_stop(sid, data):
     if not log_sessions[log_id].service:
       raise Exception(f'No service for log_id: {log_id}')
 
-    log_files = quts.diag_log_save(log_sessions[log_id].serial)
+    user = log_sessions[log_id].user
+    user_id = user["email"].split('@', 1)[0]
+    log_file_paths, log_file_names = quts.diag_log_save(user_id, log_id, log_sessions[log_id].serial)
     logging.info('Saved logs')
 
-    log_sessions[log_id].raw_logs = log_files
+    log_sessions[log_id].raw_logs = log_file_paths
     log_sessions[log_id].end_log_timestamp = get_current_timestamp()
     logging.info(log_sessions[log_id].raw_logs)
 
@@ -182,7 +184,8 @@ def QUTS_log_stop(sid, data):
       'data': {
         'id': log_sessions[log_id].id,
         'logId': log_id,
-        'logFile': log_sessions[log_id].raw_logs[0],
+        'logFilePath': log_sessions[log_id].raw_logs[0],
+        'logFileName': log_file_names[0],
         'startLogTimestamp': log_sessions[log_id].start_log_timestamp.isoformat(),
         'endLogTimestamp': log_sessions[log_id].end_log_timestamp.isoformat(),
         'status': 'saved log',
@@ -558,7 +561,8 @@ def main():
     sys.stdout.flush()
     sys.stderr.flush()
   try:
-    QCAT_start(None, None)
+    pass
+    # QCAT_start(None, None)
   except QConnectException as qcat_exception:
     logging.error(f"ERROR QCAT_start {qcat_exception}")
     sys.stdout.flush()
