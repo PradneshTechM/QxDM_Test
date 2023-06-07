@@ -481,7 +481,15 @@ class ParsedRawMessage:
         return header, parsed
         
     def to_json(self):
-        header, parsedPayload = self.parse_payload()
+        try:
+            header, parsedPayload = self.parse_payload()
+        except:
+            traceback.print_exc()
+            logging.info(self.index)
+            sys.stdout.flush()
+            sys.stderr.flush()
+            header = {}
+            parsedPayload = {}
         return {
             "_index": self.index,
             "_packetType": hex(int(self.packet_type)),
@@ -741,11 +749,11 @@ class ParsedRawMessage:
             
             except:
                 # catch any faulty block parsing
-              pass
+                # pass
                 # traceback.print_exc()
-                # logging.info(self.index)
-                # sys.stdout.flush()
-                # sys.stderr.flush()
+                logging.info(self.index)
+                sys.stdout.flush()
+                sys.stderr.flush()
                 
         # parse payloads that are encoded in hex
         def _hex_payload(lines: list[str]):

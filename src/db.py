@@ -44,22 +44,30 @@ class DB:
       metadata["_logID"] = log_session.log_id
       metadata["_device"] = {
         "serial": log_session.serial,
-        "manufacturer": log_session.device["manufacturer"] if log_session.device else "",
-        "model": log_session.device["model"] if log_session.device else "",
-        "software": f'{log_session.device["platform"]} {log_session.device["sdk"]}' if log_session.device else "",
-        "imei": log_session.device["phone"]["imei"] if log_session.device else "",
+        "manufacturer": log_session.device["manufacturer"] if log_session.device and "manufacturer" in log_session.device else "",
+        "model": log_session.device["model"] if log_session.device and "model" in log_session.device else "",
+        "software": f'{log_session.device["platform"] if "platform" in log_session.device else ""} {log_session.device["sdk"] if "sdk" in log_session.device else ""}' if log_session.device else "",
+        "imei": log_session.device["phone"]["imei"] if log_session.device and "phone" in log_session.device and "imei" in log_session.device["phone"] else "",
       }
-      metadata["_startLogTimestamp"] = log_session.start_log_timestamp
-      metadata["_endLogTimestamp"] = log_session.end_log_timestamp
-      metadata["_maskFile"] = log_session.mask_file
-      metadata["_server"] = {
-        "url": log_session.app_url,
-        "location": [log_session.device["location"]["longitude"], log_session.device["location"]["latitude"]]
-      }
-      metadata["_user"] = {
-        "name": log_session.user["name"] if log_session.user["name"] else "",
-        "email": log_session.user["email"] if log_session.user["email"] else ""
-      }
+      if log_session.start_log_timestamp:
+        metadata["_startLogTimestamp"] = log_session.start_log_timestamp
+      if log_session.end_log_timestamp:
+        metadata["_endLogTimestamp"] = log_session.end_log_timestamp
+      if log_session.mask_file:
+        metadata["_maskFile"] = log_session.mask_file
+      metadata["_filePath"] = log_session.raw_logs[0]
+      if log_session.device:
+        metadata["_server"] = {
+          "url": log_session.app_url,
+          "location": [log_session.device["location"]["longitude"] if "location" in log_session.device and "longitude" in log_session.device["location"] else 0,
+              log_session.device["location"]["latitude"] if "location" in log_session.device and "latitude" in log_session.device["location"] else 0
+          ]
+        }
+      if log_session.user:
+        metadata["_user"] = {
+          "name": log_session.user["name"] if log_session.user["name"] else "",
+          "email": log_session.user["email"] if log_session.user["email"] else ""
+        }
       return { **metadata, **log }
     
     deserialized_logs = list(map(deserialize, logs))
