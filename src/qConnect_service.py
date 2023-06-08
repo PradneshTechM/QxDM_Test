@@ -562,7 +562,7 @@ def main():
     sys.stderr.flush()
   try:
     pass
-    # QCAT_start(None, None)
+    QCAT_start(None, None)
   except QConnectException as qcat_exception:
     logging.error(f"ERROR QCAT_start {qcat_exception}")
     sys.stdout.flush()
