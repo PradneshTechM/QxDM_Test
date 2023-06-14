@@ -1,11 +1,9 @@
 import os
 import sys
 import time
+import platform
 from typing import List
-import re
 from pathlib import Path
-import collections
-import dataclasses
 import datetime
 
 # The path where QUTS files are installed
@@ -32,9 +30,18 @@ import QXDMService.ttypes
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _STORAGE_PATH = os.environ.get("STORAGE_PATH")
+if _STORAGE_PATH is None:
+    if platform.system() == "Linux":
+        _STORAGE_PATH = os.path.join(os.path.expanduser("~"), "tmdc", "storage")
+    else:
+        _STORAGE_PATH = os.path.join(os.path.expanduser("~"), "Documents", "tmdc", "storage")
+_QXDM_MASKS_FOLDER = os.path.join(_STORAGE_PATH, "qxdm_mask_files")
 _LOG_FOLDER_PATH = _STORAGE_PATH if _STORAGE_PATH else (_BASE_PATH.parent / 'logs')
 LOGMASK_FILEPATH = _BASE_PATH.parent / 'default.dmc'
 
+print(f'Storage path {_STORAGE_PATH}')
+print(f'Qxdm masks path {_QXDM_MASKS_FOLDER}')
+sys.stdout.flush()
 
 class QUTS:
   def __init__(self, name: str):
@@ -192,7 +199,7 @@ class QUTS:
       dt_format_folder = now.strftime("%Y-%m-%d")
       prefix = f'{dt_format}_{log_id}_{serial}'
       filename = f'{prefix}.hdf'
-      path = f'{_LOG_FOLDER_PATH}/{dt_format_folder}/{user_id}/qxdm_logs/{filename}'
+      path = os.path.join(_LOG_FOLDER_PATH, dt_format_folder, user_id, 'qxdm_logs', filename)
 
       protocol_handle = None
       for protocol in self._get_device_protocols(serial):
