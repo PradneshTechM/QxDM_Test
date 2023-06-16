@@ -3,7 +3,10 @@ import re
 import logging
 import sys
 import traceback
-from typing import List, Tuple, Any
+import json
+import os
+import datetime
+from typing import List, Tuple, Any, Dict
 
 
 class ValidationType(Enum):
@@ -442,7 +445,7 @@ class RawMessage:
     
 
 class ParsedRawMessage:
-    VERSION = 1
+    VERSION = 2
     
     INT_REGEX = r'^[-+]?\d+$'
     FLOAT_REGEX = r'^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$'
@@ -473,12 +476,10 @@ class ParsedRawMessage:
     def test(self):
         header, parsed = self.parse_payload()
         print(header)
-        print(parsed)
-        logging.info(header)
-        logging.info(parsed)
+        print(json.dumps(parsed, indent=2))
         sys.stdout.flush()
         sys.stderr.flush()
-        return header, parsed
+        return {**header, **parsed}
         
     def to_json(self):
         try:
@@ -515,6 +516,12 @@ class ParsedRawMessage:
         def _clean(val: str):
             val = re.sub(r'[^\S\n]+', ' ', val).strip()
             return val
+        
+        def _clean_key_val(_key: str, _val: str):
+            key = _clean(_key)
+            val = _clean(_val)
+            val = _parse_val_primitive(val)
+            return key, val
         
         # clean and parse values into primitives, turn duplicate keys to contain array of values
         def _insert_cleaned(_obj: dict, _key: str, _val: str):
@@ -619,7 +626,7 @@ class ParsedRawMessage:
                     # split { ... } type values into array
                     if val.strip().startswith('{') and val.strip().endswith('}'):
                         val = [_parse_val_primitive(_clean(entry)) for entry in val.strip()[1:-1].strip().split(',')]
-                        _obj[key] = val
+                        _obj[_parse_val_primitive(_clean(key))] = val
                     else: _insert_cleaned(_obj, key, val)
             
         # multiline value parsing 
@@ -761,15 +768,147 @@ class ParsedRawMessage:
                 payload["Payload"] = " ".join(lines[1:]) if len(lines[1:]) > 0 else ""
                 return True
             return False
+        
+        def _tables(lines: list[str], _obj: dict):
+            TABLE_BOUNDARIES_REGEX = r'^-+$'
+            TABLE_VERTICAL_BOUNDARY_REGEX = r'^\|'
+            TABLE_VERTICAL_BOUNDARY = "|"
+            
+            # find a table start and end
+            table_name = "TABLE"
+            table_start = 0
+            table_cols_start: int = None
+            table_cols_end: int = None
+            table_rows_start: int = None
+            table_rows_end: int = None
+            generic_parse_done = False
+            first_table_start = None
+            
+            def _parse_table(lines: list[str], _obj: dict):
+                # find the max number of columns in the table 
+                max_col_number = lines[table_cols_end].count(TABLE_VERTICAL_BOUNDARY) - 1
+                
+                # parse column structure as a tree, eg:
+                # """
+                #                |Bit Width                         
+                #  SB Result     |   |  |       |   |PMI |PMI|  |PMI
+                #     |SB|SB |SB |   |  |Zero   |WB |WB  |WB |  |SB 
+                #  #  |ID|CQI|PMI|CRI|RI|Padding|CQI|X1  |X2 |LI|X2 
+                # """
+                def _parse_cols(lines: list[str]) -> list[list[str]]:
+                    cols: list[str] = []
+                    lines.reverse()
+                    bottom_most_names_and_len: list[(str, int)] = []
+                    for r_index, row in enumerate(lines):
+                        row = row.strip()
+                        row = row[1:len(row)-1]
+                        split_row = row.split(TABLE_VERTICAL_BOUNDARY)
+                        skipped_bottom_cols = 0
+                        for c_index, col_name in enumerate(split_row):
+                            if r_index > 0:
+                                len_of_current = len(col_name)
+                                index = c_index + skipped_bottom_cols
+                                while len_of_current > 0:
+                                    len_of_bottom_most_col = bottom_most_names_and_len[index][1] + 1 # add 1 to compensate for removed TABLE_BOUNDARY character
+                                    stripped_col_name = col_name.strip()
+                                    if len(stripped_col_name) > 0:
+                                        cols[index] = stripped_col_name.replace(" ", "_") + "." + cols[index]
+                                    index += 1
+                                    if index > max_col_number - 1:
+                                        break
+                                    len_of_current -= len_of_bottom_most_col
+                                    if len_of_current > 0:
+                                        skipped_bottom_cols += 1
+                            else:
+                                bottom_most_names_and_len.append((col_name, len(col_name)))
+                                cols.append(col_name.strip().replace(" ", "_"))
+                                
+                    return cols
+                
+                columns = _parse_cols(lines[table_cols_start:table_cols_end+1])
+                
+                all_parsed_rows: List[Dict[str, Any]] = []
+                
+                # parse table data rows into arrays of objects with key-val
+                for i in range(table_rows_start, table_rows_end):
+                    row = lines[i].strip()
+                    row = row[1:len(row)-1]
+                    data = row.split(TABLE_VERTICAL_BOUNDARY)
+                    parsed_row_data: Dict[str, Any] = {}
+                    for j, field in enumerate(data):
+                        _insert_cleaned(parsed_row_data, columns[j], field)
+                    all_parsed_rows.append(parsed_row_data)
+                    
+                _obj[table_name] = all_parsed_rows
+                
+            for i in range(len(lines)):
+                line = lines[i].strip()
+                # table columns start, aka ---------------
+                if not table_cols_start and re.match(TABLE_BOUNDARIES_REGEX, line):
+                    table_cols_start = i + 1
+                    table_start = i - 1 if i > 0 else i
+                    if not first_table_start:
+                        first_table_start = table_start
+                    table_name = lines[table_start].strip() # the previous line is the table name
+                    continue
+                
+                # table columns end, aka ---------------
+                if not table_cols_end and re.match(TABLE_BOUNDARIES_REGEX, line):
+                    table_cols_end = i - 1
+                    table_rows_start = i + 1
+                    table_rows_end = table_rows_start + 1
+                    while table_rows_end < len(lines) and re.match(TABLE_VERTICAL_BOUNDARY_REGEX, lines[table_rows_end].strip()):
+                        table_rows_end += 1
+                        
+                if table_cols_start and table_cols_end and table_rows_start and table_rows_end:
+                    if not generic_parse_done:
+                        # parse the rest of the payload (non-table data)
+                        _struct_or_generic_parse(lines[0:first_table_start], _obj)
+                        generic_parse_done = True
+                    _parse_table(lines, _obj)
+                    table_name = "TABLE"
+                    table_start = 0
+                    table_cols_start: int = None
+                    table_cols_end: int = None
+                    table_rows_start: int = None
+                    table_rows_end: int = None
+              
+            if not generic_parse_done:
+                # parse the rest of the payload (non-table data) if not already parsed
+                _struct_or_generic_parse(lines[0:first_table_start], _obj)
                     
         # START PARSING
         def _PARSE(lines: list[str], _obj: dict):
             # parse payloads that are encoded in hex
             if _hex_payload(lines):
                return 
+            
+            if (self.packet_type.lower() in [
+                "0xb97f",
+                "0xb0c0",
+                "0xb0ed",
+                "0xb0ec",
+                "0xb0e2",
+                "0xb0e3",
+                "0xb821",
+                "0xb814",
+                "0xb80b",
+                "0xb809",
+                "0xb808",
+                "0xb80a",
+                "0xb801",
+                "0xb800",
+                "0xb14d",
+                "0xb8a7",
+                "0xb193",
+                "0xb173",
+                "0xb887",
+                "0xb825",
+            ]):
+               return _tables(lines, _obj)
             # else parse class/struct type data and generic key-value pairs
             return _struct_or_generic_parse(lines, _obj)
-        
+            
         # start here
     
         # remove empty (only whitespace) lines
@@ -866,12 +1005,210 @@ class Message:
         return parsed_message
 
 
-# MANUAL PARSING TEST
-# msg = ParsedRawMessage(index = 0, packet_type = "0xAAAA", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
-# """2023 May 23  07:32:52.592  [EC]  0x1FF0  Diagnostic Response Status  --  Invalid Command Error Response
-# Cmd Code: 19
-# Data = { 
-#    0x4B, 0x12, 0x33, 0x08, 0x01, 0x01, 0x00, 0x00
-# }""")
 
-# msg.test()
+
+# MANUAL PARSING TEST
+def test_parsing():
+    def test_table_parsing():
+        messages: List[ParsedRawMessage] = []
+
+        msg = ParsedRawMessage(index = 0, packet_type = "0xB8A7", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+        """2023 Jun  6  18:41:10.040  [0F]  0xB8A7  NR5G MAC CSF Report
+        Subscription ID = 2
+        Misc ID         = 0
+        Major.Minor                    = 2. 3
+        Log Fields Change BMask        = 0x0000
+        Num Records                    = 1
+        Records[0]
+        Timestamp
+            Slot                     = 9
+            Numerology               = 30kHz
+            Frame                    = 642
+        Num CSF Reports             = 1
+        Num CSF Type2 Reports       = 0
+        Reports
+            ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            |   |       |        |      |          |                    |    |     |    |    |Num |Num |       |       |       |       |       |Quantities                                                                                                                         |
+            |   |       |        |      |          |                    |    |     |    |Num |CSI |CSI |       |       |       |       |       |CSI                                                                                  |RSRP                                         |
+            |   |       |        |      |          |                    |    |     |Num |CSI |P2  |P2  |       |       |       |P2 SB  |P2 SB  |Metrics                                           |Bit Width                         |        |CRI  |     |Diff |       |    |     |
+            |   |       |Resource|      |          |                    |    |     |CSI |P2  |SB  |SB  |       |       |       |Odd    |Even   |   |  |   |        |        |  |   |SB Result     |   |  |       |   |PMI |PMI|  |PMI|        |SSBRI|RSRP |RSRP |       |    |     |
+            |   |Carrier|Carrier |Report|Report    |Report Quantity     |Late|Faked|P1  |WB  |Odd |Even|Report |P1     |P2 WB  |Report |Report |   |  |WB |PMI WB  |PMI WB  |  |Num|   |SB|SB |SB |   |  |Zero   |WB |WB  |WB |  |SB |Resource|Bit  |Bit  |Bit  |Num    |    |SSBRI|
+            |#  |ID     |ID      |ID    |Type      |Bitmask             |CSF |CSF  |Bits|Bits|Bits|Bits|Dropped|Dropped|Dropped|Dropped|Dropped|CRI|RI|CQI|X1      |X2      |LI|SB |#  |ID|CQI|PMI|CRI|RI|Padding|CQI|X1  |X2 |LI|X2 |Set ID  |Width|Width|Width|Results|RSRP|CRI  |
+            ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            |  0|      0|       0|     0|  PERIODIC|          CRI:RI:CQI|   0|    0|   5|   0|   0|   0|      0|      0|      0|      0|      0|  0| 1| 15|       0|       0| 0|  0|   |  |   |   |  0| 1|      0|  4|   0|  0| 0|  0|        |     |     |     |       |    |     |
+        """)
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index = 0, packet_type = "0xB8A7", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+        """2023 Jun  6  18:41:10.040  [0F]  0xB8A7  NR5G MAC CSF Report
+        Subscription ID = 2
+        Misc ID         = 0
+        Major.Minor                    = 2. 3
+        Log Fields Change BMask        = 0x0000
+        Num Records                    = 1
+        Records[0]
+        Timestamp
+            Slot                     = 9
+            Numerology               = 30kHz
+            Frame                    = 642
+        Num CSF Reports             = 1
+        Num CSF Type2 Reports       = 0
+        Records
+                ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                |   |        |     |   |      |Num      |       |Transport Blocks                                                                                                                |    |    |     |       |
+                |   |        |     |   |      |Transport|Serving|HARQ|  |   |      |         |     |Discarded|                                   |           |       |   |   |          |        |    |    |Alt  |       |
+                |   |Subframe|Frame|Num|Num   |Blocks   |Cell   |HARQ|  |   |CRC   |         |TB   |reTx     |                                   |Did        |TB Size|   |Num|Modulation|ACK/NACK|PMCH|Area|TBS  |Alt MCS|
+                |#  |Num     |Num  |RBs|Layers|Present  |Index  |ID  |RV|NDI|Result|RNTI Type|Index|Present  |Discarded ReTx                     |Recombining|(bytes)|MCS|RBs|Type      |Decision|ID  |ID  |Index|Enabled|
+                ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+                |  0|       9|  352| 12|     2|        1|  PCELL|   2| 0|  0|  Pass|        P|    0|     None|                         NO_DISCARD|         No|     18|  5| 12|      QPSK|     ACK|    |    | NONE|  false|
+                |  1|       9|  352| 12|     2|        1|  PCELL|   2| 0|  0|  Pass|        P|    0|     None|                         NO_DISCARD|         No|     18|  5| 12|      QPSK|     ACK|    |    | NONE|  false|
+        """)
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index = 0, packet_type = "0xb97f", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+        """ 2023 Jun  6  18:41:01.899  [3E]  0xB97F  NR5G ML1 Searcher Measurement Database Update Ext
+        Subscription ID = 2
+        Misc ID         = 0
+        Major.Minor Version                 = 2. 8
+        System Time
+        Slot Number                      = 0
+        SubFrame Number                  = 3
+        System Frame Number              = 7
+        SCS                              = DEFAULT
+        Num Layers                          = 1
+        SSB Periodicity Serv Cell           = INVALID
+        Frequency Offset                    = 3.901 PPM
+        Timing Offset                       = 36681533
+        Component Carrier List[0]
+        Raster ARFCN                        = 639936
+        Num Cells                           = 1
+        Serving Cell Index                  = 255
+        Serving Cell PCI                    = 65535
+        Serving SSB                         = NA
+        ServingRsrpRx23[0]
+            Serving RSRP Rx23                = NA
+        ServingRsrpRx23[1]
+            Serving RSRP Rx23                = NA
+        Serving RX Beam                     = { NA, NA }
+        Serving RFIC ID                     = NA
+        ServingSubarrayId[0]
+            SubArray ID                      = NA
+        ServingSubarrayId[1]
+            SubArray ID                      = NA
+        Cells
+            -----------------------------------------------------------------------------------------------------------------------------------------
+            |   |      |      |     |            |            |Detected Beams                                                                       |
+            |   |      |      |     |            |            |   |     |RX Beam Info           |NR2NR       |NR2NR       |L2NR        |L2NR        |
+            |   |      |PBCH  |Num  |Cell Quality|Cell Quality|   |SSB  |RX Beam|               |Filtered Tx |Filtered Tx |Filtered Tx |Filtered Tx |
+            |#  |PCI   |SFN   |Beams|RSRP        |RSRQ        |#  |Index|Id     |RSRP           |Beam RSRP L3|Beam RSRQ L3|Beam RSRP L3|Beam RSRQ L3|
+            -----------------------------------------------------------------------------------------------------------------------------------------
+            |  0|     1|   852|    1|     -90.438|     -10.352|  0|    0|     NA|        -90.438|     -90.438|     -10.352|          NA|          NA|
+            |   |      |      |     |            |            |   |     |     NA|        -97.836|            |            |            |            |
+
+        """)
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index = 0, packet_type = "0xb173", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+        """ 2023 May 31  13:08:18.598  [E5]  0xB173  LTE PDSCH Stat Indication
+        Subscription ID = 1
+        Version      = 48
+        Num Records  = 3
+        Records
+        ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        |   |        |     |   |      |Num      |       |Transport Blocks                                                                                                                |    |    |     |       |
+        |   |        |     |   |      |Transport|Serving|    |  |   |      |         |     |Discarded|                                   |           |       |   |   |          |        |    |    |Alt  |       |
+        |   |Subframe|Frame|Num|Num   |Blocks   |Cell   |HARQ|  |   |CRC   |         |TB   |reTx     |                                   |Did        |TB Size|   |Num|Modulation|ACK/NACK|PMCH|Area|TBS  |Alt MCS|
+        |#  |Num     |Num  |RBs|Layers|Present  |Index  |ID  |RV|NDI|Result|RNTI Type|Index|Present  |Discarded ReTx                     |Recombining|(bytes)|MCS|RBs|Type      |Decision|ID  |ID  |Index|Enabled|
+        ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        |  0|       0|  512| 28|     4|        1|  PCELL|   1| 0|  0|  Pass|       SI|    0|     None|                         NO_DISCARD|         No|     47| 11| 28|      QPSK|     ACK|    |    | NONE|  false|
+        |  1|       5|  512|  8|     4|        1|  PCELL|   0| 0|  0|  Pass|       SI|    0|     None|                         NO_DISCARD|         No|     32|  8|  8|      QPSK|     ACK|    |    | NONE|  false|
+        |  2|       0|  514| 28|     4|        1|  PCELL|   1| 0|  0|  Pass|       SI|    0|     None|                         NO_DISCARD|         No|     47| 11| 28|      QPSK|     ACK|    |    | NONE|  false|
+
+
+        """)
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index = 0, packet_type = "0xb887", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+        """ 2023 Jun  6  18:41:02.041  [73]  0xB887  NR5G MAC PDSCH Status
+        Subscription ID = 2
+        Misc ID         = 0
+        Major.Minor                    = 2. 5
+        Log Fields Change BMask        = 0x0
+        Sub ID                         = 1
+        Num Records                    = 1
+        Records
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        |   |                     |      |PDSCH Status Info                                                                                                                                                                                                                                                                             |
+        |   |                     |      |       |    |      |    |         |    |       |        |        |     |        |   |   |    |  |HARQ |    |    |   |      |         |        |      |    |   |       |      |      |    |       |       |       |       |      |     |        |     |        |       |       |       |       |
+        |   |                     |      |       |    |      |    |         |    |       |        |        |     |        |   |   |    |  |Or   |    |K1  |   |      |         |        |      |    |   |       |      |      |    |       |       |       |       |      |     |        |     |        |RX     |RX     |RX     |RX     |
+        |   |                     |Num   |       |    |      |    |         |    |       |        |        |     |        |   |   |    |  |MBSFN|    |Or  |   |      |         |        |      |New |   |       |      |      |    |HD     |HARQ   |HD     |HARQ   |      |Is   |        |High |        |Antenna|Antenna|Antenna|Antenna|
+        |   |System Time          |PDSCH |Carrier|Tech|      |Conn|         |Band|Variant|Physical|        |TB   |        |SCS|   |Num |  |Area |RNTI|PMCH|   |Num   |Iteration|CRC     |CRC   |Tx  |   |Discard|Bypass|Bypass|Num |Onload |Onload |Offload|Offload|Did   |IOVec|        |Clock|        |Mapping|Mapping|Mapping|Mapping|
+        |#  |Slot|Numerology|Frame|Status|ID     |Id  |Opcode|ID  |Bandwidth|Type|Id     |cell ID |EARFCN  |Index|TB Size |MU |MCS|Rbs |RV|Id   |Type|ID  |TCI|Layers|Index    |State   |Status|Flag|NDI|Mode   |Decode|HARQ  |ReTx|Timeout|Timeout|Timeout|Timeout|Recomb|Valid|Mod Type|Mode |Num RX  |0      |1      |2      |3      |
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        |  0|  11|     30kHz|  866|     1|      0|   1|     3|   0|        6|   0|      0|       1|  639936|    0|      11|  1|  5|   1| 0|    0|   8|   1|  0|     1|        0|    PASS|  PASS|   1|  0|      0|     0|     1|   0|      0|      0|      0|      0|     0| true|    QPSK|    0|4x4_MIMO|      0|      0|      0|      0|
+
+        """)
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index = 0, packet_type = "0xb825", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+        """ 2023 Jun  6  18:41:02.068  [50]  0xB825  NR5G RRC Configuration Info
+        Subscription ID = 2
+        Misc ID         = 0
+        Major.Minor Version               = 2. 0
+        Conn Config Info
+        State = CONNECTED
+        Config Status = true
+        Connectivity Mode = SA
+        Num Active SRB = 1
+        Num Active DRB = 0
+        MN MCG DRB IDs = NONE
+        SN MCG DRB IDs = NONE
+        MN SCG DRB IDs = NONE
+        SN SCG DRB IDs = NONE
+        MN Split DRB IDs = NONE
+        SN Split DRB IDs = NONE
+        LTE Serving Cell Info {
+            Num Bands = 0
+        }
+        Num Contiguous CC Groups = 1
+        Num Active CC = 1
+        Num Active RB = 1
+        Contiguous CC Info
+            --------------------
+            |Band  |DL BW|UL BW|
+            |Number|Class|Class|
+            --------------------
+            |    48|    A|    A|
+
+        NR5G Serving Cell Info
+            ----------------------------------------------------------------------------------
+            |  |    |          |          |          |    |    |DL       |UL       |DL  |UL  |
+            |CC|Cell|          |          |          |    |Band|Carrier  |Carrier  |Max |Max |
+            |Id|Id  |DL Arfcn  |UL Arfcn  |SSB Arfcn |Band|Type|Bandwidth|Bandwidth|MIMO|MIMO|
+            ----------------------------------------------------------------------------------
+            | 0|   1|    640666|    640666|    639936|  48|SUB6|    40MHZ|    40MHZ|  NA|   1|
+            | 1|   1|    640666|    640666|    639936|  48|SUB6|    40MHZ|    40MHZ|  NA|   1|
+
+        Radio Bearer Info
+            ----------------------------------------------------------------------------------------------------------------------------------------------------
+            |  |           |          |DL  |       |            |            |UL  |          |       |            |            |          |UL PDCP  |UL Data   |
+            |RB|Termination|          |RB  |DL ROHC|DL Cipher   |DL Integrity|RB  |          |UL ROHC|UL Cipher   |UL Integrity|UL Primary|Dup      |Split     |
+            |ID|Point      |DL RB Type|Path|Enabled|Algo        |Algo        |Type|UL RB Path|Enabled|Algo        |Algo        |Path      |Activated|Threshold |
+            ----------------------------------------------------------------------------------------------------------------------------------------------------
+            | 1|         NR|       SRB|  NR|  false|          NA|          NA| SRB|        NR|  false|          NA|          NA|      NONE|    false|         0|
+
+
+        """)
+        messages.append(msg)
+
+        json_arr = [{"_packetType": message.packet_type, "_rawPayload": message.packet_text, "_parsedPayload": message.test()} for message in messages]
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        dt_format = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        with open(os.path.join(os.path.dirname(base_path), "temp", f"{dt_format}_parsed.json"), "w") as outfile:
+            json_obj = json.dumps(json_arr, indent=2)
+            outfile.write(json_obj)
+            
+    test_table_parsing()
+    
+if __name__ == "__main__":
+    test_parsing()
