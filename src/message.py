@@ -450,9 +450,14 @@ class ParsedRawMessage:
     INT_REGEX = r'^[-+]?\d+$'
     FLOAT_REGEX = r'^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$'
     
-    def __init__(self, index: int, packet_type: str, packet_length: int, name: str, subtitle: str, datetime: str, packet_text: str):
+    def __init__(self, index: int, packet_type: Any, packet_length: int, name: str, subtitle: str, datetime: str, packet_text: str):
         self.index = index
-        self.packet_type = packet_type
+        if isinstance(packet_type, int):
+            self.packet_type = packet_type
+            self.packet_type_hex = hex(self.packet_type)
+        else: 
+            self.packet_type_hex = packet_type
+            self.packet_type = int(self.packet_type_hex, 16)
         self.packet_length = packet_length
         self.name = name
         self.subtitle = subtitle
@@ -883,7 +888,7 @@ class ParsedRawMessage:
             if _hex_payload(lines):
                return 
             
-            if (self.packet_type.lower() in [
+            if (self.packet_type_hex.lower() in [
                 "0xb97f",
                 "0xb0c0",
                 "0xb0ed",
@@ -1201,7 +1206,7 @@ def test_parsing():
         """)
         messages.append(msg)
 
-        json_arr = [{"_packetType": message.packet_type, "_rawPayload": message.packet_text, "_parsedPayload": message.test()} for message in messages]
+        json_arr = [{"_packetType": message.packet_type_hex, "_rawPayload": message.packet_text, "_parsedPayload": message.test()} for message in messages]
         base_path = os.path.dirname(os.path.abspath(__file__))
         dt_format = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
         with open(os.path.join(os.path.dirname(base_path), "temp", f"{dt_format}_parsed.json"), "w") as outfile:
