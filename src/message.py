@@ -770,11 +770,11 @@ class ParsedRawMessage:
             
             except:
                 # catch any faulty block parsing
-                # pass
+                pass
                 # traceback.print_exc()
-                logging.info(self.index)
-                sys.stdout.flush()
-                sys.stderr.flush()
+                # logging.info(self.index)
+                # sys.stdout.flush()
+                # sys.stderr.flush()
                 
         # parse payloads that are encoded in hex
         def _hex_payload(lines: list[str]):

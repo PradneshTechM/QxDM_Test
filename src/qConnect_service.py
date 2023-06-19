@@ -13,6 +13,7 @@ import eventlet
 from asyncio import Future
 import asyncio
 import argparse
+import json
 
 import quts_lib
 import qcat_lib_win as qcat_lib
@@ -303,6 +304,27 @@ def QCAT_process(sid, data):
   except Exception as e:
     logging.error(e)
     return { 'error': str(e) }
+  
+def get_all_chunks(filepath):
+  all_packets = []
+  suffix = 1
+  while True:
+    chunk_path = f'{filepath}.{suffix}'
+    if os.path.isfile(chunk_path):
+      with open(chunk_path, 'r') as file:
+        try:
+          data = json.load(file)
+          all_packets += data
+        except json.JSONDecodeError:
+          print(f"Error decoding JSON in file: {chunk_path}")
+          sys.stdout.flush()
+          sys.stderr.flush()
+          break
+        finally:
+          suffix += 1
+    else: break
+  return all_packets
+    
 
 @sio.event
 def QCAT_parse_all(sid, data):
@@ -327,15 +349,24 @@ def QCAT_parse_all(sid, data):
     logging.info('QCAT parsing log file')
     
     def parse():
-      parsedJsonArr = qcat_lib.parse_raw_log_json(log_file,
+      packet_count = qcat_lib.parse_raw_log_json(log_file,
                                 json_filepath,
                                 qcat)
-      if not parsedJsonArr:
+      if not packet_count:
         raise Exception(f'QCAT raw JSON parsing failed for log_id: {log_id}')
-      print('QCAT parsed log file')
+      print(f'QCAT parsed log file with {packet_count} packets')
+      sys.stdout.flush()
+      sys.stderr.flush()
+      
+      parsedJsonArr = get_all_chunks(json_filepath)
+      sys.stdout.flush()
+      sys.stderr.flush()
       
       insertLogsResult = db.insert_logs(parsedJsonArr, log_session)
-      print(f'Inserted {len(insertLogsResult.inserted_ids)} to db')
+      print(f'Inserting {len(parsedJsonArr)} to db...')
+      print(f'Inserted {len(insertLogsResult.inserted_ids)} to db!')
+      sys.stdout.flush()
+      sys.stderr.flush()
       
       return_val = {
         'data': {
@@ -344,7 +375,7 @@ def QCAT_parse_all(sid, data):
           'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
           'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
           'jsonFile': json_filepath,
-          'packetCount': len(parsedJsonArr),
+          'packetCount': packet_count,
           'insertedCount': len(insertLogsResult.inserted_ids),
           'status': 'Parsing success',
         }

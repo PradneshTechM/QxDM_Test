@@ -3,8 +3,11 @@ from pathlib import Path
 import random
 import os
 import json
+import sys
+import math
 import csv
 import win32com.client
+from pubsub import pub
 
 import message
 from message import ParsedRawMessage
@@ -72,6 +75,7 @@ class QCAT:
         print(count, 'packets loaded.')
         
     def parse_raw(self, input):
+        CHUNK_SIZE = 10000
         print('Opening log file: ' + input)
         self.qcat.OpenLog(input)
 
@@ -82,6 +86,7 @@ class QCAT:
         print('Loading log packets from log file...')
 
         self.parsed_raw_messages = []
+        parsed_raw_messages = []
 
         count = 0
         while packet:
@@ -94,12 +99,20 @@ class QCAT:
             
             raw_msg = ParsedRawMessage(count, packet_type, packet_length, name, subtitle, datetime, text)
             self.parsed_raw_messages.append(raw_msg)
+            parsed_raw_messages.append(raw_msg)
 
             count += 1
+            if count % CHUNK_SIZE == 0:
+                pub.sendMessage('messages', data={"messages": parsed_raw_messages, "chunk_num": int(count / CHUNK_SIZE)})
+                parsed_raw_messages = []
             if not packet.Next():
                 break
-
+            
+        if count % CHUNK_SIZE != 0:
+            pub.sendMessage('messages', data={"messages": parsed_raw_messages, "chunk_num": math.ceil(count / CHUNK_SIZE)})
+        
         print(count, 'packets loaded.')
+        return count
 
     def set_packet_filter(self, packet_types):
         # get the filter
@@ -253,18 +266,26 @@ def parse_raw_log(input_filename, raw_filename, qcat):
 
 def parse_raw_log_json(input_filename, json_filename, qcat):
     print('QCAT json log parsing started')
+    def messages_listener(data):
+        messages = data["messages"]
+        chunk_num = data["chunk_num"]
+        chunk_file = f'{json_filename}.{chunk_num}'
+        print(f'chunk: {chunk_file}')
+        sys.stdout.flush()
+        sys.stderr.flush()
+        with open(chunk_file, 'w') as f:
+            json_arr = []
+            for raw_msg in messages:
+                json_arr.append(raw_msg.to_json())
+            json.dump(json_arr, f, indent = 2) 
+    
+    pub.subscribe(messages_listener, 'messages')
 
-    qcat.parse_raw(input_filename)
+    total_count = qcat.parse_raw(input_filename)
 
-    with open(json_filename, 'w') as f:
-        json_arr = []
-        for raw_msg in qcat.parsed_raw_messages:
-            json_arr.append(raw_msg.to_json())
-        json.dump(json_arr, f, indent = 2) 
-            
     print('JSON file path:', json_filename)
 
-    return json_arr
+    return total_count
 
 if __name__ == '__main__':
     input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')

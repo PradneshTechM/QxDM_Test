@@ -12,3 +12,4 @@ eventlet
 pywin32
 pymongo
 python-dotenv
+PyPubSub
