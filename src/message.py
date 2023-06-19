@@ -479,16 +479,20 @@ class ParsedRawMessage:
         return ''.join(lines)
     
     def test(self):
-        header, parsed = self.parse_payload()
-        print(header)
-        print(json.dumps(parsed, indent=2))
+        header, parsed, flags = self.parse_payload()
+        val = {
+            "_flags": flags, 
+            **header, 
+            **parsed
+        }
+        print(json.dumps(val, indent=2))
         sys.stdout.flush()
         sys.stderr.flush()
-        return {**header, **parsed}
+        return val
         
     def to_json(self):
         try:
-            header, parsedPayload = self.parse_payload()
+            header, parsedPayload, flags = self.parse_payload()
         except:
             traceback.print_exc()
             logging.info(self.index)
@@ -506,10 +510,15 @@ class ParsedRawMessage:
             "_subtitle": self.subtitle if self.subtitle else "",
             "_rawPayload": self.packet_text,
             "_parserVersion": ParsedRawMessage.VERSION,
+            "_flags": flags,
             **header, **parsedPayload
         }
     
     def parse_payload(self):
+        class TYPE_FLAGS(str, Enum):
+            SINGLE_ROW_TABLE = "SINGLE_ROW_TABLE"
+            MULTI_ROW_TABLE = "MULTI_ROW_TABLE"
+            
         payload = {}
         header = {}
         
@@ -779,6 +788,7 @@ class ParsedRawMessage:
             TABLE_VERTICAL_BOUNDARY_REGEX = r'^\|'
             TABLE_VERTICAL_BOUNDARY = "|"
             
+            flags = {}
             # find a table start and end
             table_name = "TABLE"
             table_start = 0
@@ -870,6 +880,10 @@ class ParsedRawMessage:
                         # parse the rest of the payload (non-table data)
                         _struct_or_generic_parse(lines[0:first_table_start], _obj)
                         generic_parse_done = True
+                    if table_rows_end - table_rows_start >= 2:
+                        flags[table_name] = TYPE_FLAGS.MULTI_ROW_TABLE
+                    else:
+                        flags[table_name] = TYPE_FLAGS.SINGLE_ROW_TABLE
                     _parse_table(lines, _obj)
                     table_name = "TABLE"
                     table_start = 0
@@ -881,9 +895,12 @@ class ParsedRawMessage:
             if not generic_parse_done:
                 # parse the rest of the payload (non-table data) if not already parsed
                 _struct_or_generic_parse(lines[0:first_table_start], _obj)
+                
+            return flags
                     
         # START PARSING
         def _PARSE(lines: list[str], _obj: dict):
+            flags = {}
             # parse payloads that are encoded in hex
             if _hex_payload(lines):
                return 
@@ -910,9 +927,12 @@ class ParsedRawMessage:
                 "0xb887",
                 "0xb825",
             ]):
-               return _tables(lines, _obj)
+                f = _tables(lines, _obj)
+                flags = {**flags, **f}
             # else parse class/struct type data and generic key-value pairs
-            return _struct_or_generic_parse(lines, _obj)
+            else: _struct_or_generic_parse(lines, _obj)
+            
+            return flags
             
         # start here
     
@@ -923,18 +943,18 @@ class ParsedRawMessage:
         # skip first line, because first line content is main content 
         # (packet type, length, etc), and is already parsed  
         # also skip 2nd line because it is payload header
-        _PARSE(raw_lines[2:], payload)
+        flags = _PARSE(raw_lines[2:], payload)
                     
         # parse payload header
         if len(raw_lines) >= 2:
             _key_value_parse([raw_lines[1]], header)
           
-        return header, payload
+        return header, payload, flags
 
 
 class Message:
     def __init__(self, description: str, packet_type: str, subtitle: str,
-                 fields: [Field], must_match_field: bool, saved_values: dict):
+                 fields: List[Field], must_match_field: bool, saved_values: dict):
         '''
         must_match_field: boolean used to indicate that a message MUST contain
             the first field, otherwise, message should not be added. Used to
@@ -1203,6 +1223,32 @@ def test_parsing():
             | 1|         NR|       SRB|  NR|  false|          NA|          NA| SRB|        NR|  false|          NA|          NA|      NONE|    false|         0|
 
 
+        """)
+        messages.append(msg)
+        
+        msg = ParsedRawMessage(index = 0, packet_type = "0xb825", packet_length=100, name="Packet", subtitle="subtitle", datetime="", packet_text=
+        """2023 Jun  6  18:41:24.040  [3E]  0xB825  NR5G RRC Configuration Info
+            Subscription ID = 2
+            Misc ID         = 0
+            Major.Minor Version               = 2. 0
+            Conn Config Info
+            State = IDLE
+            Config Status = true
+            Connectivity Mode = SA
+            Num Active SRB = 0
+            Num Active DRB = 0
+            MN MCG DRB IDs = NONE
+            SN MCG DRB IDs = NONE
+            MN SCG DRB IDs = NONE
+            SN SCG DRB IDs = NONE
+            MN Split DRB IDs = NONE
+            SN Split DRB IDs = NONE
+            LTE Serving Cell Info {
+                Num Bands = 0
+            }
+            Num Contiguous CC Groups = 0
+            Num Active CC = 0
+            Num Active RB = 0
         """)
         messages.append(msg)
 
