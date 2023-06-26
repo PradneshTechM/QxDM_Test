@@ -515,7 +515,7 @@ class ParsedRawMessage:
             **header, **parsedPayload
         }
     
-    def parse_payload(self, parsing_config: dict):
+    def parse_payload(self):
         class TYPE_FLAGS(str, Enum):
             SINGLE_ROW_TABLE = "SINGLE_ROW_TABLE"
             MULTI_ROW_TABLE = "MULTI_ROW_TABLE"
