@@ -8,6 +8,8 @@ import math
 import csv
 import win32com.client
 from pubsub import pub
+from typing import List
+import traceback
 
 import message
 from message import ParsedRawMessage
@@ -98,11 +100,12 @@ class QCAT:
             text = packet.Text
             
             raw_msg = ParsedRawMessage(count, packet_type, packet_length, name, subtitle, datetime, text)
-            self.parsed_raw_messages.append(raw_msg)
+            # self.parsed_raw_messages.append(raw_msg)
             parsed_raw_messages.append(raw_msg)
 
             count += 1
             if count % CHUNK_SIZE == 0:
+                print(count, 'packets loaded.')
                 pub.sendMessage('messages', data={"messages": parsed_raw_messages, "chunk_num": int(count / CHUNK_SIZE)})
                 parsed_raw_messages = []
             if not packet.Next():

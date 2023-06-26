@@ -11,6 +11,7 @@ class DB:
   _DB_USER = os.environ.get("DB_USER")
   _DB_PASS = os.environ.get("DB_PASS")
   _DB_PORT = os.environ.get("DB_PORT")
+  _DB_TABLE = os.environ.get("DB_TABLE") if os.environ.get("DB_TABLE") else "logs"
   
   _DB_CLIENT = None
   _DB_INSTANCE = None
@@ -31,13 +32,13 @@ class DB:
     self._create_indexes()
     
   def _create_indexes(self): 
-    DB._DB_INSTANCE["logs"].create_index([("_server.location", GEO2D)])
+    DB._DB_INSTANCE[DB._DB_TABLE].create_index([("_server.location", GEO2D)])
     
   def get_instance():
     return DB._DB_INSTANCE
 
   def insert_logs(self, logs: list, log_session: LogSession):
-    logs_collection = DB._DB_INSTANCE["logs"]
+    logs_collection = DB._DB_INSTANCE[DB._DB_TABLE]
     
     def deserialize(log): 
       metadata = {}

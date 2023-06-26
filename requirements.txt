@@ -13,3 +13,7 @@ pywin32
 pymongo
 python-dotenv
 PyPubSub
+numpy
+pandas
+pyyaml
+openpyxl
