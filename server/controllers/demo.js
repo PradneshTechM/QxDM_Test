@@ -55,7 +55,7 @@ demoRouter.post('/diag', (request, response) => {
       name: "unknown",
       email: "unknown"
     },
-    appUrl: request.body.appUrl,
+    appUrl: request.body.appUrl ? request.body.appUrl : request.ip || "",
     device: request.body.device ? request.body.device: {}
   }
   if(request.body.mask) {

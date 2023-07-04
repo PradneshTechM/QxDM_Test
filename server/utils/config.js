@@ -18,6 +18,9 @@ const PROTOCOL = NODE_ENV === 'development'
   : 'https'
 const KEY_PATH = process.env.KEY_PATH
 const CERT_PATH = process.env.CERT_PATH
+const QUALCOMM_PATH = process.env.QUALCOMM_PATH
+const QPM_USER = process.env.QPM_USER
+const QPM_PASSWORD = process.env.QPM_PASSWORD
 
 VARIABLES = [
   "KEY_PATH",
@@ -32,7 +35,7 @@ VARIABLES = [
 ]
 
 module.exports = {
-  NODE_ENV, PORT, ADDRESS, DOMAIN, PROTOCOL, KEY_PATH, CERT_PATH
+  NODE_ENV, PORT, ADDRESS, DOMAIN, PROTOCOL, KEY_PATH, CERT_PATH, QUALCOMM_PATH, QPM_USER, QPM_PASSWORD
 }
 
   ; (function createPythonEnv() {

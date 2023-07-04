@@ -3,6 +3,7 @@ const io = require('socket.io-client')
 const logger = require('./utils/logger')
 const path = require('path')
 const config = require('./utils/config')
+const win = require('./utils/win')
 
 let server
 
