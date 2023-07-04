@@ -362,9 +362,10 @@ def QCAT_parse_all(sid, data):
       sys.stdout.flush()
       sys.stderr.flush()
       
-      insertLogsResult = db.insert_logs(parsedJsonArr, log_session)
       print(f'Inserting {len(parsedJsonArr)} to db...')
-      print(f'Inserted {len(insertLogsResult.inserted_ids)} to db!')
+      insertLogsResult = db.insert_logs(parsedJsonArr, log_session)
+      if insertLogsResult:
+        print(f'Inserted {len(insertLogsResult.inserted_ids)} to db!')
       sys.stdout.flush()
       sys.stderr.flush()
       
@@ -376,10 +377,12 @@ def QCAT_parse_all(sid, data):
           'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
           'jsonFile': json_filepath,
           'packetCount': packet_count,
-          'insertedCount': len(insertLogsResult.inserted_ids),
           'status': 'Parsing success',
         }
       }
+      if insertLogsResult:
+        return_val['insertedCount'] = len(insertLogsResult.inserted_ids)
+      print(json.dumps(return_val, indent=2))
       sio.emit("QCAT_parse_done", return_val)
       return return_val
       

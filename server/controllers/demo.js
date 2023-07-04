@@ -213,7 +213,7 @@ demoRouter.post('/logs/:log_id/parse', (request, response) => {
 
   const socket = request.app.get('socketio')
   socket.emit('QCAT_parse_all', data, (res) => {
-    if (res.error) {
+    if (res && res.error) {
       return response.status(400).send(res)
     }
     response.send(res)

@@ -74,13 +74,14 @@ class DB:
     deserialized_logs = list(map(deserialize, logs))
     
     try:
-      result = logs_collection.insert_many(deserialized_logs)
-      print("Inserted logs to db")
-      return result
+      if(len(deserialized_logs) > 0):
+        result = logs_collection.insert_many(deserialized_logs)
+        print("Inserted logs to db")
+        return result
+      else: return
     except BulkWriteError as bwe:
       print(bwe.details)
       print(bwe.details['writeErrors'])
-      raise
     finally:
       sys.stdout.flush()
       sys.stderr.flush()
