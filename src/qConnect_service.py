@@ -7,13 +7,17 @@ import logging
 from pathlib import Path
 from datetime import datetime
 import sys
+import win32com.client
+import pythoncom
 import signal
 import socketio
 import eventlet
 from asyncio import Future
 import asyncio
+import threading
 import argparse
 import json
+from pubsub import pub
 
 import quts_lib
 import qcat_lib_win as qcat_lib
@@ -305,27 +309,11 @@ def QCAT_process(sid, data):
     logging.error(e)
     return { 'error': str(e) }
   
-def get_all_chunks(filepath):
-  all_packets = []
-  suffix = 1
-  while True:
-    chunk_path = f'{filepath}.{suffix}'
-    if os.path.isfile(chunk_path):
-      with open(chunk_path, 'r') as file:
-        try:
-          data = json.load(file)
-          all_packets += data
-        except json.JSONDecodeError:
-          print(f"Error decoding JSON in file: {chunk_path}")
-          sys.stdout.flush()
-          sys.stderr.flush()
-          break
-        finally:
-          suffix += 1
-    else: break
-  return all_packets
-    
-
+def parse_in_background(log_id, log_session, log_file, json_filepath):
+  qc = win32com.client.Dispatch("QCAT6.Application")
+  worker = qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath)
+  worker.start()
+  
 @sio.event
 def QCAT_parse_all(sid, data):
   if not qcat:
@@ -348,58 +336,17 @@ def QCAT_parse_all(sid, data):
     # call QCAT library on the log file which needs parsing
     logging.info('QCAT parsing log file')
     
-    def parse():
-      packet_count = qcat_lib.parse_raw_log_json(log_file,
-                                json_filepath,
-                                qcat)
-      if not packet_count:
-        raise Exception(f'QCAT raw JSON parsing failed for log_id: {log_id}')
-      print(f'QCAT parsed log file with {packet_count} packets')
-      sys.stdout.flush()
-      sys.stderr.flush()
-      
-      parsedJsonArr = get_all_chunks(json_filepath)
-      sys.stdout.flush()
-      sys.stderr.flush()
-      
-      print(f'Inserting {len(parsedJsonArr)} to db...')
-      insertLogsResult = db.insert_logs(parsedJsonArr, log_session)
-      if insertLogsResult:
-        print(f'Inserted {len(insertLogsResult.inserted_ids)} to db!')
-      sys.stdout.flush()
-      sys.stderr.flush()
-      
-      return_val = {
-        'data': {
-          'id': log_sessions[log_id].id,
-          'log_id': log_id,
-          'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
-          'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
-          'jsonFile': json_filepath,
-          'packetCount': packet_count,
-          'status': 'Parsing success',
-        }
+    parse_in_background(log_id, log_session, log_file, json_filepath)
+    
+    return {
+      'data': {
+        'id': log_sessions[log_id].id,
+        'log_id': log_id,
+        'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
+        'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
+        'status': 'Parsing started',
       }
-      if insertLogsResult:
-        return_val['insertedCount'] = len(insertLogsResult.inserted_ids)
-      print(json.dumps(return_val, indent=2))
-      sio.emit("QCAT_parse_done", return_val)
-      return return_val
-      
-    # asyncio.create_task(parse())
-    
-    return parse()
-    
-    # return {
-    #   'data': {
-    #     'id': log_sessions[log_id].id,
-    #     'log_id': log_id,
-    #     'startLogTimestamp': log_session.start_log_timestamp.isoformat(),
-    #     'endLogTimestamp': log_session.end_log_timestamp.isoformat(),
-    #     'jsonFile': json_filepath,
-    #     'status': 'Parsing started',
-    #   }
-    # }
+    }
     
     # DISABLE TEXT PARSING 
     # parsedText = qcat_lib.parse_raw_log(log_file,

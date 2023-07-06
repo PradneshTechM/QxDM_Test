@@ -37,7 +37,7 @@ class DB:
   def get_instance():
     return DB._DB_INSTANCE
 
-  def insert_logs(self, logs: list, log_session: LogSession):
+  def insert_logs(logs: list, log_session: LogSession):
     logs_collection = DB._DB_INSTANCE[DB._DB_TABLE]
     
     def deserialize(log): 
@@ -76,7 +76,6 @@ class DB:
     try:
       if(len(deserialized_logs) > 0):
         result = logs_collection.insert_many(deserialized_logs)
-        print("Inserted logs to db")
         return result
       else: return
     except BulkWriteError as bwe:
