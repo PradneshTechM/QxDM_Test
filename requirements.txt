@@ -1,3 +1,4 @@
+setuptools
 xvfbwrapper
 psutil
 pydbus
