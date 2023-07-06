@@ -1,16 +1,18 @@
 xvfbwrapper
 psutil
 pydbus
-pycairo==1.19.1
-PyGObject==3.30.0
+# pycairo==1.19.1
+# PyGObject==3.30.0
 grpcio
 grpcio-tools
 Appium-Python-Client
 requests
+socketio
 python-socketio
 eventlet
 pywin32
 pymongo
+load_dotenv
 python-dotenv
 PyPubSub
 numpy
