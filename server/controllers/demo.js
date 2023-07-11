@@ -61,6 +61,9 @@ demoRouter.post('/diag', (request, response) => {
   if(request.body.mask) {
     data.mask = request.body.mask
   }
+  if(request.body.config) {
+    data.config = request.body.config
+  }
 
   const socket = request.app.get('socketio')
   socket.emit('QUTS_diag_connect', data, (res) => {

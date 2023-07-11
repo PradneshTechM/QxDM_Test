@@ -12,6 +12,7 @@ from typing import List
 import traceback
 import pythoncom
 import threading
+import yaml
 
 import message
 from message import ParsedRawMessage
@@ -141,6 +142,7 @@ class QCAT:
 
 class QCATWorker(threading.Thread):
     qcat_worker = None
+    packet_config = None
     
     def __init__(self, qcat, log_id, log_session, log_file, json_filepath):
         threading.Thread.__init__(self)
@@ -148,12 +150,47 @@ class QCATWorker(threading.Thread):
         
         self.qcat = qcat 
         self.log_id = log_id
-        self.log_session = log_session
         self.log_file = log_file
         self.json_filepath = json_filepath
+        self.log_session = log_session
+        self.config_file = self.log_session.config_file
+        self.packet_types = []
+        if self.config_file:
+            self.packet_config = {}
+            self.parse_config()
+            # print(json.dumps(self.packet_config, indent=2))
         
         self.marshalled_qcat = pythoncom.CoMarshalInterThreadInterfaceInStream(pythoncom.IID_IDispatch, self.qcat)
 
+    def parse_config(self):
+        try:
+            with open(self.config_file, 'r') as f:
+                unparsed_config = yaml.load(f, Loader=yaml.FullLoader)
+                for key, value in unparsed_config.items():
+                    splited_key = key.split("--")
+                    packet_type, packet_name = splited_key[:2]
+                    packet_name = packet_name.strip()
+                    packet_type = packet_type.strip()
+                    packet_subtitle = None
+                    if len(splited_key) > 2: packet_subtitle = splited_key[2].strip()
+                    val = {
+                        "packet_type": packet_type.lower(),
+                        "packet_name": packet_name.strip(),
+                        "fields": value
+                    }
+                    if packet_subtitle:
+                        val["packet_subtitle"] = packet_subtitle
+                        key = packet_type + " -- " + packet_subtitle
+                    else:
+                        key = packet_type
+                    key = key.strip()
+                    self.packet_config[key] = val
+                    self.packet_types.append(val["packet_type"])
+        except:
+            traceback.print_exc()
+            sys.stderr.flush()
+            sys.stdout.flush()
+    
     def run(self) -> None:
         pythoncom.CoInitialize()
         self.qcat_worker = win32com.client.Dispatch(
@@ -198,64 +235,100 @@ class QCATWorker(threading.Thread):
 
         print('Loading log packets from log file...')
 
-        self.parsed_raw_messages = []
-
-        self.count = 0
+        raw_messages = []
+        
+        index = 0
+        total_count = 0
         while packet:
+            packet_type = packet.Type
+            if len(self.packet_types) > 0 and hex(packet_type).lower() not in self.packet_types:
+                index += 1
+                if index % CHUNK_SIZE == 0:
+                    print(total_count, 'packets loaded to parse.')
+                    print(index, 'packets walked over.')
+                    sys.stdout.flush()
+                if not packet.Next():
+                    break
+                else:
+                    continue
+                
             name = packet.Name
             subtitle = packet.Subtitle
             datetime = packet.TimestampAsString
-            packet_type = packet.Type
             packet_length = packet.Length
             text = packet.Text
             
-            raw_msg = ParsedRawMessage(self.count, packet_type, packet_length, name, subtitle, datetime, text)
-            self.parsed_raw_messages.append(raw_msg)
+            raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetime, text)
+            raw_msg.packet_config = self.packet_config
+            raw_messages.append(raw_msg)
 
-            self.count += 1
-            if self.count % CHUNK_SIZE == 0:
-                print(self.count, 'packets loaded.')
-                pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": self.parsed_raw_messages, "chunk_num": int(self.count / CHUNK_SIZE)})
-                self.parsed_raw_messages = []
+            index += 1
+            total_count += 1
+            if index % CHUNK_SIZE == 0:
+                print(total_count, 'packets loaded to parse.')
+                sys.stdout.flush()
+                pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": int(index / CHUNK_SIZE)})
+                raw_messages = []
+                
             if not packet.Next():
                 break
             
-        if self.count % CHUNK_SIZE != 0:
-            pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": self.parsed_raw_messages, "chunk_num": math.ceil(self.count / CHUNK_SIZE)})
+        if index % CHUNK_SIZE != 0:
+            pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": math.ceil(index / CHUNK_SIZE)})
         
-        print(self.count, 'packets loaded.')
-        return self.count
+        print(index, 'packets walked over.')
+        sys.stdout.flush()
+        return total_count 
     
     def parse_raw_log_json(self):
         print('QCAT json log parsing started')
         def messages_listener(data):
-            messages = data["messages"]
-            chunk_num = data["chunk_num"]
-            log_id = data["log_id"]
-            chunk_file = f'{self.json_filepath}.{chunk_num}'
-            # parse to json
-            json_arr = []
-            for raw_msg in messages:
-                json_arr.append(raw_msg.to_json())
-            with open(chunk_file, 'w') as f:
-                json.dump(json_arr, f, indent = 2) 
+            try:
+                messages = data["messages"]
+                chunk_num = data["chunk_num"]
+                log_id = data["log_id"]
+                chunk_file = f'{self.json_filepath}.{chunk_num}'
                 
-            print(f'Inserting chunk {chunk_num} for log {log_id} with {len(json_arr)} packets to db...')
-            sys.stdout.flush()
-            sys.stderr.flush()
-            insertLogsResult = DB.insert_logs(json_arr, self.log_session)
-            if insertLogsResult:
-                print(f'Inserted {len(insertLogsResult.inserted_ids)}')
+                # parse to json
+                json_arr = []
+                for raw_msg in messages:
+                    payload, metadata = raw_msg.to_json()
+                    
+                    # seperate possible table rows into separate entries
+                    if "TABLE" in payload and isinstance(payload["TABLE"], list):
+                        for item in payload["TABLE"]:
+                            json_arr.append({
+                                **metadata,
+                                **item
+                            })
+                    else:
+                        json_arr.append({
+                            **metadata,
+                            **payload
+                        })
+                    
+                # stop writing chunks to json file since we're proactively inserting to db
+                # with open(chunk_file, 'w') as f:
+                #     json.dump(json_arr, f, indent = 2) 
+                    
+                if len(json_arr) > 0:
+                    print(f'Inserting chunk {chunk_num} for log {log_id} with {len(json_arr)} packets to db...')
+                    sys.stdout.flush()
+                    insertLogsResult = DB.insert_logs(json_arr, self.log_session)
+                    if insertLogsResult:
+                        print(f'Inserted {len(insertLogsResult.inserted_ids)}')
+                        sys.stdout.flush()
+                        
+            except:
+                traceback.print_exc()
                 sys.stdout.flush()
                 sys.stderr.flush()
         
         pub.subscribe(messages_listener, self.log_id)
-
-        self.parsed_raw_messages = []
         total_count = self.parse_raw(self.log_file)
         pub.unsubscribe(messages_listener, self.log_id)
         
-        print(f'Inserted a total of {total_count} packets for log {self.log_id} to db!')
+        print(f'Successfuly parsed a total of {total_count} packets for log {self.log_id}!')
         sys.stdout.flush()
         sys.stderr.flush()
 
@@ -412,29 +485,6 @@ def parse_raw_log(input_filename, raw_filename, qcat):
     print('raw messages:', raw_filename)
 
     return True
-
-def parse_raw_log_json(input_filename, json_filename, qcat):
-    print('QCAT json log parsing started')
-    def messages_listener(data):
-        messages = data["messages"]
-        chunk_num = data["chunk_num"]
-        chunk_file = f'{json_filename}.{chunk_num}'
-        print(f'chunk: {chunk_file}')
-        sys.stdout.flush()
-        sys.stderr.flush()
-        with open(chunk_file, 'w') as f:
-            json_arr = []
-            for raw_msg in messages:
-                json_arr.append(raw_msg.to_json())
-            json.dump(json_arr, f, indent = 2) 
-    
-    pub.subscribe(messages_listener, 'messages')
-
-    total_count = qcat.parse_raw(input_filename)
-
-    print('JSON file path:', json_filename)
-
-    return total_count
 
 if __name__ == '__main__':
     input_filename = os.path.abspath('/home/techm/Desktop/QXDM_Log.isf')

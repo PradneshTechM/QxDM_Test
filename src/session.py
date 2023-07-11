@@ -21,6 +21,7 @@ class Session:
 class LogSession(Session):
   log_id: str = None
   mask_file: str = None
+  config_file: str = None
   raw_logs: List[str] = None
   validated_logs: List[str] = None
   test_case: TestCase = None

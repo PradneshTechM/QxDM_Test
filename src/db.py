@@ -56,6 +56,8 @@ class DB:
         metadata["_endLogTimestamp"] = log_session.end_log_timestamp
       if log_session.mask_file:
         metadata["_maskFile"] = log_session.mask_file
+      if log_session.config_file:
+        metadata["_configFile"] = log_session.config_file
       metadata["_filePath"] = log_session.raw_logs[0]
       if log_session.device:
         metadata["_server"] = {

@@ -80,6 +80,7 @@ def QUTS_diag_connect(sid, data):
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']
         logging.info(f'Using mask file {mask_file}')
+        sys.stdout.flush()
         diag_service = quts.diag_connect(serial, mask_file)
       else:
         diag_service = quts.diag_connect(serial)
@@ -93,6 +94,11 @@ def QUTS_diag_connect(sid, data):
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']
         sessions[id].mask_file = mask_file
+      if 'config' in data and data['config'] is not None:
+        config_file = data['config']
+        logging.info(f'Using config file {config_file}')
+        sys.stdout.flush()
+        sessions[id].config_file = config_file
       
       return {
         'data': {

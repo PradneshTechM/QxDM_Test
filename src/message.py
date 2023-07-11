@@ -7,6 +7,7 @@ import json
 import os
 import datetime
 from typing import List, Tuple, Any, Dict
+import yaml
 
 
 class ValidationType(Enum):
@@ -450,6 +451,8 @@ class ParsedRawMessage:
     INT_REGEX = r'^[-+]?\d+$'
     FLOAT_REGEX = r'^[-+]?[0-9]*\.[0-9]+([eE][-+]?[0-9]+)?$'
     
+    packet_config = None
+    
     def __init__(self, index: int, packet_type: Any, packet_length: int, name: str, subtitle: str, datetime: str, packet_text: str):
         self.index = index
         if isinstance(packet_type, int):
@@ -479,10 +482,9 @@ class ParsedRawMessage:
         return ''.join(lines)
     
     def test(self):
-        header, parsed, flags = self.parse_payload()
+        parsed, flags = self.parse_payload()
         val = {
             "_flags": flags, 
-            **header, 
             **parsed
         }
         print(json.dumps(val, indent=2))
@@ -492,16 +494,15 @@ class ParsedRawMessage:
         
     def to_json(self):
         try:
-            header, parsedPayload, flags = self.parse_payload()
+            parsedPayload, flags = self.parse_payload()
         except:
             traceback.print_exc()
             logging.info(self.index)
             sys.stdout.flush()
             sys.stderr.flush()
-            header = {}
             parsedPayload = {}
             flags = {}
-        return {
+        return parsedPayload, {
             "_index": self.index,
             "_packetType": hex(int(self.packet_type)),
             "_packetTypeInt": int(self.packet_type),
@@ -512,7 +513,6 @@ class ParsedRawMessage:
             "_rawPayload": self.packet_text,
             "_parserVersion": ParsedRawMessage.VERSION,
             "_flags": flags,
-            **header, **parsedPayload
         }
     
     def parse_payload(self):
@@ -520,8 +520,30 @@ class ParsedRawMessage:
             SINGLE_ROW_TABLE = "SINGLE_ROW_TABLE"
             MULTI_ROW_TABLE = "MULTI_ROW_TABLE"
             
+        TABLE_PACKET_TYPES = [
+            "0xb97f",
+            "0xb0c0",
+            "0xb0ed",
+            "0xb0ec",
+            "0xb0e2",
+            "0xb0e3",
+            "0xb821",
+            "0xb814",
+            "0xb80b",
+            "0xb809",
+            "0xb808",
+            "0xb80a",
+            "0xb801",
+            "0xb800",
+            "0xb14d",
+            "0xb8a7",
+            "0xb193",
+            "0xb173",
+            "0xb887",
+            "0xb825",
+        ]
+            
         payload = {}
-        header = {}
         
         #################################
         # HELPER METHODS
@@ -957,6 +979,60 @@ class ParsedRawMessage:
                 else:
                     current_dict[key] = {}
                     stack.append(current_dict[key])
+        
+        def _apply_parsing_config(_obj: dict, _flags: dict) -> dict:
+            packet_type_hex = "0x" + self.packet_type_hex[2:].upper()
+            packet_type = (
+                            packet_type_hex + " -- " + self.subtitle 
+                            if self.subtitle and len(self.subtitle) > 0 
+                            else packet_type_hex
+                        )
+            output = {}
+            if packet_type in self.packet_config:
+                parsing_config_type = self.packet_config[packet_type]
+                for key, value in parsing_config_type["fields"].items():
+                    if "." in key:
+                        key_parts = key.split(".")
+                        curr_obj = _obj
+                        final_key_part = ""
+                        for key_part in key_parts:
+                            if key_part in curr_obj:
+                                curr_obj = curr_obj[key_part]
+                                final_key_part = key_part
+                        if key_parts[-1:][0] == final_key_part:
+                            output[final_key_part] = curr_obj
+                    else:
+                        if isinstance(value, list):
+                            if key in _flags:
+                                if _flags[key] == TYPE_FLAGS.MULTI_ROW_TABLE:
+                                    arr = []
+                                    for entry in _obj[key]:
+                                        new_entry = {**output}
+                                        for record in value:
+                                            k_record = list(record.keys())[0]
+                                            new_entry[k_record] = entry[k_record]
+                                        arr.append(new_entry)
+                                    if len(arr) > 0:
+                                        output = arr
+                                else:
+                                    for record in value:
+                                        k_record = list(record.keys())[0]
+                                        if k_record in _obj[key][0]:
+                                            output[k_record] = _obj[key][0][k_record]
+                            else:
+                                continue
+                        else:
+                            if key in _obj:
+                                output[key] = _obj[key]
+                
+                _obj.clear()
+                if isinstance(output, list):
+                    _obj["TABLE"] = output
+                else:
+                    _obj.update(output)
+            else:
+                _obj.clear()
+                            
         # START PARSING
         def _PARSE(lines: list[str], _obj: dict):
             flags = {}
@@ -964,32 +1040,14 @@ class ParsedRawMessage:
             if _hex_payload(lines):
                return 
             
-            if (self.packet_type_hex.lower() in [
-                "0xb97f",
-                "0xb0c0",
-                "0xb0ed",
-                "0xb0ec",
-                "0xb0e2",
-                "0xb0e3",
-                "0xb821",
-                "0xb814",
-                "0xb80b",
-                "0xb809",
-                "0xb808",
-                "0xb80a",
-                "0xb801",
-                "0xb800",
-                "0xb14d",
-                "0xb8a7",
-                "0xb193",
-                "0xb173",
-                "0xb887",
-                "0xb825",
-            ]):
+            if (self.packet_type_hex.lower() in TABLE_PACKET_TYPES):
                 f = _tables(lines, _obj)
                 flags = {**flags, **f}
             # else parse class/struct type data and generic key-value pairs
             else: _struct_or_generic_parse(lines, _obj)
+            
+            if self.packet_config:
+                _apply_parsing_config(_obj, flags)
             
             return flags
             
@@ -1003,11 +1061,7 @@ class ParsedRawMessage:
         # (packet type, length, etc), and is already parsed  
         flags = _PARSE(raw_lines[1:], payload)
                     
-        # parse payload header
-        # if len(raw_lines) >= 2:
-        #     _key_value_parse([raw_lines[1]], header)
-          
-        return header, payload, flags
+        return payload, flags
 
 
 class Message:
@@ -1092,12 +1146,37 @@ class Message:
 
 # MANUAL PARSING TEST
 def test_parsing():
+    def parse_config(config_file):
+        packet_config = {}
+        with open(config_file, 'r') as f:
+            unparsed_config = yaml.load(f, Loader=yaml.FullLoader)
+            for key, value in unparsed_config.items():
+                splited_key = key.split("--")
+                packet_type, packet_name = splited_key[:2]
+                packet_name = packet_name.strip()
+                packet_type = packet_type.strip()
+                packet_subtitle = None
+                if len(splited_key) > 2: packet_subtitle = splited_key[2].strip()
+                val = {
+                    "packet_type": packet_type.lower(),
+                    "packet_name": packet_name.strip(),
+                    "fields": value
+                }
+                if packet_subtitle:
+                    val["packet_subtitle"] = packet_subtitle
+                    key = packet_type + " -- " + packet_subtitle
+                else:
+                    key = packet_type
+                key = key.strip()
+                packet_config[key] = val
+        return packet_config
+    
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
 
-        msg = ParsedRawMessage(index = 0, packet_type = "0xB193", packet_length=100, name="Unrecognized", subtitle="", datetime="", packet_text=
-"""2023 Jun 16  20:16:42.611  [EB]  0xB193  Unrecognized\r\nSubscription ID = 1\r\n\tThis packet is currently not supported.\r\n""")
-        messages.append(msg)
+#         msg = ParsedRawMessage(index = 0, packet_type = "0xB193", packet_length=100, name="Unrecognized", subtitle="", datetime="", packet_text=
+# """2023 Jun 16  20:16:42.611  [EB]  0xB193  Unrecognized\r\nSubscription ID = 1\r\n\tThis packet is currently not supported.\r\n""")
+#         messages.append(msg)
 
 #         msg = ParsedRawMessage(index = 0, packet_type = "0xB80B", packet_length=100, name="NR5G NAS MM5G Plain OTA Outgoing Msg", subtitle="Registration request", datetime="", packet_text=
 # """2023 Jun  8  21:16:17.494  [CC]  0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg  --  Registration request
@@ -2241,6 +2320,9 @@ def test_parsing():
 #         """)
 #         messages.append(msg)
 
+        conf = parse_config("C:\\Users\\tmreddemo07\\Documents\\tmdc\\storage\\qxdm_mask_files\\charter.yaml")
+        for message in messages:
+            message.packet_config = conf
         json_arr = [{"_packetType": message.packet_type_hex, "_rawPayload": message.packet_text, "_parsedPayload": message.test()} for message in messages]
         base_path = os.path.dirname(os.path.abspath(__file__))
         dt_format = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
