@@ -43,6 +43,8 @@ class DB:
     def deserialize(log): 
       metadata = {}
       metadata["_logID"] = log_session.log_id
+      if log_session.test_case_id:
+        metadata["_testCaseID"] = log_session.test_case_id
       metadata["_device"] = {
         "serial": log_session.serial,
         "manufacturer": log_session.device["manufacturer"] if log_session.device and "manufacturer" in log_session.device else "",
@@ -55,10 +57,10 @@ class DB:
       if log_session.end_log_timestamp:
         metadata["_endLogTimestamp"] = log_session.end_log_timestamp
       if log_session.mask_file:
-        metadata["_maskFile"] = log_session.mask_file
+        metadata["_maskFile"] = os.path.basename(log_session.mask_file)
       if log_session.config_file:
-        metadata["_configFile"] = log_session.config_file
-      metadata["_filePath"] = log_session.raw_logs[0]
+        metadata["_configFile"] = os.path.basename(log_session.config_file)
+      metadata["_filePath"] = os.path.basename(log_session.raw_logs[0])
       if log_session.device:
         metadata["_server"] = {
           "url": log_session.app_url,

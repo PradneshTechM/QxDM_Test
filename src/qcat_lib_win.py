@@ -148,19 +148,24 @@ class QCATWorker(threading.Thread):
         threading.Thread.__init__(self)
         super().__init__()
         
-        self.qcat = qcat 
-        self.log_id = log_id
-        self.log_file = log_file
-        self.json_filepath = json_filepath
-        self.log_session = log_session
-        self.config_file = self.log_session.config_file
-        self.packet_types = []
-        if self.config_file:
-            self.packet_config = {}
-            self.parse_config()
-            # print(json.dumps(self.packet_config, indent=2))
-        
-        self.marshalled_qcat = pythoncom.CoMarshalInterThreadInterfaceInStream(pythoncom.IID_IDispatch, self.qcat)
+        try:
+            self.qcat = qcat 
+            self.log_id = log_id
+            self.log_file = log_file
+            self.json_filepath = json_filepath
+            self.log_session = log_session
+            self.config_file = self.log_session.config_file
+            self.packet_types = []
+            if self.config_file:
+                self.packet_config = {}
+                self.parse_config()
+                # print(json.dumps(self.packet_config, indent=2))
+            
+            self.marshalled_qcat = pythoncom.CoMarshalInterThreadInterfaceInStream(pythoncom.IID_IDispatch, self.qcat)
+        except:
+            traceback.print_exc()
+            sys.stdout.flush()
+            raise
 
     def parse_config(self):
         try:

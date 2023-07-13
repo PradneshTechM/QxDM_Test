@@ -17,9 +17,10 @@ const generateShortId = (bytes) => {
 }
 
 const pythonServicePath = path.join(__dirname, '..', '..', 'src', 'qConnect_service.py')
+const pythonExcecPath = path.join(__dirname, '..', '..', 'venv', 'Scripts', 'python.exe')
 
 const defaults = { cwd: path.parse(pythonServicePath).dir }
-const pythonProgram = spawn('python', [pythonServicePath, "--env", config.NODE_ENV], defaults)
+const pythonProgram = spawn(pythonExcecPath, [pythonServicePath, "--env", config.NODE_ENV], defaults)
 
 pythonProgram.stdout.on('data', (data) => {
   const message = data.toString()
@@ -63,6 +64,9 @@ demoRouter.post('/diag', (request, response) => {
   }
   if(request.body.config) {
     data.config = request.body.config
+  }
+  if(request.body.testCaseID) {
+    data.testCaseID = request.body.testCaseID
   }
 
   const socket = request.app.get('socketio')

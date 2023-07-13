@@ -99,6 +99,12 @@ def QUTS_diag_connect(sid, data):
         logging.info(f'Using config file {config_file}')
         sys.stdout.flush()
         sessions[id].config_file = config_file
+        
+      if 'testCaseID' in data and data['testCaseID'] is not None:
+        test_case_id = data['testCaseID']
+        logging.info(f'Test case: {test_case_id}')
+        sys.stdout.flush()
+        sessions[id].test_case_id = test_case_id
       
       return {
         'data': {

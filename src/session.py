@@ -25,6 +25,7 @@ class LogSession(Session):
   raw_logs: List[str] = None
   validated_logs: List[str] = None
   test_case: TestCase = None
+  test_case_id: str = None
 
 class ATSession(Session):
   pass
