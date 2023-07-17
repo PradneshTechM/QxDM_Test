@@ -3,8 +3,6 @@ import os
 from pymongo import MongoClient, GEO2D
 from pymongo.errors import BulkWriteError
 
-from session import LogSession
-
 class DB:
   _DB_NAME = os.environ.get("DB_NAME") if os.environ.get("DB_NAME") else "qxdm_dev"
   _DB_HOST = os.environ.get("DB_HOST")
@@ -36,9 +34,16 @@ class DB:
     
   def get_instance():
     return DB._DB_INSTANCE
+  
+  def get_default_client():
+    return DB._DB_CLIENT
 
-  def insert_logs(logs: list, log_session: LogSession):
-    logs_collection = DB._DB_INSTANCE[DB._DB_TABLE]
+  def insert_logs(logs: list, log_session):
+    if log_session.collection:
+      logs_collection = log_session.db_instance[log_session.collection]
+    else:
+      logs_collection = log_session.db_instance[DB._DB_TABLE]
+      
     
     def deserialize(log): 
       metadata = {}

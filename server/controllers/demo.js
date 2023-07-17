@@ -68,6 +68,12 @@ demoRouter.post('/diag', (request, response) => {
   if(request.body.testCaseID) {
     data.testCaseID = request.body.testCaseID
   }
+  if(request.body.db) {
+    data.db = request.body.db
+  }
+  if(request.body.collection) {
+    data.collection = request.body.collection
+  }
 
   const socket = request.app.get('socketio')
   socket.emit('QUTS_diag_connect', data, (res) => {

@@ -1,7 +1,12 @@
 import dataclasses
+import sys
 from datetime import datetime
 from typing import List, Any
 from enum import Enum
+from pymongo import MongoClient, GEO2D
+import traceback
+
+from db import DB
 
 class TestCase(Enum):
   TC1 = 0
@@ -26,6 +31,24 @@ class LogSession(Session):
   validated_logs: List[str] = None
   test_case: TestCase = None
   test_case_id: str = None
-
+  db: str = None
+  collection: str = None
+  db_client: MongoClient = None
+  
+  def init_db_connection(self):
+    self.db_client = DB.get_default_client()
+    try:
+      print("Initializing database connection")
+      sys.stdout.flush()
+      if self.db: 
+        self.db_instance = self.db_client.get_database(self.db)
+        print(self.db_instance)
+        sys.stdout.flush()
+      else:
+        self.db_instance = DB.get_instance()
+    except:
+      traceback.print_exc()
+      sys.stdout.flush()
+      
 class ATSession(Session):
   pass

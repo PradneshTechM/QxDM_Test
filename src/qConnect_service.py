@@ -91,6 +91,7 @@ def QUTS_diag_connect(sid, data):
         raise Exception(f'Could not connect {serial} diag')
       
       sessions[id] = LogSession(id, serial, service=diag_service, user=user, app_url=app_url, device=device)
+      
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']
         sessions[id].mask_file = mask_file
@@ -105,6 +106,18 @@ def QUTS_diag_connect(sid, data):
         logging.info(f'Test case: {test_case_id}')
         sys.stdout.flush()
         sessions[id].test_case_id = test_case_id
+        
+      if 'db' in data and data['db'] is not None:
+        logging.info(f'Using database: {data["db"]}')
+        sys.stdout.flush()
+        sessions[id].db = data['db']
+        
+      if 'collection' in data and data['collection'] is not None:
+        logging.info(f'Using collection: {data["collection"]}')
+        sys.stdout.flush()
+        sessions[id].collection = data["collection"]
+        
+      sessions[id].init_db_connection()
       
       return {
         'data': {
