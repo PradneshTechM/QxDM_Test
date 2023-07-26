@@ -3,7 +3,8 @@ const io = require('socket.io-client')
 const logger = require('./utils/logger')
 const path = require('path')
 const config = require('./utils/config')
-const win = require('./utils/win')
+// disable QPM autolaunch
+// const win = require('./utils/win')
 
 let server
 
@@ -27,7 +28,7 @@ server.listen(config.PORT, serverAddr, () => {
   logger.info(`qConnect server now listening for requests at ${config.PROTOCOL}://${serverAddr}:${config.PORT}`)
 })
 
-const socketAddr = config.NODE_ENV == 'development' ? `http://localhost:6001` : `${config.PROTOCOL}://${config.ADDRESS}:6001`
+const socketAddr = config.NODE_ENV == 'development' ? `http://localhost:6001` : `http://${config.ADDRESS}:6001`
 const socket = io(socketAddr)
 app.set('socketio', socket)
 

@@ -581,12 +581,13 @@ def main():
   listen = eventlet.listen(('', 6001))
   eventlet.wsgi.server(
     (
-      listen if args.env == "development" else ( eventlet.wrap_ssl(
-        listen, 
-        certfile=_CERT_PATH,
-        keyfile=_KEY_PATH,
-        server_side=True
-      ))
+      listen 
+        # if args.env == "development" else ( eventlet.wrap_ssl(
+        #   listen, 
+        #   certfile=_CERT_PATH,
+        #   keyfile=_KEY_PATH,
+        #   server_side=True
+        # ))
     ), app
   )
 
