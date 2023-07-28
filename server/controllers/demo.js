@@ -44,8 +44,6 @@ const handleErrors = (message) => {
 demoRouter.post('/diag', (request, response) => {
   // starts logging
   // socket.io usage: https://stackoverflow.com/a/43685951
-  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
-  
   if (request.body.serial === undefined) {
     return response.status(400).send({ error : 'missing serial' })
   }
@@ -86,8 +84,6 @@ demoRouter.post('/diag', (request, response) => {
 })
 
 demoRouter.delete('/diag/:id', (request, response) => {
-  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
-
   const data = {
     id: request.params.id,
   }
@@ -104,8 +100,6 @@ demoRouter.delete('/diag/:id', (request, response) => {
 
 demoRouter.post('/logs', (request, response) => {
   // starts logging
-  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
-
   if (request.body.id === undefined) {
     return response.status(400).send({ error : 'missing id' })
   }
@@ -127,8 +121,6 @@ demoRouter.post('/logs', (request, response) => {
 
 demoRouter.delete('/logs/:log_id', (request, response) => {
   // stops logging
-  request.setTimeout(DEFAULT_LOG_REQUEST_TIMEOUT)
-
   const data = {
     log_id: request.params.log_id,
   }
