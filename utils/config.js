@@ -12,7 +12,7 @@ const DOMAIN = process.env.DOMAIN != undefined
   : '0.0.0.0'
 const FREQUENCY = process.env.FREQUENCY != undefined
   ? process.env.FREQUENCY
-  : 2
+  : 20
 const PROTOCOL = NODE_ENV === 'development'
   ? 'http'
   : 'https'

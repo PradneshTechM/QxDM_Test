@@ -6,6 +6,7 @@ const socket = require('socket.io')
 const appiumManager = require('./appium-manager')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
+const adbutil = require('./utils/adbutil')
 const path = require('path')
 
 const app = express()
@@ -56,7 +57,16 @@ async function cleanUpExistingServers() {
 
 // manages Appium server every frequency seconds
 function manageServers() {
-  setInterval(() => appiumManager.manage(), config.FREQUENCY * 1000)
+  setInterval(async () => {
+    try {
+      appiumManager.manage()
+    }
+    catch (err) {
+      logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
+      await adbutil.restartProcess()
+      appiumManager.manage()
+    }
+  }, config.FREQUENCY * 1000)
 }
 
 cleanUpExistingServers().then(() => manageServers())
