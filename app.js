@@ -75,4 +75,8 @@ cleanUpExistingServers().then(() => manageServers())
 server.listen(config.PORT, config.ADDRESS, function () {
   logger.info(`Appium Manager Server now listening for requests at ${config.PROTOCOL}://${config.ADDRESS}:${config.PORT}`)
   logger.info(`Appium Manager Server updating every ${config.FREQUENCY} seconds`)
-})
+}).on('error', (err) => {
+  logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
+  adbutil.solveAddressInUse(config.PORT)
+});
+

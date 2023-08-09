@@ -4,7 +4,15 @@ const fs = require('fs')
 const logger = require('./utils/logger')
 const adb = require('adbkit')
 const config = require('./utils/config')
-const client = adb.createClient({host: config.ADB_HOST,port: config.ADB_PORT})
+let client
+try {
+  client = adb.createClient({host: config.ADB_HOST,port: config.ADB_PORT})
+} catch (err) {
+  logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
+  adbutil.restartProcess().then(() => {
+    client = adb.createClient({host: config.ADB_HOST,port: config.ADB_PORT})
+  })
+}
 
 const MAX_DEVICES = 15
 const PORT_START = 4723

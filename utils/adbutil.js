@@ -123,7 +123,20 @@ const restartProcess = async () => {
   }
 };
 
+const solveAddressInUse = async (port) => {
+  try {
+    const pid = await findProcessUsingPort(port);
+    logger.info(`PID using :${port} is ${pid}`);
+
+    await killProcess(pid);
+    logger.info(`Process with PID ${pid} killed.`);
+  } catch (err) {
+    logger.error(`${new Date().toISOString()}: Error occurred: ${err}`);
+  }
+}
+ 
 // Call the restartProcess function
 module.exports = {
-  restartProcess: restartProcess
+  restartProcess: restartProcess,
+  solveAddressInUse: solveAddressInUse
 }
