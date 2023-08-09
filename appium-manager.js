@@ -4,6 +4,8 @@ const fs = require('fs')
 const logger = require('./utils/logger')
 const adb = require('adbkit')
 const config = require('./utils/config')
+const adbutil = require('./utils/adbutil')
+
 let client
 try {
   client = adb.createClient({host: config.ADB_HOST,port: config.ADB_PORT})

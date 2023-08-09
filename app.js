@@ -63,8 +63,10 @@ function manageServers() {
     }
     catch (err) {
       logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
-      await adbutil.restartProcess()
-      appiumManager.manage()
+      if (err.message.includes("5037") || err.message.includes("android") || err.message.includes("adb")) {
+        await adbutil.restartProcess()
+        appiumManager.manage()
+      }
     }
   }, config.FREQUENCY * 1000)
 }
