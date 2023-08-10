@@ -55,8 +55,9 @@ function autoManage() {
     // console.log('devices not connected: ' + difference(containers, connectedDevices))
     // console.log('no containers for: ' + difference(connectedDevices, containers))
 
-    stopServers(containers, connectedDevices)
-    startServers(containers, connectedDevices)
+    stopServers(containers, connectedDevices).then(() => 
+      startServers(containers, connectedDevices)
+    )
   })
 }
 
@@ -118,6 +119,11 @@ async function startServers(containers, connectedDevices) {
     let availablePorts = getNextUnusedPort()
     let containerName = generateContainerName(availablePorts.port)
     await startServer(serial, containerName, availablePorts)
+      .catch(err => {
+        if(err.message.toLowerCase().includes("conflict")) {
+          stopServer(serial).then(() => startServer(serial, containerName, availablePorts))
+        }
+      })
   }
 }
 
@@ -187,6 +193,7 @@ function startServer(serial, containerName, availablePorts) {
       resolve(container)
     }).catch(err => {
       logger.error(`Error while starting container: ${serial}\n${err.stack}`)
+      reject(new Error(`Error while starting container: ${serial}\n${err.stack}`))
     })
   })
 

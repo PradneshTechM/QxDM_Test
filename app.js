@@ -17,7 +17,7 @@ let server;
 
 process.on('uncaughtException', async (err)=>{  
   console.error('process error is:', err.message);  
-  if (err.message.includes("5037") || err.message.includes("android") || err.message.includes("adb")) {
+  if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
     await adbutil.restartProcess()
   }
 
@@ -26,7 +26,7 @@ process.on('uncaughtException', async (err)=>{
 
 process.on('unhandledRejection', async (err)=>{  
   console.error('unhandledRejection error is:', err.message);  
-  if (err.message.includes("5037") || err.message.includes("android") || err.message.includes("adb")) {
+  if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
     await adbutil.restartProcess()
   }
 
@@ -81,7 +81,7 @@ function manageServers() {
     }
     catch (err) {
       logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
-      if (err.message.includes("5037") || err.message.includes("android") || err.message.includes("adb")) {
+      if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
         await adbutil.restartProcess()
         appiumManager.manage()
       }
