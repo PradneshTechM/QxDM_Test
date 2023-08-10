@@ -15,6 +15,24 @@ const app = express()
 
 let server;
 
+process.on('uncaughtException', async (err)=>{  
+  console.error('process error is:', err.message);  
+  if (err.message.includes("5037") || err.message.includes("android") || err.message.includes("adb")) {
+    await adbutil.restartProcess()
+  }
+
+  process.exit(1);
+});
+
+process.on('unhandledRejection', async (err)=>{  
+  console.error('unhandledRejection error is:', err.message);  
+  if (err.message.includes("5037") || err.message.includes("android") || err.message.includes("adb")) {
+    await adbutil.restartProcess()
+  }
+
+  process.exit(1);
+});
+
 if (config.NODE_ENV === 'development') {
   const http = require('http')
 
