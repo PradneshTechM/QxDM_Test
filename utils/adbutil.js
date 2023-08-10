@@ -90,7 +90,7 @@ const redeploySTFProxy = () => {
 const redeployTMDC = () => {
   return new Promise((resolve, reject) => {
     logger.info(`Redeploying TMDC...`);
-    exec(process.platform === 'win32' ? `wsl cd; .nvm/versions/node/v8.16.1/bin/pm2 restart provider1` : "pm2 restart provider1", (error, stdout, stderr) => {
+    exec(process.platform === 'win32' ? `wsl cd; .nvm/versions/node/v8.16.1/bin/pm2 restart all` : "pm2 restart all", (error, stdout, stderr) => {
       if (error) {
         return reject(error);
       }
