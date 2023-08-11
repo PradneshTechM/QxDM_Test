@@ -1,38 +1,55 @@
 param (
-  [string]$arg1
+    [int]$pidToKill,
+    [string]$processName
 )
 
-# Validate input
-if (-not $arg1 -or -not $arg1 -match '^\d+$') {
-  Throw "Invalid or missing process ID."
-  exit 1
+if ($pidToKill -eq "" -and -not $processName) {
+    Write-Host "Both PID and process name are missing."
+    exit 1
 }
 
-$pidToKill = [int]$arg1
+Write-Host "Attempting to kill process with PID: $pidToKill or name: $processName"
 
-Write-Host "Attempting to kill process with PID: $pidToKill"
-
-# Try taskkill first
-try {
-  $taskkillResult = Start-Process -FilePath "taskkill" -ArgumentList "/PID $pidToKill /F" -Wait -NoNewWindow -PassThru
-  if ($taskkillResult.ExitCode -eq 0) {
-    Write-Host "Process with PID $pidToKill finished successfully."
-    exit 0
-  }
-} catch {
-  Write-Error "Taskkill failed. Using wmic."
+# Try to terminate by PID using taskkill
+if ($pidToKill -ne "") {
+    try {
+        $taskkillResult = Start-Process -FilePath "taskkill" -ArgumentList "/PID $pidToKill /F" -Wait -NoNewWindow -PassThru
+        if ($taskkillResult.ExitCode -eq 0) {
+            Write-Host "Process with PID $pidToKill terminated successfully using taskkill."
+            exit 0
+        }
+    } catch {
+        Write-Error "Failed to terminate process with PID $pidToKill using taskkill."
+        Write-Error $_.Exception.Message
+    }
 }
 
-# If taskkill fails, use wmic
-$wmicCommand = "wmic process where ""ProcessId=$pidToKill"" delete"
-$wmicResult = Invoke-Expression $wmicCommand 2>&1
+# Try to terminate by process name using taskkill
+if ($processName) {
+    try {
+        $taskkillResult = Start-Process -FilePath "taskkill" -ArgumentList "/IM $processName /F" -Wait -NoNewWindow -PassThru
+        if ($taskkillResult.ExitCode -eq 0) {
+            Write-Host "Process '$processName' terminated successfully using taskkill."
+            exit 0
+        }
+    } catch {
+        Write-Error "Failed to terminate process '$processName' using taskkill."
+        Write-Error $_.Exception.Message
+    }
 
-# Check the result of the wmic command
-if ($LASTEXITCODE -eq 0) {
-  Write-Host "Process with PID $pidToKill terminated successfully."
-  exit 0
-} else {
-  Write-Error "Failed to terminate process with PID $pidToKill using both taskkill and wmic."
-  Throw "Error: $wmicResult"
-  exit 1
+    # If taskkill by name fails, use wmic by name
+    try {
+        $wmicCommand = "wmic process where ""Name='$processName'"" delete"
+        $wmicResult = Invoke-Expression $wmicCommand 2>&1
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "Process '$processName' terminated successfully using wmic by name."
+            exit 0
+        }
+    } catch {
+        Write-Error "Failed to terminate process '$processName' using wmic by name."
+        Write-Error "Error: $wmicResult"
+    }
 }
+
+Write-Host "Failed to terminate process with both taskkill and wmic."
+exit 1
