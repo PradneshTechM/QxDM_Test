@@ -3,8 +3,7 @@ const logger = require('./logger')
 const path = require('path')
 
 const ADB_PORT = 5037;
-const KILL_PROCESS_PS_PATH = path.resolve(__dirname, '..', 'scripts', 'kill-process.ps1');
-console.log("🚀 ~ file: processutil.js:6 ~ KILL_PROCESS_PS_PATH:", KILL_PROCESS_PS_PATH)
+const KILL_PROCESS_PS_PATH = path.resolve(__dirname, '..', 'scripts', 'kill_process.ps1');
 
 // Function to fetch the PID of the process listening on the specified port
 const findProcessUsingPort = (port) => {
@@ -46,7 +45,7 @@ const killProcess = (pid) => {
       return resolve();
     }
 
-    const killCommand = process.platform === 'win32' ? `runas /user:admin  "taskkill /PID ${pid} /F"` : `kill ${pid}`;
+    const killCommand = process.platform === 'win32' ? `taskkill /PID ${pid} /F` : `kill ${pid}`;
 
     exec(killCommand, (error, stdout, stderr) => {
       if (error) {
@@ -83,18 +82,6 @@ const killProcessPS = async (pid) => {
     });
   });
 };
-
-; (async () => {
-  try {
-    const pid = await findProcessUsingPort(ADB_PORT);
-    logger.info(`ADB PID is ${pid}`);
-
-    await killProcessPS(pid);
-    logger.info(`Process with PID ${pid} killed.`);
-  } catch (err) {
-    console.error(err)
-  }
-})();
 
 const relaunchADB = () => {
   return new Promise((resolve, reject) => {
