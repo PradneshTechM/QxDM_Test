@@ -1,4 +1,4 @@
-const { exec } = require('child_process');
+const { exec, spawn } = require('child_process');
 const logger = require('./logger')
 const path = require('path')
 
@@ -19,8 +19,12 @@ const findProcessUsingPort = (port) => {
       const lines = stdout.split('\n').filter(line => line.trim() !== '').map(line => line.trim());
       if (process.platform === 'win32') {
         if (lines.length > 0) {
+          const line = lines.find(line => line.toUpperCase().includes('LISTENING'));
+          if(!line) {
+            return resolve(null)
+          }
           // For Windows, the PID is in the last column (index 4)
-          const pid = lines[0].split(/\s+/)[4]
+          const pid = line.split(/\s+/)[4]
           return resolve(Number(pid));
         } else {
           return resolve(null);
@@ -63,22 +67,28 @@ const killProcessPS = async (pid) => {
     if (!pid || process.platform !== 'win32') {
       return resolve();
     }
+    
+    const command = 'powershell.exe';
+    const args = ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', KILL_PROCESS_PS_PATH, `${pid}`];
 
-    const args = [`${pid}`]
+    const child = spawn(command, args);
 
-    const command = `Start-Process powershell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File "${KILL_PROCESS_PS_PATH}" ${args.map(arg => `"${arg}"`).join(' ')}' -Verb RunAs`;
+    child.stdout.on('data', (data) => {
+      logger.info(`PowerShell Script Output: ${data}`);
+    });
 
-    exec(command, { 'shell': 'powershell.exe' }, (error, stdout, stderr) => {
-      if (error) {
-        logger.error(`${new Date().toISOString()}: Error: ${error.message}`);
-        return reject(error)
+    child.stderr.on('data', (data) => {
+      logger.error(`${new Date().toISOString()}: Error: ${data}`);
+      reject(`${new Date().toISOString()}: Error: ${data}`)
+    });
+
+    child.on('close', (code) => {
+      logger.info(`Child process exited with code ${code}`);
+      if(code === 0) {
+        resolve()
+      } else {
+        reject(new Error(`Child process exited with code ${code}`))
       }
-      if (stderr) {
-        logger.error(`${new Date().toISOString()}: PowerShell Script Error: ${stderr}`);
-        return reject(new Error(`${new Date().toISOString()}: PowerShell Script Error: ${stderr}`))
-      }
-      resolve(true)
-      logger.info(`PowerShell Script Output: ${stdout}`);
     });
   });
 };
