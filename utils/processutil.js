@@ -1,7 +1,10 @@
 const { exec } = require('child_process');
 const logger = require('./logger')
+const path = require('path')
 
 const ADB_PORT = 5037;
+const KILL_PROCESS_PS_PATH = path.resolve(__dirname, '..', 'scripts', 'kill-process.ps1');
+console.log("🚀 ~ file: processutil.js:6 ~ KILL_PROCESS_PS_PATH:", KILL_PROCESS_PS_PATH)
 
 // Function to fetch the PID of the process listening on the specified port
 const findProcessUsingPort = (port) => {
@@ -43,7 +46,7 @@ const killProcess = (pid) => {
       return resolve();
     }
 
-    const killCommand = process.platform === 'win32' ? `taskkill /PID ${pid} /F` : `kill ${pid}`;
+    const killCommand = process.platform === 'win32' ? `runas /user:admin  "taskkill /PID ${pid} /F"` : `kill ${pid}`;
 
     exec(killCommand, (error, stdout, stderr) => {
       if (error) {
@@ -54,6 +57,44 @@ const killProcess = (pid) => {
     });
   });
 };
+
+// Function to kill the process using the given PID with powershell
+const killProcessPS = async (pid) => {
+  return new Promise((resolve, reject) => {
+    if (!pid || process.platform !== 'win32') {
+      return resolve();
+    }
+
+    const args = [`${pid}`]
+
+    const command = `Start-Process powershell -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File "${KILL_PROCESS_PS_PATH}" ${args.map(arg => `"${arg}"`).join(' ')}' -Verb RunAs`;
+
+    exec(command, { 'shell': 'powershell.exe' }, (error, stdout, stderr) => {
+      if (error) {
+        logger.error(`${new Date().toISOString()}: Error: ${error.message}`);
+        return reject(error)
+      }
+      if (stderr) {
+        logger.error(`${new Date().toISOString()}: PowerShell Script Error: ${stderr}`);
+        return reject(new Error(`${new Date().toISOString()}: PowerShell Script Error: ${stderr}`))
+      }
+      resolve(true)
+      logger.info(`PowerShell Script Output: ${stdout}`);
+    });
+  });
+};
+
+; (async () => {
+  try {
+    const pid = await findProcessUsingPort(ADB_PORT);
+    logger.info(`ADB PID is ${pid}`);
+
+    await killProcessPS(pid);
+    logger.info(`Process with PID ${pid} killed.`);
+  } catch (err) {
+    console.error(err)
+  }
+})();
 
 const relaunchADB = () => {
   return new Promise((resolve, reject) => {
@@ -101,13 +142,23 @@ const redeployTMDC = () => {
 };
 
 // Restart the process after killing it
-const restartProcess = async () => {
+const restartAll = async () => {
   try {
     const pid = await findProcessUsingPort(ADB_PORT);
     logger.info(`ADB PID is ${pid}`);
 
-    await killProcess(pid);
-    logger.info(`Process with PID ${pid} killed.`);
+    try {
+      await killProcess(pid);
+      logger.info(`Process with PID ${pid} killed.`);
+    } catch (err) {
+      logger.error(`${new Date().toISOString()}: Failed to execute kill process: ${err}`)
+      if (process.platform === 'win32') {
+        logger.info(`Retrying with powershell script...`)
+        await killProcessPS(pid)
+      } else {
+        throw err
+      }
+    }
 
     await relaunchADB()
     try {
@@ -134,9 +185,9 @@ const solveAddressInUse = async (port) => {
     logger.error(`${new Date().toISOString()}: Error occurred: ${err}`);
   }
 }
- 
+
 // Call the restartProcess function
 module.exports = {
-  restartProcess: restartProcess,
+  restartAll: restartAll,
   solveAddressInUse: solveAddressInUse
 }

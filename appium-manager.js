@@ -4,14 +4,14 @@ const fs = require('fs')
 const logger = require('./utils/logger')
 const adb = require('adbkit')
 const config = require('./utils/config')
-const adbutil = require('./utils/adbutil')
+const processutil = require('./utils/processutil')
 
 let client
 try {
   client = adb.createClient({host: config.ADB_HOST,port: config.ADB_PORT})
 } catch (err) {
   logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
-  adbutil.restartProcess().then(() => {
+  processutil.restartAll().then(() => {
     client = adb.createClient({host: config.ADB_HOST,port: config.ADB_PORT})
   })
 }

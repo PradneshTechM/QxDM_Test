@@ -6,7 +6,7 @@ const socket = require('socket.io')
 const appiumManager = require('./appium-manager')
 const logger = require('./utils/logger')
 const config = require('./utils/config')
-const adbutil = require('./utils/adbutil')
+const processutil = require('./utils/processutil')
 const path = require('path')
 
 const app = express()
@@ -16,18 +16,18 @@ const app = express()
 let server;
 
 process.on('uncaughtException', async (err)=>{  
-  console.error('process error is:', err.message);  
+  logger.error(`${new Date().toISOString()}: process error is: ${err.message}`);  
   if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
-    await adbutil.restartProcess()
+    await processutil.restartAll()
   }
 
   process.exit(1);
 });
 
 process.on('unhandledRejection', async (err)=>{  
-  console.error('unhandledRejection error is:', err.message);  
+  logger.error(`${new Date().toISOString()}: unhandledRejection error is: ${err.message}`);
   if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
-    await adbutil.restartProcess()
+    await processutil.restartAll()
   }
 
   process.exit(1);
@@ -82,7 +82,7 @@ function manageServers() {
     catch (err) {
       logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
       if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
-        await adbutil.restartProcess()
+        await processutil.restartAll()
         appiumManager.manage()
       }
     }
@@ -97,6 +97,6 @@ server.listen(config.PORT, config.ADDRESS, function () {
   logger.info(`Appium Manager Server updating every ${config.FREQUENCY} seconds`)
 }).on('error', (err) => {
   logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
-  adbutil.solveAddressInUse(config.PORT)
+  processutil.solveAddressInUse(config.PORT)
 });
 
