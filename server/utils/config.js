@@ -32,6 +32,7 @@ VARIABLES = [
   "DB_PASS",
   "DB_PORT",
   "DB_TABLE",
+  "MULTITHREADING",
 ]
 
 module.exports = {

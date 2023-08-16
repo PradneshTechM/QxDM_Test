@@ -30,6 +30,7 @@ import QXDMService.ttypes
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _STORAGE_PATH = os.environ.get("STORAGE_PATH")
+_MULTITHREADING = bool(os.environ.get("MULTITHREADING", 'False').lower() in ('true', '1', 't'))
 if _STORAGE_PATH is None:
     if platform.system() == "Linux":
         _STORAGE_PATH = os.path.join(os.path.expanduser("~"), "tmdc", "storage")
@@ -54,7 +55,9 @@ class QUTS:
   def _start_quts_client(self, name):
     client = None
     try:
-      client = QutsClient.QutsClient(name)
+      print("QUTS using multithreading" if _MULTITHREADING else "")
+      sys.stdout.flush()
+      client = QutsClient.QutsClient(name, multithreadedClient=_MULTITHREADING)
     except Exception as e:
       print('Exception starting client')
     if client:
