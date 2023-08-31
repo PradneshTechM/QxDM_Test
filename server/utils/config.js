@@ -33,6 +33,7 @@ VARIABLES = [
   "DB_PORT",
   "DB_TABLE",
   "MULTITHREADING",
+  "AUTOMATION_DELETE_LOGS_AFTER_PARSING",
 ]
 
 module.exports = {

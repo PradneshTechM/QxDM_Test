@@ -18,6 +18,9 @@ import message
 from message import ParsedRawMessage
 from db import DB
 
+_AUTOMATION_DELETE_LOGS_AFTER_PARSING = bool(os.environ.get("AUTOMATION_DELETE_LOGS_AFTER_PARSING", 'True').lower() in ('true', '1', 't'))
+print("_AUTOMATION_DELETE_LOGS_AFTER_PARSING", _AUTOMATION_DELETE_LOGS_AFTER_PARSING)
+sys.stdout.flush()
 
 class QCAT:
     def __init__(self):
@@ -281,6 +284,8 @@ class QCATWorker(threading.Thread):
         if index % CHUNK_SIZE != 0:
             pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": math.ceil(index / CHUNK_SIZE)})
         
+        self.qcat_worker.closeFile()
+        
         print(index, 'packets walked over.')
         sys.stdout.flush()
         return total_count 
@@ -336,7 +341,14 @@ class QCATWorker(threading.Thread):
         print(f'Successfuly parsed a total of {total_count} packets for log {self.log_id}!')
         sys.stdout.flush()
         sys.stderr.flush()
-
+        
+        if _AUTOMATION_DELETE_LOGS_AFTER_PARSING:
+            if os.path.exists(self.log_file):
+                os.remove(self.log_file)
+                print(f'deleted log {self.log_id} from disk at {self.log_file}')
+            sys.stdout.flush()
+            sys.stderr.flush()
+        
         return total_count
     
     def get_all_chunks(self, filepath):
