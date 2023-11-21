@@ -1,5 +1,6 @@
 const demoRouter = require('express').Router()
 const path = require('path')
+const fs = require('fs')
 const { spawn } = require('child_process')
 const crypto = require('crypto')
 const AdmZip = require('adm-zip')
@@ -16,11 +17,17 @@ const generateShortId = (bytes) => {
   return crypto.randomBytes(bytes).toString('hex')
 }
 
-const pythonServicePath = path.join(__dirname, '..', '..', 'src', 'qConnect_service.py')
-const pythonExcecPath = path.join(__dirname, '..', '..', 'venv', 'Scripts', 'python.exe')
+let pythonServicePath = path.join(__dirname, '..', '..', 'src', 'qConnect_service.py')
+const pycServicePath = pythonServicePath + 'c'
+// check if bytecode pyc file exists
+if (fs.existsSync(pycServicePath)) {
+  logger.info('Using bytecode service ' + pycServicePath)
+  pythonServicePath = pycServicePath
+}
+const pythonExecPath = path.join(__dirname, '..', '..', 'venv', 'Scripts', 'python.exe')
 
 const defaults = { cwd: path.parse(pythonServicePath).dir }
-const pythonProgram = spawn(pythonExcecPath, [pythonServicePath, "--env", config.NODE_ENV], defaults)
+const pythonProgram = spawn(pythonExecPath, [pythonServicePath, "--env", config.NODE_ENV], defaults)
 
 pythonProgram.stdout.on('data', (data) => {
   const message = data.toString()

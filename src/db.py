@@ -51,7 +51,18 @@ class DB:
       metadata = {}
       metadata["_logID"] = log_session.log_id
       if log_session.test_case_id:
-        metadata["_testCaseID"] = log_session.test_case_id
+        # test_case_id is split as such "tcid_execid_itid" (testcase id then execution id then iteration id)
+        split = log_session.test_case_id.split("_")
+        metadata["_testCaseID"] = split[0]
+        if len(split) > 1:
+          metadata["_executionID"] = split[1]
+        else:
+          metadata["_executionID"] = None
+        if len(split) > 2:
+          metadata["_iterationID"] = split[2]
+        else:
+          metadata["_iterationID"] = None
+          
       metadata["_device"] = {
         "serial": log_session.serial,
         "manufacturer": log_session.device["manufacturer"] if log_session.device and "manufacturer" in log_session.device else "",
