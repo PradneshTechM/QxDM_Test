@@ -4,23 +4,6 @@ require('winston-daily-rotate-file')
 const { createLogger, format, transports } = winston
 const { colorize, combine, printf } = format
 
-//  Write all logs error (and below) to `error.log`.
-const transportError = new (winston.transports.DailyRotateFile)({
-  dirname: 'logs',
-  filename: '%DATE%_error.json',
-  maxSize: '20m',
-  maxFiles: '14d',
-  level: 'error',
-})
-
-// Write to all logs with level `info` and below to `combined.log`
-const transportAll = new (winston.transports.DailyRotateFile)({
-  dirname: 'logs',
-  filename: '%DATE%_combined.json',
-  maxSize: '20m',
-  maxFiles: '14d',
-})
-
 const logger = createLogger({
   level: 'info',
   exitOnError: false,
@@ -31,10 +14,6 @@ const logger = createLogger({
     format.json(),
   ),
   defaultMeta: { service: 'qConnect-API' },
-  transports: [
-    transportError,
-    transportAll,
-  ],
 })
 
 // https://github.com/winstonjs/winston/issues/1243
