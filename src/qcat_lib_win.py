@@ -2,6 +2,7 @@
 from pathlib import Path
 import random
 import os
+from datetime import date,timedelta,datetime
 import json
 import sys
 import math
@@ -186,12 +187,22 @@ class QCATWorker(threading.Thread):
                         "packet_name": packet_name.strip(),
                         "fields": value
                     }
+                    if '__event_frequency' in value:
+                        #self.packet_frequency[val["packet_type"]]=60000/value['__event_frequency']
+                        val['packet_frequency'] = 60000/value['__event_frequency']
+                        del val["fields"]["__event_frequency"]
+                    if '__db_collection_name' in value:
+                        val['custom_dbcollection'] = val["fields"]["__db_collection_name"]
+                        del val["fields"]["__db_collection_name"]
+                    if '__raw_data' in value:
+                        val['rawDataTag'] = val["fields"]["__raw_data"]
+                        del val["fields"]["__raw_data"]
                     if packet_subtitle:
                         val["packet_subtitle"] = packet_subtitle
                         key = packet_type + " -- " + packet_subtitle
                     else:
                         key = packet_type
-                    key = key.strip()
+                    key = key.strip() 
                     self.packet_config[key] = val
                     self.packet_types.append(val["packet_type"])
         except:
@@ -232,6 +243,9 @@ class QCATWorker(threading.Thread):
         }
         print(json.dumps(return_val, indent=2))
 
+    def checkPacketAllowedbyConf(self,packet_type_raw,now):
+        return ((not self.packet_config)or(("packet_frequency" not in self.packet_config[packet_type_raw]) or ("packet_frequency" in self.packet_config[packet_type_raw] and (packet_type_raw not in self.nextPacketAllowedat or self.nextPacketAllowedat[packet_type_raw] < now))))
+             
     def parse_raw(self, input):
         CHUNK_SIZE = 10000
         print('Opening log file: ' + input)
@@ -244,7 +258,7 @@ class QCATWorker(threading.Thread):
         print('Loading log packets from log file...')
 
         raw_messages = []
-        
+        self.nextPacketAllowedat ={}
         index = 0
         total_count = 0
         while packet:
@@ -262,24 +276,59 @@ class QCATWorker(threading.Thread):
                 
             name = packet.Name
             subtitle = packet.Subtitle
-            datetime = packet.TimestampAsString
+            datetimestring = packet.TimestampAsString
             packet_length = packet.Length
-            text = packet.Text
-            
-            raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetime, text)
-            raw_msg.packet_config = self.packet_config
-            raw_messages.append(raw_msg)
-
-            index += 1
-            total_count += 1
-            if index % CHUNK_SIZE == 0:
-                print(total_count, 'packets loaded to parse.')
-                sys.stdout.flush()
-                pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": int(index / CHUNK_SIZE)})
-                raw_messages = []
+            text = packet.Text 
+            if isinstance(packet_type, int):
+                packet_type_hex1 = hex(packet_type)
+            else: 
+                packet_type_hex1 = packet_type       
+                packet_type = int(packet_type_hex1, 16)
                 
-            if not packet.Next():
-                break
+            packet_type_hex = "0x" + packet_type_hex1[2:].upper()
+            packet_type_raw = ( 
+                            packet_type_hex + " -- "  + subtitle 
+                            if subtitle and len(subtitle) > 0 
+                            else packet_type_hex
+                        )
+
+            output = {}
+
+            if ((not self.packet_config)or(packet_type_raw in self.packet_config)):
+                now = datetime.strptime(datetimestring, '%Y %b %d  %H:%M:%S.%f')
+                if self.checkPacketAllowedbyConf(packet_type_raw,now):
+                    #parsing_config_type = self.packet_config[packet_type]
+                    if ((self.packet_config) and ("packet_frequency" in self.packet_config[packet_type_raw])):
+                     
+                        self.nextPacketAllowedat[packet_type_raw] = now + timedelta(milliseconds=self.packet_config[packet_type_raw]["packet_frequency"])
+                        print('next will be allowed after')
+                        print(self.nextPacketAllowedat[packet_type_raw])
+                    raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetimestring, text)
+                    if self.packet_config:
+                        raw_msg.self_packet_config = self.packet_config[packet_type_raw]
+                    else:
+                         raw_msg.self_packet_config = None
+                    raw_messages.append(raw_msg)
+
+                    index += 1
+                    total_count += 1
+                    if index % CHUNK_SIZE == 0:
+                        print(total_count, 'packets loaded to parse.')
+                        sys.stdout.flush()
+                        pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": int(index / CHUNK_SIZE)})
+                        raw_messages = []
+                        
+                    if not packet.Next():
+                        break
+                else:
+                            print('packet looked over as frequency not allowed') 
+                            
+            else:
+                print('packet overlooked as not present in config')
+                sys.stdout.flush()
+                sys.stderr.flush()
+
+                   
             
         if index % CHUNK_SIZE != 0:
             pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": math.ceil(index / CHUNK_SIZE)})
@@ -300,34 +349,53 @@ class QCATWorker(threading.Thread):
                 chunk_file = f'{self.json_filepath}.{chunk_num}'
                 
                 # parse to json
-                json_arr = []
+                json_arr = {'default':[]}
+
                 for raw_msg in messages:
+                
                     payload, metadata = raw_msg.to_json()
-                    
-                    # seperate possible table rows into separate entries
+                    collection_name = 'default'
+                    # seperate possible table rows into separate entries\
+                    try:                   
+                        if  raw_msg.self_packet_config:
+                            print(raw_msg.self_packet_config)
+                            if "rawDataTag" in raw_msg.self_packet_config:
+                                if not raw_msg.self_packet_config["rawDataTag"]:
+                                    del metadata["_rawPayload"]
+                            if "custom_dbcollection" in raw_msg.self_packet_config:
+                                collection_name = raw_msg.self_packet_config["custom_dbcollection"]
+                                sys.stdout.flush()
+                                if collection_name not in json_arr:
+                                    json_arr[collection_name]=[]
+                    except:
+                        print('exception')
                     if "TABLE" in payload and isinstance(payload["TABLE"], list):
                         for item in payload["TABLE"]:
-                            json_arr.append({
+
+                            json_arr[collection_name].append({
                                 **metadata,
                                 **item
                             })
                     else:
-                        json_arr.append({
+                        json_arr[collection_name].append({
                             **metadata,
                             **payload
                         })
-                    
+                        
                 # stop writing chunks to json file since we're proactively inserting to db
                 # with open(chunk_file, 'w') as f:
                 #     json.dump(json_arr, f, indent = 2) 
                     
-                if len(json_arr) > 0:
+               
+
+                if json_arr:
                     print(f'Inserting chunk {chunk_num} for log {log_id} with {len(json_arr)} packets to db...')
                     sys.stdout.flush()
-                    insertLogsResult = DB.insert_logs(json_arr, self.log_session)
-                    if insertLogsResult:
-                        print(f'Inserted {len(insertLogsResult.inserted_ids)}')
-                        sys.stdout.flush()
+                    for collection_name in json_arr:
+                        insertLogsResult = DB.insert_logs(json_arr[collection_name], self.log_session,collection_name)
+                        if insertLogsResult:
+                            print(f'Inserted {len(insertLogsResult.inserted_ids)}')
+                            sys.stdout.flush()
                         
             except:
                 traceback.print_exc()

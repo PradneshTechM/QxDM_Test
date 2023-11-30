@@ -38,8 +38,10 @@ class DB:
   def get_default_client():
     return DB._DB_CLIENT
 
-  def insert_logs(logs: list, log_session):
-    if log_session.collection:
+  def insert_logs(logs: list, log_session,custom_collection):
+    if custom_collection != 'default':
+      logs_collection = log_session.db_instance[custom_collection]
+    elif log_session.collection:
       logs_collection = log_session.db_instance[log_session.collection]
     else:
       logs_collection = log_session.db_instance[DB._DB_TABLE]
