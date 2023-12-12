@@ -705,9 +705,6 @@ class ParsedRawMessage:
                     elif 'NR5GMAC  |' in line:
                         self.subtitle = 'NR5GMAC'
                         _obj['Technology'] = 'NR'
-                    elif  '     QEvent 0X' in line"
-                        self.subtitle = 'QEvent'
-                        _obj['Sub-Type'] = line.split('|')[1].strip()
                     else:
                         return False
                     rows=line.split('|')
@@ -760,7 +757,7 @@ class ParsedRawMessage:
                 i =0
                 while i < len(lines):
                     line = lines[i].strip()
-                    if  '     QEvent 0X' in line"
+                    if  '     QEvent 0X' in line:
                         self.subtitle = 'QEvent'
                         _obj['Sub-Type'] = line.split('|')[1].strip()
                     else:
