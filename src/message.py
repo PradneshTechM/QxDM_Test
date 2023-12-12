@@ -687,6 +687,124 @@ class ParsedRawMessage:
                 val = val + "\n" + "\n".join(lines[1:])
                 val = _parse_val_primitive(_clean(val))
                 _obj[key] = val
+        
+        def _QtraceMessage(lines: list[str],_obj:dict):
+            #
+            
+            
+            if len(lines) > 0:
+                i =0
+                while i < len(lines):
+                    line = lines[i].strip()
+                    if 'ENL2UL   |' in line:
+                        self.subtitle = 'ENL2UL'
+                        _obj['Technology'] = 'NR'
+                    elif 'ENL2DL   |' in line:
+                        self.subtitle = 'ENL2DL'
+                        _obj['Technology'] = 'NR'
+                    elif 'NR5GMAC  |' in line:
+                        self.subtitle = 'NR5GMAC'
+                        _obj['Technology'] = 'NR'
+                    elif  '     QEvent 0X' in line"
+                        self.subtitle = 'QEvent'
+                        _obj['Sub-Type'] = line.split('|')[1].strip()
+                    else:
+                        return False
+                    rows=line.split('|')
+                    j=0
+                    while j < len(rows):
+                        rowdata = rows[j]
+                        if j == 0:
+                            if 'Sub-ID:1' in rowdata:
+                                _obj['Subscription ID']=1
+                            elif 'Sub-ID:0' in rowdata:
+                                _obj['Subscription ID']=0
+                        elif j< 3:
+                            if ':' in rowdata:
+                                key_value = rowdata.split(':')
+                                key = key_value[0].strip().replace('{','')
+                                
+                                value = ':'.join( key_value[1:]).strip().replace('}','')
+                                _obj[key] = value
+                                if key == 'tput.kbps':
+                                    _obj['Sub-Type']=key
+                                    valueArr = value.replace('[','').replace(']','').split(';')
+                                    k=0
+                                    while k < len(valueArr):
+                                        valueLine = valueArr[k]
+                                        if ':' in valueLine:
+                                            key_value = valueLine.split(':')
+                                            keyChild = key_value[0].strip()
+                                            valueChild = ':'.join( key_value[1:]).strip().replace('}','')
+                                            _obj[keyChild] = valueChild
+                                        k +=1
+                                        
+                                    
+                            else:
+                                if rowdata != ' NR ':
+                                    _obj['Sub-Type']=rowdata.strip()
+                        else:
+                            if ':' in rowdata:
+                                key_value = rowdata.split(':')
+                                key = key_value[0].strip()
+                                value =   ':'.join( key_value[1:]).strip()
+                                _obj[key] = value
+                        j +=1
+                    i += 1
+                return True
+            else:
+                return False
+                
+        def _QtraceEvent(lines: list[str],_obj:dict):   
+            if len(lines) > 0:
+                i =0
+                while i < len(lines):
+                    line = lines[i].strip()
+                    if  '     QEvent 0X' in line"
+                        self.subtitle = 'QEvent'
+                        _obj['Sub-Type'] = line.split('|')[1].strip()
+                    else:
+                        return False
+                    rows=line.split('|')
+                    j=0
+                    while j < len(rows):
+                        rowdata = rows[j]
+                        if j == 0:
+                            if 'Sub-ID:1' in rowdata:
+                                _obj['Subscription ID']=1
+                            elif 'Sub-ID:0' in rowdata:
+                                _obj['Subscription ID']=0
+                            if 'Misc-ID:1' in rowdata:
+                                _obj['Misc ID']=1
+                            elif 'Misc-ID:0' in rowdata:
+                                _obj['Misc ID']=0
+                        else:
+                            if '=' in rowdata:
+                                key_value = rowdata.split('=')
+                                key = key_value[0].strip()
+                                if '=' in key_value[1]:
+                                    otherData =  '='.join( key_value[1:]).strip()
+                                    otherRows = otherData.split(' ')
+                                    rows += otherRows[1:]
+                                else:
+                                    value = key_value[1].strip()
+                            elif ':' in rowdata:
+                                if '[' in  rowdata and ']' not in rowdata :
+                                    j +=1
+                                    rowdata =  rowdata +',' + rows[j]
+                                key_value = rowdata.split(':')
+                                key = key_value[0].strip()
+                                value =   ':'.join( key_value[1:]).strip()
+                                _obj[key] = value           
+                                    
+                        j +=1            
+                                
+                                
+                                
+                    i += 1
+                return True
+            else:
+                return False
                
         def _struct_or_generic_parse(lines: list[str], _obj: dict):
             try: 
@@ -991,18 +1109,7 @@ class ParsedRawMessage:
             if packet_type in self.packet_config:
                 parsing_config_type = self.packet_config[packet_type]
                 for key, value in parsing_config_type["fields"].items():
-                    if "." in key:
-                        key_parts = key.split(".")
-                        curr_obj = _obj
-                        final_key_part = ""
-                        for key_part in key_parts:
-                            if key_part in curr_obj:
-                                curr_obj = curr_obj[key_part]
-                                final_key_part = key_part
-                        if key_parts[-1:][0] == final_key_part:
-                            output[final_key_part] = curr_obj
-                    else:
-                        if isinstance(value, list):
+                    if isinstance(value, list):
                             if key in _flags:
                                 if _flags[key] == TYPE_FLAGS.MULTI_ROW_TABLE:
                                     arr = []
@@ -1021,9 +1128,22 @@ class ParsedRawMessage:
                                             output[k_record] = _obj[key][0][k_record]
                             else:
                                 continue
-                        else:
-                            if key in _obj:
+                        
+                    elif key in _obj:
                                 output[key] = _obj[key]
+                    elif "." in key:
+                        key_parts = key.split(".")
+                        curr_obj = _obj
+                        final_key_part = ""
+                        for key_part in key_parts:
+                            if key_part in curr_obj:
+                                curr_obj = curr_obj[key_part]
+                                final_key_part = key_part
+                        if key_parts[-1:][0] == final_key_part:
+                            output[final_key_part] = curr_obj
+                    
+                        
+                            
                 
                 _obj.clear()
                 if isinstance(output, list):
@@ -1039,7 +1159,10 @@ class ParsedRawMessage:
             # parse payloads that are encoded in hex
             if _hex_payload(lines):
                return 
-            
+            if (self.name == 'QTrace Messages' ) and _QtraceMessage(lines,_obj):
+                print('QTrace Messages',_obj)
+            if (self.name == 'QTrace Event' ) and _QtraceEvent(lines,_obj):
+                print('QTrace Event',_obj)
             if (self.packet_type_hex.lower() in TABLE_PACKET_TYPES):
                 f = _tables(lines, _obj)
                 flags = {**flags, **f}
@@ -1147,28 +1270,39 @@ class Message:
 # MANUAL PARSING TEST
 def test_parsing():
     def parse_config(config_file):
+        print(config_file)
         packet_config = {}
         with open(config_file, 'r') as f:
             unparsed_config = yaml.load(f, Loader=yaml.FullLoader)
             for key, value in unparsed_config.items():
-                splited_key = key.split("--")
-                packet_type, packet_name = splited_key[:2]
-                packet_name = packet_name.strip()
-                packet_type = packet_type.strip()
-                packet_subtitle = None
-                if len(splited_key) > 2: packet_subtitle = splited_key[2].strip()
-                val = {
-                    "packet_type": packet_type.lower(),
-                    "packet_name": packet_name.strip(),
-                    "fields": value
-                }
-                if packet_subtitle:
-                    val["packet_subtitle"] = packet_subtitle
-                    key = packet_type + " -- " + packet_subtitle
-                else:
-                    key = packet_type
-                key = key.strip()
-                packet_config[key] = val
+                    splited_key = key.split("--")
+                    packet_type, packet_name = splited_key[:2]
+                    packet_name = packet_name.strip()
+                    packet_type = packet_type.strip()
+                    packet_subtitle = None
+                    if len(splited_key) > 2: packet_subtitle = splited_key[2].strip()
+                    val = {
+                        "packet_type": packet_type.lower(),
+                        "packet_name": packet_name.strip(),
+                        "fields": value
+                    }
+                    if '__event_frequency' in value:
+                        #self.packet_frequency[val["packet_type"]]=60000/value['__event_frequency']
+                        val['packet_frequency'] = 60000/value['__event_frequency']
+                        del val["fields"]["__event_frequency"]
+                    if '__db_collection_name' in value:
+                        val['custom_dbcollection'] = val["fields"]["__db_collection_name"]
+                        del val["fields"]["__db_collection_name"]
+                    if '__raw_data' in value:
+                        val['rawDataTag'] = val["fields"]["__raw_data"]
+                        del val["fields"]["__raw_data"]
+                    if packet_subtitle:
+                        val["packet_subtitle"] = packet_subtitle
+                        key = packet_type + " -- " + packet_subtitle
+                    else:
+                        key = packet_type
+                    key = key.strip() 
+                    packet_config[key] = val
         return packet_config
     
     def test_table_parsing():
@@ -2319,8 +2453,9 @@ def test_parsing():
 #             Num Active RB = 0
 #         """)
 #         messages.append(msg)
+        #C:\Users\tm-reddev04\Documents\tmdc\storage\qxdm_mask_files\automation_freqtest.yaml
 
-        conf = parse_config("C:\\Users\\tmreddemo07\\Documents\\tmdc\\storage\\qxdm_mask_files\\charter.yaml")
+        conf = parse_config("C:\\Users\\tm-reddev04\\Documents\\tmdc\\storage\\qxdm_mask_files\\automation_freqtest.yaml")
         for message in messages:
             message.packet_config = conf
         json_arr = [{"_packetType": message.packet_type_hex, "_rawPayload": message.packet_text, "_parsedPayload": message.test()} for message in messages]
