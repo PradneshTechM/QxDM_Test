@@ -244,7 +244,18 @@ class QCATWorker(threading.Thread):
         print(json.dumps(return_val, indent=2))
 
     def checkPacketAllowedbyConf(self,packet_type_raw,now):
-        return ((not self.packet_config)or(("packet_frequency" not in self.packet_config[packet_type_raw]) or ("packet_frequency" in self.packet_config[packet_type_raw] and (packet_type_raw not in self.nextPacketAllowedat or self.nextPacketAllowedat[packet_type_raw] < now))))
+        if not self.packet_config:
+            return True
+        elif packet_type_raw not in self.packet_config:
+            return False
+        elif "packet_frequency" not in self.packet_config[packet_type_raw]:
+            return True
+        elif packet_type_raw not in self.nextPacketAllowedat :
+            return True
+        elif self.nextPacketAllowedat[packet_type_raw] < now:
+            return True
+        else:
+            return False
              
     def parse_raw(self, input):
         CHUNK_SIZE = 10000
@@ -297,17 +308,14 @@ class QCATWorker(threading.Thread):
             if ((not self.packet_config)or(packet_type_raw in self.packet_config)):
                 now = datetime.strptime(datetimestring, '%Y %b %d  %H:%M:%S.%f')
                 if self.checkPacketAllowedbyConf(packet_type_raw,now):
-                    #parsing_config_type = self.packet_config[packet_type]
                     if ((self.packet_config) and ("packet_frequency" in self.packet_config[packet_type_raw])):
-                     
                         self.nextPacketAllowedat[packet_type_raw] = now + timedelta(milliseconds=self.packet_config[packet_type_raw]["packet_frequency"])
-                        print('next will be allowed after')
-                        print(self.nextPacketAllowedat[packet_type_raw])
+                        
                     raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetimestring, text)
                     if self.packet_config:
                         raw_msg.self_packet_config = self.packet_config[packet_type_raw]
                     else:
-                         raw_msg.self_packet_config = None
+                        raw_msg.self_packet_config = None
                     raw_messages.append(raw_msg)
 
                     index += 1
@@ -317,16 +325,15 @@ class QCATWorker(threading.Thread):
                         sys.stdout.flush()
                         pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": int(index / CHUNK_SIZE)})
                         raw_messages = []
-                        
-                    if not packet.Next():
-                        break
+                    
                 else:
-                            print('packet looked over as frequency not allowed') 
+                    pass
                             
             else:
-                print('packet overlooked as not present in config')
-                sys.stdout.flush()
-                sys.stderr.flush()
+                pass
+
+            if not packet.Next():
+                break
 
                    
             
@@ -358,7 +365,6 @@ class QCATWorker(threading.Thread):
                     # seperate possible table rows into separate entries\
                     try:                   
                         if  raw_msg.self_packet_config:
-                            print(raw_msg.self_packet_config)
                             if "rawDataTag" in raw_msg.self_packet_config:
                                 if not raw_msg.self_packet_config["rawDataTag"]:
                                     del metadata["_rawPayload"]
@@ -368,7 +374,8 @@ class QCATWorker(threading.Thread):
                                 if collection_name not in json_arr:
                                     json_arr[collection_name]=[]
                     except:
-                        print('exception')
+                        pass
+                        
                     if "TABLE" in payload and isinstance(payload["TABLE"], list):
                         for item in payload["TABLE"]:
 

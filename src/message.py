@@ -761,7 +761,7 @@ class ParsedRawMessage:
                         _obj['Sub-Type'] = line.split('|')[1].strip()
                        
                         _obj['QEvent'] = '0x'+line.split('QEvent 0x')[1].split(' ')[0].strip()
-                        if self.subtitle == 'QEVENT 87 - 10':
+                        if self.subtitle == 'QEVENT 87 - 10' or self.subtitle == 'QEVENT 84 - 41' or self.subtitle == 'QEVENT 13 - 77':
                             _obj['eventInfo'] = line.split('|')[3].strip()
                         rows=line.split('|')
                         j=0
