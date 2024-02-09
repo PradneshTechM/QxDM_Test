@@ -1321,9 +1321,9 @@ def test_parsing():
         messages.append(msg)
         #C:\Users\tm-reddev04\Documents\tmdc\storage\qxdm_mask_files\automation_freqtest.yaml
 
-        conf = parse_config("C:\\Users\\tm-reddev04\\Documents\\tmdc\\storage\\qxdm_mask_files\\automation_freqtest.yaml")
+        conf = parse_config("C:\\Users\\tm-reddev05\\Documents\\tmdc\\storage\\qxdm_mask_files\\qtrace_filet.yaml")
         for message in messages:
-            message.packet_config = {}
+            message.packet_config = conf
         json_arr = [{"_packetType": message.packet_type_hex, "_rawPayload": message.packet_text, "_parsedPayload": message.test()} for message in messages]
         base_path = os.path.dirname(os.path.abspath(__file__))
         dt_format = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")

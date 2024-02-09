@@ -3,6 +3,7 @@ load_dotenv()
 
 from collections import defaultdict
 import os
+import traceback
 import logging
 from pathlib import Path
 from datetime import datetime
@@ -14,17 +15,19 @@ import socketio
 import eventlet
 from asyncio import Future
 import asyncio
-import threading
 import argparse
 import json
 from pubsub import pub
-
+import multiprocessing
+queue = multiprocessing.Queue()
+import psutil
 import quts_lib
 import qcat_lib_win as qcat_lib
 
 from db import DB
 from session import Session, LogSession, ATSession, TestCase
 from exception import QConnectException
+
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _LOG_FOLDER_PATH = Path(_BASE_PATH.parent / 'logs')
@@ -127,6 +130,7 @@ def QUTS_diag_connect(sid, data):
         }
       }
     except Exception as e:
+      traceback.print_exc()
       logging.error(str(e))
       return { 'error': str(e) }
 
@@ -335,10 +339,27 @@ def QCAT_process(sid, data):
     return { 'error': str(e) }
   
 def parse_in_background(log_id, log_session, log_file, json_filepath):
+  #  thread management system
+  try:
+   free_memory = psutil.virtual_memory().available
+  except FileNotFoundError:
+   free_memory = 3221225500
   qc = win32com.client.Dispatch("QCAT6.Application")
-  worker = qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath)
-  worker.start()
-  
+  if queue.empty() and free_memory > 3221225472:
+   
+    worker[log_id] = qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath)
+    worker[log_id].start()
+  else:
+    queue.put({log_id, log_session, log_file, json_filepath})
+  while not queue.empty():
+    try:
+      free_memory = psutil.virtual_memory().available
+    except FileNotFoundError:
+      free_memory = 3221225500
+    if free_memory > 3221225472:
+      values =  queue.get()
+      worker[log_id] = qcat_lib.QCATWorker(qc, values.log_id, values.log_session, values.log_file, values.json_filepath)
+      worker[log_id].start()
 @sio.event
 def QCAT_parse_all(sid, data):
   if not qcat:
