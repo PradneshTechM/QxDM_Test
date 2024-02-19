@@ -27,7 +27,7 @@ import qcat_lib_win as qcat_lib
 from db import DB
 from session import Session, LogSession, ATSession, TestCase
 from exception import QConnectException
-
+worker = {}
 
 _BASE_PATH = Path(__file__).parent.resolve()
 _LOG_FOLDER_PATH = Path(_BASE_PATH.parent / 'logs')
@@ -360,6 +360,7 @@ def parse_in_background(log_id, log_session, log_file, json_filepath):
       values =  queue.get()
       worker[log_id] = qcat_lib.QCATWorker(qc, values.log_id, values.log_session, values.log_file, values.json_filepath)
       worker[log_id].start()
+    time.sleep(60)
 @sio.event
 def QCAT_parse_all(sid, data):
   if not qcat:
