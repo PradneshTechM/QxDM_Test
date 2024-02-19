@@ -5,6 +5,7 @@ from collections import defaultdict
 import os
 import traceback
 import logging
+import time
 from pathlib import Path
 from datetime import datetime
 import sys
@@ -83,15 +84,22 @@ def QUTS_diag_connect(sid, data):
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']
         logging.info(f'Using mask file {mask_file}')
-        sys.stdout.flush()
-        diag_service = quts.diag_connect(serial, mask_file)
       else:
-        diag_service = quts.diag_connect(serial)
+        mask_file = None
+        
+      if 'packets' in data and data['packets'] is not None:
+        packets = data['packets']
+        logging.info(f'Using packet type list ({len(packets)} packets)')
+      else:
+        packets = None
+        
+      diag_service = quts.diag_connect(serial, packets, mask_file)
 
       if diag_service:
         logging.info(f'Connected {serial} diag')
       else:
         raise Exception(f'Could not connect {serial} diag')
+      sys.stdout.flush()
       
       sessions[id] = LogSession(id, serial, service=diag_service, user=user, app_url=app_url, device=device)
       

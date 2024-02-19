@@ -131,7 +131,7 @@ class QUTS:
       return True
 
 
-  def diag_connect(self, serial: str, logmask_filepath=LOGMASK_FILEPATH) -> DiagService.DiagService.Client:
+  def diag_connect(self, serial: str, packet_types: list[str], logmask_filepath: str) -> DiagService.DiagService.Client:
     '''Connects to given device diag with serial number with given filepath to logmask.  Default logmask is used if none is provided.'''
     if not serial or serial == '':
       raise ValueError('Input serial cannot be None or empty string')
@@ -152,10 +152,18 @@ class QUTS:
 
     if diag_service.initializeServiceByProtocol(diag_protocol.protocolHandle):
       raise ConnectionError(f'Diag connect failed for serial: {serial}, device handle: {diag_protocol.deviceHandle}, procotol: {diag_protocol.protocolHandle}')
-
-    diag_service.setLoggingMask(QutsClient.readFile(logmask_filepath), Common.ttypes.LogMaskFormat.DMC_FORMAT)
+    
+    if(packet_types is not None and len(packet_types) > 0):
+      diagPacketFilter = Common.ttypes.DiagPacketFilter()
+      diagPacketFilter.idOrNameMask = {}
+      diagPacketFilter.idOrNameMask[Common.ttypes.DiagPacketType.LOG_PACKET] = list(map(lambda packet: Common.ttypes.DiagIdFilterItem(idOrName=packet), packet_types))
+      print(diagPacketFilter.idOrNameMask[Common.ttypes.DiagPacketType.LOG_PACKET])
+      diag_service.setLoggingMaskFromFilter(diagPacketFilter)
+    elif logmask_filepath is not None:
+      diag_service.setLoggingMask(QutsClient.readFile(logmask_filepath), Common.ttypes.LogMaskFormat.DMC_FORMAT)
 
     print(f'Diag connect succeeded for serial: {serial}, device handle: {diag_protocol.deviceHandle}, protocol: {diag_protocol.protocolHandle}')
+    sys.stdout.flush()
 
     return diag_service
 

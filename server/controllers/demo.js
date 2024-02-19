@@ -67,6 +67,9 @@ demoRouter.post('/diag', (request, response) => {
   if(request.body.mask) {
     data.mask = request.body.mask
   }
+  if(request.body.packets) {
+    data.packets = request.body.packets
+  }
   if(request.body.config) {
     data.config = request.body.config
   }
