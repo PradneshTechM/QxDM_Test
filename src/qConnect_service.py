@@ -358,7 +358,7 @@ def parse_in_background(log_id, log_session, log_file, json_filepath):
     worker[log_id] = qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath)
     worker[log_id].start()
   else:
-    queue.put({log_id, log_session, log_file, json_filepath})
+    queue.put({"log_id": log_id, "log_file": log_file, "json_filepath": json_filepath})
   while not queue.empty():
     try:
       free_memory = psutil.virtual_memory().available
@@ -366,7 +366,8 @@ def parse_in_background(log_id, log_session, log_file, json_filepath):
       free_memory = 3221225500
     if free_memory > 3221225472:
       values =  queue.get()
-      worker[log_id] = qcat_lib.QCATWorker(qc, values.log_id, values.log_session, values.log_file, values.json_filepath)
+      log_session_from_queue = log_sessions[values.log_id]
+      worker[log_id] = qcat_lib.QCATWorker(qc, values.log_id, log_session_from_queue, values.log_file, values.json_filepath)
       worker[log_id].start()
     time.sleep(60)
 @sio.event
