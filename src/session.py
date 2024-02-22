@@ -29,6 +29,7 @@ class LogSession(Session):
   config_file: str = None
   raw_logs: List[str] = None
   validated_logs: List[str] = None
+  packets: List[str] = None
   test_case: TestCase = None
   test_case_id: str = None
   db: str = None

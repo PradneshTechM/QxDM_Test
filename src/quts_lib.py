@@ -157,7 +157,6 @@ class QUTS:
       diagPacketFilter = Common.ttypes.DiagPacketFilter()
       diagPacketFilter.idOrNameMask = {}
       diagPacketFilter.idOrNameMask[Common.ttypes.DiagPacketType.LOG_PACKET] = list(map(lambda packet: Common.ttypes.DiagIdFilterItem(idOrName=packet), packet_types))
-      print(diagPacketFilter.idOrNameMask[Common.ttypes.DiagPacketType.LOG_PACKET])
       diag_service.setLoggingMaskFromFilter(diagPacketFilter)
     elif logmask_filepath is not None:
       diag_service.setLoggingMask(QutsClient.readFile(logmask_filepath), Common.ttypes.LogMaskFormat.DMC_FORMAT)

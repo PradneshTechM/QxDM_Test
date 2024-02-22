@@ -261,6 +261,16 @@ class QCATWorker(threading.Thread):
         CHUNK_SIZE = 10000
         print('Opening log file: ' + input)
         self.qcat_worker.OpenLog(input)
+        
+        packet_filter = self.qcat_worker.PacketFilter
+        
+        # assign packet filter before parsing
+        if self.log_session.packets is not None:
+            packet_filter.SetAll(False) 
+            for packet in self.log_session.packets:
+                packet_type_as_int = int(packet, 16)
+                packet_filter.Set(packet_type_as_int, True) 
+            packet_filter.Commit()
 
         packet = self.qcat_worker.FirstPacket
         if not packet:

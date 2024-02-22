@@ -36,7 +36,8 @@ _TC1_TEST_CONFIG = _BASE_PATH / 'qcat_tests/Test_case_1.json'
 _TC2_TEST_CONFIG = _BASE_PATH / 'qcat_tests/Test_case_2.json'
 _CERT_PATH = os.environ.get("CERT_PATH")
 _KEY_PATH = os.environ.get("KEY_PATH")
-
+_MEM_THRESHOLD = int(os.environ.get("MEM_THRESHOLD")) if os.environ.get("MEM_THRESHOLD") else 3221225472
+FALL_BACK_FREE_MEM = 3221225500
 
 class HiddenPrints:
   def __enter__(self):
@@ -102,6 +103,8 @@ def QUTS_diag_connect(sid, data):
       sys.stdout.flush()
       
       sessions[id] = LogSession(id, serial, service=diag_service, user=user, app_url=app_url, device=device)
+      if(packets):
+        sessions[id].packets = packets
       
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']
@@ -348,28 +351,47 @@ def QCAT_process(sid, data):
   
 def parse_in_background(log_id, log_session, log_file, json_filepath):
   #  thread management system
+  mem_threshold = _MEM_THRESHOLD
+  
   try:
-   free_memory = psutil.virtual_memory().available
+    free_memory = psutil.virtual_memory().available
   except FileNotFoundError:
-   free_memory = 3221225500
+    free_memory = FALL_BACK_FREE_MEM
+  logging.info(f'Free memory: {free_memory}')
+  sys.stdout.flush()
+    
   qc = win32com.client.Dispatch("QCAT6.Application")
-  if queue.empty() and free_memory > 3221225472:
-   
+  
+  if queue.empty() and free_memory > mem_threshold:
+    logging.info("Starting parser thread...")
     worker[log_id] = qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath)
     worker[log_id].start()
   else:
+    logging.info("Not enough memory, queueing parser...")
     queue.put({"log_id": log_id, "log_file": log_file, "json_filepath": json_filepath})
+  sys.stdout.flush()
+  
   while not queue.empty():
     try:
       free_memory = psutil.virtual_memory().available
     except FileNotFoundError:
-      free_memory = 3221225500
-    if free_memory > 3221225472:
+      free_memory = FALL_BACK_FREE_MEM
+    logging.info(f'Free memory: {free_memory}')
+    sys.stdout.flush()
+    
+    if free_memory > mem_threshold:
+      logging.info("Memory available for parsing, starting parser thread...")
+      sys.stdout.flush()
       values =  queue.get()
-      log_session_from_queue = log_sessions[values.log_id]
-      worker[log_id] = qcat_lib.QCATWorker(qc, values.log_id, log_session_from_queue, values.log_file, values.json_filepath)
+      log_session_from_queue = log_sessions[values["log_id"]]
+      worker[log_id] = qcat_lib.QCATWorker(qc, values["log_id"], log_session_from_queue, values["log_file"], values["json_filepath"])
       worker[log_id].start()
+    else:
+      logging.info("Not enough memory, waiting...")
+      sys.stdout.flush()
+    
     time.sleep(60)
+    
 @sio.event
 def QCAT_parse_all(sid, data):
   if not qcat:
