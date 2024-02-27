@@ -18,7 +18,6 @@ class Packet_0xB80B:
             mapped_entry["__frequency"] = config.get('__frequency')
             mapped_entry["__cell"] = config.get('__cell')
             mapped_entry["__packet_message"] = entry['msg_subtitle']
-            mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             return mapped_entry

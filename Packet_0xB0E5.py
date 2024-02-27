@@ -25,6 +25,7 @@ class Packet_0xB0E5:
                 modified_entry[new_key] = value
             modified_entry['__collection'] = config['__collection']
             modified_entry['__cell'] = config['__cell']
+            modified_entry['__packet_message'] = config['__packet_message']
             modified_entry['__Raw_Data'] = str(config['__Raw_Data'])
             modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry

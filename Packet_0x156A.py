@@ -20,9 +20,7 @@ class Packet_0x156A:
             }
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
             mapped_entry["__collection"] = config.get('__collection')
-            # mapped_entry["__frequency"] = config.get('__frequency')
             mapped_entry["__cell"] = config.get('__cell')
-            # mapped_entry["__packet_message"] = config.get('__packet_message')
             mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
