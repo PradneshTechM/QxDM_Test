@@ -347,7 +347,8 @@
     },
     "PRACH Actual Tx Power": {
       "DB Field": "PRACH Actual Tx Power"
-    }
+    },
+  "__cell": "LTE"
   },
   "0xB168 -- PCC": {
     "Cell Index": {
