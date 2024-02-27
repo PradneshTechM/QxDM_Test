@@ -2082,7 +2082,7 @@ RAT = DCM_RAT_LTE
 """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB822", packet_length=100, name="RRC MIB Info",
-                               subtitle="NR5G", datetime="2024 Jan 15  07:17:08.975", packet_text=
+                               subtitle="", datetime="2024 Jan 15  07:17:08.975", packet_text=
                                '''
 2024 Jan 15  07:17:08.975  [39]  0xB822  NR5G RRC MIB Info
 Subscription ID = 1
@@ -2104,7 +2104,7 @@ Mib Info
         ''')
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB823", packet_length=100, name="RRC Serving Cell Info",
-                               subtitle="NR5G", datetime="2024 Jan 15  07:18:07.534", packet_text=
+                               subtitle="", datetime="2024 Jan 15  07:18:07.534", packet_text=
                                '''
 2024 Jan 15  07:18:07.534  [9B]  0xB823  NR5G RRC Serving Cell Info
 Subscription ID = 1
@@ -2132,7 +2132,7 @@ Serving Cell Info
         ''')
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB8D8", packet_length=100, name="NR5G LL1 LOG SERVING SNR",
-                               subtitle="Reference Signal = SSB", datetime="2024 Jan 15  07:14:41.128", packet_text=
+                               subtitle="", datetime="2024 Jan 15  07:14:41.128", packet_text=
                                '''
 2024 Jan 15  07:14:22.238  [49]  0xB8D8  NR5G LL1 LOG SERVING SNR
 Subscription ID = 1
@@ -2172,7 +2172,7 @@ UL ACK Timing Sub-fn = 15
         ''')
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB169", packet_length=100, name="LTE UE Identification Message",
-                               subtitle="PCC", datetime="2024 Jan 25  21:03:52.637", packet_text=
+                               subtitle="", datetime="2024 Jan 25  21:03:52.637", packet_text=
                                '''
 2024 Jan 25  21:03:52.637  [9C]  0xB169  LTE UE Identification Message (MSG3) Report
 Subscription ID = 1
@@ -2196,7 +2196,7 @@ HARQ ID = 3
         ''')
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB168", packet_length=100, name="LTE Random Access Response",
-                               subtitle="PCC", datetime="2024 Jan 25  21:03:52.637", packet_text=
+                               subtitle="", datetime="2024 Jan 25  21:03:52.637", packet_text=
                                '''
 2024 Jan 25  21:03:52.637  [62]  0xB168  LTE Random Access Response (MSG2) Report
 Subscription ID = 1
@@ -2214,7 +2214,7 @@ Timing Advance = 10
         ''')
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB166", packet_length=100, name="LTE PRACH Configuration",
-                               subtitle="PRACH", datetime="2024 Jan 25  20:55:19.030", packet_text=
+                               subtitle="", datetime="2024 Jan 25  20:55:19.030", packet_text=
                                '''
 2024 Jan 25  20:55:19.030  [F6]  0xB166  LTE PRACH Configuration
 Subscription ID = 1
@@ -2252,7 +2252,7 @@ Detected Cells
         ''')
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0E5", packet_length=100, name="LTE NAS ESM Bearer",
-                               subtitle="NAS",
+                               subtitle="",
                                datetime="2024 Jan 25  21:03:44.144", packet_text=
                                '''
         2024 Jan 25  21:03:44.144  [EC]  0xB0E5  LTE NAS ESM Bearer Context Info
