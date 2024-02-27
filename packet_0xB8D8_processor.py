@@ -3,7 +3,7 @@ import re
 
 class Packet_0xB8D8:
     def extract_info(packet_text, config=None, entry= None):
-        pattern = r'.*?(?P<Packet>0xB8D8).*?Subscription ID = (?P<Subs_ID>[\d]+).*?Cell Id = (?P<PCI>[\d]+).*?Carrier Index = (?P<Carrier_Index>[\d]+).*?Reference Signal = (?P<Reference_Signal>[a-zA-Z\d]+).*?RX\[0\].*?SNR = (?P<SINR_DBM>[\d\.\sa-zA-Z]+)\n'
+        pattern = r'.*?0xB8D8.*?Subscription ID = (?P<Subs_ID>[\d]+).*?Cell Id = (?P<PCI>[\d]+).*?Carrier Index = (?P<Carrier_Index>[\d]+).*?Reference Signal = (?P<Reference_Signal>[a-zA-Z\d]+).*?RX\[0\].*?SNR = (?P<SINR_DBM>[\d\.\sa-zA-Z]+)\n'
 
         # Use re.search to find the first match of the pattern in the packet_text
         match = re.search(pattern, packet_text, re.DOTALL)

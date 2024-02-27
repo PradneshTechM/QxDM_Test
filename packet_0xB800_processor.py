@@ -4,7 +4,8 @@ class Packet_0xB800:
     def __init__(self):
         print("0xB800")
     def extract_info(lines, config, entry):
-        pattern = r".*?0xB800.*? --  (?P<msg_subtitle>.*)\nSubscription ID = (?P<subscription_id>\d+).*?nr5g_smm_msg\n(?P<nr5g_smm_msg>.*?(?=\n)).*?_5gsm_cause\n(?P<_5gsm_cause>.*?(?=\n)).*?qci = (?P<qci>.*?(?=\n))"
+        # pattern = r".*?0xB800.*? --  (?P<msg_subtitle>.*)\nSubscription ID = (?P<subscription_id>\d+).*?nr5g_smm_msg\n(?P<nr5g_smm_msg>.*?(?=\n)).*?_5gsm_cause\n(?P<_5gsm_cause>.*?(?=\n)).*?qci = (?P<qci>.*?(?=\n))"
+        pattern = r".*?0xB800.*? --  (?P<msg_subtitle>.*)\nSubscription ID = (?P<subscription_id>\d+).*?nr5g_smm_msg\n\s*(?P<nr5g_smm_msg>.*?(?=\n)).*?_5gsm_cause\n\s*(?P<_5gsm_cause>.*?(?=\n)).*?qci = (?P<qci>.*?(?=\n))"
         match = re.match(pattern, lines, re.DOTALL)
         if match:
             entry.update(match.groupdict())
