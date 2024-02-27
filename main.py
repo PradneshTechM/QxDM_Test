@@ -1,27 +1,4 @@
 from enum import Enum, auto
-from Packet_0xB0F7 import Packet_0xB0F7
-from Packet_0x156A import Packet_0x156A
-from Packet_0xB800 import Packet_0xB800
-from Packet_0xB80B import Packet_0xB80B
-from Packet_0xB0C1 import Packet_0xB0C1
-from Packet_0x156E import Packet_0x156E
-from Packet_0xB0E4 import Packet_0xB0E4
-from Packet_0xB0EC import Packet_0xB0EC
-from Packet_0xB1832 import Packet_0x1832
-from Packet_0xB0C2 import Packet_0xB0C2
-from Packet_0x1830 import Packet_0x1830
-from Packet_0x1831 import Packet_0x1831
-from Packet_0xB167 import Packet_0xB167
-from Packet_0x1569 import Packet_0x1569
-from Packet_0xB8D8 import Packet_0xB8D8
-from Packet_0xB823 import Packet_0xB823
-from Packet_0xB0E5 import Packet_0xB0E5
-from Packet_0xB822 import Packet_0xB822
-from Packet_0xB115 import Packet_0xB115
-from Packet_0xB166 import Packet_0xB166
-from Packet_0xB168 import Packet_0xB168
-from Packet_0xB169 import Packet_0xB169
-from Packet_0xB16A import Packet_0xB16A
 import re
 import logging
 import sys
@@ -31,7 +8,29 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
-
+from packet_0xB0F7_processor import Packet_0xB0F7
+from packet_0x156A_processor import Packet_0x156A
+from packet_0xB800_processor import Packet_0xB800
+from packet_0xB80B_processor import Packet_0xB80B
+from packet_0xB0C1_processor import Packet_0xB0C1
+from packet_0x156E_processor import Packet_0x156E
+from packet_0xB0E4_processor import Packet_0xB0E4
+from packet_0xB0EC_processor import Packet_0xB0EC
+from packet_0x1832_processor import Packet_0x1832
+from packet_0xB0C2_processor import Packet_0xB0C2
+from packet_0x1830_processor import Packet_0x1830
+from packet_0x1831_processor import Packet_0x1831
+from packet_0xB167_processor import Packet_0xB167
+from packet_0x1569_processor import Packet_0x1569
+from packet_0xB8D8_processor import Packet_0xB8D8
+from packet_0xB823_processor import Packet_0xB823
+from packet_0xB0E5_processor import Packet_0xB0E5
+from packet_0xB822_processor import Packet_0xB822
+from packet_0xB115_processor import Packet_0xB115
+from packet_0xB166_processor import Packet_0xB166
+from packet_0xB168_processor import Packet_0xB168
+from packet_0xB169_processor import Packet_0xB169
+from packet_0xB16A_processor import Packet_0xB16A
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1198,51 +1197,74 @@ class ParsedRawMessage:
             with open('input.json') as f:
                 config = json.load(f)
             if packet_name == '0xB0E5':
+                print("0xB0E5")
                 return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5 -- LTE -- NAS'], entry)
             elif packet_name == "0x156E":
+                print("0x156E")
                 return Packet_0x156E.extract_info(packet_text, config['0x156E -- IMS -- IMS_SIP_INVITE'],entry)
             elif packet_name == "0x156A":
+                print("0x156A")
                 return Packet_0x156A.extract_info(packet_text, config['0x156A -- IMS'],entry)
             elif packet_name == "0xB0C1":
+                print("0xB0C1")
                 return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1 -- LTE-- RRC'],entry)
             elif packet_name == "0xB0F7":
+                print("0xB0F7")
                 return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7 -- LTE'],entry)
             elif packet_name == "0xB80B":
+                print("0xB80B")
                 return Packet_0xB80B.extract_info(packet_text, config['0xB80B -- NR5G -- Packet Subtitle'],entry)
             elif packet_name == "0xB800":
+                print("0xB800")
                 return Packet_0xB800.extract_info(packet_text, config['0xB800 -- NR5G -- PDU session release req'],entry)
             elif packet_name =="0xB0EC":
+                print("0xB0EC")
                 return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC -- LTE -- msg_type"],entry)
             elif packet_name =="0xB0E4":
+                print("0xB0E4")
                 return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4 -- LTE -- NAS"],entry)
             elif packet_name =="0xB0C2":
+                print("0xB0C2")
                 return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2 -- Cell -- Cell Info"],entry)
             elif packet_name == "0x1832":
+                print("0x1832")
                 return Packet_0x1832.extract_info(packet_text, config["0x1832 -- IMS -- IMS_SIP_REGISTER/INFORMAL_RESPONSE"],entry)
             elif packet_name == '0xB822':
+                print("0xB822")
                 return Packet_0xB822.extract_info(packet_text, config['0xB822  -- NR5G'], entry)
             elif packet_name == '0xB115':
+                print("0xB115")
                 return Packet_0xB115.extract_info(packet_text, None, entry)
             elif packet_name == "0x1831":
+                print("0x1831")
                 return Packet_0x1831.extract_info(packet_text, config["0x1831 -- IMS -- Direction"],entry)
             elif packet_name == "0x1830":
+                print("0x1830")
                 return Packet_0x1830.extract_info(packet_text, config["0x1830 -- IMS -- Direction"],entry)
             elif packet_name == '0xB166':
+                print("0xB166")
                 return Packet_0xB166.extract_info(packet_text, config['0xB166 -- Pcell -- PRACH'], entry)
             elif packet_name == '0xB168':
+                print("0xB168")
                 return Packet_0xB168.extract_info(packet_text, config['0xB168 -- PCC'], entry)
             elif packet_name == '0xB169':
+                print("0xB169")
                 return Packet_0xB169.extract_info(packet_text, config['0xB169 -- PCC'], entry)
             elif packet_name == '0xB16A':
+                print("0xB16A")
                 return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
             elif packet_name == '0xB8D8':
+                print("0xB8D8")
                 return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],
                                                   entry)
             elif packet_name == '0xB167':
+                print("0xB167")
                 return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
             elif packet_name == "0x1569":
+                print("0x1569")
                 return Packet_0x1569.extract_info(packet_text, config['0x1569 -- IMS'], entry)
             elif packet_name == '0xB823':
+                print("0xB823")
                 return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
 
         # start here

@@ -4,7 +4,7 @@ class Packet_0xB80B:
     def __init__(self):
         print("0xB80B")
     def extract_info(lines, config, entry):
-        pattern = r".*?0xB80B.*? -- (?P<msg_subtitle>.*)\nSubscription ID = (?P<subscription_id>\d+).*?nr5g_mm_msg\n(?P<nr5g_mm_msg>.*?(?=\n))"
+        pattern = r".*?0xB80B.*? --  (?P<msg_subtitle>.*)\nSubscription ID = (?P<subscription_id>\d+).*?nr5g_mm_msg\n(?P<nr5g_mm_msg>.*?(?=\n))"
         match = re.match(pattern, lines, re.DOTALL)
         if match:
             entry.update(match.groupdict())
@@ -17,7 +17,11 @@ class Packet_0xB80B:
             mapped_entry["__collection"] = config.get('__collection')
             mapped_entry["__frequency"] = config.get('__frequency')
             mapped_entry["__cell"] = config.get('__cell')
-            mapped_entry["__packet_message"] = entry['msg_subtitle']
+            if "__packet_message" in config:
+                mapped_entry["__packet_message"] = entry["msg_subtitle"]
+                mapped_entry.pop("msg_subtitle", None)
+            # mapped_entry["__packet_message"] = entry['msg_subtitle']
+            # mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             return mapped_entry

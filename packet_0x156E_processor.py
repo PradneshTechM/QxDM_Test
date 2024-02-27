@@ -30,6 +30,7 @@ class Packet_0x156E:
             # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
             mapped_entry["__collection"] = config.get('__collection')
+            # mapped_entry["__frequency"] = config.get('__frequency')
             mapped_entry["__cell"] = config.get('__cell')
             mapped_entry["__packet_message"] = mapped_entry["Message ID"]
             mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
