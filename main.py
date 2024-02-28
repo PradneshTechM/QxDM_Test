@@ -8,6 +8,7 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB887_processor import Packet_0xB887
 from packet_0xB0F7_processor import Packet_0xB0F7
 from packet_0x156A_processor import Packet_0x156A
 from packet_0xB800_processor import Packet_0xB800
@@ -1266,6 +1267,10 @@ class ParsedRawMessage:
             elif packet_name == '0xB823':
                 print("0xB823")
                 return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
+            elif packet_name == '0xB887':
+                print('0xB887')
+                return Packet_0xB887(packet_text, config, entry).extract_info()
+
 
         # start here
 
@@ -1399,6 +1404,9 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+
+        def test_table_parsing():
+            messages: List[ParsedRawMessage] = []
         msg = ParsedRawMessage(index=0, packet_type="0xB0F7", packet_length=100,
                                name="LTE NAS EMM RRC Service Request",
                                subtitle="", datetime="2024 Jan 15  07:16:05.535", packet_text=
@@ -1517,6 +1525,27 @@ Rat Priority List {
       Use Timer = false
    }
 }''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB887", packet_length=100,
+                               name="LTE NAS ESM Bearer Context State",
+                               subtitle="", datetime="2024 Jan 15  07:15:16.754", packet_text=
+                               """2024 Jan 15  07:15:35.471  [55]  0xB887  NR5G MAC PDSCH Status
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor = 3. 6
+Num Records = 2
+Records
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |                     |      |PDSCH Status Info                                                                                                                                                                                                                                                                                                  |
+   |   |                     |      |       |    |      |    |         |    |       |        |        |     |        |   |   |   |  |HARQ |              |    |   |      |         |        |      |    |   |       |      |      |    |       |       |       |       |      |     |        |     |        |          |          |          |          |
+   |   |                     |      |       |    |      |    |         |    |       |        |        |     |        |   |   |   |  |Or   |              |K1  |   |      |         |        |      |    |   |       |      |      |    |       |       |       |       |      |     |        |     |        |          |          |          |          |
+   |   |                     |Num   |       |    |      |    |         |    |       |        |        |     |        |   |   |   |  |MBSFN|              |Or  |   |      |         |        |      |New |   |       |      |      |    |HD     |HARQ   |HD     |HARQ   |      |Is   |        |High |        |          |          |          |          |
+   |   |System Time          |PDSCH |Carrier|Tech|      |Conn|         |Band|Variant|Physical|        |TB   |        |SCS|   |Num|  |Area |              |PMCH|   |Num   |Iteration|CRC     |CRC   |Tx  |   |Discard|Bypass|Bypass|Num |Onload |Onload |Offload|Offload|Did   |IOVec|        |Clock|        |Rx Antenna|Rx Antenna|Rx Antenna|Rx Antenna|
+   |#  |Slot|Numerology|Frame|Status|ID     |Id  |Opcode|ID  |Bandwidth|Type|Id     |Cell ID |EARFCN  |Index|TB Size |MU |MCS|Rbs|RV|Id   |RNTI Type     |ID  |TCI|Layers|Index    |State   |Status|Flag|NDI|Mode   |Decode|HARQ  |ReTx|Timeout|Timeout|Timeout|Timeout|Recomb|Valid|Mod Type|Mode |Num RX  |Mapping 0 |Mapping 1 |Mapping 2 |Mapping 3 |
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|   0|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   10|        C RNTI|   5|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
+   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|        C RNTI|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
+""")
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x156A", packet_length=100,
                                name="IMS RTCP",
