@@ -1050,38 +1050,11 @@
       "DB Field": "Message",
       "Field Name": "Event [LTE] Message"
     },
-    "cellAccessRelatedInfo": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "plmn-Identity": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "trackingAreaCode": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "cellIdentity": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "cellSelectionInfo": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "q-RxLevMin": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "p-Max": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
+
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "LTE",
-    "__packet_message": "__packet_message = _obj['packet_subtitle']\\",
+    "__packet_message": "_obj['packet_subtitle']\\",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1167,12 +1140,12 @@
     "__KPI_type": "LTE Info"
   },
   "0xB0ED -- LTE -- msg_type": {
-    "SRVCC to GERAN/UTRAN capability": {
+    "lte_emm_msg.emm_attach_request.ms_netwk_cap.SRVCC to GERAN/UTRAN capability": {
       "DB Field": "SRVCC",
       "Field Name": "Event [LTE] SRVCC",
       "__comments": "Refer Serving cell Index to identify Pcell or Scell"
     },
-    "att_type": {
+    "lte_emm_msg.emm_attach_request.att_type": {
       "DB Field": "Attach Type",
       "Field Name": "Event [LTE] Attach Type"
     },
@@ -1180,15 +1153,15 @@
       "DB Field": "Identity",
       "Field Name": "Event [LTE] Identity"
     },
-    "UE_usage_setting": {
+    "lte_emm_msg.emm_attach_request.voice_domain_pref.UE_usage_setting": {
       "DB Field": "UE Usage",
       "Field Name": "Event [LTE] UE Usage"
     },
-    "esm_info_trans_flag": {
+    "lte_emm_msg.emm_attach_request.esm_msg_container.lte_esm_msg.pdn_connectivity_req.esm_info_trans_flag": {
       "DB Field": "ESM Info",
       "Field Name": "Event [LTE] ESM Info"
     },
-    "detach type": {
+    "lte_emm_msg.emm_detach_request.detach_type": {
       "DB Field": "Detach Type",
       "Field Name": "Event [LTE] Detach Type"
     },
@@ -1210,10 +1183,6 @@
     },
     "emm_attach_request": {
       "att_type": {
-        "DB Field": "SRVCC",
-        "Field Name": "Event [LTE] SRVCC"
-      },
-      "eps_mob_id": {
         "DB Field": "SRVCC",
         "Field Name": "Event [LTE] SRVCC"
       },
