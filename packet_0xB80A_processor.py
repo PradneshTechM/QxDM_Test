@@ -17,7 +17,6 @@ class Packet_0xB80A:
             # print(lines)
             # _obj.update(match.groupdict())
             entry.update(match.groupdict())
-
             # entry = match.groupdict()
             # print(entry)
 

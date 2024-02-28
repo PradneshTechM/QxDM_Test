@@ -35,7 +35,6 @@ class Packet_0xB801:
             mapped_entry["__cell"] = config.get('__cell')
             if mapped_entry[config['_5gsm_cause']['DB Field']] is None:
                 mapped_entry.pop(config['_5gsm_cause']['DB Field'], None)
-
             if "__packet_message" in config:
                 mapped_entry["__packet_message"] = entry["msg_subtitle"]
                 mapped_entry.pop("msg_subtitle", None)
