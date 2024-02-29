@@ -2,6 +2,7 @@ import re
 class Packet_0xB80A:
     # def __int__(self):
     #     print("New")
+
     def extract_info(lines, config, entry):
         # print("Lines", lines)
         # print("obj", dict)
