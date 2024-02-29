@@ -8,6 +8,7 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB887_processor import Packet_0xB887
 from packet_0xB0F7_processor import Packet_0xB0F7
 from packet_0x156A_processor import Packet_0x156A
 from packet_0xB800_processor import Packet_0xB800
@@ -31,9 +32,6 @@ from packet_0xB166_processor import Packet_0xB166
 from packet_0xB168_processor import Packet_0xB168
 from packet_0xB169_processor import Packet_0xB169
 from packet_0xB16A_processor import Packet_0xB16A
-from packet_0xB80A_processor import Packet_0xB80A
-from packet_0xB801_processor import Packet_0xB801
-from packet_0xB825_processor import Packet_0xB825
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1269,15 +1267,10 @@ class ParsedRawMessage:
             elif packet_name == '0xB823':
                 print("0xB823")
                 return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
-            elif packet_name =='0xB80A':
-                print("0xB80A")
-                return  Packet_0xB80A.extract_info(packet_text, config['0xB80A -- NR5G -- Packet Subtitle'], entry)
-            elif packet_name =="0xB801":
-                print("0xB801")
-                return Packet_0xB801.extract_info(packet_text, config["0xB801 -- NR5G -- Packet Subtitle"], entry)
-            elif packet_name=="0xB825":
-                print("0xB825")
-                return Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+            elif packet_name == '0xB887':
+                print('0xB887')
+                return Packet_0xB887(packet_text, config, entry).extract_info()
+
 
         # start here
 
@@ -1411,6 +1404,9 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+
+        def test_table_parsing():
+            messages: List[ParsedRawMessage] = []
         msg = ParsedRawMessage(index=0, packet_type="0xB0F7", packet_length=100,
                                name="LTE NAS EMM RRC Service Request",
                                subtitle="", datetime="2024 Jan 15  07:16:05.535", packet_text=
@@ -1529,6 +1525,27 @@ Rat Priority List {
       Use Timer = false
    }
 }''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB887", packet_length=100,
+                               name="LTE NAS ESM Bearer Context State",
+                               subtitle="", datetime="2024 Jan 15  07:15:16.754", packet_text=
+                               """2024 Jan 15  07:15:35.471  [55]  0xB887  NR5G MAC PDSCH Status
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor = 3. 6
+Num Records = 2
+Records
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |                     |      |PDSCH Status Info                                                                                                                                                                                                                                                                                                  |
+   |   |                     |      |       |    |      |    |         |    |       |        |        |     |        |   |   |   |  |HARQ |              |    |   |      |         |        |      |    |   |       |      |      |    |       |       |       |       |      |     |        |     |        |          |          |          |          |
+   |   |                     |      |       |    |      |    |         |    |       |        |        |     |        |   |   |   |  |Or   |              |K1  |   |      |         |        |      |    |   |       |      |      |    |       |       |       |       |      |     |        |     |        |          |          |          |          |
+   |   |                     |Num   |       |    |      |    |         |    |       |        |        |     |        |   |   |   |  |MBSFN|              |Or  |   |      |         |        |      |New |   |       |      |      |    |HD     |HARQ   |HD     |HARQ   |      |Is   |        |High |        |          |          |          |          |
+   |   |System Time          |PDSCH |Carrier|Tech|      |Conn|         |Band|Variant|Physical|        |TB   |        |SCS|   |Num|  |Area |              |PMCH|   |Num   |Iteration|CRC     |CRC   |Tx  |   |Discard|Bypass|Bypass|Num |Onload |Onload |Offload|Offload|Did   |IOVec|        |Clock|        |Rx Antenna|Rx Antenna|Rx Antenna|Rx Antenna|
+   |#  |Slot|Numerology|Frame|Status|ID     |Id  |Opcode|ID  |Bandwidth|Type|Id     |Cell ID |EARFCN  |Index|TB Size |MU |MCS|Rbs|RV|Id   |RNTI Type     |ID  |TCI|Layers|Index    |State   |Status|Flag|NDI|Mode   |Decode|HARQ  |ReTx|Timeout|Timeout|Timeout|Timeout|Recomb|Valid|Mod Type|Mode |Num RX  |Mapping 0 |Mapping 1 |Mapping 2 |Mapping 3 |
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|   0|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   10|        C RNTI|   5|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
+   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|        C RNTI|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
+""")
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x156A", packet_length=100,
                                name="IMS RTCP",
@@ -2303,313 +2320,6 @@ EPS_QOS
   eps_qos_length = 1 (0x1)
   qos_content
     qci = 6 (0x6) (QC6)
-        ''')
-        messages.append(msg)
-
-
-        msg = ParsedRawMessage(index=0, packet_type="0xB80A", packet_length=100, name="NR5G NAS MM5G Plain OTA Incoming Msg",
-                               subtitle="Security mode command",
-                               datetime="2024 Jan 15  07:17:09.243", packet_text=
-                               '''2024 Jan 15  07:17:09.243  [3B]  0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg  --  Security mode command
-Subscription ID = 1
-Misc ID         = 0
-pkt_version = 1 (0x1)
-rel_number = 15 (0xf)
-rel_version_major = 4 (0x4)
-rel_version_minor = 0 (0x0)
-prot_disc_type = 14 (0xe)
-ext_protocol_disc = 126 (0x7e)
-security_header = 0 (0x0)
-msg_type = 93 (0x5d) (Security mode command)
-nr5g_mm_msg
-  security_mode_cmd
-    nas_security_algo
-      ciphering_algorithm = 3 (0x3) (128-5G-EA3)
-      integ_protection_algorithm = 3 (0x3) (128-5G-IA3)
-    ngKSI
-      tsc = 1 (0x1) (mapped sec context)
-      nas_key_set_id = 1 (0x1)
-    replayed_ue_sec_cap
-      _5G_EA0 = 1 (0x1)
-      _5G_EA1_128 = 1 (0x1)
-      _5G_EA2_128 = 1 (0x1)
-      _5G_EA3_128 = 1 (0x1)
-      _5G_EA4 = 0 (0x0)
-      _5G_EA5 = 0 (0x0)
-      _5G_EA6 = 0 (0x0)
-      _5G_EA7 = 0 (0x0)
-      _5G_IA0 = 0 (0x0)
-      _5G_IA1_128 = 1 (0x1)
-      _5G_IA2_128 = 1 (0x1)
-      _5G_IA3_128 = 1 (0x1)
-      _5G_IA4 = 0 (0x0)
-      _5G_IA5 = 0 (0x0)
-      _5G_IA6 = 0 (0x0)
-      _5G_IA7 = 0 (0x0)
-      oct5_incl = 1 (0x1)
-      EEA0 = 1 (0x1)
-      EEA1_128 = 1 (0x1)
-      EEA2_128 = 1 (0x1)
-      EEA3_128 = 1 (0x1)
-      EEA4 = 0 (0x0)
-      EEA5 = 0 (0x0)
-      EEA6 = 0 (0x0)
-      EEA7 = 0 (0x0)
-      oct6_incl = 1 (0x1)
-      EIA0 = 0 (0x0)
-      EIA1_128 = 1 (0x1)
-      EIA2_128 = 1 (0x1)
-      EIA3_128 = 1 (0x1)
-      EIA4 = 0 (0x0)
-      EIA5 = 0 (0x0)
-      EIA6 = 0 (0x0)
-      EIA7 = 0 (0x0)
-    imeisv_req_incl = 1 (0x1)
-    meisv_req
-      imeisv_req_val = 1 (0x1)
-    eps_nas_sec_algo_incl = 1 (0x1)
-    nas_sec_algo
-      cipher_algorithm = 2 (0x2) (128-EEA2)
-      inte_prot_algorithm = 2 (0x2) (128-EIA2)
-    add_5g_security_info_incl = 1 (0x1)
-    add_5g_security_info
-      length = 1 (0x1)
-      RINMR = 1 (0x1)
-      HDP = 0 (0x0)
-    eap_msg_incl = 0 (0x0)
-    nr5g_abba_type_incl = 0 (0x0)
-    replayed_ue_sec_cap_incl = 1 (0x1)
-    replayed_s1_ue_sec_cap
-      EEA0 = 1 (0x1)
-      EEA1_128 = 1 (0x1)
-      EEA2_128 = 1 (0x1)
-      EEA3_128 = 1 (0x1)
-      EEA4 = 0 (0x0)
-      EEA5 = 0 (0x0)
-      EEA6 = 0 (0x0)
-      EEA7 = 0 (0x0)
-      EIA0 = 0 (0x0)
-      EIA1_128 = 1 (0x1)
-      EIA2_128 = 1 (0x1)
-      EIA3_128 = 1 (0x1)
-      EIA4 = 0 (0x0)
-      EIA5 = 0 (0x0)
-      EIA6 = 0 (0x0)
-      EIA7 = 0 (0x0)
-      oct5_incl = 1 (0x1)
-      UEA0 = 1 (0x1)
-      UEA1 = 1 (0x1)
-      UEA2 = 0 (0x0)
-      UEA3 = 0 (0x0)
-      UEA4 = 0 (0x0)
-      UEA5 = 0 (0x0)
-      UEA6 = 0 (0x0)
-      UEA7 = 0 (0x0)
-      oct6_incl = 1 (0x1)
-      UIA1 = 1 (0x1)
-      UIA2 = 0 (0x0)
-      UIA3 = 0 (0x0)
-      UIA4 = 0 (0x0)
-      UIA5 = 0 (0x0)
-      UIA6 = 0 (0x0)
-      UIA7 = 0 (0x0)
-      oct7_incl = 0 (0x0)
-        ''')
-        messages.append(msg)
-
-        msg = ParsedRawMessage(index=0, packet_type="0xB801", packet_length=100,
-                               name="NR5G NAS SM5G Plain OTA Outgoing Msg",
-                               subtitle="PDU session release req",
-                               datetime="2023 Nov 17  02:21:34.390", packet_text=
-                               '''2023 Nov 17  02:21:34.390  [37]  0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg  --  PDU session release req
-Subscription ID = 1
-Misc ID         = 0
-pkt_version = 1 (0x1)
-rel_number = 15 (0xf)
-rel_version_major = 4 (0x4)
-rel_version_minor = 0 (0x0)
-prot_disc_type = 14 (0xe)
-ext_protocol_disc = 46 (0x2e)
-pdu_session_id = 2 (0x2)
-proc_trans_id = 135 (0x87)
-msg_type = 209 (0xd1) (PDU session release request)
-nr5g_smm_msg
-  pdu_session_rel_req
-    _5gsm_cause_incl = 1 (0x1)
-    _5gsm_cause
-      cause = 36 (0x24) (Regular deactivation)
-    ext_prot_config_incl = 0 (0x0)
-        ''')
-        messages.append(msg)
-
-        msg = ParsedRawMessage(index=0, packet_type="0xB801", packet_length=100,
-                               name="NR5G NAS SM5G Plain OTA Outgoing Msg",
-                               subtitle="PDU session establishment req",
-                               datetime="2023 Nov 17  02:21:50.857", packet_text=
-                               '''2023 Nov 17  02:21:50.857  [6A]  0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg  --  PDU session establishment req
-Subscription ID = 1
-Misc ID         = 0
-pkt_version = 1 (0x1)
-rel_number = 15 (0xf)
-rel_version_major = 4 (0x4)
-rel_version_minor = 0 (0x0)
-prot_disc_type = 14 (0xe)
-ext_protocol_disc = 46 (0x2e)
-pdu_session_id = 1 (0x1)
-proc_trans_id = 136 (0x88)
-msg_type = 193 (0xc1) (PDU session establishment request)
-nr5g_smm_msg
-  pdu_session_estab_req
-    integrity_prot_max_data_rate
-      max_data_rate_per_UE_integrity_prot_ul = 255 (0xff)
-      max_data_rate_per_UE_integrity_prot_dl = 255 (0xff)
-    pdu_session_incl = 1 (0x1)
-    pdu_session_type
-      pdu_session_type = 3 (0x3) (IPv4v6)
-    scc_mode_incl = 0 (0x0)
-    _5gsm_cap_incl = 1 (0x1)
-    _5gsm_cap
-      tpmic = 0 (0x0)
-      atsss_st = 0 (0x0)
-      ept_s1 = 0 (0x0)
-      mh6_pdu = 0 (0x0)
-      Rqos = 0 (0x0)
-      num_octs = 0 (0x0)
-    max_num_supp_pkt_filter_incl = 0 (0x0)
-    always_on_pdu_session_req_incl = 0 (0x0)
-    pdu_dn_req_container_incl = 0 (0x0)
-    ext_prot_config_incl = 1 (0x1)
-    ext_prot_config
-      ext = 1 (0x1)
-      conf_prot = 0 (0x0)
-      num_recs = 12 (0xc)
-      prot_or_container[0]
-        id = 32801 (0x8021) (IPCP)
-        prot_or_container
-          prot_len = 16 (0x10)
-          ipcp_prot
-            ipcp_prot_id = 1 (0x1) (CONF_REQ)
-            identifier = 0 (0x0)
-            rfc1332_conf_req
-              num_options = 2 (0x2)
-              conf_options[0]
-                type = 129 (0x81)
-                rfc1877_primary_dns_server_add
-                  length = 6 (0x6)
-                  ip_addr = 0 (0x0) (0.0.0.0)
-              conf_options[1]
-                type = 131 (0x83)
-                rfc1877_sec_dns_server_add
-                  length = 6 (0x6)
-                  ip_addr = 0 (0x0) (0.0.0.0)
-      prot_or_container[1]
-        id = 13 (0xd) (DNS Server IPv4 Address Requestt)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[2]
-        id = 3 (0x3) (DNS Server IPv6 Address Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[3]
-        id = 1 (0x1) (P-CSCF IPv6 Address Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[4]
-        id = 12 (0xc) (P-CSCF IPv4 Address Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[5]
-        id = 18 (0x12) (P-CSCF Re-selection support)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[6]
-        id = 2 (0x2) (IM CN Subsystem Signalling Flag)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[7]
-        id = 10 (0xa) (IP address allocation via NAS signalling)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[8]
-        id = 5 (0x5) (NWK Req Bearer Control indicator)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[9]
-        id = 16 (0x10) (Ipv4 Link MTU Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[10]
-        id = 17 (0x11) (MS support of Local address in TFT indicator)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[11]
-        id = 35 (0x23) (QoS Rules with the length of 2 Octs support indicator)
-        prot_or_container
-          container_len = 0 (0x0)
-    ip_hc_config_incl = 0 (0x0)
-    ds_tt_ethernet_mac_add_incl = 0 (0x0)
-    ue_ds_tt_residence_time_incl = 0 (0x0)
-    port_management_incl = 0 (0x0)
-    ethernet_hc_config_incl = 0 (0x0)
-    pdu_addr_incl = 0 (0x0)
-    serv_level_aa_incl = 0 (0x0)
-    req_msb_container_incl = 0 (0x0)
-    pdu_session_pair_id_incl = 0 (0x0)
-    rsn_incl = 0 (0x0)
-        ''')
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB825", packet_length=100, name="NR5G RRC Configuration Info",
-                               subtitle="", datetime="2024 Jan 15  07:15:12.504", packet_text=
-                               '''2024 Jan 15  07:15:12.504  [3D]  0xB825  NR5G RRC Configuration Info
-Subscription ID = 1
-Misc ID         = 0
-Major.Minor Version = 3. 4
-Conn Config Info
-   NR Cell Global Identity = 0x0000000000000000
-   State = CONNECTED
-   Config Status = true
-   Connectivity Mode = NSA
-   Standby Mode = SINGLE STANDBY
-   Num Active SRB = 0
-   Num Active DRB = 1
-   MN MCG DRB IDs = NONE
-   SN MCG DRB IDs = NONE
-   MN SCG DRB IDs = NONE
-   SN SCG DRB IDs = NONE
-   MN Split DRB IDs = NONE
-   SN Split DRB IDs = 5
-   LTE Serving Cell Info {
-      Num Bands = 4
-      LTE Bands = { 
-         2, 12, 30, 66, 0, 0, 0, 0, 
-         0, 0, 0, 0
-      }
-   }
-   Num Contiguous CC Groups = 1
-   Num Active CC = 1
-   Num Active RB = 1
-   Contiguous CC Info
-      --------------------
-      |Band  |DL BW|UL BW|
-      |Number|Class|Class|
-      --------------------
-      |    77|    A|    A|
-
-   NR5G Serving Cell Info
-      -------------------------------------------------------------------------------------------
-      |  |    |          |          |          |    |    |DL       |UL       |        |DL  |UL  |
-      |CC|Cell|          |          |          |    |Band|Carrier  |Carrier  |        |Max |Max |
-      |Id|Id  |DL Arfcn  |UL Arfcn  |SSB Arfcn |Band|Type|Bandwidth|Bandwidth|SCS     |MIMO|MIMO|
-      -------------------------------------------------------------------------------------------
-      | 8| 700|    662666|    662666|    660768|  77|SUB6|    80MHZ|    80MHZ|  30 kHz|   4|   1|
-
-   Radio Bearer Info
-      ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |  |           |          |              |       |            |            |UL  |              |          |       |            |            |UL PDCP  |UL Data   |
-      |RB|Termination|          |              |DL ROHC|DL Cipher   |DL Integrity|RB  |              |UL Primary|UL ROHC|UL Cipher   |UL Integrity|Dup      |Split     |
-      |ID|Point      |DL RB Type|DL RB Path    |Enabled|Algo        |Algo        |Type|UL RB Path    |Path      |Enabled|Algo        |Algo        |Activated|Threshold |
-      ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      | 5|         SN|       DRB|  Split (ENDC)|  false|    NEA2/AES|          NA| DRB|  Split (ENDC)|        NR|  false|    NEA2/AES|          NA|    false|    b51200|
         ''')
         messages.append(msg)
 
