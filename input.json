@@ -571,10 +571,12 @@
           "index": 4,
           "DB Field": "RSRP(dBm)",
           "Field Name": "NR5G [PCC] RSRP(dBm)",
-          "__comments": ["if _obj['#']\\ == 0:",
-                             "return _obj['RSRP(dBm)']",
-                          "else:",
-                              "return None"]
+          "__comments": [
+            "if output['#'] == 0:",
+            "  return_val = output['RSRP(dBm)']",
+            "else:",
+            "  return_val = None"
+          ]
         }
       },
       {
