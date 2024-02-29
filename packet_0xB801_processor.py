@@ -13,7 +13,6 @@ class Packet_0xB801:
         pattern = r'.*?0xB801.*?--  (?P<msg_subtitle>.*?)\s*\nSubscription ID = (?P<subscription_id>\d+)\n.*?nr5g_smm_msg\s+(?P<nr5g_smm_msg>.*?)\n(?:.*?cause = (?P<_5gsm_cause>.*?)\n|.*?)'
 
         match = re.match(pattern, lines, re.DOTALL)
-
         # print(config)
         if match:
             # _obj["State"] = 1

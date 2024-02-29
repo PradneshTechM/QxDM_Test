@@ -25,7 +25,6 @@ class Packet_0xB80A:
                            'nr5g_mm_msg': config['nr5g_mm_msg']['DB Field']
                            }
 
-
             # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
             mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
             mapped_entry["__collection"] = config.get('__collection')
