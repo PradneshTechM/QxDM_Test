@@ -12,18 +12,14 @@ class Packet_0xB887:
     def extract_info(self):
         self.dict.update(self.entry)
         non_table_capture = self.regular_pattern()
+        table_capture = self.table_pattern()
         if non_table_capture:  # Check if non_table_capture is not None
             self.dict.update(non_table_capture)
-        else:
-            return None
-        table_capture = self.table_pattern()
         if table_capture:
             self.dict['records'] = {}  # Initialize the records key as an empty dictionary
             for i, entry in enumerate(table_capture, start=1):
                 entry_key = f'record{i}'  # Create a unique key for each entry
                 self.dict['records'][entry_key] = entry
-        else:
-            return None
         return self.dict  # Return the updated dictionary
 
     def regular_pattern(self):
