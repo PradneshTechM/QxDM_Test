@@ -14,6 +14,7 @@ import traceback
 import pythoncom
 import threading
 import yaml
+import parser.main as parser
 
 import message
 from message import ParsedRawMessage
@@ -321,11 +322,12 @@ class QCATWorker(threading.Thread):
                     if ((self.packet_config) and ("packet_frequency" in self.packet_config[packet_type_raw])):
                         self.nextPacketAllowedat[packet_type_raw] = now + timedelta(milliseconds=self.packet_config[packet_type_raw]["packet_frequency"])
                         
-                    raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetimestring, text)
-                    if self.packet_config:
-                        raw_msg.self_packet_config = self.packet_config[packet_type_raw]
-                    else:
-                        raw_msg.self_packet_config = None
+                    raw_msg = parser.ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetimestring, text)
+                    # raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetimestring, text)
+                    # if self.packet_config:
+                    #     raw_msg.self_packet_config = self.packet_config[packet_type_raw]
+                    # else:
+                    #     raw_msg.self_packet_config = None
                     raw_messages.append(raw_msg)
 
                     index += 1
@@ -370,34 +372,35 @@ class QCATWorker(threading.Thread):
 
                 for raw_msg in messages:
                 
-                    payload, metadata = raw_msg.to_json()
+                    # payload, metadata = raw_msg.to_json()
+                    payload = raw_msg.test()
                     collection_name = 'default'
-                    # seperate possible table rows into separate entries\
-                    try:                   
-                        if  raw_msg.self_packet_config:
-                            if "rawDataTag" in raw_msg.self_packet_config:
-                                if not raw_msg.self_packet_config["rawDataTag"]:
-                                    del metadata["_rawPayload"]
-                            if "custom_dbcollection" in raw_msg.self_packet_config:
-                                collection_name = raw_msg.self_packet_config["custom_dbcollection"]
-                                sys.stdout.flush()
-                                if collection_name not in json_arr:
-                                    json_arr[collection_name]=[]
-                    except:
-                        pass
+                    # # seperate possible table rows into separate entries\
+                    # try:                   
+                    #     if  raw_msg.self_packet_config:
+                    #         if "rawDataTag" in raw_msg.self_packet_config:
+                    #             if not raw_msg.self_packet_config["rawDataTag"]:
+                    #                 del metadata["_rawPayload"]
+                    #         if "custom_dbcollection" in raw_msg.self_packet_config:
+                    #             collection_name = raw_msg.self_packet_config["custom_dbcollection"]
+                    #             sys.stdout.flush()
+                    #             if collection_name not in json_arr:
+                    #                 json_arr[collection_name]=[]
+                    # except:
+                    #     pass
                         
-                    if "TABLE" in payload and isinstance(payload["TABLE"], list):
-                        for item in payload["TABLE"]:
+                    # if "TABLE" in payload and isinstance(payload["TABLE"], list):
+                    #     for item in payload["TABLE"]:
 
-                            json_arr[collection_name].append({
-                                **metadata,
-                                **item
-                            })
-                    else:
-                        json_arr[collection_name].append({
-                            **metadata,
-                            **payload
-                        })
+                    #         json_arr[collection_name].append({
+                    #             **metadata,
+                    #             **item
+                    #         })
+                    # else:
+                    json_arr[collection_name].append({
+                        # **metadata,
+                        **payload
+                    })
                         
                 # stop writing chunks to json file since we're proactively inserting to db
                 # with open(chunk_file, 'w') as f:
