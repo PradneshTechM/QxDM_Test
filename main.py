@@ -32,6 +32,11 @@ from packet_0xB166_processor import Packet_0xB166
 from packet_0xB168_processor import Packet_0xB168
 from packet_0xB169_processor import Packet_0xB169
 from packet_0xB16A_processor import Packet_0xB16A
+from packet_0xB0C0_processor import Packet_0xB0C0
+from packet_0xB196_processor import Packet_0xB196
+from packet_0xB113_processor import Packet_0xB113
+from packet_0xB171_processor import Packet_0xB171
+from packet_0xB18E_processor import Packet_0xB18E
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1269,7 +1274,22 @@ class ParsedRawMessage:
                 return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
             elif packet_name == '0xB887':
                 print('0xB887')
-                return Packet_0xB887(packet_text, config, entry).extract_info()
+                return Packet_0xB887(packet_text, config['0xB887 -- PCC -- PDSCH'], entry).extract_info()
+            elif packet_name == '0xB0C0':
+                print('0xB0C0')
+                return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0 -- LTE -- Packet Subtitle'], entry)
+            elif packet_name == '0xB196':
+                print('0xB196')
+                return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
+            elif packet_name == '0xB113':
+                print('0xB113')
+                return Packet_0xB113(packet_text, config['0xB113 -- LTE'], entry).extract_info()
+            elif packet_name == '0xB171':
+                print('0xB171')
+                return Packet_0xB171(packet_text, config['0xB171 -- PCC -- SRS'], entry).extract_info()
+            elif packet_name == '0xB18E':
+                print('0xB18E')
+                return Packet_0xB18E(packet_text, config['0xB18E -- PCell/SCelln'], entry).extract_info()
 
 
         # start here
@@ -1279,7 +1299,7 @@ class ParsedRawMessage:
         # parse payload
         # skip first line, because first line content is main content
         # (packet type, length, etc), and is already parsed
-        entry = {"Time": self.datetime, "Source": "QxDM", "Subtitle": self.subtitle}
+        entry = {"Time": self.datetime, "Source": "QxDM", "Packet Name": self.subtitle}
         data = _PARSE(self.packet_type_hex, self.packet_text, entry)
         print(data)
         return data
@@ -1547,8 +1567,61 @@ Records
    |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|        C RNTI|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
 """)
         messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB113", packet_length=100,
+                               name="LTE LL1 PSS Results",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.642", packet_text=
+                               """
+                               2024 Jan 15  07:14:07.642  [E1]  0xB113  LTE LL1 PSS Results
+Subscription ID = 1
+Version = 181
+Number of Half Frames = 1
+Sub-frame Number = 9
+System Frame Number = 539
+Number of PSS Records = 10
+Srch_type = LTE_LL1_SRCH_NCELL
+Nb Id = 0
+Earfcn = 66986
+PSS Records
+   -------------------------------
+   |   |PSS    |        |        |
+   |   |Peak   |        |        |
+   |   |Value  |Peak    |PSS     |
+   |#  |(dB)   |Position|Indicies|
+   -------------------------------
+   |  0| 17.114|    5192|       0|
+   |  1| 15.764|    5190|       0|
+   |  2| 15.594|    5193|       0|
+   |  3| 11.994|    5191|       0|
+   |  4| 11.291|    5189|       0|
+   |  5|  8.494|    6272|       2|
+   |  6|  8.237|    6273|       2|
+   |  7|  7.926|    8242|       0|
+   |  8|  7.620|    5270|       0|
+   |  9|  7.214|    5321|       1|
+                               """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB196", packet_length=100,
+                               name="LTE ML1 Cell Measurement Results",
+                               subtitle="", datetime="2024 Jan 19  21:46:04.483", packet_text=
+                               """
+2024 Jan 19  21:46:04.483  [84]  0xB196  LTE ML1 Cell Measurement Results
+Subscription ID = 1
+Version = 41
+Num Cells = 2
+Is 1Rx Mode = 0
+Cell Measurement List
+   ------------------------------------------------------------------------------
+   |   |       |        |       |Inst   |Inst   |Inst   |Inst   |Inst   |Inst   |
+   |   |       |        |       |RSRP   |RSRP   |RSRQ   |RSRQ   |RSSI   |RSSI   |
+   |   |       |Physical|Valid  |Rx[0]  |Rx[1]  |Rx[0]  |Rx[1]  |Rx[0]  |Rx[1]  |
+   |#  |E-ARFCN|Cell ID |Rx     |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+   ------------------------------------------------------------------------------
+   |  0|   5780|     147|RX0_RX1| -84.50| -82.31| -11.44| -11.50| -56.13| -53.81|
+   |  1|   5780|     295|RX0_RX1|-102.31| -97.00| -26.44| -23.50| -68.13| -65.75|
+                               """)
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x156A", packet_length=100,
-                               name="IMS RTCP",
+                               name="0x156A  IMS RTCP",
                                subtitle="", datetime="2024 Jan 15  07:14:51.652", packet_text=
                                '''2024 Jan 15  07:14:51.652  [4F]  0x156A  IMS RTCP
 Subscription ID = 1
@@ -2028,6 +2101,32 @@ MNC = 410
 Allowed Access = Full
 """)
         messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB18E", packet_length=100,
+                               name="LTE ML1 System Scan Results",
+                               subtitle="", datetime="2024 Jan 19  21:46:03.747", packet_text=
+                               """2024 Jan 19  21:46:03.747  [14]  0xB18E  LTE ML1 System Scan Results
+Subscription ID = 1
+Version = 41
+Use Init Search = 0
+Num Candidates = 10
+Candidates
+   ------------------------------------------------------------
+   |   |      |    |         |Energy      |NB_Energy   |      |
+   |#  |EARFCN|Band|Bandwidth|(dBm/100KHz)|(dBm/100KHz)|Pruned|
+   ------------------------------------------------------------
+   |  0| 68661|  71|    5 MHz|         -73|           0|     0|
+   |  1|  5230|  13|   10 MHz|         -78|           0|     0|
+   |  2|  5780|  17|   10 MHz|         -80|           0|     0|
+   |  3|  5330|  14|   10 MHz|         -82|           0|     0|
+   |  4| 66986|  66|   10 MHz|         -88|           0|     0|
+   |  5|   700|   2|   20 MHz|         -89|           0|     0|
+   |  6|   975|   2|   15 MHz|         -93|           0|     0|
+   |  7|  9820|  30|   10 MHz|        -101|           0|     0|
+   |  8| 66736|  66|   20 MHz|        -103|           0|     0|
+   |  9| 40072|  41|   20 MHz|        -118|           0|     0|
+
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x1832", packet_length=100,
                                name="IMS Registration",
                                subtitle="", datetime="2024 Jan 15  07:15:50.978", packet_text=
@@ -2302,7 +2401,7 @@ Detected Cells
    |   |     |    |        |          |         |  Rx1| N/A|        |        |
         ''')
         messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB0E5", packet_length=100, name="LTE NAS ESM Bearer",
+        msg = ParsedRawMessage(index=0, packet_type="0xB0E5", packet_length=100, name="LTE NAS ESM Bearer Context Info",
                                subtitle="",
                                datetime="2024 Jan 25  21:03:44.144", packet_text=
                                '''
@@ -2320,6 +2419,194 @@ EPS_QOS
   eps_qos_length = 1 (0x1)
   qos_content
     qci = 6 (0x6) (QC6)
+        ''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0C0", packet_length=100, name="LTE RRC OTA Packet",
+                               subtitle="BCCH_DL_SCH / SystemInformationBlockType1",
+                               datetime="2024 Jan 15  07:17:09.664", packet_text=
+                               '''
+        2024 Jan 15  07:17:09.664  [37]  0xB0C0  LTE RRC OTA Packet  --  BCCH_DL_SCH / SystemInformationBlockType1
+Subscription ID = 1
+Pkt Version = 27
+RRC Release Number.Major.minor = 16.1.0
+NR RRC Release Number.Major.minor = 16.6.0
+Radio Bearer ID = 0, Physical Cell ID = 147
+Freq = 5780
+SysFrameNum = 310, SubFrameNum = 5
+PDU Number = BCCH_DL_SCH Message,    Msg Length = 37
+SIB Mask in SI =  0x02
+
+Interpreted PDU:
+
+value BCCH-DL-SCH-Message ::= 
+{
+  message c1 : systemInformationBlockType1 : 
+      {
+        cellAccessRelatedInfo 
+        {
+          plmn-IdentityList 
+          {
+            {
+              plmn-Identity 
+              {
+                mcc 
+                {
+                  3,
+                  1,
+                  0
+                },
+                mnc 
+                {
+                  4,
+                  1,
+                  0
+                }
+              },
+              cellReservedForOperatorUse notReserved
+            },
+            {
+              plmn-Identity 
+              {
+                mcc 
+                {
+                  3,
+                  1,
+                  3
+                },
+                mnc 
+                {
+                  1,
+                  0,
+                  0
+                }
+              },
+              cellReservedForOperatorUse notReserved
+            }
+          },
+          trackingAreaCode '10010001 00001101'B,
+          cellIdentity '01100111 10111011 11110000 1111'B,
+          cellBarred notBarred,
+          intraFreqReselection allowed,
+          csg-Indication FALSE
+        },
+        cellSelectionInfo 
+        {
+          q-RxLevMin -65
+        },
+        p-Max 23,
+        freqBandIndicator 17,
+        schedulingInfoList 
+        {
+          {
+            si-Periodicity rf16,
+            sib-MappingInfo 
+            {
+            }
+          },
+          {
+            si-Periodicity rf16,
+            sib-MappingInfo 
+            {
+              sibType3
+            }
+          },
+          {
+            si-Periodicity rf64,
+            sib-MappingInfo 
+            {
+              sibType5
+            }
+          }
+        },
+        si-WindowLength ms20,
+        systemInfoValueTag 12,
+        nonCriticalExtension 
+        {
+          lateNonCriticalExtension 
+            CONTAINING
+            {
+              multiBandInfoList 
+              {
+                12
+              },
+              nonCriticalExtension 
+              {
+                nonCriticalExtension 
+                {
+                  nonCriticalExtension 
+                  {
+                    nonCriticalExtension 
+                    {
+                      nonCriticalExtension 
+                      {
+                        schedulingInfoListExt-r12 
+                        {
+                          {
+                            si-Periodicity-r12 rf32,
+                            sib-MappingInfo-r12 
+                            {
+                              sibType24-v1530
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+          nonCriticalExtension 
+          {
+            ims-EmergencySupport-r9 true,
+            nonCriticalExtension 
+            {
+              nonCriticalExtension 
+              {
+                cellAccessRelatedInfo-v1250 
+                {
+                },
+                nonCriticalExtension 
+                {
+                  hyperSFN-r13 '10011110 11'B,
+                  eDRX-Allowed-r13 true
+                }
+              }
+            }
+          }
+        }
+      }
+}
+        ''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB171", packet_length=100, name="0xB171  LTE SRS Power Control Report",
+                               subtitle="",
+                               datetime="2024 Jan 15  07:17:09.664", packet_text=
+                               '''
+ 2024 Jan 19  21:46:06.512  [5C]  0xB171  LTE SRS Power Control Report
+Subscription ID = 1
+Version = 24
+Number of Records = 14
+Report
+   -------------------------------------------------------
+   |   |     |    |      |SRS  |    |     |       |SRS   |
+   |   |     |    |      |Tx   |    |     |TPC    |Actual|
+   |   |Cell |    |      |Power|Path|     |Command|Tx    |
+   |#  |Index|SFN |Sub-fn|(dBm)|Loss|M_SRS|(f(i)) |Power |
+   -------------------------------------------------------
+   |  0|    0| 818|     5|   18| 105|    4|      5|    18|
+   |  1|    0| 819|     5|   18| 105|    4|      5|    18|
+   |  2|    0| 820|     5|   17| 105|    4|      4|    17|
+   |  3|    0| 821|     5|   17| 105|    4|      4|    17|
+   |  4|    0| 822|     5|   17| 105|    4|      4|    17|
+   |  5|    0| 823|     5|   17| 105|    4|      4|    17|
+   |  6|    0| 824|     5|   17| 105|    4|      4|    17|
+   |  7|    0| 825|     5|   17| 105|    4|      4|    17|
+   |  8|    0| 826|     5|   17| 105|    4|      4|    17|
+   |  9|    0| 827|     5|   17| 105|    4|      4|    17|
+   | 10|    0| 828|     5|   17| 105|    4|      4|    17|
+   | 11|    0| 829|     5|   17| 105|    4|      4|    17|
+   | 12|    0| 830|     5|   17| 105|    4|      4|    17|
+   | 13|    0| 831|     5|   17| 105|    4|      4|    17|
         ''')
         messages.append(msg)
 

@@ -23,11 +23,16 @@ class Packet_0xB0E5:
                 new_key = key.replace('_', ' ')
                 # Add the modified key and its value to the new dictionary
                 modified_entry[new_key] = value
-            modified_entry['__collection'] = config['__collection']
-            modified_entry['__cell'] = config['__cell']
-            modified_entry['__packet_message'] = config['__packet_message']
-            modified_entry['__Raw_Data'] = str(config['__Raw_Data'])
-            modified_entry['__KPI_type'] = config['__KPI_type']
+            if config['__collection']:
+                modified_entry['__collection'] = config['__collection']
+            if config['__cell']:
+                modified_entry['__cell'] = config['__cell']
+            if config['Packet_Type']:
+                modified_entry['Packet_Type'] = config['Packet_Type']
+            if config['__Raw_Data']:
+                modified_entry['__Raw_Data'] = str(config['__Raw_Data'])
+            if config['__KPI_type']:
+                modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry
         else:
             # Return None or an empty dictionary if there is no match

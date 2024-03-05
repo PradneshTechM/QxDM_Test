@@ -21,12 +21,18 @@ class Packet_0xB0C1:
 
             # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
-            mapped_entry["__collection"] = config.get('__collection')
-            mapped_entry["__frequency"] = config.get('__frequency')
-            mapped_entry["__cell"] = config.get('__cell')
-            mapped_entry["__packet_message"] = config.get('__packet_message')
-            mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
-            mapped_entry["__KPI_type"] = config.get('__KPI_type')
+            if config['__collection']:
+                mapped_entry["__collection"] = config.get('__collection')
+            if config['__frequency']:
+                mapped_entry["__frequency"] = config.get('__frequency')
+            if config['__cell']:
+                mapped_entry["__cell"] = config.get('__cell')
+            if config['Packet_Type']:
+                mapped_entry["Packet_Type"] = config.get('Packet_Type')
+            if config['__Raw_Data']:
+                mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
+            if config['__KPI_type']:
+                mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             return mapped_entry
 
