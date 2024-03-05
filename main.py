@@ -8,29 +8,32 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
-from packet_0xB0F7_processor import Packet_0xB0F7
-from packet_0x156A_processor import Packet_0x156A
-from packet_0xB800_processor import Packet_0xB800
-from packet_0xB80B_processor import Packet_0xB80B
-from packet_0xB0C1_processor import Packet_0xB0C1
-from packet_0x156E_processor import Packet_0x156E
-from packet_0xB0E4_processor import Packet_0xB0E4
-from packet_0xB0EC_processor import Packet_0xB0EC
-from packet_0x1832_processor import Packet_0x1832
-from packet_0xB0C2_processor import Packet_0xB0C2
-from packet_0x1830_processor import Packet_0x1830
-from packet_0x1831_processor import Packet_0x1831
-from packet_0xB167_processor import Packet_0xB167
-from packet_0x1569_processor import Packet_0x1569
-from packet_0xB8D8_processor import Packet_0xB8D8
-from packet_0xB823_processor import Packet_0xB823
-from packet_0xB0E5_processor import Packet_0xB0E5
-from packet_0xB822_processor import Packet_0xB822
-from packet_0xB115_processor import Packet_0xB115
-from packet_0xB166_processor import Packet_0xB166
-from packet_0xB168_processor import Packet_0xB168
-from packet_0xB169_processor import Packet_0xB169
-from packet_0xB16A_processor import Packet_0xB16A
+from parser.packet_0xB0F7_processor import Packet_0xB0F7
+from parser.packet_0x156A_processor import Packet_0x156A
+from parser.packet_0xB800_processor import Packet_0xB800
+from parser.packet_0xB80B_processor import Packet_0xB80B
+from parser.packet_0xB0C1_processor import Packet_0xB0C1
+from parser.packet_0x156E_processor import Packet_0x156E
+from parser.packet_0xB0E4_processor import Packet_0xB0E4
+from parser.packet_0xB0EC_processor import Packet_0xB0EC
+from parser.packet_0x1832_processor import Packet_0x1832
+from parser.packet_0xB0C2_processor import Packet_0xB0C2
+from parser.packet_0x1830_processor import Packet_0x1830
+from parser.packet_0x1831_processor import Packet_0x1831
+from parser.packet_0xB167_processor import Packet_0xB167
+from parser.packet_0x1569_processor import Packet_0x1569
+from parser.packet_0xB8D8_processor import Packet_0xB8D8
+from parser.packet_0xB823_processor import Packet_0xB823
+from parser.packet_0xB0E5_processor import Packet_0xB0E5
+from parser.packet_0xB822_processor import Packet_0xB822
+from parser.packet_0xB115_processor import Packet_0xB115
+from parser.packet_0xB166_processor import Packet_0xB166
+from parser.packet_0xB168_processor import Packet_0xB168
+from parser.packet_0xB169_processor import Packet_0xB169
+from parser.packet_0xB16A_processor import Packet_0xB16A
+
+config_file = open('parser/input.json')
+config = json.load(config_file)
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -539,26 +542,29 @@ class ParsedRawMessage:
 
     def to_json(self):
         try:
-            data = self.parse_payload()
+            parsedPayload = self.parse_payload()
         except:
             traceback.print_exc()
             logging.info(self.index)
             sys.stdout.flush()
             sys.stderr.flush()
-            parsedPayload = {}
-            flags = {}
-        return parsedPayload, {
+            return None, None
+        metadata = {
             "_index": self.index,
             "_packetType": hex(int(self.packet_type)),
             "_packetTypeInt": int(self.packet_type),
             "_name": self.name,
-            "_datetime": self.datetime,
+            # "_datetime": self.datetime,
             "_length": self.packet_length,
-            "_subtitle": self.subtitle if self.subtitle else "",
-            "_rawPayload": self.packet_text,
+            # "_subtitle": self.subtitle if self.subtitle else "",
             "_parserVersion": ParsedRawMessage.VERSION,
-            "_flags": flags,
         }
+        if parsedPayload != None:
+            if "__Raw_Data" in parsedPayload:
+                if (parsedPayload["__Raw_Data"] == True or parsedPayload["__Raw_Data"] == 'True'):
+                    metadata["_rawPayload"] = self.packet_text
+                del parsedPayload["__Raw_Data"]
+        return parsedPayload, metadata
 
     def parse_payload(self):
         class TYPE_FLAGS(str, Enum):
@@ -1194,8 +1200,6 @@ class ParsedRawMessage:
 
         # START PARSING
         def _PARSE(packet_name, packet_text, entry):
-            with open('input.json') as f:
-                config = json.load(f)
             if packet_name == '0xB0E5':
                 print("0xB0E5")
                 return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5 -- LTE -- NAS'], entry)
@@ -1276,7 +1280,7 @@ class ParsedRawMessage:
         # (packet type, length, etc), and is already parsed
         entry = {"Time": self.datetime, "Source": "QxDM", "Subtitle": self.subtitle}
         data = _PARSE(self.packet_type_hex, self.packet_text, entry)
-        print(data)
+        # print(data)
         return data
 
 
