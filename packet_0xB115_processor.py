@@ -67,5 +67,6 @@ class Packet_0xB115:
                             dict_1[additional_key] = self.config[additional_key]
                     carrier_ids.append(dict_1)
             return carrier_ids
+
         else:
             print("No data rows found.")

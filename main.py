@@ -1327,7 +1327,6 @@ class ParsedRawMessage:
                 print('0xB196')
                 return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
 
-
         # start here
 
         # remove empty (only whitespace) lines

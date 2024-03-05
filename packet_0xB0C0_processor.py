@@ -21,7 +21,6 @@ class Packet_0xB0C0:
                 }
 
 
-
                 # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
                 mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
                 # mapped_entry.update(utils.metadata(mapped_entry, config))

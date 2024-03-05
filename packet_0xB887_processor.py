@@ -53,7 +53,6 @@ class Packet_0xB887:
 
             # Split the captured content into rows based on newline characters
             rows = table_content.split('\n')
-
             for row in rows:  # Iterate over each row
                 dict_1 = {}
                 row_values = row.split('|')  # Split the current row by the '|' character to get individual values

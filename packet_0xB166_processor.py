@@ -17,7 +17,6 @@ class Packet_0xB166:
             modified_entry = {}
             # modified_entry['subtitle'] = subtitle
             # Iterate over each item in the entry dictionary
-
             for key, value in entry.items():
                 # Replace underscores with spaces in the key
                 new_key = key.replace('_', ' ')

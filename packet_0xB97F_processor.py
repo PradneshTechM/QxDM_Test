@@ -70,7 +70,6 @@ class Packet_0xB97F:
         if match:
             # Extract the 'table' named group which contains the data rows
             table_content = match.group('table').strip()
-
             # Split the captured content into rows based on newline characters
             rows = table_content.split('\n')
 

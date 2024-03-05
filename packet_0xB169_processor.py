@@ -28,4 +28,3 @@ class Packet_0xB169:
             return modified_entry
         else:
             None
-            # Return None or an empty d

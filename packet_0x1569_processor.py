@@ -13,7 +13,6 @@ class Packet_0x1569:
             # key_mapping = {'subscription_id': 'Subscription ID', 'sequence_number': 'Sequence Number',
             #                'ssrc': 'SSRC', 'codec_type': 'codecType',
             #                'loss_type': 'LossType', 'total_packets_count': 'Total Packets Count'}
-
             # with open('config.json') as f:
             #     config = json.load(f)
             # key_mapping = {

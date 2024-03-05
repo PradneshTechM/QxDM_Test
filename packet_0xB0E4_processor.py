@@ -11,7 +11,6 @@ class Packet_0xB0E4:
 
         match = re.match(pattern, lines, re.DOTALL)
 
-
         if match:
             # _obj["State"] = 1
             # print(lines)

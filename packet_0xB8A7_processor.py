@@ -45,7 +45,6 @@ class Packet_0xB8A7:
         #     return data
         # else:
         #     return None
-
     def table_pattern(self):
         match = re.search(self.pattern2, self.packet_text, re.DOTALL)
         carrier_ids = []  # Initialize an empty list to store dictionaries

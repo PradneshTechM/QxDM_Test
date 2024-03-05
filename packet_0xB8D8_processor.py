@@ -45,7 +45,6 @@ class Packet_0xB8D8:
                     elif new_key == 'SINR(dBm)':
                         new_value = int(value)
                         # new_value = Decimal(value)
-
                         modified_entry[new_key] = new_value
                     else:
                     # Add the modified key and its value to the new dictionary

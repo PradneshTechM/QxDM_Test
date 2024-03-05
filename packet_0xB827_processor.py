@@ -10,7 +10,6 @@ class Packet_0xB827:
         self.pattern2 = r'.*?Band Cap 385_448.*?\|Band Cap 449_512.*?\|.*?-+.*?\n(?P<table>[\s\S]*).*?NR5G Arfcn Counts'
         self.dict = {}
         self.result = []
-
     def extract_info(self):
         self.dict.update(self.entry)
         non_table_capture = self.regular_pattern()

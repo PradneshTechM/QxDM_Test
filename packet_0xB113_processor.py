@@ -9,7 +9,6 @@ class Packet_0xB113:
         self.pattern2 = r".*?Position.*?\|Indicies.*?\|.*?-+.*?\n(?P<table>[\s\S]*)"
         self.dict = {}
         self.result = []
-
     def extract_info(self):
         self.dict.update(self.entry)
         non_table_capture = self.regular_pattern(self.config)

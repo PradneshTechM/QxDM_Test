@@ -20,7 +20,6 @@ class Packet_0xB0C2:
 
             # entry = match.groupdict()
             # print(entry)
-
             key_mapping = {'subscription_id': config['Subscription ID']['DB Field'],
                            'physical_cell_id': config['Physical Cell ID']['DB Field'],
                            'dl_freq': config['DL FREQ']['DB Field'],

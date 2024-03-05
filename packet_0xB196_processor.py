@@ -60,7 +60,6 @@ class Packet_0xB196:
 
             # Split the captured content into rows based on newline characters
             rows = table_content.split('\n')
-
             if rows:  # Check if rows list is not empty
                 for row in rows:  # Iterate over each row
                     row_values = row.split('|')  # Split the current row by the '|' character to get individual values

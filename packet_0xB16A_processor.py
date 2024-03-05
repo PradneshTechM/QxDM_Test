@@ -7,7 +7,6 @@ class Packet_0xB16A:
 
         # Use re.search to find the first match of the pattern in the packet_text
         match = re.search(pattern, packet_text, re.DOTALL)
-
         if match:
             # If there is a match, extract the group dictionary
             entry.update(match.groupdict())

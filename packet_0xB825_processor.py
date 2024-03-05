@@ -33,7 +33,6 @@ class Packet_0xB825:
 
             entry["lte_bands"] = lte_bands
 
-
             entry = {key_mapping.get(key, key): value for key, value in entry.items()}
             # print(entry["table"])
             if entry["table"]:

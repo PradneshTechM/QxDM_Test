@@ -13,7 +13,6 @@ class Packet_0x1830:
 
             # entry = match.groupdict()
             # print(entry)
-
             key_mapping = {
                 'subscription_id': config['Subscription ID']['DB Field'],
                 'direction': config['Direction']['DB Field'],

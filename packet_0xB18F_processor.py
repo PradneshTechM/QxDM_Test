@@ -24,7 +24,6 @@ class Packet_0xB18F:
                     self.dict[key] = value
                 self.result.append(self.dict)
         return self.result  # Return the updated dictionary
-
     def regular_pattern(self):
         match = re.search(self.pattern1, self.packet_text, re.DOTALL)
         if match:
