@@ -32,11 +32,19 @@ from packet_0xB166_processor import Packet_0xB166
 from packet_0xB168_processor import Packet_0xB168
 from packet_0xB169_processor import Packet_0xB169
 from packet_0xB16A_processor import Packet_0xB16A
+from packet_0xB80A_processor import Packet_0xB80A
+from packet_0xB801_processor import Packet_0xB801
+from packet_0xB825_processor import Packet_0xB825
+from packet_0xB97F_processor import Packet_0xB97F
+from packet_0xB8A7_processor import Packet_0xB8A7
+from packet_0xB827_processor import Packet_0xB827
+from packet_0xB18F_processor import Packet_0xB18F
+from packet_0xB821_processor import Packet_0xB821
 from packet_0xB0C0_processor import Packet_0xB0C0
-from packet_0xB196_processor import Packet_0xB196
 from packet_0xB113_processor import Packet_0xB113
 from packet_0xB171_processor import Packet_0xB171
 from packet_0xB18E_processor import Packet_0xB18E
+from packet_0xB196_processor import Packet_0xB196
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -572,6 +580,7 @@ class ParsedRawMessage:
             MULTI_ROW_TABLE = "MULTI_ROW_TABLE"
 
         TABLE_PACKET_TYPES = [
+            "0xB825",
             "0xb97f",
             "0xb0c0",
             "0xb0ed",
@@ -978,7 +987,7 @@ class ParsedRawMessage:
             TABLE_BOUNDARIES_REGEX = r'^-+$'
             TABLE_VERTICAL_BOUNDARY_REGEX = r'^\|'
             TABLE_VERTICAL_BOUNDARY = "|"
-
+            print(lines)
             flags = {}
             # find a table start and end
             table_name = "TABLE"
@@ -1003,6 +1012,7 @@ class ParsedRawMessage:
                 # """
                 def _parse_cols(lines: list[str]) -> list[list[str]]:
                     cols: list[str] = []
+                    print("lines before  getting reversed", lines)
                     lines.reverse()
                     bottom_most_names_and_len: list[(str, int)] = []
                     for r_index, row in enumerate(lines):
@@ -1240,7 +1250,7 @@ class ParsedRawMessage:
                 return Packet_0xB822.extract_info(packet_text, config['0xB822  -- NR5G'], entry)
             elif packet_name == '0xB115':
                 print("0xB115")
-                return Packet_0xB115.extract_info(packet_text, None, entry)
+                return Packet_0xB115(packet_text, config['0xB115'], entry).extract_info()
             elif packet_name == "0x1831":
                 print("0x1831")
                 return Packet_0x1831.extract_info(packet_text, config["0x1831 -- IMS -- Direction"],entry)
@@ -1275,12 +1285,35 @@ class ParsedRawMessage:
             elif packet_name == '0xB887':
                 print('0xB887')
                 return Packet_0xB887(packet_text, config['0xB887 -- PCC -- PDSCH'], entry).extract_info()
+            elif packet_name == '0xB801':
+                print('0xB801')
+                return Packet_0xB801.extract_info(packet_text, config["0xB801 -- NR5G -- Packet Subtitle"], entry)
+            elif packet_name == '0xB80A':
+                print('0xB80A')
+                return Packet_0xB80A.extract_info(packet_text, config["0xB80A -- NR5G -- Packet Subtitle"], entry)
+            elif packet_name == '0xB825':
+                print('0xB825')
+                return Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+            elif packet_name == "0xB97F":
+                print("0xB97F")
+                return Packet_0xB97F(packet_text, config['0xB97F -- PCC'], entry).extract_info()
+                # entry,table_lines = Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+                # return _tables(table_lines, entry)
+            elif packet_name == '0xB8A7':
+                print('0xB8A7')
+                return Packet_0xB8A7(packet_text, config['0xB8A7 -- PCC'], entry).extract_info()
+            elif packet_name == '0xB827':
+                print('0xB827')
+                return Packet_0xB827(packet_text, config['0xB827 -- NR5G'], entry).extract_info()
+            elif packet_name == '0xB18F':
+                print('0xB18F')
+                return Packet_0xB18F(packet_text, config['0xB18F -- LTE'], entry).extract_info()
+            elif packet_name == '0xB821':
+                print('0xB821')
+                return Packet_0xB821.extract_info(packet_text, config['0xB821 -- NR5G -- Packet Subtitle'], entry)
             elif packet_name == '0xB0C0':
                 print('0xB0C0')
                 return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0 -- LTE -- Packet Subtitle'], entry)
-            elif packet_name == '0xB196':
-                print('0xB196')
-                return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
             elif packet_name == '0xB113':
                 print('0xB113')
                 return Packet_0xB113(packet_text, config['0xB113 -- LTE'], entry).extract_info()
@@ -1290,7 +1323,9 @@ class ParsedRawMessage:
             elif packet_name == '0xB18E':
                 print('0xB18E')
                 return Packet_0xB18E(packet_text, config['0xB18E -- PCell/SCelln'], entry).extract_info()
-
+            elif packet_name == '0xB196':
+                print('0xB196')
+                return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
 
         # start here
 
@@ -1299,7 +1334,16 @@ class ParsedRawMessage:
         # parse payload
         # skip first line, because first line content is main content
         # (packet type, length, etc), and is already parsed
-        entry = {"Time": self.datetime, "Source": "QxDM", "Packet Name": self.subtitle}
+        # entry = {"Time": self.datetime, "Source": "QxDM", "Subtitle": self.subtitle}
+        packet_name = None
+        # if self.subtitle:
+        if self.subtitle == "" or self.subtitle == " ":
+            packet_name = self.packet_type_hex + ' '+ self.name
+        else:
+            packet_name = self.packet_type_hex + ' '+ self.name + ' -- ' + self.subtitle
+
+        entry = {"Time": self.datetime, "Source": "QxDM", "Packet Name": packet_name}
+
         data = _PARSE(self.packet_type_hex, self.packet_text, entry)
         print(data)
         return data
@@ -1566,59 +1610,6 @@ Records
    |  0|   0|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   10|        C RNTI|   5|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
    |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|        C RNTI|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
 """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB113", packet_length=100,
-                               name="LTE LL1 PSS Results",
-                               subtitle="", datetime="2024 Jan 15  07:14:07.642", packet_text=
-                               """
-                               2024 Jan 15  07:14:07.642  [E1]  0xB113  LTE LL1 PSS Results
-Subscription ID = 1
-Version = 181
-Number of Half Frames = 1
-Sub-frame Number = 9
-System Frame Number = 539
-Number of PSS Records = 10
-Srch_type = LTE_LL1_SRCH_NCELL
-Nb Id = 0
-Earfcn = 66986
-PSS Records
-   -------------------------------
-   |   |PSS    |        |        |
-   |   |Peak   |        |        |
-   |   |Value  |Peak    |PSS     |
-   |#  |(dB)   |Position|Indicies|
-   -------------------------------
-   |  0| 17.114|    5192|       0|
-   |  1| 15.764|    5190|       0|
-   |  2| 15.594|    5193|       0|
-   |  3| 11.994|    5191|       0|
-   |  4| 11.291|    5189|       0|
-   |  5|  8.494|    6272|       2|
-   |  6|  8.237|    6273|       2|
-   |  7|  7.926|    8242|       0|
-   |  8|  7.620|    5270|       0|
-   |  9|  7.214|    5321|       1|
-                               """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB196", packet_length=100,
-                               name="LTE ML1 Cell Measurement Results",
-                               subtitle="", datetime="2024 Jan 19  21:46:04.483", packet_text=
-                               """
-2024 Jan 19  21:46:04.483  [84]  0xB196  LTE ML1 Cell Measurement Results
-Subscription ID = 1
-Version = 41
-Num Cells = 2
-Is 1Rx Mode = 0
-Cell Measurement List
-   ------------------------------------------------------------------------------
-   |   |       |        |       |Inst   |Inst   |Inst   |Inst   |Inst   |Inst   |
-   |   |       |        |       |RSRP   |RSRP   |RSRQ   |RSRQ   |RSSI   |RSSI   |
-   |   |       |Physical|Valid  |Rx[0]  |Rx[1]  |Rx[0]  |Rx[1]  |Rx[0]  |Rx[1]  |
-   |#  |E-ARFCN|Cell ID |Rx     |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
-   ------------------------------------------------------------------------------
-   |  0|   5780|     147|RX0_RX1| -84.50| -82.31| -11.44| -11.50| -56.13| -53.81|
-   |  1|   5780|     295|RX0_RX1|-102.31| -97.00| -26.44| -23.50| -68.13| -65.75|
-                               """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x156A", packet_length=100,
                                name="0x156A  IMS RTCP",
@@ -2101,32 +2092,6 @@ MNC = 410
 Allowed Access = Full
 """)
         messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB18E", packet_length=100,
-                               name="LTE ML1 System Scan Results",
-                               subtitle="", datetime="2024 Jan 19  21:46:03.747", packet_text=
-                               """2024 Jan 19  21:46:03.747  [14]  0xB18E  LTE ML1 System Scan Results
-Subscription ID = 1
-Version = 41
-Use Init Search = 0
-Num Candidates = 10
-Candidates
-   ------------------------------------------------------------
-   |   |      |    |         |Energy      |NB_Energy   |      |
-   |#  |EARFCN|Band|Bandwidth|(dBm/100KHz)|(dBm/100KHz)|Pruned|
-   ------------------------------------------------------------
-   |  0| 68661|  71|    5 MHz|         -73|           0|     0|
-   |  1|  5230|  13|   10 MHz|         -78|           0|     0|
-   |  2|  5780|  17|   10 MHz|         -80|           0|     0|
-   |  3|  5330|  14|   10 MHz|         -82|           0|     0|
-   |  4| 66986|  66|   10 MHz|         -88|           0|     0|
-   |  5|   700|   2|   20 MHz|         -89|           0|     0|
-   |  6|   975|   2|   15 MHz|         -93|           0|     0|
-   |  7|  9820|  30|   10 MHz|        -101|           0|     0|
-   |  8| 66736|  66|   20 MHz|        -103|           0|     0|
-   |  9| 40072|  41|   20 MHz|        -118|           0|     0|
-
-""")
-        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x1832", packet_length=100,
                                name="IMS Registration",
                                subtitle="", datetime="2024 Jan 15  07:15:50.978", packet_text=
@@ -2421,6 +2386,473 @@ EPS_QOS
     qci = 6 (0x6) (QC6)
         ''')
         messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB825", packet_length=100, name="NR5G RRC Configuration Info",
+                               subtitle="",
+                               datetime="2024 Jan 15  07:17:09.173", packet_text=
+                               '''2024 Jan 15  07:17:09.173  [DD]  0xB825  NR5G RRC Configuration Info
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 4
+Conn Config Info
+   NR Cell Global Identity = 0x0130014457237C31
+   State = CONNECTED
+   Config Status = true
+   Connectivity Mode = SA
+   Standby Mode = SINGLE STANDBY
+   Num Active SRB = 1
+   Num Active DRB = 0
+   MN MCG DRB IDs = NONE
+   SN MCG DRB IDs = NONE
+   MN SCG DRB IDs = NONE
+   SN SCG DRB IDs = NONE
+   MN Split DRB IDs = NONE
+   SN Split DRB IDs = NONE
+   LTE Serving Cell Info {
+      Num Bands = 0
+      LTE Bands = { 
+         0, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0
+      }
+   }
+   Num Contiguous CC Groups = 1
+   Num Active CC = 1
+   Num Active RB = 1
+   Contiguous CC Info
+      --------------------
+      |Band  |DL BW|UL BW|
+      |Number|Class|Class|
+      --------------------
+      |     5|    A|    A|
+
+   NR5G Serving Cell Info
+      -------------------------------------------------------------------------------------------
+      |  |    |          |          |          |    |    |DL       |UL       |        |DL  |UL  |
+      |CC|Cell|          |          |          |    |Band|Carrier  |Carrier  |        |Max |Max |
+      |Id|Id  |DL Arfcn  |UL Arfcn  |SSB Arfcn |Band|Type|Bandwidth|Bandwidth|SCS     |MIMO|MIMO|
+      -------------------------------------------------------------------------------------------
+      | 0| 354|    174800|    165800|    174770|   5|SUB6|    10MHZ|    10MHZ|  15 kHz|   1|   1|
+
+   Radio Bearer Info
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  |           |          |              |       |            |            |UL  |              |          |       |            |            |UL PDCP  |UL Data   |
+      |RB|Termination|          |              |DL ROHC|DL Cipher   |DL Integrity|RB  |              |UL Primary|UL ROHC|UL Cipher   |UL Integrity|Dup      |Split     |
+      |ID|Point      |DL RB Type|DL RB Path    |Enabled|Algo        |Algo        |Type|UL RB Path    |Path      |Enabled|Algo        |Algo        |Activated|Threshold |
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      | 1|         MN|       SRB|            NR|  false|          NA|          NA| SRB|            NR|         0|  false|          NA|          NA|    false|        NA|
+        ''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB825", packet_length=100, name="NR5G RRC Configuration Info",
+                               subtitle="",
+                               datetime="2024 Jan 15  07:15:48.068", packet_text=
+                               '''2024 Jan 15  07:15:48.068  [28]  0xB825  NR5G RRC Configuration Info
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 4
+Conn Config Info
+   NR Cell Global Identity = 0x0000000000000000
+   State = IDLE
+   Config Status = true
+   Connectivity Mode = NSA
+   Standby Mode = SINGLE STANDBY
+   Num Active SRB = 0
+   Num Active DRB = 0
+   MN MCG DRB IDs = NONE
+   SN MCG DRB IDs = NONE
+   MN SCG DRB IDs = NONE
+   SN SCG DRB IDs = NONE
+   MN Split DRB IDs = NONE
+   SN Split DRB IDs = NONE
+   LTE Serving Cell Info {
+      Num Bands = 1
+      LTE Bands = { 
+         66, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0
+      }
+   }
+   Num Contiguous CC Groups = 0
+   Num Active CC = 0
+   Num Active RB = 0
+        ''')
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index=0, packet_type="0xB825", packet_length=100, name="NR5G RRC Configuration Info",
+                               subtitle="",
+                               datetime="2024 Jan 15  07:17:10.501", packet_text=
+                               '''2024 Jan 15  07:17:10.501  [FB]  0xB825  NR5G RRC Configuration Info
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 4
+Conn Config Info
+   NR Cell Global Identity = 0x0000000000000000
+   State = CONNECTED
+   Config Status = true
+   Connectivity Mode = NSA
+   Standby Mode = SINGLE STANDBY
+   Num Active SRB = 0
+   Num Active DRB = 1
+   MN MCG DRB IDs = 4
+   SN MCG DRB IDs = NONE
+   MN SCG DRB IDs = NONE
+   SN SCG DRB IDs = NONE
+   MN Split DRB IDs = NONE
+   SN Split DRB IDs = NONE
+   LTE Serving Cell Info {
+      Num Bands = 1
+      LTE Bands = { 
+         17, 0, 0, 0, 0, 0, 0, 0, 
+         0, 0, 0, 0
+      }
+   }
+   Num Contiguous CC Groups = 0
+   Num Active CC = 0
+   Num Active RB = 1
+   Radio Bearer Info
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  |           |          |              |       |            |            |UL  |              |          |       |            |            |UL PDCP  |UL Data   |
+      |RB|Termination|          |              |DL ROHC|DL Cipher   |DL Integrity|RB  |              |UL Primary|UL ROHC|UL Cipher   |UL Integrity|Dup      |Split     |
+      |ID|Point      |DL RB Type|DL RB Path    |Enabled|Algo        |Algo        |Type|UL RB Path    |Path      |Enabled|Algo        |Algo        |Activated|Threshold |
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      | 4|         MN|       DRB|           LTE|  false|   NEA0/NONE|   NIA0/NONE| DRB|           LTE|         0|  false|   NEA0/NONE|   NIA0/NONE|    false|        NA|
+        ''')
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index=0, packet_type="0xB97F", packet_length=100, name="NR5G ML1 Searcher Measurement Database Update Ext",
+                               subtitle="",
+                               datetime="2024 Jan 15  07:15:35.638", packet_text=
+                               '''2024 Jan 15  07:15:35.638  [AD]  0xB97F  NR5G ML1 Searcher Measurement Database Update Ext
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 2. 9
+System Time
+   Slot Number = 1
+   SubFrame Number = 1
+   System Frame Number = 124
+   SCS = 30KHZ
+Num Layers = 1
+SSB Periodicity Serv Cell = MS20
+Frequency Offset = 2.029 PPM
+Timing Offset = 4294967288
+Component Carrier List[0]
+   Raster ARFCN = 660768
+   CC_ID = 0
+   Num Cells = 3
+   Serving Cell PCI = 700
+   Serving Cell Index = 0
+   Serving SSB = 0
+   ServingRSRP Rx23[0]
+      ServingRSRP_Rx23 = -110.21 dBm
+   ServingRSRP Rx23[1]
+      ServingRSRP_Rx23 = -107.13 dBm
+   Serving RX Beam = { NA, NA }
+   Serving RFIC ID = NA
+   ServingSubarrayId[0] {
+      SubArray ID = NA
+   }
+   ServingSubarrayId[1] {
+      SubArray ID = NA
+   }
+   Cells
+      ---------------------------------------------------------------------------------------------------------------------------------
+      |   |      |      |     |            |            |Detected Beams                                                               |
+      |   |      |      |     |            |            |     |RX Beam Info       |NR2NR       |NR2NR       |L2NR        |L2NR        |
+      |   |      |PBCH  |Num  |Cell Quality|Cell Quality|SSB  |RX Beam |          |Filtered Tx |Filtered Tx |Filtered Tx |Filtered Tx |
+      |#  |PCI   |SFN   |Beams|RSRP        |RSRQ        |Index|Id      |RSRP      |Beam RSRP L3|Beam RSRQ L3|Beam RSRP L3|Beam RSRQ L3|
+      ---------------------------------------------------------------------------------------------------------------------------------
+      |  0|   700|   124|    4|     -101.60|      -10.28|    0|       0|   -101.80|     -101.60|      -10.28|     -102.82|      -10.47|
+      |   |      |      |     |            |            |     |       0|   -104.56|            |            |            |            |
+      |   |      |      |     |            |            |    2|       0|   -113.08|     -113.06|      -11.00|     -115.18|      -12.17|
+      |   |      |      |     |            |            |     |       0|   -117.18|            |            |            |            |
+      |   |      |      |     |            |            |    1|       0|   -113.91|     -113.83|      -11.18|     -114.23|      -12.16|
+      |   |      |      |     |            |            |     |       0|   -115.80|            |            |            |            |
+      |   |      |      |     |            |            |    3|       0|   -118.43|     -118.55|      -12.88|     -119.73|      -14.20|
+      |   |      |      |     |            |            |     |       0|   -120.80|            |            |            |            |
+      |  1|   132|   434|    1|     -126.12|      -17.87|    3|       0|   -156.00|     -124.90|      -17.41|     -124.14|      -18.34|
+      |   |      |      |     |            |            |     |       0|   -124.68|            |            |            |            |
+      |  2|   523|   638|    1|     -128.73|      -20.66|    4|       0|   -129.45|     -128.90|      -20.55|          NA|          NA|
+      |   |      |      |     |            |            |     |       0|   -156.00|            |            |            |            |
+        ''')
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index=0, packet_type="0xB801", packet_length=100,
+                               name="NR5G NAS SM5G Plain OTA Outgoing Msg",
+                               subtitle="PDU session release req",
+                               datetime="2023 Nov 17  02:21:34.390", packet_text=
+                               '''2023 Nov 17  02:21:34.390  [37]  0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg  --  PDU session release req
+Subscription ID = 1
+Misc ID         = 0
+pkt_version = 1 (0x1)
+rel_number = 15 (0xf)
+rel_version_major = 4 (0x4)
+rel_version_minor = 0 (0x0)
+prot_disc_type = 14 (0xe)
+ext_protocol_disc = 46 (0x2e)
+pdu_session_id = 2 (0x2)
+proc_trans_id = 135 (0x87)
+msg_type = 209 (0xd1) (PDU session release request)
+nr5g_smm_msg
+  pdu_session_rel_req
+    _5gsm_cause_incl = 1 (0x1)
+    _5gsm_cause
+      cause = 36 (0x24) (Regular deactivation)
+    ext_prot_config_incl = 0 (0x0)
+        ''')
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index=0, packet_type="0xB80A", packet_length=100,
+                               name="NR5G NAS MM5G Plain OTA Incoming Msg",
+                               subtitle="Security mode command",
+                               datetime="2024 Jan 15  07:17:09.243",
+                               packet_text=
+                               '''2024 Jan 15  07:17:09.243  [3B]  0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg  --  Security mode command
+Subscription ID = 1
+Misc ID         = 0
+pkt_version = 1 (0x1)
+rel_number = 15 (0xf)
+rel_version_major = 4 (0x4)
+rel_version_minor = 0 (0x0)
+prot_disc_type = 14 (0xe)
+ext_protocol_disc = 126 (0x7e)
+security_header = 0 (0x0)
+msg_type = 93 (0x5d) (Security mode command)
+nr5g_mm_msg
+  security_mode_cmd
+    nas_security_algo
+      ciphering_algorithm = 3 (0x3) (128-5G-EA3)
+      integ_protection_algorithm = 3 (0x3) (128-5G-IA3)
+    ngKSI
+      tsc = 1 (0x1) (mapped sec context)
+      nas_key_set_id = 1 (0x1)
+    replayed_ue_sec_cap
+      _5G_EA0 = 1 (0x1)
+      _5G_EA1_128 = 1 (0x1)
+      _5G_EA2_128 = 1 (0x1)
+      _5G_EA3_128 = 1 (0x1)
+      _5G_EA4 = 0 (0x0)
+      _5G_EA5 = 0 (0x0)
+      _5G_EA6 = 0 (0x0)
+      _5G_EA7 = 0 (0x0)
+      _5G_IA0 = 0 (0x0)
+      _5G_IA1_128 = 1 (0x1)
+      _5G_IA2_128 = 1 (0x1)
+      _5G_IA3_128 = 1 (0x1)
+      _5G_IA4 = 0 (0x0)
+      _5G_IA5 = 0 (0x0)
+      _5G_IA6 = 0 (0x0)
+      _5G_IA7 = 0 (0x0)
+      oct5_incl = 1 (0x1)
+      EEA0 = 1 (0x1)
+      EEA1_128 = 1 (0x1)
+      EEA2_128 = 1 (0x1)
+      EEA3_128 = 1 (0x1)
+      EEA4 = 0 (0x0)
+      EEA5 = 0 (0x0)
+      EEA6 = 0 (0x0)
+      EEA7 = 0 (0x0)
+      oct6_incl = 1 (0x1)
+      EIA0 = 0 (0x0)
+      EIA1_128 = 1 (0x1)
+      EIA2_128 = 1 (0x1)
+      EIA3_128 = 1 (0x1)
+      EIA4 = 0 (0x0)
+      EIA5 = 0 (0x0)
+      EIA6 = 0 (0x0)
+      EIA7 = 0 (0x0)
+    imeisv_req_incl = 1 (0x1)
+    meisv_req
+      imeisv_req_val = 1 (0x1)
+    eps_nas_sec_algo_incl = 1 (0x1)
+    nas_sec_algo
+      cipher_algorithm = 2 (0x2) (128-EEA2)
+      inte_prot_algorithm = 2 (0x2) (128-EIA2)
+    add_5g_security_info_incl = 1 (0x1)
+    add_5g_security_info
+      length = 1 (0x1)
+      RINMR = 1 (0x1)
+      HDP = 0 (0x0)
+    eap_msg_incl = 0 (0x0)
+    nr5g_abba_type_incl = 0 (0x0)
+    replayed_ue_sec_cap_incl = 1 (0x1)
+    replayed_s1_ue_sec_cap
+      EEA0 = 1 (0x1)
+      EEA1_128 = 1 (0x1)
+      EEA2_128 = 1 (0x1)
+      EEA3_128 = 1 (0x1)
+      EEA4 = 0 (0x0)
+      EEA5 = 0 (0x0)
+      EEA6 = 0 (0x0)
+      EEA7 = 0 (0x0)
+      EIA0 = 0 (0x0)
+      EIA1_128 = 1 (0x1)
+      EIA2_128 = 1 (0x1)
+      EIA3_128 = 1 (0x1)
+      EIA4 = 0 (0x0)
+      EIA5 = 0 (0x0)
+      EIA6 = 0 (0x0)
+      EIA7 = 0 (0x0)
+      oct5_incl = 1 (0x1)
+      UEA0 = 1 (0x1)
+      UEA1 = 1 (0x1)
+      UEA2 = 0 (0x0)
+      UEA3 = 0 (0x0)
+      UEA4 = 0 (0x0)
+      UEA5 = 0 (0x0)
+      UEA6 = 0 (0x0)
+      UEA7 = 0 (0x0)
+      oct6_incl = 1 (0x1)
+      UIA1 = 1 (0x1)
+      UIA2 = 0 (0x0)
+      UIA3 = 0 (0x0)
+      UIA4 = 0 (0x0)
+      UIA5 = 0 (0x0)
+      UIA6 = 0 (0x0)
+      UIA7 = 0 (0x0)
+      oct7_incl = 0 (0x0)
+      ''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB8A7", packet_length=100,
+                               name="NR5G MAC CSF Report",
+                               subtitle="", datetime="2024 Jan 15  07:15:37.648", packet_text=
+                               '''2024 Jan 15  07:15:37.648  [6A]  0xB8A7  NR5G MAC CSF Report
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor = 3. 5
+Num Records = 1
+Records[0]
+   Timestamp
+      Slot = 14
+      Numerology = 30kHz
+      Frame = 324
+   Num CSF Reports = 2
+   Num CSF Type2 Reports = 0
+   Num CSF Enh Type2 Reports = 0
+   Reports
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |   |       |        |      |          |                                 |    |     |    |    |Num |Num |       |       |       |       |       |                                                                                                                                   |
+      |   |       |        |      |          |                                 |    |     |    |Num |CSI |CSI |       |       |       |       |       |Quantities                                                                                                                         |
+      |   |       |        |      |          |                                 |    |     |    |CSI |P2  |P2  |       |       |       |       |       |CSI                                                                                  |RSRP                                         |
+      |   |       |        |      |          |                                 |    |     |Num |P2  |SB  |SB  |       |       |       |P2 SB  |P2 SB  |Metrics                                           |Bit Width                         |        |CRI  |     |Diff |       |    |     |
+      |   |       |Resource|      |          |                                 |    |     |CSI |WB  |Even|Odd |       |       |       |Odd    |Even   |   |  |   |        |        |  |   |SB Result     |   |  |       |   |PMI |PMI|  |PMI|        |SSBRI|RSRP |RSRP |       |    |     |
+      |   |Carrier|Carrier |Report|Report    |                                 |Late|Faked|P1  |Bits|Bits|Bits|Report |P1     |P2 WB  |Report |Report |   |  |WB |PMI WB  |PMI WB  |  |Num|   |SB|SB |SB |   |  |Zero   |WB |WB  |WB |  |SB |Resource|Bit  |Bit  |Bit  |Num    |    |SSBRI|
+      |#  |ID     |ID      |ID    |Type      |Report Quantity Bitmask          |CSF |CSF  |Bits|Grp0|Grp1|Grp2|Dropped|Dropped|Dropped|Dropped|Dropped|CRI|RI|CQI|X1      |X2      |LI|SB |#  |ID|CQI|PMI|CRI|RI|Padding|CQI|X1  |X2 |LI|X2 |Set ID  |Width|Width|Width|Results|RSRP|CRI  |
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|      0|       0|     2|  PERIODIC|                     RSRP:SSB_IDX|   0|    0|  17|   0|   0|   0|      0|      0|      0|      0|      0|   |  |   |        |        |  |   |   |  |   |   |   |  |       |   |    |   |  |   |       0|    3|    7|    4|      2|  55|    0|
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |   |  |   |   |   |  |       |   |    |   |  |   |        |     |     |     |       |   6|    2|
+      |  1|      0|       0|     0|  PERIODIC|                CRI:RI:PMI:CQI:LI|   0|    0|  19|   0|   0|   0|      0|      0|      0|      0|      0|  0| 1| 11|      68|       1| 1|  0|  0| 0|  0|  0|  2| 2|      1|  4|   8|  1| 1|  0|        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  1| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  2| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  3| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  4| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  5| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  6| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  7| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  8| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   |  9| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 10| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 11| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 12| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 13| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 14| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 15| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 16| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 17| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+      |   |       |        |      |          |                                 |    |     |    |    |    |    |       |       |       |       |       |   |  |   |        |        |  |   | 18| 0|  0|  0|   |  |       |   |    |   |  |   |        |     |     |     |       |    |     |
+                               ''')
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index=0, packet_type="0xB827", packet_length=100,
+                               name="NR5G RRC OTA Packet",
+                               subtitle="", datetime="2024 Jan 15  07:18:06.766", packet_text=
+                               '''2024 Jan 15  07:18:06.766  [93]  0xB827  NR5G RRC PLMN Search Request
+Subscription ID = 1
+Misc ID         = 0
+Version = 4
+PLMN Search Request
+   Source RAT = LTE
+   Network Select Mode = AUTOMATIC
+   Search Type = NONE
+   Scan Scope = FULL BAND
+   Guard Timer = 876 ms
+   Num RATs = 1
+   RAT List
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |#  |RAT   |Band Cap          |Band Cap 65_128   |Band Cap 129_192  |Band Cap 193_256  |Band Cap 257_320  |Band Cap 321_384  |Band Cap 385_448  |Band Cap 449_512  |
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|  NR5G|0x000001203B082817|0x0000000000000062|0x0000000000000000|0x0000000000000000|0x0000000000000000|0x0000000000000000|0x0000000000000000|0x0000000000000000|
+
+   NR5G Arfcn Counts = 0
+   Num PLMNs = 1
+   PLMN List
+      ------------------------------
+      |   |      |Plmn |Plmn |Plmn |
+      |#  |RAT   |byte0|byte1|byte2|
+      ------------------------------
+      |  0|  NR5G| 0x13| 0x03| 0x43|
+                               ''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB18F", packet_length=100,
+                               name="LTE ML1 AdvRx IC Cell List",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.679", packet_text=
+                               '''2024 Jan 15  07:15:35.679  [A3]  0xB18F  LTE ML1 AdvRx IC Cell List
+Subscription ID = 1
+Version = 54
+Carrier Index = PCC
+Earfcn = 66986
+Num Neighbors = 1
+Panic Escape Mask = 0x0000
+Valid Sched Rate = 1
+Is Carrier Cfg FW = 0
+SubFn = 1283
+TM Mode = 4
+Serving
+   -------------------------------------------------------------------------------
+   |   |      |         |        |          |RSRP  |IC INR|                      |
+   |   |Cell  |DL       |Num     |Filt RSRP |SS    |SS    |                      |
+   |#  |ID    |Bandwidth|Antennas|(dB)      |Buffer|Buffer|Cell Type             |
+   -------------------------------------------------------------------------------
+   |  0|   147|       50|       4|    -92.25|    WB|    WB|          CELL_SERVING|
+
+Neighbors
+   -------------------------------------------------------------------------------
+   |   |      |         |        |          |RSRP  |IC INR|                      |
+   |   |Cell  |DL       |Num     |Filt RSRP |SS    |SS    |                      |
+   |#  |ID    |Bandwidth|Antennas|(dB)      |Buffer|Buffer|Cell Type             |
+   -------------------------------------------------------------------------------
+   |  0|   295|       50|       4|   -104.00|    NB|    NB|   CELL_NOT_IN_IC_LIST|
+                               ''')
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB821", packet_length=100,
+                               name="NR5G RRC OTA Packet",
+                               subtitle="UL_CCCH / RRC Setup Req", datetime="2024 Jan 15  07:17:09.075", packet_text=
+                               '''2024 Jan 15  07:17:09.075  [4F]  0xB821  NR5G RRC OTA Packet  --  UL_CCCH / RRC Setup Req
+Subscription ID = 1
+Misc ID         = 0
+Pkt Version = 17
+RRC Release Number.Major.minor = 16.6.0
+Radio Bearer ID = 0, Physical Cell ID = 354
+NR Cell Global ID = 85569785951386673
+Freq = 174770
+Sfn = N/A, SubFrameNum = N/A
+slot = 0
+PDU Number = UL_CCCH Message,    Msg Length = 6
+SIB Mask in SI =  0x00
+
+Interpreted PDU:
+
+value UL-CCCH-Message ::= 
+{
+message c1 : rrcSetupRequest : 
+  {
+    rrcSetupRequest 
+    {
+      ue-Identity randomValue : '11100001 01010110 11011001 11001000 0111011'B,
+      establishmentCause mo-Signalling,
+      spare '0'B
+    }
+  }
+}
+                               ''')
+        messages.append(msg)
+
         msg = ParsedRawMessage(index=0, packet_type="0xB0C0", packet_length=100, name="LTE RRC OTA Packet",
                                subtitle="BCCH_DL_SCH / SystemInformationBlockType1",
                                datetime="2024 Jan 15  07:17:09.664", packet_text=
@@ -2577,8 +3009,43 @@ value BCCH-DL-SCH-Message ::=
       }
 }
         ''')
+
         messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB171", packet_length=100, name="0xB171  LTE SRS Power Control Report",
+        msg = ParsedRawMessage(index=0, packet_type="0xB113", packet_length=100,
+                               name="LTE LL1 PSS Results",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.642", packet_text=
+                               """
+                               2024 Jan 15  07:14:07.642  [E1]  0xB113  LTE LL1 PSS Results
+Subscription ID = 1
+Version = 181
+Number of Half Frames = 1
+Sub-frame Number = 9
+System Frame Number = 539
+Number of PSS Records = 10
+Srch_type = LTE_LL1_SRCH_NCELL
+Nb Id = 0
+Earfcn = 66986
+PSS Records
+   -------------------------------
+   |   |PSS    |        |        |
+   |   |Peak   |        |        |
+   |   |Value  |Peak    |PSS     |
+   |#  |(dB)   |Position|Indicies|
+   -------------------------------
+   |  0| 17.114|    5192|       0|
+   |  1| 15.764|    5190|       0|
+   |  2| 15.594|    5193|       0|
+   |  3| 11.994|    5191|       0|
+   |  4| 11.291|    5189|       0|
+   |  5|  8.494|    6272|       2|
+   |  6|  8.237|    6273|       2|
+   |  7|  7.926|    8242|       0|
+   |  8|  7.620|    5270|       0|
+   |  9|  7.214|    5321|       1|
+                               """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB171", packet_length=100,
+                               name="0xB171  LTE SRS Power Control Report",
                                subtitle="",
                                datetime="2024 Jan 15  07:17:09.664", packet_text=
                                '''
@@ -2609,7 +3076,52 @@ Report
    | 13|    0| 831|     5|   17| 105|    4|      4|    17|
         ''')
         messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB18E", packet_length=100,
+                               name="LTE ML1 System Scan Results",
+                               subtitle="", datetime="2024 Jan 19  21:46:03.747", packet_text=
+                               """2024 Jan 19  21:46:03.747  [14]  0xB18E  LTE ML1 System Scan Results
+Subscription ID = 1
+Version = 41
+Use Init Search = 0
+Num Candidates = 10
+Candidates
+   ------------------------------------------------------------
+   |   |      |    |         |Energy      |NB_Energy   |      |
+   |#  |EARFCN|Band|Bandwidth|(dBm/100KHz)|(dBm/100KHz)|Pruned|
+   ------------------------------------------------------------
+   |  0| 68661|  71|    5 MHz|         -73|           0|     0|
+   |  1|  5230|  13|   10 MHz|         -78|           0|     0|
+   |  2|  5780|  17|   10 MHz|         -80|           0|     0|
+   |  3|  5330|  14|   10 MHz|         -82|           0|     0|
+   |  4| 66986|  66|   10 MHz|         -88|           0|     0|
+   |  5|   700|   2|   20 MHz|         -89|           0|     0|
+   |  6|   975|   2|   15 MHz|         -93|           0|     0|
+   |  7|  9820|  30|   10 MHz|        -101|           0|     0|
+   |  8| 66736|  66|   20 MHz|        -103|           0|     0|
+   |  9| 40072|  41|   20 MHz|        -118|           0|     0|
 
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB196", packet_length=100,
+                               name="LTE ML1 Cell Measurement Results",
+                               subtitle="", datetime="2024 Jan 19  21:46:04.483", packet_text=
+                               """
+2024 Jan 19  21:46:04.483  [84]  0xB196  LTE ML1 Cell Measurement Results
+Subscription ID = 1
+Version = 41
+Num Cells = 2
+Is 1Rx Mode = 0
+Cell Measurement List
+   ------------------------------------------------------------------------------
+   |   |       |        |       |Inst   |Inst   |Inst   |Inst   |Inst   |Inst   |
+   |   |       |        |       |RSRP   |RSRP   |RSRQ   |RSRQ   |RSSI   |RSSI   |
+   |   |       |Physical|Valid  |Rx[0]  |Rx[1]  |Rx[0]  |Rx[1]  |Rx[0]  |Rx[1]  |
+   |#  |E-ARFCN|Cell ID |Rx     |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+   ------------------------------------------------------------------------------
+   |  0|   5780|     147|RX0_RX1| -84.50| -82.31| -11.44| -11.50| -56.13| -53.81|
+   |  1|   5780|     295|RX0_RX1|-102.31| -97.00| -26.44| -23.50| -68.13| -65.75|
+                               """)
+        messages.append(msg)
         #     msg = ParsedRawMessage(index = 0, packet_type = "0x1FE7", packet_length=100, name="QTrace Event", subtitle="QEVENT 84 - 2", datetime="", packet_text=
         #     """2023 Nov 17  01:59:04.733  [BC]  0x1FE7  QTrace Event  --  QEVENT 84 - 2
         # nr5g_mac_rach.c     9254     D     Sub-ID:1     Misc-ID:0     QEvent 0x41100854 | NR5GMAC_QSH_EVENT_RACH_MSG2 | RAID_MATCH, ca: 0 | MTPL exceeded: 1 | RAR PRUNE bmsk: 0

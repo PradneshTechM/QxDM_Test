@@ -18,7 +18,6 @@ class Packet_0xB0C1:
                 'no_tx_antennas': config['Number of TX Antennas']['DB Field'],
                 'dl_bandwidth': config['DL Bandwidth']['DB Field']
             }
-
             # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
             if config['__collection']:

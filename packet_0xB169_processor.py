@@ -27,5 +27,4 @@ class Packet_0xB169:
             modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry
         else:
-            # Return None or an empty dictionary if there is no match
-            return None
+            None

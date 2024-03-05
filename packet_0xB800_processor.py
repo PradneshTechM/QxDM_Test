@@ -16,7 +16,6 @@ class Packet_0xB800:
                 'nr5g_smm_msg': config['nr5g_smm_msg']['DB Field'],
                 '_5gsm_cause': config['_5gsm_cause']['DB Field'],
                 'eps_qos.qci': config['eps_qos.qci']['DB Field']
-
             }
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
             if config['__collection']:

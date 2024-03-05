@@ -1,5 +1,5 @@
 import re
-from utils import map_entry, metadata
+# from utils import map_entry, metadata
 class Packet_0xB113:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
@@ -9,7 +9,6 @@ class Packet_0xB113:
         self.pattern2 = r".*?Position.*?\|Indicies.*?\|.*?-+.*?\n(?P<table>[\s\S]*)"
         self.dict = {}
         self.result = []
-
     def extract_info(self):
         self.dict.update(self.entry)
         non_table_capture = self.regular_pattern(self.config)

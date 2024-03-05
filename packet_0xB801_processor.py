@@ -22,7 +22,6 @@ class Packet_0xB801:
 
             # entry = match.groupdict()
             # print(entry)
-
             key_mapping = {'subscription_id': config['Subscription ID']['DB Field'],
                            'nr5g_smm_msg': config['nr5g_smm_msg']['DB Field'],
                            '_5gsm_cause': config['_5gsm_cause']['DB Field']
@@ -35,8 +34,8 @@ class Packet_0xB801:
             mapped_entry["__cell"] = config.get('__cell')
             if mapped_entry[config['_5gsm_cause']['DB Field']] is None:
                 mapped_entry.pop(config['_5gsm_cause']['DB Field'], None)
-            if "__packet_message" in config:
-                mapped_entry["__packet_message"] = entry["msg_subtitle"]
+            if "Packet_Type" in config:
+                mapped_entry["Packet_Type"] = entry["msg_subtitle"]
                 mapped_entry.pop("msg_subtitle", None)
             # mapped_entry["__Raw_Data"] = config.get("__Raw_Data")
             mapped_entry["__KPI_type"] = config.get('__KPI_type')

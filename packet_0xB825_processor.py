@@ -3,30 +3,79 @@ class Packet_0xB825:
     # def __int__(self):
     #     # print("New")
 
-
-
     def extract_info(lines, config, entry):
         # print("Lines", lines)
         # print("obj", dict)
         # return dict
         # pattern = r'.*?0xB801.*?--  (?P<msg_subtitle>.*?)\s*\nSubscription ID = (?P<subscription_id>\d+)\n.*?nr5g_smm_msg\s+(?P<nr5g_smm_msg>.*?)\n(?:.*?cause = (?P<_5gsm_cause>.*?)\n|.*?)'
-        pattern = r'.*?0xB825.*?Subscription ID = (?P<Subscription_ID>\d+).*?Conn Config Info.*?State = (?P<State>\w+).*?LTE Serving Cell Info.*?Num Bands = (?P<num_bands>\d+).*?LTE Bands = (?P<lte_bands>.+).*?Num Contiguous CC Groups = (?P<num_cont_cc_groups>\d+).*?Num Active CC = (?P<num_active_cc>\d+).*?NR5G Serving Cell Info\n(?P<table>.+)?Radio Bearer Info.*?'
-        # pattern = r'0xB825.*?Subscription ID = (?P<Subscription_ID>\d+).*?State = (?P<State>\w+).*?Num Bands = (?P<LTE_Bands_Num>\d+).*?\|Band\s+\|DL BW\s+\|UL BW\s+\|.*?\|(?P<Band>\d+)\s+\|(?P<DL_BW>\w+)\s+\|(?P<UL_BW>\w+)\s+\|.*?LTE Serving Cell Info.*?\|(?P<CC_Id>\d+)\|(?P<Cell_Id>\d+)\|(?P<DL_Arfcn>\d+)\|(?P<UL_Arfcn>\d+)\|(?P<Band_Type>\w+)\|.*?\|(?P<DL_Bandwidth>\S+)\|(?P<UL_Bandwidth>\S+)\|.*?\|(?P<DL_MIMO>\d+)\|(?P<UL_MIMO>\d+)\|'
+        # pattern = r'.*?0xB825.*?Subscription ID = (?P<Subscription_ID>\d+).*?Conn Config Info.*?State = (?P<State>\w+).*?LTE Serving Cell Info.*?Num Bands = (?P<num_bands>\d+).*?LTE Bands = (?P<lte_bands>.+).*?Num Contiguous CC Groups = (?P<num_cont_cc_groups>\d+).*?Num Active CC = (?P<num_active_cc>\d+).*?NR5G Serving Cell Info\n.*?MIMO\|\n.*?\n(?P<table>.+)?Radio Bearer Info.*?'
+        # pattern = r'.*?0xB825.*?Subscription ID = (?P<Subscription_ID>\d+).*?Conn Config Info.*?State = (?P<State>\w+).*?LTE Serving Cell Info.*?Num Bands = (?P<num_bands>\d+).*?LTE Bands = (?P<lte_bands>.+?).*?Num Contiguous CC Groups = (?P<num_cont_cc_groups>\d+))?(Num Active CC = (?P<num_active_cc>\d+).*?(?:NR5G Serving Cell Info\n.*?MIMO\|\n.*?\n(?P<table>.+?))?(?:Radio Bearer Info|$)'
+
+        pattern = r'.*?0xB825.*?Subscription ID = (?P<subscription_id>\d+).*?Conn Config Info.*?State = (?P<State>\w+).*?Connectivity Mode = (?P<connectivity_mode>\w+).*?LTE Serving Cell Info {.*?Num Bands = (?P<num_bands>\d+).*?LTE Bands = {(?P<lte_bands>.+)}.*?}.*?Num Contiguous CC Groups = (?P<num_cont_cc_groups>\d+).*?Num Active CC = (?P<num_active_cc>\d+)(.*?)(NR5G Serving Cell Info\n.*?MIMO\|\n.*?\n(?P<table>.+?))?(Radio Bearer Info.*?|$)'
+
         match = re.match(pattern, lines, re.DOTALL)
 
         # print(config)
 
         if match:
             entry.update(match.groupdict())
-            # table_data = Packet_0xB825.extract_table_data(entry['table'])
-            print(entry["table"])
-            table_lines = entry["table"].strip().split('\n')
-            # print(table_lines)
-            for line in table_lines:
-                print("dummy")
-                print(line)
-            return entry
 
+            key_mapping = {'subscription_id': config['Subscription ID']['DB Field'],
+                           'State': config['Conn Config Info.State']['DB Field'],
+                           'num_bands': config['Conn Config Info.LTE Serving Cell Info.Num Bands']['DB Field'],
+                           'lte_bands': config['Conn Config Info.LTE Serving Cell Info.LTE Bands']['DB Field'],
+                           'num_cont_cc_groups': config['Conn Config Info.Num Contiguous CC Groups']['DB Field'],
+                           'num_active_cc': config['Conn Config Info.Num Active CC']['DB Field'],
+                           }
+
+            lte_bands_str = entry["lte_bands"].strip()
+            lte_bands = [int(band) for band in lte_bands_str.split(",") if int(band.strip()) != 0]
+
+            entry["lte_bands"] = lte_bands
+
+            entry = {key_mapping.get(key, key): value for key, value in entry.items()}
+            # print(entry["table"])
+            if entry["table"]:
+                column_row_values = entry["table"].split("|")
+                # print(column_row_values)
+                # nr5g_serving_cell_info = {}
+
+                for item in config['Conn Config Info.NR5G Serving Cell Info']:
+                    # print(item)
+                    # keys = list(item.keys())
+                    # print(keys)
+                    for key in list(item.keys()):
+                        # print(key)
+                        index = item[key]['index']
+                        mapped_key = item[key]['DB Field']
+                        if index < len(column_row_values):
+                            value = column_row_values[index+1].strip()
+                            # nr5g_serving_cell_info[mapped_key] = value
+                            entry[mapped_key] = value
+
+                # entry['NR5G Serving Cell Info'] = nr5g_serving_cell_info
+            entry["__collection"] = config.get('__collection')
+            entry["__frequency"] = config.get('__frequency')
+
+            # if config["__cell"]:
+            #     ccid= entry['nr5g_serving_cell_info'][0]
+            #     print(ccid)
+
+            if "__packet_message" in config:
+                entry["__packet_message"] = entry["connectivity_mode"]
+                entry.pop("connectivity_mode", None)
+
+
+            # entry["__cell"] = config.get('__cell')
+            # if "__packet_message" in config:
+            #     entry["__packet_message"] = entry["msg_subtitle"]
+            #     entry.pop("msg_subtitle", None)
+            entry["__Raw_Data"] = config.get("__Raw_Data")
+            entry["__KPI_type"] = config.get('__KPI_type')
+
+            entry.pop("table", None)
+            entry.pop("connectivity_mode", None)
+            return entry
         else:
             return None
 

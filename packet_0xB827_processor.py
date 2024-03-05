@@ -1,13 +1,13 @@
 import re
+# from  kpi_utils import table_extract
 
-
-class Packet_0xB115:
+class Packet_0xB827:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
         self.config = config
         self.entry = entry
-        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?Number of Barred Cells    = (?P<Number_of_Barred_Cells>[\d]+).*?Number of Detected Cells  = (?P<Number_of_Detected_Cells>[\d]+).*?Number of IC Cells.*?= (?P<Number_of_IC_Cells>[\d]+).*?EARFCN.*?=.*?(?P<EARFCN>[\d]+)'
-        self.pattern2 = r'.*?Boundary\|Range.*?\|.*?-+.*?\n(?P<table>[\s\S]*)'
+        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?Source RAT = (?P<Source_RAT>[a-zA-Z]+).*?Network Select Mode = (?P<Network_Select_Mode>[a-zA-Z]+).*?Scan Scope = (?P<Scan_Scope>[a-zA-Z]+).*?Guard Timer = (?P<Guard_Timer>[a-zA-Z0-9\s]+)\n.*?Num RATs = (?P<Num_RATs>[\d]+)'
+        self.pattern2 = r'.*?Band Cap 385_448.*?\|Band Cap 449_512.*?\|.*?-+.*?\n(?P<table>[\s\S]*).*?NR5G Arfcn Counts'
         self.dict = {}
         self.result = []
     def extract_info(self):
@@ -43,6 +43,7 @@ class Packet_0xB115:
         carrier_ids = []  # Initialize an empty list to store dictionaries
 
         if match:
+            # return table_extract(match, self.config, self.config['PLMN Search Request.RAT List'])
             # Extract the 'table' named group which contains the data rows
             table_content = match.group('table').strip()
 
@@ -52,7 +53,7 @@ class Packet_0xB115:
             for row in rows:  # Iterate over each row
                 dict_1 = {}
                 row_values = row.split('|')  # Split the current row by the '|' character to get individual values
-                config_values = self.config['Detected Cells:']
+                config_values = self.config['PLMN Search Request.RAT List']
                 for entry in config_values[0].items():  # Access the first (and only) item in the list, then iterate over its items
                     key, value = entry
                     db_field = value['DB Field']
@@ -67,6 +68,5 @@ class Packet_0xB115:
                             dict_1[additional_key] = self.config[additional_key]
                     carrier_ids.append(dict_1)
             return carrier_ids
-
         else:
             print("No data rows found.")
