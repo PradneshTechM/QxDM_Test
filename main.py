@@ -1338,9 +1338,9 @@ class ParsedRawMessage:
         packet_name = None
         # if self.subtitle:
         if self.subtitle == "" or self.subtitle == " ":
-            packet_name = self.packet_type_hex + ''+ self.name
+            packet_name = self.packet_type_hex + ' '+ self.name
         else:
-            packet_name = self.packet_type_hex + ''+ self.name + ' -- ' + self.subtitle
+            packet_name = self.packet_type_hex + ' '+ self.name + ' -- ' + self.subtitle
 
         entry = {"Time": self.datetime, "Source": "QxDM", "Packet Name": packet_name}
 
