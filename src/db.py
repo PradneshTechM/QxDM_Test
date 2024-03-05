@@ -38,7 +38,7 @@ class DB:
   def get_default_client():
     return DB._DB_CLIENT
 
-  def insert_logs(logs: list, log_session,custom_collection):
+  def insert_logs(logs: list, log_session, custom_collection):
     if custom_collection != 'default':
       logs_collection = log_session.db_instance[custom_collection]
     elif log_session.collection:
@@ -74,11 +74,11 @@ class DB:
         metadata["_startLogTimestamp"] = log_session.start_log_timestamp
       if log_session.end_log_timestamp:
         metadata["_endLogTimestamp"] = log_session.end_log_timestamp
-      if log_session.mask_file:
-        metadata["_maskFile"] = os.path.basename(log_session.mask_file)
-      if log_session.config_file:
-        metadata["_configFile"] = os.path.basename(log_session.config_file)
-      metadata["_filePath"] = os.path.basename(log_session.raw_logs[0])
+      # if log_session.mask_file:
+      #   metadata["_maskFile"] = os.path.basename(log_session.mask_file)
+      # if log_session.config_file:
+      #   metadata["_configFile"] = os.path.basename(log_session.config_file)
+      # metadata["_filePath"] = os.path.basename(log_session.raw_logs[0])
       if log_session.device:
         metadata["_server"] = {
           "url": log_session.app_url,
