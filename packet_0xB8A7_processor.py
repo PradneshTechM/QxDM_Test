@@ -1,5 +1,5 @@
 import re
-
+from kpi_utils import table_config, map_entry
 
 class Packet_0xB8A7:
     def __init__(self, packet_text, config, entry):
@@ -49,27 +49,28 @@ class Packet_0xB8A7:
         match = re.search(self.pattern2, self.packet_text, re.DOTALL)
         carrier_ids = []  # Initialize an empty list to store dictionaries
         if match:
-            # return table_extract(match, self.config, self.config['Records'])
-            # Extract the 'table' named group which contains the data rows
-            table_content = match.group('table').strip()
-
-            # Split the captured content into rows based on newline characters
-            rows = table_content.split('\n')
-
-            for row in rows:  # Iterate over each row
-                dict_1 = {}
-                row_values = row.split('|')  # Split the current row by the '|' character to get individual values
-                config_values = self.config['Reports']
-                for entry in config_values[0].items():  # Access the first (and only) item in the list, then iterate over its items
-                    key, value = entry
-                    db_field = value['DB Field']
-                    index = value['index'] + 1
-                    if index < len(row_values):  # Check if the index is within the bounds of row_values
-                        row_value = row_values[index].strip()
-                        if row_value:  # Add to dict_1 only if row_value is not empty
-                            dict_1[db_field] = row_value
-                if dict_1:  # Check if dict_1 is not empty before printing or adding to carrier_ids
-                    carrier_ids.append(dict_1)
-            return carrier_ids
+            data = table_config(match, self.config['Reports'], self.config)
+            # # return table_extract(match, self.config, self.config['Records'])
+            # # Extract the 'table' named group which contains the data rows
+            # table_content = match.group('table').strip()
+            #
+            # # Split the captured content into rows based on newline characters
+            # rows = table_content.split('\n')
+            #
+            # for row in rows:  # Iterate over each row
+            #     dict_1 = {}
+            #     row_values = row.split('|')  # Split the current row by the '|' character to get individual values
+            #     config_values = self.config['Reports']
+            #     for entry in config_values[0].items():  # Access the first (and only) item in the list, then iterate over its items
+            #         key, value = entry
+            #         db_field = value['DB Field']
+            #         index = value['index'] + 1
+            #         if index < len(row_values):  # Check if the index is within the bounds of row_values
+            #             row_value = row_values[index].strip()
+            #             if row_value:  # Add to dict_1 only if row_value is not empty
+            #                 dict_1[db_field] = row_value
+            #     if dict_1:  # Check if dict_1 is not empty before printing or adding to carrier_ids
+            #         carrier_ids.append(dict_1)
+            return data
         else:
             print("No data rows found.")

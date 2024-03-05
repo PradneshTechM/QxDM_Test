@@ -1271,8 +1271,7 @@ class ParsedRawMessage:
                 return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
             elif packet_name == '0xB8D8':
                 print("0xB8D8")
-                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],
-                                                  entry)
+                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],entry)
             elif packet_name == '0xB167':
                 print("0xB167")
                 return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
