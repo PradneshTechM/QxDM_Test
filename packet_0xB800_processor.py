@@ -16,19 +16,21 @@ class Packet_0xB800:
                 'nr5g_smm_msg': config['nr5g_smm_msg']['DB Field'],
                 '_5gsm_cause': config['_5gsm_cause']['DB Field'],
                 'eps_qos.qci': config['eps_qos.qci']['DB Field']
-
             }
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
-            mapped_entry["__collection"] = config.get('__collection')
+            if config['__collection']:
+                mapped_entry["__collection"] = config.get('__collection')
             # mapped_entry["__frequency"] = config.get('__frequency')
-            mapped_entry["__cell"] = config.get('__cell')
+            if config['__cell']:
+                mapped_entry["__cell"] = config.get('__cell')
 
             # mapped_entry["__packet_message"] = entry['msg_subtitle']
-            if "__packet_message" in config:
-                mapped_entry["__packet_message"] = entry["msg_subtitle"]
+            if "Packet_Type" in config:
+                mapped_entry["Packet_Type"] = entry["msg_subtitle"]
                 mapped_entry.pop("msg_subtitle", None)
             # mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
-            mapped_entry["__KPI_type"] = config.get('__KPI_type')
+            if config['__KPI_type']:
+                mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             return mapped_entry
         else:

@@ -12,7 +12,6 @@ class Packet_0x1832:
 
             # entry = match.groupdict()
             # print(entry)
-
             key_mapping = {
                 'subscription_id': config['Subscription ID']['DB Field'],
                 'registration_type': config['Registration Type']['DB Field'],
@@ -24,7 +23,8 @@ class Packet_0x1832:
             mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
             mapped_entry["__collection"] = config.get('__collection')
             mapped_entry["__cell"] = config.get("__cell")
-            mapped_entry["__packet_message"] = config.get('__packet_message')
+            if "Packet_Type" in config:
+                mapped_entry["Packet_Type"] = config.get('Packet_Type')
             mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
 

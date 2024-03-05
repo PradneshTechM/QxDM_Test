@@ -1,3 +1,4 @@
+
 {
   "0x1830 -- IMS -- Direction": {
     "Subscription ID": {
@@ -22,10 +23,10 @@
     "__collection": "Event",
     "__frequency": "Event [One]",
     "__cell": "IMS",
-    "__packet_message": ["if _obj['Direction']\\ == 'MO'",
-                             "__packet_message == 'MO'",
+    "Packet_Type": ["if _obj['Direction']\\ == 'MO'",
+                             "Packet_Type == 'MO'",
                          "elif _obj['Direction']\\ == 'MT'",
-                             "__packet_message == 'MT'"],
+                             "Packet_Type == 'MT'"],
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -53,10 +54,10 @@
     "__collection": "Event",
     "__frequency": "Event [One]",
     "__cell": "IMS",
-    "__packet_message": ["if _obj['Direction']\\ == 'MO'",
-                             "__packet_message == 'MO'",
+    "Packet_Type": ["if _obj['Direction']\\ == 'MO'",
+                             "Packet_Type == 'MO'",
                          "elif _obj['Direction']\\ == 'MT'",
-                             "__packet_message == 'MT'"],
+                             "Packet_Type == 'MT'"],
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -75,7 +76,7 @@
     },
     "__collection": "Event",
     "__cell": "IMS",
-    "__packet_message": "IMS_SIP_REGISTER/INFORMAL_RESPONSE",
+    "Packet_Type": "IMS_SIP_REGISTER/INFORMAL_RESPONSE",
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -120,7 +121,7 @@
     },
     "__collection": "Event",
     "__cell": "IMS",
-    "__packet_message": ["__packet_message = _obj['Message ID']\\"],
+    "Packet_Type": ["Packet_Type = _obj['Message ID']\\"],
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -147,7 +148,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "LTE",
-    "__packet_message": "RRC",
+    "Packet_Type": "RRC",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -169,11 +170,14 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "NAS",
+    "Packet_Type": "NAS",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
-  "0xB113": {
+  "0xB113 -- LTE": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
     "Sub-frame Number": {
       "DB Field": "Sub-frame Number"
     },
@@ -201,12 +205,7 @@
           "DB Field": "PSS Indicies"
         }
       }
-    ]
-  },
-  "0xB113 -- LTE": {
-    "Subscription ID": {
-      "DB Field": "Subs ID"
-    },
+    ],
     "__collection": "Event",
     "__cell": "LTE",
     "__KPI_type": "LTE Info"
@@ -295,7 +294,7 @@
                             "__cell = 'PCell'" ,
                         "elif _obj['Cell Index']\\>=1:,",
                             "__cell = 'SCell(_obj['Cell Index']\\)'"],
-    "__packet_message": "PRACH",
+    "Packet_Type": "PRACH",
     "__Raw_Data": false,
     "__KPI_type": "LTE Info"
   },
@@ -466,69 +465,55 @@
           "DB Field": "Cell ID",
           "Field Name": "NR5G [PCC] Cell Id",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "DL Arfcn": {
           "index": 2,
           "DB Field": "DL Arfcn",
           "Field Name": "NR5G [PCC] DL Arfcn",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "UL Arfcn": {
           "index": 3,
           "DB Field": "UL Arfcn",
           "Field Name": "NR5G [PCC] UL Arfcn",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "Band": {
           "index": 5,
           "DB Field": "Band",
           "Field Name": "NR5G [PCC] Band",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "Band Type": {
           "index": 6,
           "DB Field": "Band Type",
           "Field Name": "NR5G [PCC] Band Type",
           "Field Type": "Text"
-        }
-      },
-      {
+        },
         "DL Carrier Bandwidth": {
           "index": 7,
           "DB Field": "DL Bandwidth",
           "Field Name": "NR5G [PCC] DL Bandwidth",
-          "Field Type": "Text"}
-      },
-      {
+          "Field Type": "Text"
+        },
         "UL Carrier Bandwidth": {
           "index": 8,
           "DB Field": "UL Bandwidth",
           "Field Name": "NR5G [PCC] UL Bandwidth",
           "Field Type": "Text"
-       }
-      },
-      {
+       },
         "DL Max MIMO": {
-          "index": 9,
+          "index": 10,
           "DB Field": "DL MIMO",
           "Field Name": "NR5G [PCC] DL MIMO",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "UL Max MIMO": {
-          "index": 10,
+          "index": 11,
           "DB Field": "UL MIMO",
           "Field Name": "NR5G [PCC] UL MIMO",
-          "Field Type": "Positive Number"       }
+          "Field Type": "Positive Number"
+        }
       }
     ],
     "__collection": "NR5G",
@@ -537,7 +522,7 @@
                               "__cell='PCC'",
                           "elif _obj[CC Id]\\ in range(1,8) or _obj['CC Id']\\ in range(9,16):",
                                 "__cell='SCC({x})' where x in range(1,8)"],
-    "__packet_message": "NSA",
+    "Packet_Type": "_obj['Conn Config Info.Connectivity Mode']\\",
     "__Raw_Data": false,
     "__KPI_type": "NR Info"
   },
@@ -547,39 +532,32 @@
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
     },
-    "Raster ARFCN": {
+    "Component Carrier List[0].Raster ARFCN": {
       "DB Field": "ARFCN",
       "Field Name": "NR5G [PCC] ARFCN"
     },
-    "CC_ID": {
+    "Component Carrier List[0].CC_ID": {
       "DB Field": "CC_ID"
     },
-    "Cells": [
+    "Component Carrier List[0].Serving Cell PCI": {
+      "DB Field": "PCI",
+      "Field Name": "NR5G [PCC] PCI"
+    },
+    "Component Carrier List[0].Cells": [
       {
         "#": {
           "index": 0,
           "DB Field": "#"
         },
-        "PCI": {
-          "index": 1,
-          "DB Field": "PCI",
-          "Field Name": "NR5G [PCC] PCI"
-        }
-      },
-      {
         "Cell Quality RSRP": {
           "index": 4,
           "DB Field": "RSRP(dBm)",
           "Field Name": "NR5G [PCC] RSRP(dBm)",
-          "__comments": [
-            "if output['#'] == 0:",
-            "  return_val = output['RSRP(dBm)']",
-            "else:",
-            "  return_val = None"
-          ]
-        }
-      },
-      {
+          "__comments": ["if _obj['#']\\ == 0:",
+                             "return _obj['RSRP(dBm)']",
+                          "else:",
+                              "return None"]
+        },
         "Cell Quality RSRQ": {
           "index": 5,
           "DB Field": "RSRQ(dBm)",
@@ -722,12 +700,14 @@
       },
       {
         "PDSCH Status Info NDI": {
+          "index": 29,
           "DB Field": "NDI",
           "Field Name": "NR5G [PCC] NDI"
         }
       },
       {
         "PDSCH Status Info Num Layers": {
+          "index": 24,
           "DB Field": "Num Layers",
           "Field Name": "NR5G [PCC] Num Layers",
           "__comments": "_obj['PCI']\\ = '< Carrier ID = 0>'"
@@ -739,7 +719,7 @@
                             "__cell = 'PCC'" ,
                         "elif _obj['Carrier Id']\\>=1:,",
                             "__cell = 'SCC(_obj['Carrier Id']\\)'"],
-    "__packet_message": "PDSCH",
+    "Packet_Type": "PDSCH",
     "__Raw_Data": false,
     "__KPI_type": "NR Info"
   },
@@ -788,7 +768,7 @@
     "__frequency": "Per Second",
     "__cell": ["if _obj['Carrier Index' == 0:",
                             "__cell = 'PCC'"],
-    "__packet_message": "Reference Signal = SSB",
+    "Packet_Type": "Reference Signal = SSB",
     "__Raw_Data": false,
     "__KPI_type": "NR Info"
   },
@@ -796,31 +776,31 @@
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
-    "Source RAT": {
+    "PLMN Search Request.Source RAT": {
       "DB Field": "Source RAT"
 
     },
-    "Network Select Mode": {
+    "PLMN Search Request.Network Select Mode": {
       "DB Field": "Network Select Mode"
 
     },
-    "Search Type": {
+    "PLMN Search Request.Search Type": {
       "DB Field": "Search Type"
 
     },
-    "Scan Scope": {
+    "PLMN Search Request.Scan Scope": {
       "DB Field": "Scan Scope"
 
     },
-    "Guard Timer": {
+    "PLMN Search Request.Guard Timer": {
       "DB Field": "Guard Timer"
 
     },
-    "Num RATs": {
+    "PLMN Search Request.Num RATs": {
       "DB Field": "Num RATs"
 
     },
-    "RAT List": [
+    "PLMN Search Request.RAT List": [
       {
         "RAT": {
           "index": 1,
@@ -976,7 +956,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__Raw_Data": true,
     "__KPI_type": "NR Info"
   },
@@ -992,7 +972,7 @@
     "__collection": "Event",
     "__frequency": "Event [One]",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__KPI_type": "NR Info"
   },
   "0xB80A -- NR5G -- Packet Subtitle": {
@@ -1006,7 +986,7 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__KPI_type": "NR Info"
   },
   "0xB801 -- NR5G -- Packet Subtitle": {
@@ -1024,7 +1004,7 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__KPI_type": "NR Info"
   },
   "0xB0C0 -- LTE -- Packet Subtitle": {
@@ -1052,38 +1032,11 @@
       "DB Field": "Message",
       "Field Name": "Event [LTE] Message"
     },
-    "cellAccessRelatedInfo": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "plmn-Identity": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "trackingAreaCode": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "cellIdentity": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "cellSelectionInfo": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "q-RxLevMin": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
-    "p-Max": {
-      "DB Field": "Message",
-      "Field Name": "Event [LTE] Message"
-    },
+
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "LTE",
-    "__packet_message": "__packet_message = _obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1124,7 +1077,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "Cell Info",
+    "Packet_Type": "Cell Info",
     "__KPI_type": "LTE Info"
   },
   "0xB0E4 -- LTE -- NAS": {
@@ -1142,7 +1095,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "NAS",
+    "Packet_Type": "NAS",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1164,17 +1117,17 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "msg_type",
+    "Packet_Type": "msg_type",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
   "0xB0ED -- LTE -- msg_type": {
-    "SRVCC to GERAN/UTRAN capability": {
+    "lte_emm_msg.emm_attach_request.ms_netwk_cap.SRVCC to GERAN/UTRAN capability": {
       "DB Field": "SRVCC",
       "Field Name": "Event [LTE] SRVCC",
       "__comments": "Refer Serving cell Index to identify Pcell or Scell"
     },
-    "att_type": {
+    "lte_emm_msg.emm_attach_request.att_type": {
       "DB Field": "Attach Type",
       "Field Name": "Event [LTE] Attach Type"
     },
@@ -1182,15 +1135,15 @@
       "DB Field": "Identity",
       "Field Name": "Event [LTE] Identity"
     },
-    "UE_usage_setting": {
+    "lte_emm_msg.emm_attach_request.voice_domain_pref.UE_usage_setting": {
       "DB Field": "UE Usage",
       "Field Name": "Event [LTE] UE Usage"
     },
-    "esm_info_trans_flag": {
+    "lte_emm_msg.emm_attach_request.esm_msg_container.lte_esm_msg.pdn_connectivity_req.esm_info_trans_flag": {
       "DB Field": "ESM Info",
       "Field Name": "Event [LTE] ESM Info"
     },
-    "detach type": {
+    "lte_emm_msg.emm_detach_request.detach_type": {
       "DB Field": "Detach Type",
       "Field Name": "Event [LTE] Detach Type"
     },
@@ -1212,10 +1165,6 @@
     },
     "emm_attach_request": {
       "att_type": {
-        "DB Field": "SRVCC",
-        "Field Name": "Event [LTE] SRVCC"
-      },
-      "eps_mob_id": {
         "DB Field": "SRVCC",
         "Field Name": "Event [LTE] SRVCC"
       },
@@ -1264,7 +1213,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "LTE",
-    "__packet_message": "msg_type",
+    "Packet_Type": "msg_type",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1290,28 +1239,17 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "__packet_message": "_obj[packet_subtitle]\\",
+    "Packet_Type": "_obj[packet_subtitle]\\",
     "__KPI_type": "NR Info"
   },
-  "0xB171 -- PCC": {
+  "0xB171 -- PCC -- SRS": {
     "Cell Index": {
       "DB Field": "Cell Index"
     },
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
-    "__collection": "LTE",
-    "__cell": ["if _obj['Cell Index']\\==0:",
-                            "__cell = 'PCC'" ,
-                        "elif _obj['Cell Index']\\>=1:,",
-                            "__cell = 'SCC(_obj['Cell Index']\\)'"],
-    "__KPI_type": "LTE Info"
-  },
-  "0xB171 -- PCC -- SRS": {
-        "Cell Index": {
-      "DB Field": "Cell Index"
-    },
-    "Report": [
+        "Report": [
       {
         "SRS Actual TX Power": {
           "index": 8,
@@ -1328,11 +1266,12 @@
       }
     ],
     "__collection": "LTE",
-        "__cell": ["if _obj['Cell Index']\\==0:",
+    "__cell": ["if _obj['Cell Index']\\==0:",
                             "__cell = 'PCC'" ,
                         "elif _obj['Cell Index']\\>=1:,",
                             "__cell = 'SCC(_obj['Cell Index']\\)'"],
-    "__packet_message": "SRS",
+    "Packet_Type": "SRS",
+
     "__KPI_type": "LTE Info"
   },
   "0x1569 -- IMS": {
@@ -1567,7 +1506,7 @@
         }
       }
     ],
-          "__collection": "LTE",
+      "__collection": "LTE",
       "__cell": "PCell/SCelln",
       "__Raw_Data": true,
       "__KPI_type": "LTE Info"

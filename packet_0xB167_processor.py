@@ -19,7 +19,6 @@ class Packet_0xB167:
             entry.update(match.groupdict())
 
             # entry = match.groupdict()
-
             # key_mapping = {'subscription_id': 'Subscription ID', 'cell_index': 'Cell Index',
             #                'prach_config_index': 'PRACH Config Index', 'preamble_sequence': 'Preamble Sequence',
             #                'physical_root_index': 'Physical Root Index', 'cyclic_shift': 'Cyclic Shift',
