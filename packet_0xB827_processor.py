@@ -1,12 +1,13 @@
 import re
+# from  kpi_utils import table_extract
 
-class Packet_0xB887:
+class Packet_0xB827:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
         self.config = config
         self.entry = entry
-        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?'
-        self.pattern2 = r'.*?Mapping 2.*?\|Mapping 3.*?\|.*?-+.*?\n(?P<table>[\s\S]*)'
+        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?Source RAT = (?P<Source_RAT>[a-zA-Z]+).*?Network Select Mode = (?P<Network_Select_Mode>[a-zA-Z]+).*?Scan Scope = (?P<Scan_Scope>[a-zA-Z]+).*?Guard Timer = (?P<Guard_Timer>[a-zA-Z0-9\s]+)\n.*?Num RATs = (?P<Num_RATs>[\d]+)'
+        self.pattern2 = r'.*?Band Cap 385_448.*?\|Band Cap 449_512.*?\|.*?-+.*?\n(?P<table>[\s\S]*).*?NR5G Arfcn Counts'
         self.dict = {}
         self.result = []
 
@@ -36,18 +37,14 @@ class Packet_0xB887:
             return modified_entry
         else:
             return None
-        # if match:
-        #     entry1 = match.groupdict()
-        #     data = map_entry(entry1, self.config)
-        #     return data
-        # else:
-        #     return None
 
     def table_pattern(self):
         match = re.search(self.pattern2, self.packet_text, re.DOTALL)
+
         carrier_ids = []  # Initialize an empty list to store dictionaries
+
         if match:
-            # return table_extract(match, self.config, self.config['Records'])
+            # return table_extract(match, self.config, self.config['PLMN Search Request.RAT List'])
             # Extract the 'table' named group which contains the data rows
             table_content = match.group('table').strip()
 
@@ -57,7 +54,7 @@ class Packet_0xB887:
             for row in rows:  # Iterate over each row
                 dict_1 = {}
                 row_values = row.split('|')  # Split the current row by the '|' character to get individual values
-                config_values = self.config['Records']
+                config_values = self.config['PLMN Search Request.RAT List']
                 for entry in config_values[0].items():  # Access the first (and only) item in the list, then iterate over its items
                     key, value = entry
                     db_field = value['DB Field']

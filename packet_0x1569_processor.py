@@ -1,4 +1,5 @@
 import re
+import kpi_utils
 # import json
 class Packet_0x1569:
     def extract_info(lines, config, entry=None):
@@ -15,7 +16,14 @@ class Packet_0x1569:
 
             # with open('config.json') as f:
             #     config = json.load(f)
-
+            # key_mapping = {
+            #     'subscription_id': 'Subscription ID',
+            #     'sequence_number': 'Sequence Number',
+            #     'ssrc': 'SSRC',
+            #     'codec_type': 'codecType',
+            #     'loss_type': 'LossType',
+            #     'total_packets_count': 'Total Packets Count'
+            # }
             key_mapping = {
                 'subscription_id': config['Subscription ID']['DB Field'],
                 'sequence_number': config['Sequence Number']['DB Field'],
@@ -31,6 +39,7 @@ class Packet_0x1569:
             mapped_entry["__collection"] = config.get('__collection')
             mapped_entry["__cell"] = config.get('__cell')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
+            # mapped_entry = kpi_utils.map_entry(entry,config, key_mapping)
 
             # print(lines)
             return mapped_entry

@@ -1,15 +1,15 @@
 import re
 
-class Packet_0xB887:
+
+class Packet_0xB8A7:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
         self.config = config
         self.entry = entry
         self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?'
-        self.pattern2 = r'.*?Mapping 2.*?\|Mapping 3.*?\|.*?-+.*?\n(?P<table>[\s\S]*)'
+        self.pattern2 = r'.*?RSRP\|CRI.*?\|.*?-+.*?\n(?P<table>[\s\S]*)'
         self.dict = {}
         self.result = []
-
     def extract_info(self):
         self.dict.update(self.entry)
         non_table_capture = self.regular_pattern()
@@ -20,6 +20,9 @@ class Packet_0xB887:
             for row in table_capture:
                 for key, value in row.items():
                     self.dict[key] = value
+                for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
+                    if additional_key in self.config:
+                        self.dict[additional_key] = self.config[additional_key]
                 self.result.append(self.dict)
         return self.result  # Return the updated dictionary
 
@@ -57,7 +60,7 @@ class Packet_0xB887:
             for row in rows:  # Iterate over each row
                 dict_1 = {}
                 row_values = row.split('|')  # Split the current row by the '|' character to get individual values
-                config_values = self.config['Records']
+                config_values = self.config['Reports']
                 for entry in config_values[0].items():  # Access the first (and only) item in the list, then iterate over its items
                     key, value = entry
                     db_field = value['DB Field']
@@ -67,9 +70,6 @@ class Packet_0xB887:
                         if row_value:  # Add to dict_1 only if row_value is not empty
                             dict_1[db_field] = row_value
                 if dict_1:  # Check if dict_1 is not empty before printing or adding to carrier_ids
-                    for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
-                        if additional_key in self.config:
-                            dict_1[additional_key] = self.config[additional_key]
                     carrier_ids.append(dict_1)
             return carrier_ids
         else:

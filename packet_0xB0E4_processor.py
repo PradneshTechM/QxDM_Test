@@ -34,7 +34,8 @@ class Packet_0xB0E4:
 
             mapped_entry["__collection"] = config.get('__collection')
             mapped_entry["__cell"] = config.get('__cell')
-            mapped_entry["__packet_message"] = config.get('__packet_message')
+            if "Packet_Type" in config:
+                mapped_entry["Packet_Type"] = config.get('Packet_Type')
             mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
 

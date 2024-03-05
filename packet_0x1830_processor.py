@@ -27,8 +27,8 @@ class Packet_0x1830:
             mapped_entry["__collection"] = config.get('__collection')
             mapped_entry["__frequency"] = config.get('__frequency')
             mapped_entry["__cell"] = config.get("__cell")
-            if "__packet_message" in config:
-                mapped_entry["__packet_message"] = entry["direction"]
+            if "Packet_Type" in config:
+                mapped_entry["Packet_Type"] = entry["direction"]
             mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
 

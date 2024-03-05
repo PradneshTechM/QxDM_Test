@@ -1,0 +1,135 @@
+Input -
+       msg = ParsedRawMessage(index=0, packet_type="0x156E", packet_length=100,
+                               name="IMS SIP Message",
+                               subtitle="0x156E  IMS SIP Message  --  IMS_SIP_BYE/INFORMAL_RESPONSE", datetime="2024 Jan 15  07:15:24.613",
+                               packet_text=
+                               '''2024 Jan 15  07:15:24.613  [87]  0x156E  IMS SIP Message  --  IMS_SIP_BYE/INFORMAL_RESPONSE
+Subscription ID = 1
+Version = 1
+Direction = UE_TO_NETWORK
+SDP Presence = 0
+SIP Call ID Length = 35
+SIP Message Length = 1042
+SIP Message Logged Bytes = 1043
+Message ID = IMS_SIP_BYE
+Response Code = INFORMAL_RESPONSE (0)
+CM Call ID = 532
+SIP Call ID = 2063678468_2676265992@10.55.196.81
+Sip Message = BYE sip:lucentNGFS-043632@10.228.38.176:6000;x-skey=00006e5e2f4500320003;x-afi=5;encoded-parm=QbkRBthOEgsTXgkTBA0HHiUrKz1CQEVBRUdHNhkTVBgiMXN0dCVqPTo9eS03fyFgYCJieSY.J3YwN0IcXlpWBQMIF11NTVJTUEpWARcYBw8fGwIcBF4eABROQEZBSA__ SIP/2.0
+To: <tel:4256153170;phone-context=ims.mnc340.mcc313.3gppnetwork.org>;tag=64d20eb0-65a4db832c99ecc2-gm-po-lucentPCSF-111786
+From: <sip:+13526739015@ims.mnc340.mcc313.3gppnetwork.org>;tag=2063678473
+Call-ID: 2063678468_2676265992@10.55.196.81
+CSeq: 989936647 BYE
+Via: SIP/2.0/TCP 10.55.196.81:44901;branch=z9hG4bK1625500643
+Max-Forwards: 70
+P-Access-Network-Info: 3GPP-E-UTRAN-FDD;utran-cell-id-3gpp=310410910D67BBF16
+Security-Verify: ipsec-3gpp; q=0.1; alg=hmac-md5-96; ealg=null; spi-c=4289143273; spi-s=4289143272; port-c=65485; port-s=6000
+Content-Length: 0
+P-Preferred-Identity: <sip:+13526739015@ims.mnc340.mcc313.3gppnetwork.org>
+Reason: RELEASE_CAUSE ;cause=1 ;text="User ends call"
+User-Agent: motorola_motorola edge plus 2023_T1TR33.43-48-21
+Require: sec-agree
+Proxy-Require: sec-agree''')
+
+Output -
+  {
+    "_packetType": "0x156E",
+    "_rawPayload": "2024 Jan 15  07:15:24.613  [87]  0x156E  IMS SIP Message  --  IMS_SIP_BYE/INFORMAL_RESPONSE\nSubscription ID = 1\nVersion = 1\nDirection = UE_TO_NETWORK\nSDP Presence = 0\nSIP Call ID Length = 35\nSIP Message Length = 1042\nSIP Message Logged Bytes = 1043\nMessage ID = IMS_SIP_BYE\nResponse Code = INFORMAL_RESPONSE (0)\nCM Call ID = 532\nSIP Call ID = 2063678468_2676265992@10.55.196.81\nSip Message = BYE sip:lucentNGFS-043632@10.228.38.176:6000;x-skey=00006e5e2f4500320003;x-afi=5;encoded-parm=QbkRBthOEgsTXgkTBA0HHiUrKz1CQEVBRUdHNhkTVBgiMXN0dCVqPTo9eS03fyFgYCJieSY.J3YwN0IcXlpWBQMIF11NTVJTUEpWARcYBw8fGwIcBF4eABROQEZBSA__ SIP/2.0\nTo: <tel:4256153170;phone-context=ims.mnc340.mcc313.3gppnetwork.org>;tag=64d20eb0-65a4db832c99ecc2-gm-po-lucentPCSF-111786\nFrom: <sip:+13526739015@ims.mnc340.mcc313.3gppnetwork.org>;tag=2063678473\nCall-ID: 2063678468_2676265992@10.55.196.81\nCSeq: 989936647 BYE\nVia: SIP/2.0/TCP 10.55.196.81:44901;branch=z9hG4bK1625500643\nMax-Forwards: 70\nP-Access-Network-Info: 3GPP-E-UTRAN-FDD;utran-cell-id-3gpp=310410910D67BBF16\nSecurity-Verify: ipsec-3gpp; q=0.1; alg=hmac-md5-96; ealg=null; spi-c=4289143273; spi-s=4289143272; port-c=65485; port-s=6000\nContent-Length: 0\nP-Preferred-Identity: <sip:+13526739015@ims.mnc340.mcc313.3gppnetwork.org>\nReason: RELEASE_CAUSE ;cause=1 ;text=\"User ends call\"\nUser-Agent: motorola_motorola edge plus 2023_T1TR33.43-48-21\nRequire: sec-agree\nProxy-Require: sec-agree",
+    "_parsedPayload": {
+      "Time": "2024 Jan 15  07:15:24.613",
+      "Source": "QxDM",
+      "Packet Name": "0x156E  IMS SIP Message  --  IMS_SIP_BYE/INFORMAL_RESPONSE",
+      "Subs ID": "1",
+      "Direction": "UE_TO_NETWORK",
+      "Message ID": "IMS_SIP_BYE",
+      "Response": "INFORMAL_RESPONSE (0)",
+      "Call ID": "532",
+      "SIP Message": "BYE sip:lucentNGFS-043632@10.228.38.176:6000;x-skey=00006e5e2f4500320003;x-afi=5;encoded-parm=QbkRBthOEgsTXgkTBA0HHiUrKz1CQEVBRUdHNhkTVBgiMXN0dCVqPTo9eS03fyFgYCJieSY.J3YwN0IcXlpWBQMIF11NTVJTUEpWARcYBw8fGwIcBF4eABROQEZBSA__ SIP/2.0",
+      "CSeq": "989936647",
+      "P-Access-Network-Info": "3GPP-E-UTRAN-FDD;utran-cell-id-3gpp=310410910D67BBF16",
+      "Cause": "RELEASE_CAUSE ;cause=1 ;text=\"User ends call\"",
+      "Method": "BYE",
+      "__collection": "Event",
+      "__cell": "IMS",
+      "Packet_Type": "IMS_SIP_BYE",
+      "__Raw_Data": true,
+      "__KPI_type": "Voice"
+    }
+  }
+
+ Input -         msg = ParsedRawMessage(index=0, packet_type="0x1569", packet_length=100,
+                               name="IMS RTP Packet Loss",
+                               subtitle="0x1569  IMS RTP Packet Loss", datetime="2024 Jan 15  07:15:24.614", packet_text=
+                               """2024 Jan 15  07:15:24.614  [99]  0x1569  IMS RTP Packet Loss
+Subscription ID = 1
+Version = 11
+Number Lost = 0
+Sequence Number = 152
+SSRC = 2821336237
+codecType = AMR-WB
+LossType = RTP NETWORK LOSS
+Num of Frame = 0
+Total Lost = 0
+Total Packets Count = 146
+""")
+
+Output-
+  {
+    "_packetType": "0x1569",
+    "_rawPayload": "2024 Jan 15  07:15:24.614  [99]  0x1569  IMS RTP Packet Loss\nSubscription ID = 1\nVersion = 11\nNumber Lost = 0\nSequence Number = 152\nSSRC = 2821336237\ncodecType = AMR-WB\nLossType = RTP NETWORK LOSS\nNum of Frame = 0\nTotal Lost = 0\nTotal Packets Count = 146\n",
+    "_parsedPayload": {
+      "Time": "2024 Jan 15  07:15:24.614",
+      "Source": "QxDM",
+      "Packet Name": "0x1569  IMS RTP Packet Loss",
+      "Subs ID": "1",
+      "Sequence Number": "152",
+      "SSRC": "2821336237",
+      "codecType": "AMR-WB",
+      "LossType": "RTP NETWORK LOSS",
+      "Total Packets Count": "146",
+      "__collection": "Event",
+      "__cell": "IMS",
+      "__KPI_type": "Voice"
+    }
+  }
+
+  Input -         msg = ParsedRawMessage(index=0, packet_type="0xB0E5", packet_length=100, name="LTE NAS ESM Bearer Context Info",
+                               subtitle="0xB0E5  LTE NAS ESM Bearer Context Info",
+                               datetime="2024 Jan 25  21:03:44.144", packet_text=
+                               '''
+        2024 Jan 25  21:03:44.144  [EC]  0xB0E5  LTE NAS ESM Bearer Context Info
+Subscription ID = 1
+Log version = 1
+Context Type = Default
+Bearer ID = 5
+Bearer State = ACTIVE
+Connection ID = 4
+SDF ID = 0
+LBI_VALID = FALSE
+RB ID = 5
+EPS_QOS
+  eps_qos_length = 1 (0x1)
+  qos_content
+    qci = 6 (0x6) (QC6)
+        ''')
+
+Output -
+  {
+    "_packetType": "0xB0E5",
+    "_rawPayload": "\n        2024 Jan 25  21:03:44.144  [EC]  0xB0E5  LTE NAS ESM Bearer Context Info\nSubscription ID = 1\nLog version = 1\nContext Type = Default\nBearer ID = 5\nBearer State = ACTIVE\nConnection ID = 4\nSDF ID = 0\nLBI_VALID = FALSE\nRB ID = 5\nEPS_QOS\n  eps_qos_length = 1 (0x1)\n  qos_content\n    qci = 6 (0x6) (QC6)\n        ",
+    "_parsedPayload": {
+      "Time": "2024 Jan 25  21:03:44.144",
+      "Source": "QxDM",
+      "Packet Name": "0xB0E5  LTE NAS ESM Bearer Context Info",
+      "Subs ID": "1",
+      "Bearer ID": "5",
+      "Bearer State": "ACTIVE",
+      "Connection ID": "4",
+      "QCI": "6 (0x6) (QC6)",
+      "__collection": "Event",
+      "__cell": "LTE",
+      "Packet_Type": "NAS",
+      "__Raw_Data": "True",
+      "__KPI_type": "LTE Info"
+    }
+  }

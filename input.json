@@ -22,10 +22,10 @@
     "__collection": "Event",
     "__frequency": "Event [One]",
     "__cell": "IMS",
-    "__packet_message": ["if _obj['Direction']\\ == 'MO'",
-                             "__packet_message == 'MO'",
+    "Packet_Type": ["if _obj['Direction']\\ == 'MO'",
+                             "Packet_Type == 'MO'",
                          "elif _obj['Direction']\\ == 'MT'",
-                             "__packet_message == 'MT'"],
+                             "Packet_Type == 'MT'"],
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -53,10 +53,10 @@
     "__collection": "Event",
     "__frequency": "Event [One]",
     "__cell": "IMS",
-    "__packet_message": ["if _obj['Direction']\\ == 'MO'",
-                             "__packet_message == 'MO'",
+    "Packet_Type": ["if _obj['Direction']\\ == 'MO'",
+                             "Packet_Type == 'MO'",
                          "elif _obj['Direction']\\ == 'MT'",
-                             "__packet_message == 'MT'"],
+                             "Packet_Type == 'MT'"],
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -75,7 +75,7 @@
     },
     "__collection": "Event",
     "__cell": "IMS",
-    "__packet_message": "IMS_SIP_REGISTER/INFORMAL_RESPONSE",
+    "Packet_Type": "IMS_SIP_REGISTER/INFORMAL_RESPONSE",
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -120,7 +120,7 @@
     },
     "__collection": "Event",
     "__cell": "IMS",
-    "__packet_message": ["__packet_message = _obj['Message ID']\\"],
+    "Packet_Type": ["Packet_Type = _obj['Message ID']\\"],
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
@@ -147,7 +147,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "LTE",
-    "__packet_message": "RRC",
+    "Packet_Type": "RRC",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -169,7 +169,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "NAS",
+    "Packet_Type": "NAS",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -293,7 +293,7 @@
                             "__cell = 'PCell'" ,
                         "elif _obj['Cell Index']\\>=1:,",
                             "__cell = 'SCell(_obj['Cell Index']\\)'"],
-    "__packet_message": "PRACH",
+    "Packet_Type": "PRACH",
     "__Raw_Data": false,
     "__KPI_type": "LTE Info"
   },
@@ -464,69 +464,55 @@
           "DB Field": "Cell ID",
           "Field Name": "NR5G [PCC] Cell Id",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "DL Arfcn": {
           "index": 2,
           "DB Field": "DL Arfcn",
           "Field Name": "NR5G [PCC] DL Arfcn",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "UL Arfcn": {
           "index": 3,
           "DB Field": "UL Arfcn",
           "Field Name": "NR5G [PCC] UL Arfcn",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "Band": {
           "index": 5,
           "DB Field": "Band",
           "Field Name": "NR5G [PCC] Band",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "Band Type": {
           "index": 6,
           "DB Field": "Band Type",
           "Field Name": "NR5G [PCC] Band Type",
           "Field Type": "Text"
-        }
-      },
-      {
+        },
         "DL Carrier Bandwidth": {
           "index": 7,
           "DB Field": "DL Bandwidth",
           "Field Name": "NR5G [PCC] DL Bandwidth",
-          "Field Type": "Text"}
-      },
-      {
+          "Field Type": "Text"
+        },
         "UL Carrier Bandwidth": {
           "index": 8,
           "DB Field": "UL Bandwidth",
           "Field Name": "NR5G [PCC] UL Bandwidth",
           "Field Type": "Text"
-       }
-      },
-      {
+       },
         "DL Max MIMO": {
           "index": 10,
           "DB Field": "DL MIMO",
           "Field Name": "NR5G [PCC] DL MIMO",
           "Field Type": "Positive Number"
-        }
-      },
-      {
+        },
         "UL Max MIMO": {
           "index": 11,
           "DB Field": "UL MIMO",
           "Field Name": "NR5G [PCC] UL MIMO",
-          "Field Type": "Positive Number"       }
+          "Field Type": "Positive Number"
+        }
       }
     ],
     "__collection": "NR5G",
@@ -535,7 +521,7 @@
                               "__cell='PCC'",
                           "elif _obj[CC Id]\\ in range(1,8) or _obj['CC Id']\\ in range(9,16):",
                                 "__cell='SCC({x})' where x in range(1,8)"],
-    "__packet_message": "_obj['Conn Config Info.Connectivity Mode']\\",
+    "Packet_Type": "_obj['Conn Config Info.Connectivity Mode']\\",
     "__Raw_Data": false,
     "__KPI_type": "NR Info"
   },
@@ -561,10 +547,7 @@
         "#": {
           "index": 0,
           "DB Field": "#"
-        }
-      },
-
-      {
+        },
         "Cell Quality RSRP": {
           "index": 4,
           "DB Field": "RSRP(dBm)",
@@ -573,9 +556,7 @@
                              "return _obj['RSRP(dBm)']",
                           "else:",
                               "return None"]
-        }
-      },
-      {
+        },
         "Cell Quality RSRQ": {
           "index": 5,
           "DB Field": "RSRQ(dBm)",
@@ -737,7 +718,7 @@
                             "__cell = 'PCC'" ,
                         "elif _obj['Carrier Id']\\>=1:,",
                             "__cell = 'SCC(_obj['Carrier Id']\\)'"],
-    "__packet_message": "PDSCH",
+    "Packet_Type": "PDSCH",
     "__Raw_Data": false,
     "__KPI_type": "NR Info"
   },
@@ -786,7 +767,7 @@
     "__frequency": "Per Second",
     "__cell": ["if _obj['Carrier Index' == 0:",
                             "__cell = 'PCC'"],
-    "__packet_message": "Reference Signal = SSB",
+    "Packet_Type": "Reference Signal = SSB",
     "__Raw_Data": false,
     "__KPI_type": "NR Info"
   },
@@ -974,7 +955,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__Raw_Data": true,
     "__KPI_type": "NR Info"
   },
@@ -990,7 +971,7 @@
     "__collection": "Event",
     "__frequency": "Event [One]",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__KPI_type": "NR Info"
   },
   "0xB80A -- NR5G -- Packet Subtitle": {
@@ -1004,7 +985,7 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__KPI_type": "NR Info"
   },
   "0xB801 -- NR5G -- Packet Subtitle": {
@@ -1022,7 +1003,7 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__KPI_type": "NR Info"
   },
   "0xB0C0 -- LTE -- Packet Subtitle": {
@@ -1054,7 +1035,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "LTE",
-    "__packet_message": "_obj['packet_subtitle']\\",
+    "Packet_Type": "_obj['packet_subtitle']\\",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1095,7 +1076,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "Cell Info",
+    "Packet_Type": "Cell Info",
     "__KPI_type": "LTE Info"
   },
   "0xB0E4 -- LTE -- NAS": {
@@ -1113,7 +1094,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "NAS",
+    "Packet_Type": "NAS",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1135,7 +1116,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "__packet_message": "msg_type",
+    "Packet_Type": "msg_type",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1231,7 +1212,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "LTE",
-    "__packet_message": "msg_type",
+    "Packet_Type": "msg_type",
     "__Raw_Data": true,
     "__KPI_type": "LTE Info"
   },
@@ -1257,7 +1238,7 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "__packet_message": "_obj[packet_subtitle]\\",
+    "Packet_Type": "_obj[packet_subtitle]\\",
     "__KPI_type": "NR Info"
   },
   "0xB171 -- PCC -- SRS": {
@@ -1288,7 +1269,7 @@
                             "__cell = 'PCC'" ,
                         "elif _obj['Cell Index']\\>=1:,",
                             "__cell = 'SCC(_obj['Cell Index']\\)'"],
-    "__packet_message": "SRS",
+    "Packet_Type": "SRS",
 
     "__KPI_type": "LTE Info"
   },
