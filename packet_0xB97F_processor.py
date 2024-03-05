@@ -84,6 +84,10 @@ class Packet_0xB97F:
                     if index < len(row_values):  # Check if the index is within the bounds of row_values
                         row_value = row_values[index].strip()
                         if row_value:  # Add to dict_1 only if row_value is not empty
+                            if db_field == 'RSRP(dBm)' and row_value != 0:
+                                continue
+                            elif db_field == 'RSRQ(dBm)' and row_value != 0:
+                                continue
                             dict_1[db_field] = row_value
                 if dict_1:  # Check if dict_1 is not empty before printing or adding to carrier_ids
                     row_dicts.append(dict_1)
