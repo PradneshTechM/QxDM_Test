@@ -1,5 +1,6 @@
 import re
 # from utils import map_entry, metadata
+#from json_comments import cell_PCC
 class Packet_0xB171:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
@@ -24,10 +25,11 @@ class Packet_0xB171:
                 if self.config['__collection']:
                     row_dict['__collection'] = self.config.get('__collection')
                 if self.config['__cell']:
+                    # row_dict = cell_PCC(["if _obj['Cell Index']==0:","__cell = 'PCC'" ,"elif _obj['Cell Index']>=1:,","__cell = 'SCC(_obj['Cell Index'])'"], row_dict)
                     if int(row_dict["Cell index"]) == 0:
                         row_dict['__cell'] = 'PCC'
                     elif int(row_dict["Cell index"]) >= 1:
-                        row_dict['__cell'] = f'SCC{self.dict["Cell index"]}'
+                        row_dict['__cell'] = f'SCC{row_dict["Cell index"]}'
                 if self.config['Packet_Type']:
                     row_dict["Packet_Type"] = self.config.get('Packet_Type')
                 if self.config['__KPI_type']:

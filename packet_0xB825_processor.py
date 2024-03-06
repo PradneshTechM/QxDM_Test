@@ -1,4 +1,5 @@
 import re
+from json_comments import LTE_bands_0xB825
 class Packet_0xB825:
     # def __int__(self):
     #     # print("New")
@@ -30,8 +31,14 @@ class Packet_0xB825:
 
             lte_bands_str = entry["lte_bands"].strip()
             lte_bands = [int(band) for band in lte_bands_str.split(",") if int(band.strip()) != 0]
+            # lte_bands = LTE_bands_0xB825([
+            # "lte_bands_str = entry['lte_bands'].strip()",
+            # "lte_bands = [int(band) for band in lte_bands_str.split(',') if int(band.strip()) != 0]"
+            # ], entry)
+            lte_bands_str = ''.join(str(x) for x in lte_bands)
+            lte_bands_str.strip('[')
 
-            entry["lte_bands"] = lte_bands
+            entry["lte_bands"] = lte_bands_str
 
             entry = {key_mapping.get(key, key): value for key, value in entry.items()}
             # print(entry["table"])
@@ -72,11 +79,11 @@ class Packet_0xB825:
             #     entry.pop("msg_subtitle", None)
             entry["__Raw_Data"] = config.get("__Raw_Data")
             entry["__KPI_type"] = config.get('__KPI_type')
+            # print("CC ID", entry['CC Id'])
 
             entry.pop("table", None)
             entry.pop("connectivity_mode", None)
             return entry
         else:
             return None
-
 
