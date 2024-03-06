@@ -28,6 +28,7 @@ class Packet_0xB16A:
                     new_key = key.replace('_', ' ')
                     # Add the modified key and its value to the new dictionary
                     modified_entry[new_key] = value
+            modified_entry['__cell'] = 'LTE'
 
             return modified_entry
         else:

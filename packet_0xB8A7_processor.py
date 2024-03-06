@@ -22,6 +22,12 @@ class Packet_0xB8A7:
                     self.dict[key] = value
                 for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
                     if additional_key in self.config:
+                        if additional_key == '__collection':
+                            self.dict[additional_key] = self.config[additional_key]
+                            if int(self.dict['Carrier ID']) == 0:
+                                self.dict['__cell'] = 'PCC'
+                            elif int(self.dict['Carrier ID']) >= 1:
+                                self.dict['__cell'] = 'SCC(' + self.dict['Carrier ID'] + ')'
                         self.dict[additional_key] = self.config[additional_key]
                 self.result.append(self.dict)
         return self.result  # Return the updated dictionary

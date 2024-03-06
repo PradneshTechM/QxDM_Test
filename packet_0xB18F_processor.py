@@ -22,8 +22,12 @@ class Packet_0xB18F:
             for row in table_capture:
                 for key, value in row.items():
                     self.dict[key] = value
+                for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
+                    if additional_key in self.config:
+                        self.dict[additional_key] = self.config[additional_key]
                 self.result.append(self.dict)
         return self.result  # Return the updated dictionary
+
     def regular_pattern(self):
         match = re.search(self.pattern1, self.packet_text, re.DOTALL)
         if match:
@@ -34,6 +38,7 @@ class Packet_0xB18F:
                 new_key = key.replace('_', ' ')
                 # Add the modified key and its value to the new dictionary
                 modified_entry[new_key] = value
+
             return modified_entry
         else:
             return None
