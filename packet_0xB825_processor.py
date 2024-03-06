@@ -1,5 +1,5 @@
 import re
-from json_comments import LTE_bands_0xB825
+from parser.json_comments import LTE_bands_0xB825
 class Packet_0xB825:
     # def __int__(self):
     #     # print("New")

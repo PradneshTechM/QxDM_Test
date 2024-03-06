@@ -579,7 +579,9 @@ class ParsedRawMessage:
                 if (parsedPayload["__Raw_Data"] == True or parsedPayload["__Raw_Data"] == 'True'):
                     metadata["_rawPayload"] = self.packet_text
                 del parsedPayload["__Raw_Data"]
-            # if ""
+            if "__cell" in parsedPayload:
+                parsedPayload["_cell"] = parsedPayload["__cell"]
+                del parsedPayload["__cell"]
         return parsedPayload, metadata
 
     def parse_payload(self):

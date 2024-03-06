@@ -1,5 +1,5 @@
 import re
-import utils
+import parser.utils
 
 class Packet_0x156E:
     def __init__(self):
