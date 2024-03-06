@@ -20,7 +20,6 @@ class Packet_0xB0C2:
 
             # entry = match.groupdict()
             # print(entry)
-
             key_mapping = {'subscription_id': config['Subscription ID']['DB Field'],
                            'physical_cell_id': config['Physical Cell ID']['DB Field'],
                            'dl_freq': config['DL FREQ']['DB Field'],
@@ -45,7 +44,8 @@ class Packet_0xB0C2:
             mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
             mapped_entry["__collection"] = config.get('__collection')
             mapped_entry["__cell"] = config.get('__cell')
-            mapped_entry["__packet_message"] = config.get('__packet_message')
+            if "Packet_Type" in config:
+                mapped_entry["Packet_Type"] = config.get('Packet_Type')
             mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             # print(entry)

@@ -10,7 +10,6 @@ class Packet_0xB822:
         if match:
             # If there is a match, extract the group dictionary
             entry.update(match.groupdict())
-
             # entry = match.groupdict()
             # Initialize an empty dictionary for modified entries
             modified_entry = {}

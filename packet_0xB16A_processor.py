@@ -7,7 +7,6 @@ class Packet_0xB16A:
 
         # Use re.search to find the first match of the pattern in the packet_text
         match = re.search(pattern, packet_text, re.DOTALL)
-
         if match:
             # If there is a match, extract the group dictionary
             entry.update(match.groupdict())
@@ -29,6 +28,7 @@ class Packet_0xB16A:
                     new_key = key.replace('_', ' ')
                     # Add the modified key and its value to the new dictionary
                     modified_entry[new_key] = value
+            modified_entry['__cell'] = 'LTE'
 
             return modified_entry
         else:
