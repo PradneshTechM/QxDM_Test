@@ -124,7 +124,7 @@
     "__Raw_Data": true,
     "__KPI_type": "Voice"
   },
-  "0xB0C1 -- LTE -- RRC": {
+  "0xB0C1 -- LTE-- RRC": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [LTE] Subs ID"

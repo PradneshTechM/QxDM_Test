@@ -550,20 +550,21 @@ class ParsedRawMessage:
             sys.stderr.flush()
             return None, None
         metadata = {
-            "_index": self.index,
-            "_packetType": hex(int(self.packet_type)),
-            "_packetTypeInt": int(self.packet_type),
-            "_name": self.name,
+            # "_index": self.index,
+            "Packet Type": hex(int(self.packet_type)),
+            # "_packetTypeInt": int(self.packet_type),
+            "Packet Name": self.name,
             # "_datetime": self.datetime,
-            "_length": self.packet_length,
+            # "_length": self.packet_length,
             # "_subtitle": self.subtitle if self.subtitle else "",
-            "_parserVersion": ParsedRawMessage.VERSION,
+            # "_parserVersion": ParsedRawMessage.VERSION,
         }
         if parsedPayload != None:
             if "__Raw_Data" in parsedPayload:
                 if (parsedPayload["__Raw_Data"] == True or parsedPayload["__Raw_Data"] == 'True'):
                     metadata["_rawPayload"] = self.packet_text
                 del parsedPayload["__Raw_Data"]
+            # if ""
         return parsedPayload, metadata
 
     def parse_payload(self):
