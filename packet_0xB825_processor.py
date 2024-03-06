@@ -30,8 +30,10 @@ class Packet_0xB825:
 
             lte_bands_str = entry["lte_bands"].strip()
             lte_bands = [int(band) for band in lte_bands_str.split(",") if int(band.strip()) != 0]
-
-            entry["lte_bands"] = lte_bands
+            bands = ''
+            for band in lte_bands:
+                bands += str(band) + ', '
+            entry["lte_bands"] = bands
 
             entry = {key_mapping.get(key, key): value for key, value in entry.items()}
             # print(entry["table"])
