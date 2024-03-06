@@ -1,0 +1,128 @@
+{
+  "0xB88A": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Num Attempts": {
+      "DB Field": "Num Attempts"
+    },
+    "Contention Type": {
+      "DB Field": "Contention Type"
+    },
+    "Msg1 SCS": {
+      "DB Field": "Msg1 SCS"
+    },
+    "Msg2 SCS": {
+      "DB Field": "Msg2 SCS"
+    },
+    "UL BWP SCS": {
+      "DB Field": "UL BWP SCS"
+    },
+    "Raw_Data": true,
+    "__collection": "Event",
+    "__cell": "NR5G",
+    "__KPI_type": "NR Info"
+  },
+  "0xB828": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Source RAT": {
+      "DB Field": "Source RAT"
+    },
+    "Current Search RAT": {
+      "DB Field": "Current Search RAT"
+    },
+    "Network Search Status": {
+      "DB Field": "Network Search Status"
+    },
+    "PLMN List": [
+      {
+        "RAT": {
+          "index": 1,
+          "DB Field": "RAT"
+        },
+        "CAG ID": {
+          "index": 5,
+          "DB Field": "CAG ID"
+        },
+        "ARFCN": {
+          "index": 7,
+          "DB Field": "ARFCN"
+        },
+        "SCS": {
+          "index": 8,
+          "DB Field": "SCS"
+        },
+        "Band": {
+          "index": 9,
+          "DB Field": "Band"
+        }
+      }
+    ],
+    "Raw_Data": true,
+    "__KPI_type": "NR Info",
+    "__cell": "NR5G",
+    "__collection": "Event"
+  },
+  "0xB970": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Slot Number": {
+      "DB Field": "Slot Number"
+    },
+    "SubFrame Number": {
+      "DB Field": "SubFrame Number"
+    },
+    "System Frame Number": {
+      "DB Field": "System Frame Number"
+    },
+    "SCS": {
+      "DB Field": "SCS"
+    },
+    "NR ARFCN": {
+      "DB Field": "NR ARFCN"
+    },
+    "Phy Cell ID": {
+      "DB Field": "Phy Cell ID"
+    },
+    "Serving SSB Index": {
+      "DB Field": "Serving SSB Index"
+    },
+    "Q Rx Level Min": {
+      "DB Field": "Q Rx Level Min"
+    },
+    "Q RX Level Min Offset": {
+      "DB Field": "Q RX Level Min Offset"
+    },
+    "P Max": {
+      "DB Field": "P Max"
+    },
+    "Max UE TX Power": {
+      "DB Field": "Max UE TX Power"
+    },
+    "Cell Quality RSRP": {
+      "DB Field": "Cell Quality RSRP"
+    },
+    "Q Qual Min": {
+      "DB Field": "Q Qual Min"
+    },
+    "Q Qualmin Offset": {
+      "DB Field": "Q Qualmin Offset"
+    },
+    "S Qual": {
+      "DB Field": "S Qual"
+    },
+    "Cell Quality RSRQ": {
+      "DB Field": "Cell Quality RSRQ"
+    },
+    "Result": {
+      "DB Field": "Result"
+    },
+    "Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "NR5G",
+    "__KPI_type": "NR Info"
+  }
+}

@@ -8,6 +8,9 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB88A_processor import Packet_0xB88A
+from packet_0xB828_processor import Packet_0xB828
+from packet_0xB970_processor import Packet_0xB970
 from packet_0xB887_processor import Packet_0xB887
 from packet_0xB0F7_processor import Packet_0xB0F7
 from packet_0x156A_processor import Packet_0x156A
@@ -1212,120 +1215,130 @@ class ParsedRawMessage:
         def _PARSE(packet_name, packet_text, entry):
             with open('input.json') as f:
                 config = json.load(f)
+            with open('P2.json') as f:
+                config2 = json.load(f)
             if packet_name == '0xB0E5':
                 print("0xB0E5")
                 return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5 -- LTE -- NAS'], entry)
-            elif packet_name == "0x156E":
-                print("0x156E")
-                return Packet_0x156E.extract_info(packet_text, config['0x156E -- IMS -- IMS_SIP_INVITE'],entry)
-            elif packet_name == "0x156A":
-                print("0x156A")
-                return Packet_0x156A.extract_info(packet_text, config['0x156A -- IMS'],entry)
-            elif packet_name == "0xB0C1":
-                print("0xB0C1")
-                return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1 -- LTE-- RRC'],entry)
-            elif packet_name == "0xB0F7":
-                print("0xB0F7")
-                return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7 -- LTE'],entry)
-            elif packet_name == "0xB80B":
-                print("0xB80B")
-                return Packet_0xB80B.extract_info(packet_text, config['0xB80B -- NR5G -- Packet Subtitle'],entry)
-            elif packet_name == "0xB800":
-                print("0xB800")
-                return Packet_0xB800.extract_info(packet_text, config['0xB800 -- NR5G -- PDU session release req'],entry)
-            elif packet_name =="0xB0EC":
-                print("0xB0EC")
-                return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC -- LTE -- msg_type"],entry)
-            elif packet_name =="0xB0E4":
-                print("0xB0E4")
-                return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4 -- LTE -- NAS"],entry)
-            elif packet_name =="0xB0C2":
-                print("0xB0C2")
-                return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2 -- Cell -- Cell Info"],entry)
-            elif packet_name == "0x1832":
-                print("0x1832")
-                return Packet_0x1832.extract_info(packet_text, config["0x1832 -- IMS -- IMS_SIP_REGISTER/INFORMAL_RESPONSE"],entry)
-            elif packet_name == '0xB822':
-                print("0xB822")
-                return Packet_0xB822.extract_info(packet_text, config['0xB822  -- NR5G'], entry)
-            elif packet_name == '0xB115':
-                print("0xB115")
-                return Packet_0xB115(packet_text, config['0xB115'], entry).extract_info()
-            elif packet_name == "0x1831":
-                print("0x1831")
-                return Packet_0x1831.extract_info(packet_text, config["0x1831 -- IMS -- Direction"],entry)
-            elif packet_name == "0x1830":
-                print("0x1830")
-                return Packet_0x1830.extract_info(packet_text, config["0x1830 -- IMS -- Direction"],entry)
-            elif packet_name == '0xB166':
-                print("0xB166")
-                return Packet_0xB166.extract_info(packet_text, config['0xB166 -- Pcell -- PRACH'], entry)
-            elif packet_name == '0xB168':
-                print("0xB168")
-                return Packet_0xB168.extract_info(packet_text, config['0xB168 -- PCC'], entry)
-            elif packet_name == '0xB169':
-                print("0xB169")
-                return Packet_0xB169.extract_info(packet_text, config['0xB169 -- PCC'], entry)
-            elif packet_name == '0xB16A':
-                print("0xB16A")
-                return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
-            elif packet_name == '0xB8D8':
-                print("0xB8D8")
-                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],entry)
-            elif packet_name == '0xB167':
-                print("0xB167")
-                return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
-            elif packet_name == "0x1569":
-                print("0x1569")
-                return Packet_0x1569.extract_info(packet_text, config['0x1569 -- IMS'], entry)
-            elif packet_name == '0xB823':
-                print("0xB823")
-                return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
-            elif packet_name == '0xB887':
-                print('0xB887')
-                return Packet_0xB887(packet_text, config['0xB887 -- PCC -- PDSCH'], entry).extract_info()
-            elif packet_name == '0xB801':
-                print('0xB801')
-                return Packet_0xB801.extract_info(packet_text, config["0xB801 -- NR5G -- Packet Subtitle"], entry)
-            elif packet_name == '0xB80A':
-                print('0xB80A')
-                return Packet_0xB80A.extract_info(packet_text, config["0xB80A -- NR5G -- Packet Subtitle"], entry)
-            elif packet_name == '0xB825':
-                print('0xB825')
-                return Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
-            elif packet_name == "0xB97F":
-                print("0xB97F")
-                return Packet_0xB97F(packet_text, config['0xB97F -- PCC'], entry).extract_info()
-                # entry,table_lines = Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
-                # return _tables(table_lines, entry)
-            elif packet_name == '0xB8A7':
-                print('0xB8A7')
-                return Packet_0xB8A7(packet_text, config['0xB8A7 -- PCC'], entry).extract_info()
-            elif packet_name == '0xB827':
-                print('0xB827')
-                return Packet_0xB827(packet_text, config['0xB827 -- NR5G'], entry).extract_info()
-            elif packet_name == '0xB18F':
-                print('0xB18F')
-                return Packet_0xB18F(packet_text, config['0xB18F -- LTE'], entry).extract_info()
-            elif packet_name == '0xB821':
-                print('0xB821')
-                return Packet_0xB821.extract_info(packet_text, config['0xB821 -- NR5G -- Packet Subtitle'], entry)
-            elif packet_name == '0xB0C0':
-                print('0xB0C0')
-                return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0 -- LTE -- Packet Subtitle'], entry)
-            elif packet_name == '0xB113':
-                print('0xB113')
-                return Packet_0xB113(packet_text, config['0xB113 -- LTE'], entry).extract_info()
-            elif packet_name == '0xB171':
-                print('0xB171')
-                return Packet_0xB171(packet_text, config['0xB171 -- PCC -- SRS'], entry).extract_info()
-            elif packet_name == '0xB18E':
-                print('0xB18E')
-                return Packet_0xB18E(packet_text, config['0xB18E -- PCell/SCelln'], entry).extract_info()
-            elif packet_name == '0xB196':
-                print('0xB196')
-                return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
-
+            # elif packet_name == "0x156E":
+            #     print("0x156E")
+            #     return Packet_0x156E.extract_info(packet_text, config['0x156E -- IMS -- IMS_SIP_INVITE'],entry)
+            # elif packet_name == "0x156A":
+            #     print("0x156A")
+            #     return Packet_0x156A.extract_info(packet_text, config['0x156A -- IMS'],entry)
+            # elif packet_name == "0xB0C1":
+            #     print("0xB0C1")
+            #     return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1 -- LTE-- RRC'],entry)
+            # elif packet_name == "0xB0F7":
+            #     print("0xB0F7")
+            #     return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7 -- LTE'],entry)
+            # elif packet_name == "0xB80B":
+            #     print("0xB80B")
+            #     return Packet_0xB80B.extract_info(packet_text, config['0xB80B -- NR5G -- Packet Subtitle'],entry)
+            # elif packet_name == "0xB800":
+            #     print("0xB800")
+            #     return Packet_0xB800.extract_info(packet_text, config['0xB800 -- NR5G -- PDU session release req'],entry)
+            # elif packet_name =="0xB0EC":
+            #     print("0xB0EC")
+            #     return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC -- LTE -- msg_type"],entry)
+            # elif packet_name =="0xB0E4":
+            #     print("0xB0E4")
+            #     return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4 -- LTE -- NAS"],entry)
+            # elif packet_name =="0xB0C2":
+            #     print("0xB0C2")
+            #     return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2 -- Cell -- Cell Info"],entry)
+            # elif packet_name == "0x1832":
+            #     print("0x1832")
+            #     return Packet_0x1832.extract_info(packet_text, config["0x1832 -- IMS -- IMS_SIP_REGISTER/INFORMAL_RESPONSE"],entry)
+            # elif packet_name == '0xB822':
+            #     print("0xB822")
+            #     return Packet_0xB822.extract_info(packet_text, config['0xB822  -- NR5G'], entry)
+            # elif packet_name == '0xB115':
+            #     print("0xB115")
+            #     return Packet_0xB115(packet_text, config['0xB115'], entry).extract_info()
+            # elif packet_name == "0x1831":
+            #     print("0x1831")
+            #     return Packet_0x1831.extract_info(packet_text, config["0x1831 -- IMS -- Direction"],entry)
+            # elif packet_name == "0x1830":
+            #     print("0x1830")
+            #     return Packet_0x1830.extract_info(packet_text, config["0x1830 -- IMS -- Direction"],entry)
+            # elif packet_name == '0xB166':
+            #     print("0xB166")
+            #     return Packet_0xB166.extract_info(packet_text, config['0xB166 -- Pcell -- PRACH'], entry)
+            # elif packet_name == '0xB168':
+            #     print("0xB168")
+            #     return Packet_0xB168.extract_info(packet_text, config['0xB168 -- PCC'], entry)
+            # elif packet_name == '0xB169':
+            #     print("0xB169")
+            #     return Packet_0xB169.extract_info(packet_text, config['0xB169 -- PCC'], entry)
+            # elif packet_name == '0xB16A':
+            #     print("0xB16A")
+            #     return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
+            # elif packet_name == '0xB8D8':
+            #     print("0xB8D8")
+            #     return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],entry)
+            # elif packet_name == '0xB167':
+            #     print("0xB167")
+            #     return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
+            # elif packet_name == "0x1569":
+            #     print("0x1569")
+            #     return Packet_0x1569.extract_info(packet_text, config['0x1569 -- IMS'], entry)
+            # elif packet_name == '0xB823':
+            #     print("0xB823")
+            #     return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
+            # elif packet_name == '0xB887':
+            #     print('0xB887')
+            #     return Packet_0xB887(packet_text, config['0xB887 -- PCC -- PDSCH'], entry).extract_info()
+            # elif packet_name == '0xB801':
+            #     print('0xB801')
+            #     return Packet_0xB801.extract_info(packet_text, config["0xB801 -- NR5G -- Packet Subtitle"], entry)
+            # elif packet_name == '0xB80A':
+            #     print('0xB80A')
+            #     return Packet_0xB80A.extract_info(packet_text, config["0xB80A -- NR5G -- Packet Subtitle"], entry)
+            # elif packet_name == '0xB825':
+            #     print('0xB825')
+            #     return Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+            # elif packet_name == "0xB97F":
+            #     print("0xB97F")
+            #     return Packet_0xB97F(packet_text, config['0xB97F -- PCC'], entry).extract_info()
+            #     # entry,table_lines = Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+            #     # return _tables(table_lines, entry)
+            # elif packet_name == '0xB8A7':
+            #     print('0xB8A7')
+            #     return Packet_0xB8A7(packet_text, config['0xB8A7 -- PCC'], entry).extract_info()
+            # elif packet_name == '0xB827':
+            #     print('0xB827')
+            #     return Packet_0xB827(packet_text, config['0xB827 -- NR5G'], entry).extract_info()
+            # elif packet_name == '0xB18F':
+            #     print('0xB18F')
+            #     return Packet_0xB18F(packet_text, config['0xB18F -- LTE'], entry).extract_info()
+            # elif packet_name == '0xB821':
+            #     print('0xB821')
+            #     return Packet_0xB821.extract_info(packet_text, config['0xB821 -- NR5G -- Packet Subtitle'], entry)
+            # elif packet_name == '0xB0C0':
+            #     print('0xB0C0')
+            #     return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0 -- LTE -- Packet Subtitle'], entry)
+            # elif packet_name == '0xB113':
+            #     print('0xB113')
+            #     return Packet_0xB113(packet_text, config['0xB113 -- LTE'], entry).extract_info()
+            # elif packet_name == '0xB171':
+            #     print('0xB171')
+            #     return Packet_0xB171(packet_text, config['0xB171 -- PCC -- SRS'], entry).extract_info()
+            # elif packet_name == '0xB18E':
+            #     print('0xB18E')
+            #     return Packet_0xB18E(packet_text, config['0xB18E -- PCell/SCelln'], entry).extract_info()
+            # elif packet_name == '0xB196':
+            #     print('0xB196')
+            #     return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
+            elif packet_name == '0xB88A':
+                print('0xB88A')
+                return Packet_0xB88A.extract_info(packet_text, config2['0xB88A'], entry)
+            elif packet_name == '0xB828':
+                print('0xB828')
+                return Packet_0xB828(packet_text, config2['0xB828'], entry).extract_info()
+            elif packet_name == '0xB970':
+                print('0xB970')
+                return Packet_0xB970.extract_info(packet_text, config2['0xB970'], entry)
         # start here
 
         # remove empty (only whitespace) lines
@@ -1467,9 +1480,109 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+        msg = ParsedRawMessage(index=0, packet_type="0xB970", packet_length=100,
+                               name="NR5G ML1 Searcher Idle S Criteria",
+                               subtitle="", datetime="2024 Jan 15  07:18:07.523 ", packet_text=
+                               """2024 Jan 15  07:18:07.523  [80]  0xB970  NR5G ML1 Searcher Idle S Criteria
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 2. 4
+System Time
+   Slot Number = 0
+   SubFrame Number = 6
+   System Frame Number = 976
+   SCS = 15KHZ
+NR ARFCN = 129370
+Phy Cell ID = 70
+Serving SSB Index = 3
+Q Rx Level Min = -124 dBm
+Q RX Level Min Offset = NP
+P Max = 23 dBm
+Max UE TX Power = 23 dBm
+Qoffset Temp = 0 dB
+Cell Quality RSRP = -100.45 dBm
+S Rx Level = 24 dB
+Q Qual Min Present = 0
+Q Qual Min = NA
+Q Qualmin Offset = NA
+S Qual = NA
+Cell Quality RSRQ = -18.41 dBm
+Result = SUCCESS
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB828", packet_length=100,
+                               name="NR5G RRC PLMN Search Response",
+                               subtitle="", datetime="2024 Jan 15  07:18:06.923", packet_text=
+                               """2024 Jan 15  07:18:06.923  [03]  0xB828  NR5G RRC PLMN Search Response
+Subscription ID = 1
+Misc ID         = 0
+Version = 6
+PLMN Search Response
+   Source RAT = LTE
+   Current Search RAT = NR5G
+   Network Search Status = COMPLETED
+   Num PLMNs = 1
+   PLMN List
+      -----------------------------------------------------------------------------
+      |   |      |     |     |     |          |munual|          |        |        |
+      |   |      |Plmn |Plmn |Plmn |          |CAG   |          |        |        |
+      |#  |RAT   |byte0|byte1|byte2|CAG ID    |sel   |ARFCN     |SCS     |Band    |
+      -----------------------------------------------------------------------------
+      |  0|  NR5G|   13|   03|   43|        NA|    NA|    401050|   15KHZ|      70|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB88A", packet_length=100,
+                               name="NR5G MAC RACH Attempte",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.147", packet_text=
+                               """2024 Jan 15  07:17:09.147  [49]  0xB88A  NR5G MAC RACH Attempt
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor = 3. 10
+RACH Attempt
+Num Attempts = 1
+Power Ramping Count = 1
+SSB ID = 0
+CSI-RS ID = 0
+Carrier ID = 0
+RACH Result = SUCCESS
+Contention Type = DL_MCE
+RACH MSG Bitmask = F
+Msg1 SCS = 1.25KHZ
+Msg2 SCS = 15KHZ
+UL BWP SCS = 15KHZ
+Power Limited = 0
+RACH Msg1
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  |                   |      |          |      |     |    |   |Cyclic|    |       |        |                   |                   |Backoff |
+  |System Time        |Symbol|Preamble  |PRACH |     |    |   |Shift |    |       |Regular |RAR Window Start   |RAR Window End     |Duration|
+  |Frame|SubFrame|Slot|Start |Format    |Config|Uroot|RAID|FDM|V.    |N_CS|RA_RNTI|Pathloss|Frame|SubFrame|Slot|Frame|SubFrame|Slot|(usec)  |
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  |  257|       4|   0|     0|  FORMAT_0|    13|  160|  20|  0|     0| 167|     57|      99|  257|       5|   0|  258|       5|   0|       0|
 
-        def test_table_parsing():
-            messages: List[ParsedRawMessage] = []
+RACH Msg2
+  --------------------------------------------------------------------
+  |                   |Max     |      |     |               |        |
+  |System Time        |Backoff |      |TA   |               |RAID    |
+  |Frame|SubFrame|Slot|Duration|T_RNTI|Value|Result         |Received|
+  --------------------------------------------------------------------
+  |  257|       8|   0|       0| 11852|   12|    RAPID_MATCH|      20|
+
+RACH Msg3
+  --------------------------------------------------------------------------------------------------------------------
+  |System Time        |Msg3 Grant|Msg3 Grant|HARQ|      |                                                            |
+  |Frame|SubFrame|Slot|Raw       |Bytes     |ID  |C_RNTI|MAC PDU                                                     |
+  --------------------------------------------------------------------------------------------------------------------
+  |  258|       2|   0|   11A00C0|         0|   0|    NA|   1E   15   6D   9C   87   66    0    0    0    0    0    0|
+
+RACH Msg4
+  --------------------------------------------------------------------
+  |                   |Contention         |Contention         |      |
+  |System Time        |Resolution Start   |Resolution End     |      |
+  |Frame|SubFrame|Slot|Frame|SubFrame|Slot|Frame|SubFrame|Slot|C_RNTI|
+  --------------------------------------------------------------------
+  |  258|       9|   0|  258|       2|   0|  264|       6|   0| 11852|
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0F7", packet_length=100,
                                name="LTE NAS EMM RRC Service Request",
                                subtitle="", datetime="2024 Jan 15  07:16:05.535", packet_text=

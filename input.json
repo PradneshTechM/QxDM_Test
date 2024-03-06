@@ -290,10 +290,11 @@
       "DB Field": "RA Response Window Size"
     },
     "__collection": "LTE",
-    "__cell": ["if _obj['Cell Index']\\==0:",
-                            "__cell = 'PCell'" ,
-                        "elif _obj['Cell Index']\\>=1:,",
-                            "__cell = 'SCell(_obj['Cell Index']\\)'"],
+    "__cell": ["if int(_obj['Cell Index']) == 0:",
+               "    _obj['__cell'] = 'PCell'",
+               "elif int(_obj['Cell Index']) >= 1:",
+               "    _obj['__cell'] = 'SCell(' + str(_obj['Cell Index']) + ')'"
+                    ],
     "Packet_Type": "PRACH",
     "__Raw_Data": false,
     "__KPI_type": "LTE Info"
