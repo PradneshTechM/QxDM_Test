@@ -1,5 +1,5 @@
 from decimal import Decimal
-from evaluate import evaluate
+from parser.evaluate import evaluate
 # def map_entry(entry, config, key_mapping = None ):
 #     mapped_entry = {}
 #     key_mapping = key_mapping

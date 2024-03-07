@@ -530,7 +530,7 @@ class ParsedRawMessage:
 
     packet_config = None
 
-    def __init__(self, index: int, packet_type: Any, packet_length: int, name: str, subtitle: str, datetime: str,
+    def __init__(self, index: int, packet_type: Any, packet_length: int, name: str, full_name: str, subtitle: str, datetime: str,
                  packet_text: str):
         self.index = index
         if isinstance(packet_type, int):
@@ -541,6 +541,7 @@ class ParsedRawMessage:
             self.packet_type = int(self.packet_type_hex, 16)
         self.packet_length = packet_length
         self.name = name
+        self.full_name = full_name
         self.subtitle = subtitle
         self.datetime = datetime
         self.packet_text = packet_text
@@ -576,7 +577,7 @@ class ParsedRawMessage:
             # "_index": self.index,
             "Packet Type": hex(int(self.packet_type)),
             # "_packetTypeInt": int(self.packet_type),
-            "Packet Name": self.name,
+            "Packet Name": self.full_name,
             # "_datetime": self.datetime,
             # "_length": self.packet_length,
             # "_subtitle": self.subtitle if self.subtitle else "",
@@ -588,8 +589,11 @@ class ParsedRawMessage:
                     metadata["_rawPayload"] = self.packet_text
                 del parsedPayload["__Raw_Data"]
             if "__cell" in parsedPayload:
-                parsedPayload["_cell"] = parsedPayload["__cell"]
+                parsedPayload["Cell"] = parsedPayload["__cell"]
                 del parsedPayload["__cell"]
+            if "__packet_message" in parsedPayload:
+                parsedPayload["Packet Type"] = parsedPayload["__packet_message"]
+                del parsedPayload["__packet_message"]
         return parsedPayload, metadata
 
     def parse_payload(self):

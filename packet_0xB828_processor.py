@@ -1,5 +1,5 @@
 import re
-from kpi_utils import table_config, map_entry
+from parser.kpi_utils import table_config, map_entry
 class Packet_0xB828:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
