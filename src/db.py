@@ -57,11 +57,11 @@ class DB:
         split = log_session.test_case_id.split("_$#$_")
         # metadata["_testCaseID"] = split[0]
         if len(split) > 0:
-          metadata["Execution ID"] = split[1]
+          metadata["Execution ID"] = split[0]
         # else:
         #   metadata["_executionID"] = None
         if len(split) > 1:
-          metadata["Iteration ID"] = split[2]
+          metadata["Iteration ID"] = split[1]
         # else:
         #   metadata["_iterationID"] = None
           
@@ -85,9 +85,9 @@ class DB:
       if log_session.device:
         if "location" in log_session.device: 
           if "longitude"in  log_session.device["location"]:
-            metadata["Longitude"] = log_session.device["longitude"]
+            metadata["Longitude"] = log_session.device["location"]["longitude"]
           if "latitude"in  log_session.device["location"]:
-            metadata["Latitude"] = log_session.device["latitude"]
+            metadata["Latitude"] = log_session.device["location"]["latitude"]
         # metadata["_server"] = {
         #   "url": log_session.app_url,
         #   "location": [log_session.device["location"]["longitude"] if "location" in log_session.device and "longitude" in log_session.device["location"] else 0,

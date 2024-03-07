@@ -468,6 +468,7 @@ class QCATWorker(threading.Thread):
                 
                 # parse to json
                 json_arr = {'default':[]}
+                count = 0
 
                 for raw_msg in messages:
                     arr = []
@@ -481,6 +482,7 @@ class QCATWorker(threading.Thread):
                         if payload is None: 
                             continue
                             
+                        count += 1
                         # print(payload)
                         # print(metadata)
                         # sys.stdout.flush()
@@ -488,8 +490,8 @@ class QCATWorker(threading.Thread):
                         collection_name = 'default'
                         if "__collection" in payload:
                             collection_name = payload["__collection"]
-                            print(collection_name)
-                            sys.stdout.flush()
+                            # print(collection_name)
+                            # sys.stdout.flush()
                             if collection_name not in json_arr:
                                 json_arr[collection_name] = []
                             del payload["__collection"]
@@ -533,9 +535,9 @@ class QCATWorker(threading.Thread):
                
 
                 if json_arr:
-                    print(json_arr)
-                    all_coll_len = reduce(lambda coll1, coll2: len(coll1) + len(coll2), list(json_arr.values()))
-                    print(f'Inserting chunk {chunk_num} for log {log_id} with {all_coll_len} packets to db...')
+                    # print(json_arr)
+                    # all_coll_len = reduce(lambda coll1, coll2: len(coll1) + len(coll2), list(json_arr.values()))
+                    print(f'Inserting chunk {chunk_num} for log {log_id} with {count} packets to db...')
                     sys.stdout.flush()
                     for collection_name in json_arr:
                         insertLogsResult = DB.insert_logs(json_arr[collection_name], self.log_session, collection_name)
