@@ -1,0 +1,245 @@
+{
+  "0xB88A": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Num Attempts": {
+      "DB Field": "Num Attempts"
+    },
+    "Contention Type": {
+      "DB Field": "Contention Type"
+    },
+    "Msg1 SCS": {
+      "DB Field": "Msg1 SCS"
+    },
+    "Msg2 SCS": {
+      "DB Field": "Msg2 SCS"
+    },
+    "UL BWP SCS": {
+      "DB Field": "UL BWP SCS"
+    },
+    "Raw_Data": true,
+    "__collection": "Event",
+    "__cell": "NR5G",
+    "__KPI_type": "NR Info"
+  },
+  "0xB828": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Source RAT": {
+      "DB Field": "Source RAT"
+    },
+    "Current Search RAT": {
+      "DB Field": "Current Search RAT"
+    },
+    "Network Search Status": {
+      "DB Field": "Network Search Status"
+    },
+    "PLMN List": [
+      {
+        "RAT": {
+          "index": 1,
+          "DB Field": "RAT"
+        },
+        "CAG ID": {
+          "index": 5,
+          "DB Field": "CAG ID"
+        },
+        "ARFCN": {
+          "index": 7,
+          "DB Field": "ARFCN"
+        },
+        "SCS": {
+          "index": 8,
+          "DB Field": "SCS"
+        },
+        "Band": {
+          "index": 9,
+          "DB Field": "Band"
+        }
+      }
+    ],
+    "Raw_Data": true,
+    "__KPI_type": "NR Info",
+    "__cell": "NR5G",
+    "__collection": "Event"
+  },
+  "0xB970": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Slot Number": {
+      "DB Field": "Slot Number"
+    },
+    "SubFrame Number": {
+      "DB Field": "SubFrame Number"
+    },
+    "System Frame Number": {
+      "DB Field": "System Frame Number"
+    },
+    "SCS": {
+      "DB Field": "SCS"
+    },
+    "NR ARFCN": {
+      "DB Field": "NR ARFCN"
+    },
+    "Phy Cell ID": {
+      "DB Field": "Phy Cell ID"
+    },
+    "Serving SSB Index": {
+      "DB Field": "Serving SSB Index"
+    },
+    "Q Rx Level Min": {
+      "DB Field": "Q Rx Level Min"
+    },
+    "Q RX Level Min Offset": {
+      "DB Field": "Q RX Level Min Offset"
+    },
+    "P Max": {
+      "DB Field": "P Max"
+    },
+    "Max UE TX Power": {
+      "DB Field": "Max UE TX Power"
+    },
+    "Cell Quality RSRP": {
+      "DB Field": "Cell Quality RSRP"
+    },
+    "Q Qual Min": {
+      "DB Field": "Q Qual Min"
+    },
+    "Q Qualmin Offset": {
+      "DB Field": "Q Qualmin Offset"
+    },
+    "S Qual": {
+      "DB Field": "S Qual"
+    },
+    "Cell Quality RSRQ": {
+      "DB Field": "Cell Quality RSRQ"
+    },
+    "Result": {
+      "DB Field": "Result"
+    },
+    "Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "NR5G",
+    "__KPI_type": "NR Info"
+  },
+   "0xB883 -- PCC -- PUSCH": {
+    "Subscription ID": {
+      "DB Field": "Subs ID",
+      "Field Name": "NR5G [PCC] Subs ID"
+    },
+    "Records": [
+      {
+        "Carrier ID": {
+          "index": 5,
+          "DB Field": "Carrier ID"
+        },
+        "PUSCH Data.MCS Table": {
+          "index": 21,
+          "DB Field": "Modulation",
+          "Field Name": "NR5G [PCC] Modulation"
+        },
+        "PUSCH Data.RNTI Type": {
+          "index": 6,
+          "DB Field": "RNTI Type",
+          "Field Name": "NR5G [PCC] RNTI Type"
+        },
+        "PUSCH Data.HARQ ID": {
+          "index": 10,
+          "DB Field": "HARQ ID",
+          "Field Name": "NR5G [PCC] HARQ ID"
+
+        },
+        "PUSCH Data.MCS": {
+          "index": 12,
+          "DB Field": "MCS",
+          "Field Name": "NR5G [PCC] MCS"
+        },
+        "PUSCH Data.TX Mode": {
+          "index": 13,
+          "DB Field": "TX Mode",
+          "Field Name": "NR5G [PCC] TX Mode"
+        },
+        "PUSCH Data.Num RBs": {
+          "index": 15,
+          "DB Field": "Num RBs",
+          "Field Name": "NR5G [PCC] Num RBs"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__KPI_type": "NR Info",
+    "__collection": "NR5G",
+    "__cell": [
+      "if int(entry['Carrier ID']) == 0:",
+        "entry['__cell'] = 'PCC'",
+      "elif int(entry['Carrier ID']) >= 1:",
+        "entry['__cell'] = f'SCC{entry['Carrier ID']}'"
+      ],
+    "Packet_Type": "PUSCH"
+  },
+  "0xB884 -- PCC": {
+    "Subscription ID": {
+      "DB Field": "Subs ID",
+      "Field Name": "NR5G [PCC] Subs ID"
+    },
+    "Records": [
+      {
+        "Carriers.PowerParams.Carrier ID": {
+          "index": 7,
+          "DB Field": "Carrier ID"
+        },
+        "Carriers.PowerParams.Channel Type": {
+          "index": 8,
+          "DB Field": "Channel Type",
+          "Field Name": "NR5G [PCC] Channel Type"
+        },
+        "Carriers.PowerParams.Transmit Power (dB)": {
+          "index": 9,
+          "DB Field": "TX Power (dBm)",
+          "Field Name": "NR5G [PCC] TX Power (dBm)"
+        }
+      }
+    ],
+    "__collection": "NR5G",
+    "__cell": [
+      "if int(entry['Carrier ID']) == 0:",
+        "entry['__cell'] = 'PCC'",
+      "elif int(entry['Carrier ID']) >= 1:",
+        "entry['__cell'] = f'SCC{entry['Carrier ID']}'"
+      ],
+    "__Raw_Data": true,
+    "__KPI_type": "NR Info"
+  },
+  "0xB889 -- NR5G": {
+    "Subscription ID": {
+      "DB Field": "Subs ID",
+      "Field Name": "Event [NR5G] Subs ID"
+    },
+    "RACH Trigger": [
+      {
+        "Rach Reason": {
+          "index": 4,
+          "DB Field": "RACH Reason",
+          "Field Name": "Event [NR5G] RACH Reason"
+        },
+        "Connection Type": {
+          "index": 11,
+          "DB Field": "Connection Type",
+          "Field Name": "Event [NR5G] Connection Type"
+        },
+        "UL RACH|DL RACH.Duplex Mode": {
+          "index": 10,
+          "DB Field": "Duplex Mode",
+          "Field Name": "Event [NR5G] Duplex Mode"
+        }
+      }
+    ],
+    "__collection": "Event",
+    "__cell": "NR5G",
+    "__Raw_Data": true,
+    "__KPI_type": "NR Info"
+  }
+}

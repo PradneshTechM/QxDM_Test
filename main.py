@@ -8,7 +8,9 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
-
+from parser.packet_0xB88A_processor import Packet_0xB88A
+from parser.packet_0xB828_processor import Packet_0xB828
+from parser.packet_0xB970_processor import Packet_0xB970
 from parser.packet_0xB887_processor import Packet_0xB887
 from parser.packet_0xB0F7_processor import Packet_0xB0F7
 from parser.packet_0x156A_processor import Packet_0x156A
@@ -46,9 +48,15 @@ from parser.packet_0xB113_processor import Packet_0xB113
 from parser.packet_0xB171_processor import Packet_0xB171
 from parser.packet_0xB18E_processor import Packet_0xB18E
 from parser.packet_0xB196_processor import Packet_0xB196
+from parser.packet_0xB883_processor import Packet_0xB883
+from parser.packet_0xB884_processor import Packet_0xB884
+from parser.packet_0xB889_processor import Packet_0xB889
 
 config_file = open('parser/input.json')
 config = json.load(config_file)
+
+config_file2 = open('parser/P2.json')
+config2 = json.load(config_file2)
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1334,7 +1342,24 @@ class ParsedRawMessage:
             elif packet_name == '0xB196':
                 print('0xB196')
                 return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
-
+            elif packet_name == '0xB88A':
+                print('0xB88A')
+                return Packet_0xB88A.extract_info(packet_text, config2['0xB88A'], entry)
+            elif packet_name == '0xB828':
+                print('0xB828')
+                return Packet_0xB828(packet_text, config2['0xB828'], entry).extract_info()
+            elif packet_name == '0xB970':
+                print('0xB970')
+                return Packet_0xB970.extract_info(packet_text, config2['0xB970'], entry)
+            elif packet_name == '0xB883':
+                print('0xB883')
+                return Packet_0xB883(packet_text, config2['0xB883 -- PCC -- PUSCH'], entry).extract_info()
+            elif packet_name == '0xB884':
+                print('0xB884')
+                return Packet_0xB884(packet_text, config2['0xB884 -- PCC'], entry).extract_info()
+            elif packet_name == '0xB889':
+                print('0xB889')
+                return Packet_0xB889(packet_text, config2['0xB889 -- NR5G'], entry).extract_info()
         # start here
 
         # remove empty (only whitespace) lines
@@ -1476,9 +1501,109 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+        msg = ParsedRawMessage(index=0, packet_type="0xB970", packet_length=100,
+                               name="NR5G ML1 Searcher Idle S Criteria",
+                               subtitle="", datetime="2024 Jan 15  07:18:07.523 ", packet_text=
+                               """2024 Jan 15  07:18:07.523  [80]  0xB970  NR5G ML1 Searcher Idle S Criteria
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 2. 4
+System Time
+   Slot Number = 0
+   SubFrame Number = 6
+   System Frame Number = 976
+   SCS = 15KHZ
+NR ARFCN = 129370
+Phy Cell ID = 70
+Serving SSB Index = 3
+Q Rx Level Min = -124 dBm
+Q RX Level Min Offset = NP
+P Max = 23 dBm
+Max UE TX Power = 23 dBm
+Qoffset Temp = 0 dB
+Cell Quality RSRP = -100.45 dBm
+S Rx Level = 24 dB
+Q Qual Min Present = 0
+Q Qual Min = NA
+Q Qualmin Offset = NA
+S Qual = NA
+Cell Quality RSRQ = -18.41 dBm
+Result = SUCCESS
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB828", packet_length=100,
+                               name="NR5G RRC PLMN Search Response",
+                               subtitle="", datetime="2024 Jan 15  07:18:06.923", packet_text=
+                               """2024 Jan 15  07:18:06.923  [03]  0xB828  NR5G RRC PLMN Search Response
+Subscription ID = 1
+Misc ID         = 0
+Version = 6
+PLMN Search Response
+   Source RAT = LTE
+   Current Search RAT = NR5G
+   Network Search Status = COMPLETED
+   Num PLMNs = 1
+   PLMN List
+      -----------------------------------------------------------------------------
+      |   |      |     |     |     |          |munual|          |        |        |
+      |   |      |Plmn |Plmn |Plmn |          |CAG   |          |        |        |
+      |#  |RAT   |byte0|byte1|byte2|CAG ID    |sel   |ARFCN     |SCS     |Band    |
+      -----------------------------------------------------------------------------
+      |  0|  NR5G|   13|   03|   43|        NA|    NA|    401050|   15KHZ|      70|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB88A", packet_length=100,
+                               name="NR5G MAC RACH Attempte",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.147", packet_text=
+                               """2024 Jan 15  07:17:09.147  [49]  0xB88A  NR5G MAC RACH Attempt
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor = 3. 10
+RACH Attempt
+Num Attempts = 1
+Power Ramping Count = 1
+SSB ID = 0
+CSI-RS ID = 0
+Carrier ID = 0
+RACH Result = SUCCESS
+Contention Type = DL_MCE
+RACH MSG Bitmask = F
+Msg1 SCS = 1.25KHZ
+Msg2 SCS = 15KHZ
+UL BWP SCS = 15KHZ
+Power Limited = 0
+RACH Msg1
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  |                   |      |          |      |     |    |   |Cyclic|    |       |        |                   |                   |Backoff |
+  |System Time        |Symbol|Preamble  |PRACH |     |    |   |Shift |    |       |Regular |RAR Window Start   |RAR Window End     |Duration|
+  |Frame|SubFrame|Slot|Start |Format    |Config|Uroot|RAID|FDM|V.    |N_CS|RA_RNTI|Pathloss|Frame|SubFrame|Slot|Frame|SubFrame|Slot|(usec)  |
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  |  257|       4|   0|     0|  FORMAT_0|    13|  160|  20|  0|     0| 167|     57|      99|  257|       5|   0|  258|       5|   0|       0|
 
-        def test_table_parsing():
-            messages: List[ParsedRawMessage] = []
+RACH Msg2
+  --------------------------------------------------------------------
+  |                   |Max     |      |     |               |        |
+  |System Time        |Backoff |      |TA   |               |RAID    |
+  |Frame|SubFrame|Slot|Duration|T_RNTI|Value|Result         |Received|
+  --------------------------------------------------------------------
+  |  257|       8|   0|       0| 11852|   12|    RAPID_MATCH|      20|
+
+RACH Msg3
+  --------------------------------------------------------------------------------------------------------------------
+  |System Time        |Msg3 Grant|Msg3 Grant|HARQ|      |                                                            |
+  |Frame|SubFrame|Slot|Raw       |Bytes     |ID  |C_RNTI|MAC PDU                                                     |
+  --------------------------------------------------------------------------------------------------------------------
+  |  258|       2|   0|   11A00C0|         0|   0|    NA|   1E   15   6D   9C   87   66    0    0    0    0    0    0|
+
+RACH Msg4
+  --------------------------------------------------------------------
+  |                   |Contention         |Contention         |      |
+  |System Time        |Resolution Start   |Resolution End     |      |
+  |Frame|SubFrame|Slot|Frame|SubFrame|Slot|Frame|SubFrame|Slot|C_RNTI|
+  --------------------------------------------------------------------
+  |  258|       9|   0|  258|       2|   0|  264|       6|   0| 11852|
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0F7", packet_length=100,
                                name="LTE NAS EMM RRC Service Request",
                                subtitle="", datetime="2024 Jan 15  07:16:05.535", packet_text=
@@ -3129,6 +3254,70 @@ Cell Measurement List
    |  0|   5780|     147|RX0_RX1| -84.50| -82.31| -11.44| -11.50| -56.13| -53.81|
    |  1|   5780|     295|RX0_RX1|-102.31| -97.00| -26.44| -23.50| -68.13| -65.75|
                                """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB883", packet_length=100,
+                               name="NR5G MAC UL Physical Channel Schedule Report",
+                               subtitle="", datetime="2024 Jan 15  07:15:47.888", packet_text=
+                               """
+2024 Jan 15  07:15:47.888  [D4]  0xB883  NR5G MAC UL Physical Channel Schedule Report
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 17
+Num Records = 1
+Records
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |                   |       |Carriers                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+   |   |                   |       |       |                |                 |                                                                                                                                                                                                                                                                                                                                                                                     |PUCCH Data                                                                                                                                                                         |                                                                                             |                                             |
+   |   |                   |       |       |                |                 |PUSCH Data                                                                                                                                                                                                                                                                                                                                                                           |     |Per PUCCH Data                                                                                                                                                               |SRS Data                                                                                     |                                             |
+   |   |                   |       |       |                |                 |               |     |    |     |   |        |     |      |   |      |       |      |                                  |                  |                |       |    |       |      |          |    |        |        |    |     |    |    |     |      |          |     |      |      |Num |Num |Num |   |     |          |         |     |     |     |     |   |            |   |     |                  |                                  |      |       |        |     |      |   |                        |      |Num |    |Num |Num |  |     |    |      |     |   |Per SRS Data                                                                             |PRACH Data                                   |
+   |   |                   |       |       |                |                 |               |L2   |    |     |   |        |     |      |   |      |       |TX    |                                  |                  |                |DMRS   |Freq|       |DMRS  |Data      |    |        |        |DMRS|     |    |    |RB   |      |DMRS      |DMRS |Dual  |Beta  |HARQ|CSF |CSF |SRS|REL16|          |         |Code |     |K    |     |   |            |Num|     |                  |                                  |      |       |        |REL16|Dual  |   |                        |      |HARQ|Num |UCI |UCI |  |Time |    |DFT   |DFT  |   |        |        |                       |      |     |        |       |    |Dual  |     |          |ZC  |        |      |ZC    |Dual  |
+   |   |System Time        |Num    |Carrier|                |                 |               |new  |HARQ|RV   |   |        |RB   |Num   |BWP|Start |Num    |Slot  |                                  |                  |                |Symbol |Hop |Mapping|Config|Scrambling|PTRS|DMRS    |DMRS    |Add |RNTI |    |RA  |Start|CDM   |Scrambling|PTRS |Pol   |Offset|ACK |P1  |P2  |Res|DMRS |Modulation|Transform|Rate |CB   |Prime|ZC   |Num|            |Gap|Num  |                  |                                  |Start |Num    |Starting|DMRS |Pol   |Num|                        |Second|ACK |SR  |P1  |P2  |  |OCC  |I   |OCC   |OCC  |Num|Resource|Resource|                       |Config|Num  |Starting|Num    |Num |Pol   |Re   |Resource  |Root|Preamble|Symbol|Cyclic|Pol   |
+   |#  |Slot|SCS    |Frame |Carrier|ID     |RNTI Type       |Phychan Bit Mask |TX Type        |TB   |ID  |Index|MCS|TX Mode |Start|RBs   |Id |Symbol|Symbols|Offset|UCI Request Mask                  |MCS Table         |TB Size (bytes) |Bitmask|Flag|Type   |Type  |Selection |EN  |Ports[0]|Ports[1]|Pos |Value|TPMI|Type|Hop  |Groups|Selection |Assoc|Status|Ind   |Bits|Bits|Bits|Ind|EN   |Order     |Precoding|(Q11)|Size |Value|Value|CBs|RBG Bitmap  |RBs|PUCCH|PUCCH Format      |UCI Request BMask                 |symbol|Symbols|RB      |EN   |Status|RB |Freq Hopping Flag       |Hop RB|Bits|Bits|Bits|Bits|M0|Index|DMRS|Length|Index|SRS|Set Id  |Id      |Res Config Type        |Index |Ports|Symbol  |Symbols|Hops|Status|start|Allocation|Seq |Format  |Offset|Shift |Status|
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|  14|  30KHZ|   324|      1|      0|          C_RNTI|            PUCCH|               |     |    |     |   |        |     |      |   |      |       |      |                                  |                  |                |       |    |       |      |          |    |        |        |    |     |    |    |     |      |          |     |      |      |    |    |    |   |     |          |         |     |     |     |     |   |            |   |    1|   PUCCH_FORMAT_F3|                    CSI_RPT:SR_RPT|     0|     14|      20|    0|     0|  2|           HOP_MOD_GROUP|    22|   0|   1|  37|   0| 0|    0|   0|     0|    0|   |        |        |                       |      |     |        |       |    |      |     |          |    |        |      |      |      |
+
+                               """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB884", packet_length=100,
+                               name="NR5G MAC UL Physical Channel Power Control",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.284", packet_text=
+                               """
+2024 Jan 15  07:17:09.284  [2E]  0xB884  NR5G MAC UL Physical Channel Power Control
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 3
+Num Records = 1
+Records
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |      |      |      |        |          |Carriers                                                                                                                                                                                                                |
+   |   |      |      |      |        |          |        |Power Params                                                                                                                                                                                                   |
+   |   |      |      |      |        |          |        |       |       |        |        |          |    |        |         |    |    |     |      |    |        |        |       |PRACH         |                |PUSCH                    |PUCCH                     |
+   |   |      |      |      |        |          |        |       |       |        |        |          |    |        |         |    |    |     |      |    |        |        |       |       |PRACH |SRS             |     |     |Num   |      |     |      |Num   |      |
+   |   |      |      |System|        |Timing    |        |       |       |Transmit|        |TPC       |PHR |        |Antenna  |TX  |Use |Use  |      |    |Spatial |Spatial |Minimum|       |Target|         |Rampup|Delta|     |Symbol|Rampup|Delta|      |Symbol|Rampup|
+   |   |Slot  |      |Frame |Num     |Reference |Num     |Carrier|Channel|Power   |Pathloss|Adjustment|MTPL|Channel |Switch   |Port|Pmin|PRACH|Start |Num |Relation|Relation|Power  |RACH   |Power |SRS      |Power |TF   |RAR  |First |Power |TF   |PUCCH |First |Power |
+   |#  |Number|SCS   |Number|Carriers|Number    |Channels|ID     |Type   |(dB)    |(dB)    |(dB)      |(dB)|Priority|Indicator|Mask|Beam|Beam |Symbol|Hops|Type    |Info    |(dB)   |Attempt|(dB)  |Bandwidth|(dB)  |(dB) |PUSCH|Hop   |(dB)  |(dB) |Format|Hop   |(dB)  |
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|     4| 15KHZ|   272|       1|      2724|       1|      0|  PUSCH|    12.7|    98.0|       6.0|21.3|       5|        0| 0x1|   0|    0|     0|   0|       0|     127|  -44.0|       |      |         |      |  0.0|    0|    14|   0.0|     |      |      |      |
+
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB889", packet_length=100,
+                               name="NR5G MAC RACH Trigger",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.075", packet_text=
+                               """
+2024 Jan 15  07:17:09.075  [C6]  0xB889  NR5G MAC RACH Trigger
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor = 3. 9
+RACH Trigger
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |                   |      |                  |     |First |      |UL RACH|DL RACH|      |                    |               |          |    |Msg1 |PRACH |
+   |System Time        |      |                  |     |Active|Active|Rsrc.  |Rsrc.  |Duplex|                    |               |          |Msg1|Freq |Config|
+   |Frame|SubFrame|Slot|C-RNTI|Rach Reason       |CA ID|UL BWP|DL BWP|Present|Present|Mode  |Connection Type     |RACH Contention|Msg1 SCS  |FDM |Start|Index |
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  251|       8|   0|     0|CONNECTION_REQUEST|    0|     0|     0|      1|      1|   FDD|       CONNECTION_SA|    CONT_DL_MCE|   1.25KHZ|   1|    9|    13|
+
+                       """)
         messages.append(msg)
         #     msg = ParsedRawMessage(index = 0, packet_type = "0x1FE7", packet_length=100, name="QTrace Event", subtitle="QEVENT 84 - 2", datetime="", packet_text=
         #     """2023 Nov 17  01:59:04.733  [BC]  0x1FE7  QTrace Event  --  QEVENT 84 - 2
