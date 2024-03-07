@@ -470,33 +470,34 @@ class QCATWorker(threading.Thread):
                 json_arr = {'default':[]}
 
                 for raw_msg in messages:
-                
-                    payload, metadata = None, None
+                    arr = []
                     with HiddenPrints():
-                        payload, metadata = raw_msg.to_json()
+                        arr = raw_msg.to_json()
                         
-                    if payload is None: 
-                        print("None")
-                        sys.stdout.flush()
+                    if arr is None: 
                         continue
                         
-                    # print(payload)
-                    # print(metadata)
-                    # sys.stdout.flush()
-                    
-                    collection_name = 'default'
-                    if "__collection" in payload:
-                        collection_name = payload["__collection"]
-                        print(collection_name)
-                        sys.stdout.flush()
-                        if collection_name not in json_arr:
-                            json_arr[collection_name] = []
-                        del payload["__collection"]
+                    for payload, metadata in arr:
+                        if payload is None: 
+                            continue
                             
-                    json_arr[collection_name].append({
-                        **metadata,
-                        **payload
-                    })
+                        # print(payload)
+                        # print(metadata)
+                        # sys.stdout.flush()
+                        
+                        collection_name = 'default'
+                        if "__collection" in payload:
+                            collection_name = payload["__collection"]
+                            print(collection_name)
+                            sys.stdout.flush()
+                            if collection_name not in json_arr:
+                                json_arr[collection_name] = []
+                            del payload["__collection"]
+                                
+                        json_arr[collection_name].append({
+                            **metadata,
+                            **payload
+                        })
                         
                         # # seperate possible table rows into separate entries\
                         # try:                   
