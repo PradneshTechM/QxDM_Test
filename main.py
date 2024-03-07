@@ -573,28 +573,41 @@ class ParsedRawMessage:
             sys.stdout.flush()
             sys.stderr.flush()
             return None, None
-        metadata = {
-            # "_index": self.index,
-            "Packet Type": hex(int(self.packet_type)),
-            # "_packetTypeInt": int(self.packet_type),
-            "Packet Name": self.full_name,
-            # "_datetime": self.datetime,
-            # "_length": self.packet_length,
-            # "_subtitle": self.subtitle if self.subtitle else "",
-            # "_parserVersion": ParsedRawMessage.VERSION,
-        }
-        if parsedPayload != None:
-            if "__Raw_Data" in parsedPayload:
-                if (parsedPayload["__Raw_Data"] == True or parsedPayload["__Raw_Data"] == 'True'):
-                    metadata["_rawPayload"] = self.packet_text
-                del parsedPayload["__Raw_Data"]
-            if "__cell" in parsedPayload:
-                parsedPayload["Cell"] = parsedPayload["__cell"]
-                del parsedPayload["__cell"]
-            if "__packet_message" in parsedPayload:
-                parsedPayload["Packet Type"] = parsedPayload["__packet_message"]
-                del parsedPayload["__packet_message"]
-        return parsedPayload, metadata
+        
+        def serialize(payload):
+            metadata = {
+                # "_index": self.index,
+                "Packet Type": hex(int(self.packet_type)),
+                # "_packetTypeInt": int(self.packet_type),
+                "Packet Name": self.full_name,
+                # "_datetime": self.datetime,
+                # "_length": self.packet_length,
+                # "_subtitle": self.subtitle if self.subtitle else "",
+                # "_parserVersion": ParsedRawMessage.VERSION,
+            }
+            if payload != None:
+                if "__Raw_Data" in payload:
+                    if (payload["__Raw_Data"] == True or payload["__Raw_Data"] == 'True'):
+                        metadata["_rawPayload"] = self.packet_text
+                    del payload["__Raw_Data"]
+                if "__cell" in payload:
+                    payload["Cell"] = payload["__cell"]
+                    del payload["__cell"]
+                if "__packet_message" in payload:
+                    payload["Packet Type"] = payload["__packet_message"]
+                    del payload["__packet_message"]
+            return payload, metadata
+        
+        arr = []
+        if isinstance(parsedPayload, list):
+            for payload in parsedPayload:
+                arr.append(serialize(payload))
+        else:
+            arr.append(serialize(parsedPayload))
+        
+        return arr
+                
+        
 
     def parse_payload(self):
         class TYPE_FLAGS(str, Enum):
