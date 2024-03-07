@@ -416,7 +416,7 @@ class QCATWorker(threading.Thread):
                     # print(subtitle)
                     # print(datetimestring)
                     # print(text)
-                    raw_msg = parser.ParsedRawMessage(index, packet_type_hex, packet_length, name, subtitle, datetimestring, text)
+                    raw_msg = parser.ParsedRawMessage(index, packet_type_hex, packet_length, name, packet_type_all, subtitle, datetimestring, text)
                     # raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetimestring, text)
                     # if self.packet_config:
                     #     raw_msg.self_packet_config = self.packet_config[packet_type_raw]
