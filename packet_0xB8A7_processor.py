@@ -18,18 +18,18 @@ class Packet_0xB8A7:
             self.dict.update(non_table_capture)
         if table_capture:
             for row in table_capture:
-                for key, value in row.items():
-                    self.dict[key] = value
+                row_dict = self.dict.copy()
+                row_dict.update(row)
                 for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
                     if additional_key in self.config:
                         if additional_key == '__collection':
-                            self.dict[additional_key] = self.config[additional_key]
-                            if int(self.dict['Carrier ID']) == 0:
-                                self.dict['__cell'] = 'PCC'
-                            elif int(self.dict['Carrier ID']) >= 1:
-                                self.dict['__cell'] = 'SCC(' + self.dict['Carrier ID'] + ')'
-                        self.dict[additional_key] = self.config[additional_key]
-                self.result.append(self.dict)
+                            row_dict[additional_key] = self.config[additional_key]
+                            if int(row_dict['Carrier ID']) == 0:
+                                row_dict['__cell'] = 'PCC'
+                            elif int(row_dict['Carrier ID']) >= 1:
+                                row_dict['__cell'] = 'SCC(' + row_dict['Carrier ID'] + ')'
+                        row_dict[additional_key] = self.config[additional_key]
+                self.result.append(row_dict)
         return self.result  # Return the updated dictionary
 
     def regular_pattern(self):

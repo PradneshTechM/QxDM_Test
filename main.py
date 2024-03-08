@@ -8,6 +8,13 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB192_processor import Packet_0xB192
+from packet_0xB186_processor import Packet_0xB186
+from packet_0xB181_processor import Packet_0xB181
+from packet_0xB17E_processor import Packet_0xB17E
+from packet_0xB179_processor import Packet_0xB179
+from packet_0xB176_processor import Packet_0xB176
+from packet_0xB173_processor import Packet_0xB173
 from packet_0xB88A_processor import Packet_0xB88A
 from packet_0xB828_processor import Packet_0xB828
 from packet_0xB970_processor import Packet_0xB970
@@ -51,11 +58,6 @@ from packet_0xB196_processor import Packet_0xB196
 from packet_0xB883_processor import Packet_0xB883
 from packet_0xB884_processor import Packet_0xB884
 from packet_0xB889_processor import Packet_0xB889
-from packet_0x17F2_processor import Packet_0x17F2
-from packet_0x1D4D_processor import Packet_0x1D4D
-from packet_0xB16F_processor import Packet_0xB16F
-from packet_0xB0E3_processor import Packet_0xB0E3
-from packet_0xB16E_processor import Packet_0xB16E
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1350,28 +1352,34 @@ class ParsedRawMessage:
                 return Packet_0xB970.extract_info(packet_text, config2['0xB970'], entry)
             elif packet_name == '0xB883':
                 print('0xB883')
-                return Packet_0xB883(packet_text, config2['0xB883'], entry).extract_info()
+                return Packet_0xB883(packet_text, config2['0xB883 -- PCC -- PUSCH'], entry).extract_info()
             elif packet_name == '0xB884':
                 print('0xB884')
-                return Packet_0xB884(packet_text, config2['0xB884'], entry).extract_info()
+                return Packet_0xB884(packet_text, config2['0xB884 -- PCC'], entry).extract_info()
             elif packet_name == '0xB889':
                 print('0xB889')
-                return Packet_0xB889(packet_text, config2['0xB889'], entry).extract_info()
-            elif packet_name == '0x17F2':
-                print('0x17F2')
-                return Packet_0x17F2.extract_info(packet_text, config2['0x17F2'], entry)
-            elif packet_name == '0x1D4D':
-                print('0x1D4D')
-                return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D'], entry)
-            elif packet_name == '0xB16F':
-                print('0xB16F')
-                return Packet_0xB16F(packet_text, config2['0xB16F'], entry).extract_info()
-            elif packet_name == '0xB0E3':
-                print('0xB0E3')
-                return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3'], entry)
-
-
-
+                return Packet_0xB889(packet_text, config2['0xB889 -- NR5G'], entry).extract_info()
+            elif packet_name == '0xB173':
+                print('0xB173')
+                return Packet_0xB173(packet_text, config2['0xB173'], entry).extract_info()
+            elif packet_name == '0xB176':
+                print('0xB176')
+                return Packet_0xB176.extract_info(packet_text, config2['0xB176'], entry)
+            elif packet_name == '0xB179':
+                print('0xB179')
+                return Packet_0xB179.extract_info(packet_text, config2['0xB179'], entry)
+            elif packet_name == '0xB17E':
+                print('0xB17E')
+                return Packet_0xB17E.extract_info(packet_text, config2['0xB17E'], entry)
+            elif packet_name == '0xB181':
+                print('0xB181')
+                return Packet_0xB181.extract_info(packet_text, config2['0xB181'], entry)
+            elif packet_name == '0xB186':
+                print('0xB186')
+                return Packet_0xB186.extract_info(packet_text, config2['0xB186'], entry)
+            elif packet_name == '0xB192':
+                print('0xB192')
+                return Packet_0xB192(packet_text, config2['0xB192'], entry).extract_info()
         # start here
 
         # remove empty (only whitespace) lines
@@ -1513,6 +1521,301 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+        msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
+                               name="LTE ML1 Neighbor Cell Meas Request/Response",
+                               subtitle="", datetime="2024 Jan 15  07:17:28.048", packet_text=
+                               """2024 Jan 15  07:17:28.048  [C6]  0xB192  LTE ML1 Neighbor Cell Meas Request/Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 26
+Idle Mode Neighbor Cell Measurement Request
+   Version = 2
+   SubPacket Size = 28 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Num Rx Ant = 2
+   Dupexing Mode = FDD
+   Neighbor Cells
+      ------------------------------------------------
+      |   |    |              |Enabled |      |      |
+      |   |Cell|              |Tx      |TTL   |FTL   |
+      |#  |ID  |CP Type       |Antennas|Enable|Enable|
+      ------------------------------------------------
+      |  0| 459|        Normal|       2| false| false|
+
+SubPacket ID = 27
+Neighbor Cell Meas Result
+   Version = 56
+   SubPacket Size = 64 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Duplexing Mode = FDD
+   Serving Cell Index = PCell
+   Neighbor Cells
+      ------------------------------------------------------------------------------------------------------------
+      |   |        |           |        |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
+      |   |        |FTL        |        |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
+      |   |Physical|Cumulative |        |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
+      |#  |Cell ID |Freq Offset|Bad CER |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+      ------------------------------------------------------------------------------------------------------------
+      |  0|     459|          0|   FALSE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -66.06|
+      |  0|     459|          0|    TRUE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -76.06|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
+                               name="LTE ML1 Neighbor Cell Meas Request/Response",
+                               subtitle="", datetime="2024 Jan 15  07:17:28.048", packet_text=
+                               """2024 Jan 15  07:17:28.048  [C6]  0xB192  LTE ML1 Neighbor Cell Meas Request/Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 26
+Idle Mode Neighbor Cell Measurement Request
+   Version = 2
+   SubPacket Size = 28 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Num Rx Ant = 2
+   Dupexing Mode = FDD
+   Neighbor Cells
+      ------------------------------------------------
+      |   |    |              |Enabled |      |      |
+      |   |Cell|              |Tx      |TTL   |FTL   |
+      |#  |ID  |CP Type       |Antennas|Enable|Enable|
+      ------------------------------------------------
+      |  0| 459|        Normal|       2| false| false|
+
+SubPacket ID = 27
+Neighbor Cell Meas Result
+   Version = 56
+   SubPacket Size = 64 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Duplexing Mode = FDD
+   Serving Cell Index = PCell
+   Neighbor Cells
+      ------------------------------------------------------------------------------------------------------------
+      |   |        |           |        |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
+      |   |        |FTL        |        |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
+      |   |Physical|Cumulative |        |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
+      |#  |Cell ID |Freq Offset|Bad CER |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+      ------------------------------------------------------------------------------------------------------------
+      |  0|     459|          0|   FALSE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -66.06|
+      |  0|     459|          0|    TRUE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -76.06|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB186", packet_length=100,
+                               name="LTE ML1 Reselection Candidates",
+                               subtitle="", datetime="2024 Jan 15  07:17:24.246", packet_text=
+                               """2024 Jan 15  07:17:24.246  [64]  0xB186  LTE ML1 Reselection Candidates
+Subscription ID = 1
+Version = 41
+Serving E-ARFCN = 5780
+Serving Cell ID = 147
+Num Reselection Candidates = 2
+Candidates[0]
+   Candidate Priority = 3.0
+   RAT Type = EUTRAN
+   LTE Candidate
+      E-ARFCN = 700
+      Cell ID = 147
+Candidates[1]
+   Candidate Priority = 3.0
+   RAT Type = EUTRAN
+   LTE Candidate
+      E-ARFCN = 66986
+      Cell ID = 147
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB181", packet_length=100,
+                               name="LTE ML1 Intra Frequency Cell Reselection",
+                               subtitle="", datetime="2024 Jan 15  07:15:49.491", packet_text=
+                               """2024 Jan 15  07:15:49.491  [E3]  0xB181  LTE ML1 Intra Frequency Cell Reselection
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 3
+SubPacket ID = 10
+Idle Mode Reselection Measurements Common
+   Version = 56
+   SubPacket Size = 12 bytes
+   Serving Cell E-ARFCN = 66986
+   Serving Cell Physical Cell ID = 147
+   Current UE Mobility State = Normal Mobility
+   Priority Categories Evaluated = NONE
+SubPacket ID = 5
+Idle Meas Serving Frequency Resel Info
+   Version = 25
+   SubPacket Size = 16 bytes
+   Standards Version = Release 9
+   Serving Cell Priority = 3
+   S Non-Intra Search = 4
+   Thresh Serving Low = 4
+   S Non Intra Search Q = 0 dB
+   Thres Serving Low Q = 0 dB
+SubPacket ID = 11
+Idle Mode Reselection Measurements LTE Frequency
+   Version = 58
+   SubPacket Size = 88 bytes
+   Instance = 0
+   Number of Layers = 5
+   Treselection = 0 s
+   Layer[0]
+      E-ARFCN = 66986
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 1
+      Thresh X High = 0
+      Thresh X Low = 4
+      Priority = 3
+      Neighbor Cells
+         -----------------------------------------------------------------------------------------------------
+         |   |        |      |RSSI   |      |RSRP   |RSRP   |RSRQ   |RSRQ   |            |        |          |
+         |   |Physical|Srxlev|Inst   |Q     |Average|Inst   |Average|Inst   |            |Rank    |Rank      |
+         |#  |ID      |(dB)  |(dBm)  |Offset|(dBm)  |(dBm)  |(dBm)  |(dBm)  |TReSelection|Interger|Fractional|
+         -----------------------------------------------------------------------------------------------------
+         |  0|     147|    37| -58.00|  0 dB| -88.75| -88.75| -13.25| -13.75|       65535|      79|     0.258|
+
+   Layer[1]
+      E-ARFCN = 9820
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 8
+      Thresh X Low = 0
+      Priority = 4
+   Layer[2]
+      E-ARFCN = 700
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 0
+      Thresh X Low = 0
+      Priority = 3
+   Layer[3]
+      E-ARFCN = 5780
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 0
+      Thresh X Low = 0
+      Priority = 2
+   Layer[4]
+      E-ARFCN = 5330
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 10
+      Thresh X Low = 62
+      Priority = 0
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB17E", packet_length=100,
+                               name="LTE ML1 UE Mobility State change",
+                               subtitle="", datetime="2024 Jan 15  07:16:06.698", packet_text=
+                               """2024 Jan 15  07:16:06.698  [53]  0xB17E  LTE ML1 UE Mobility State change 
+Subscription ID = 1
+Version = 56
+Version 56 {
+   E-ARFCN = 5780
+   Physical Cell ID = 147
+   Previous UE Mobility State = Normal Mobility
+   Current UE Mobility State = Normal Mobility
+   Camp Time = 978611309 ms
+   Current Time = 978612085 ms
+   High State End Time = Invalid
+   Medium State End Time = Invalid
+   t_cr_max = 30s
+   t_cr_max_hyst = 30s
+   n_cr_medium = 6
+   n_cr_high = 11
+   Number Of Cell Switches = 0
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB179", packet_length=100,
+                               name="LTE ML1 Connected Mode LTE Intra-Freq Meas Results",
+                               subtitle="", datetime="2024 Jan 15  07:16:06.024", packet_text=
+                               """2024 Jan 15  07:16:06.024  [0C]  0xB179  LTE ML1 Connected Mode LTE Intra-Freq Meas Results
+Subscription ID = 1
+Version = 56
+Serving Cell Index = PCell
+FW Serving Cell Index = PCell
+E-ARFCN = 5780
+Serving Physical Cell ID = 147
+Sub-frame Number = 908
+Serving Filtered RSRP = -76.56 dBm
+Serving Filtered RSRQ = -12.19 dB
+Number of Neighbor Cells = 1
+Number of Detected Cells = 0
+Neighbor Cells
+   --------------------------------
+   |   |        |Filtered|Filtered|
+   |   |Physical|RSRP    |RSRQ    |
+   |#  |Cell ID |(dBm)   |(dB)    |
+   --------------------------------
+   |  0|      53|  -84.81|  -18.75|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB176", packet_length=100,
+                               name="LTE Initial Acquisition Results",
+                               subtitle="", datetime="2024 Jan 15  07:16:05.831", packet_text=
+                               """2024 Jan 15  07:16:05.831  [47]  0xB176  LTE Initial Acquisition Results
+Subscription ID = 1
+Version = 32
+E-ARFCN = 5780
+Band = 17
+Duplex Mode = FDD
+Result = Success
+Min Search Half Frames = 1
+Min Search Half Frames Early Abort = 1
+Max Search Half Frames = 4
+Max PBCH Frames = 20
+Number of Blocked Cells = 0
+Number PBCH Decode Attemp Cells = 1
+Number of Search Results = 3
+Search Results
+   ----------------------------------------------------------------------
+   |   |       |      |        |        |Frequency|PSS        |         |
+   |   |Frame  |Sample|Physical|        |Offset   |Correlation|SSS Power|
+   |#  |Offset |Offset|Cell ID |CP      |(Hz)     |Result     |Value    |
+   ----------------------------------------------------------------------
+   |  0|Unknown|168914|     147|  Normal|      293|          0| 0.000806|
+   |  1|Unknown| 15330|      53|  Normal|      293|          0| 0.000092|
+   |  2|Unknown|168914|     295|  Normal|      293|          0| 0.000044|
+
+PBCH Decode Attempt Cells
+   ----------------------------------------------------------------------------
+   |   |       |      |          |Updated  |        |Number  |       |        |
+   |   |       |      |          |Frequency|        |of      |       |Number  |
+   |   |Frame  |Sample|MIB       |Offset   |Physical|Decode  |Decode |of Tx   |
+   |#  |Offset |Offset|Payload   |(Hz)     |Cell ID |Attempts|Result |Antennas|
+   ----------------------------------------------------------------------------
+   |  0|Unknown|168914|0x6044E000|        0|     147|       1|Success|       4|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB173", packet_length=100,
+                               name="LTE PDSCH Stat Indication",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.731", packet_text=
+                               """2024 Jan 15  07:15:35.731  [84]  0xB173  LTE PDSCH Stat Indication
+Subscription ID = 1
+Version = 48
+Num Records = 3
+Records
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |        |     |   |      |Num      |       |Transport Blocks                                                                                                                |    |    |     |       |
+   |   |        |     |   |      |Transport|Serving|    |  |   |      |         |     |Discarded|                                   |           |       |   |   |          |        |    |    |Alt  |       |
+   |   |Subframe|Frame|Num|Num   |Blocks   |Cell   |HARQ|  |   |CRC   |         |TB   |reTx     |                                   |Did        |TB Size|   |Num|Modulation|ACK/NACK|PMCH|Area|TBS  |Alt MCS|
+   |#  |Num     |Num  |RBs|Layers|Present  |Index  |ID  |RV|NDI|Result|RNTI Type|Index|Present  |Discarded ReTx                     |Recombining|(bytes)|MCS|RBs|Type      |Decision|ID  |ID  |Index|Enabled|
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|       0|  105|  3|     1|        1|  PCELL|   1| 0|  0|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  false|
+   |  1|       7|  113|  3|     1|        1|  PCELL|   4| 0|  1|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  false|
+   |  2|       5|  120|  3|     1|        1|  PCELL|   6| 0|  1|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  fals
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB970", packet_length=100,
                                name="NR5G ML1 Searcher Idle S Criteria",
                                subtitle="", datetime="2024 Jan 15  07:18:07.523 ", packet_text=
@@ -1753,7 +2056,7 @@ Records
    |#  |Slot|Numerology|Frame|Status|ID     |Id  |Opcode|ID  |Bandwidth|Type|Id     |Cell ID |EARFCN  |Index|TB Size |MU |MCS|Rbs|RV|Id   |RNTI Type     |ID  |TCI|Layers|Index    |State   |Status|Flag|NDI|Mode   |Decode|HARQ  |ReTx|Timeout|Timeout|Timeout|Timeout|Recomb|Valid|Mod Type|Mode |Num RX  |Mapping 0 |Mapping 1 |Mapping 2 |Mapping 3 |
    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
    |  0|   0|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   10|        C RNTI|   5|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
-   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|        C RNTI|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
+   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|       C RNTI2|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
 """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x156A", packet_length=100,
@@ -3328,484 +3631,6 @@ RACH Trigger
    |Frame|SubFrame|Slot|C-RNTI|Rach Reason       |CA ID|UL BWP|DL BWP|Present|Present|Mode  |Connection Type     |RACH Contention|Msg1 SCS  |FDM |Start|Index |
    ------------------------------------------------------------------------------------------------------------------------------------------------------------
    |  251|       8|   0|     0|CONNECTION_REQUEST|    0|     0|     0|      1|      1|   FDD|       CONNECTION_SA|    CONT_DL_MCE|   1.25KHZ|   1|    9|    13|
-
-                       """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0x17F2", packet_length=100,
-                               name="IMS Voice Call Statistics",
-                               subtitle="", datetime="2024 Jan 15  07:14:46.813", packet_text=
-                               """
-2024 Jan 15  07:14:46.813  [E7]  0x17F2  IMS Voice Call Statistics
-Subscription ID = 1
-Version = 9
-SipCallDur = 0
-CodecType = AMR_WB
-RTCP Voice Call Stat Params
-   Tx Ssrc = 0xFDAD3D9E
-   Rx Ssrc = 0x1954EBCE
-   Num Tx Rtp = 0
-   Num Rx Rtp = 5
-   Num Rx Lost = 0
-   Ave Rel Jitter = 0
-   Max Rel Jitter = 0
-   Avg Inst Jitter = 0
-   Max Inst Jitter = 4
-QDJ Voice Call Stat Params
-   Num Frames Rcvd = 5
-   Frames Not Enqued = 0
-   Frames UnderFlow = 0
-   Avg UnderFlow Rate = 0
-   Avg Frame Delay = 67
-   Max Frame Delay = 69
-   Avg Q Size = 40
-   Avg Target Delay = 40
-   Frame Drop Count at JB = 0
-Tx Rtp BitRate = 0
-Rx Rtp BitRate = 0
-TX RTP Payload = 0
-RX RTP Payload = 257
-MaxDelta = 4
-MaxDelta Imax = 4
-MaxDelta Imin = 5
-Tx Payload Type = 104
-Rx Payload Type = 104
-IP Version = IPv4
-Call State = ADSP_RESYNC
-Extra Small Bin Count = 0
-Small Bin Count = 0
-Medium Bin Count = 0
-Large Bin Count = 0
-Audio Gap Ratio =                      0.00
-RAT Type = LTE
-                       """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0x1D4D", packet_length=100,
-                               name="IMS CALL SUMMARY STATS",
-                               subtitle="", datetime="2024 Jan 15  07:15:24.625", packet_text=
-                               """
-2024 Jan 15  07:15:24.625  [82]  0x1D4D  IMS CALL SUMMARY STATS
-Subscription ID = 1
-Version = 8
-SubId = 1
-CallStatusSummary {
-   Common Call Stats
-      Call ID = 20
-      Call Status = 1
-      CallTypeAtCallOrig = CALL_TYPE_VOICE
-      CallTypeAtCallEnd = CALL_TYPE_VOICE
-      IsTextEnabledinCall = 0
-      IsVTEmergency = 0
-      WasCallEverVT = 0
-      wasCallEverRTT = 0
-      Direction of Call = CALL_MO
-      Disconnect Error Code = 200
-      ClientEndCause = CLIENT_END_CAUSE_NONE
-      CallEndCause = CALL_END_CAUSE_NORMAL
-      WasCallConnected = 1
-      IsCallEndedbyUser = 1
-      IsCallEndedbyRemote = 0
-      Redial Mask = REDIAL_MASK_NONE
-      380EmergencySrvCategory = 0
-      CallSetup Time = 6751 ms
-      CallRingingRingback Time = 2046 ms
-      CallRatatOrig = DCM_RAT_LTE
-      CallRatatEnd = DCM_RAT_LTE
-      IsConfCall = 0
-      IsWPSCall = 0
-      Encryption Status at Call orig = CALL_ENCRYPTION_DISABLED
-      Encryption Status at Call End = CALL_ENCRYPTION_DISABLED
-      MT Accepted Encryption Status = CALL_ENCRYPTION_DISABLED
-      Call End Indication Supressed = 0
-      Redial at IMS layer Call type = ORIGINATE_TYPE_NONE
-      IsCallAutoRejected = 0
-      AutoRejectReason = CALL_REJECT_NONE
-      IsAnyCallonOtherSub = 0
-      Call Information per Sub
-         -------------------------------------------------------
-         |#  |SubId|ActiveCallOnSub|HeldCallOnSub|E911CallonSub|
-         -------------------------------------------------------
-         |  0|    0|              1|            0|            0|
-         |  1|    0|              0|            0|            0|
-
-      ForkedDialogCount = 1
-      EarlyMediaPlayed = 1
-      Operator Mode = IR92
-      SubOperator Mode = DISH
-      MOUpgradesCount = 0
-      MTUpgradesCount = 0
-      MODowngradesCount = 0
-      MTDowngradesCount = 0
-      CallLocalHeldCount = 0
-      CallRemoteHeldCount = 0
-      CallLocalResumeCount = 0
-      CallRemoteResumeCount = 0
-      NoofDialogsEarlyMediaPlayed = 1
-      DowngradeEventsCachedCount = 0
-      LatestPDPStatus
-         IPType = 1
-         PCOValue = 0
-         PDPId = 8
-         PDPState = CONNECTIVITY_UP
-         SourceRAT = DCM_RAT_NONE
-         TargetRAT = DCM_RAT_NONE
-         CurrentRAT = DCM_RAT_LTE
-         ApnType = DCM_APN_IMS
-         FailureCode = 0
-      VerstatInfo
-         isVerstat FT Valid = 0
-         Verstat value for Call = CALL_TN_VALIDATION_NONE
-         is UnwantedCallFT Valid = 0
-         is UnwantedCall = 0
-   RTP/RTCP Stats
-      Media rtprtcp Stats
-         ------------------------------------------------------------------------------------------------
-         |   |     |                   |                    |          |          |RTP       |RTCP      |
-         |   |     |                   |                    |          |          |Inactivty |Inactivty |
-         |   |Media|TimeToOpenRTPStream|TimeToCloseRTPStream|no of RTP |no of RTCP|TimerValue|TimerValue|
-         |#  |Type |(ms) (ms)          |(ms) (ms)           |Inactivity|Inactivity|(s)       |(s)       |
-         ------------------------------------------------------------------------------------------------
-         |  0|AUDIO|                  7|                  11|         0|         0|        20|        20|
-         |  1|VIDEO|                  0|                   0|         0|         0|         0|         0|
-         |  2| TEXT|                  0|                   0|         0|         0|         0|         0|
-
-   CallEndDialog QOS Stats
-      Pre conditionEnabled during Call Setup = 0
-      Pre conditionEnabled Midcall = 0
-      Dialog ID of Call ended = 57
-      SRTP Enabled = 0
-      KPI of QOS for media[0]
-         QOS Enabled = 1
-         Media Allowed on Default Bearer = 0
-         Media Type = AUDIO
-         Time to Establish Dedicated Bearer = 100 ms
-         Time to Re Establish Dedicated Bearer = 0 ms
-         Latest Qos Status = QOS_MODIFIED_AVAILABLE
-         Mbr Status = MBR_MET_SUCCESS
-         No of Times QosLost = 0
-         No of Times QosReGranted = 0
-         No of QOSEvents = 2
-         QOS Event
-            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            |   |                      |                         |QOS Dir     |                           |                           |                                |Time Stamp  |
-            |#  |QOS Message           |QOS Dir Matched          |Required    |Timer Started Mask         |Timer Stopped Mask         |QOSMBRMetStatus and Action      |of QOSEvent |
-            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            |  0|         QOS_AVAILABLE|QOS_FILTR_MATCH_DIR_BIDIR|DIR_SENDRECV|             QOS_TIMER_NONE|             QOS_TIMER_NONE|          MBR_MET_SUCCESS_UPDATE|  2063680152|
-            |  1|QOS_MODIFIED_AVAILABLE|QOS_FILTR_MATCH_DIR_BIDIR|DIR_SENDRECV|             QOS_TIMER_NONE|             QOS_TIMER_NONE|                 MBR_MET_SUCCESS|  2063680152|
-
-      KPI of QOS for media[1]
-         QOS Enabled = 1
-         Media Allowed on Default Bearer = 0
-         Media Type = VIDEO
-         Time to Establish Dedicated Bearer = 0 ms
-         Time to Re Establish Dedicated Bearer = 0 ms
-         Latest Qos Status = QOS_UNKNOWN
-         Mbr Status = MBR_MET_NULL
-         No of Times QosLost = 0
-         No of Times QosReGranted = 0
-         No of QOSEvents = 0
-      KPI of QOS for media[2]
-         QOS Enabled = 1
-         Media Allowed on Default Bearer = 0
-         Media Type = TEXT
-         Time to Establish Dedicated Bearer = 0 ms
-         Time to Re Establish Dedicated Bearer = 0 ms
-         Latest Qos Status = QOS_UNKNOWN
-         Mbr Status = MBR_MET_NULL
-         No of Times QosLost = 0
-         No of Times QosReGranted = 0
-         No of QOSEvents = 0
-   CodecStatsEnabled = 1
-   Codec Stats
-      LatestAudioCodec = AMR_WB
-      LatestVideoCodec = 0
-      LatestTextCodec = 0
-      AudioCodecCachedCount = 3
-      VideoCodecCachedCount = 0
-      TextCodecCachedCount = 0
-      AudioCodecInfo
-         -----------
-         |#  |Codec|
-         -----------
-         |  0|AMR_WB|
-         |  1|AMR_WB|
-         |  2|AMR_WB|
-
-   E911StatsEnabled = 0
-   HandoverStatsEnabled = 0
-   EPSFBStatsEnabled = 0
-   SRVCCStatsEnabled = 0
-   CRBTStatsEnabled = 0
-   CRSStatsEnabled = 0
-   EarlyMediaStatsEnabled = 1
-   EarlyMediaStatistics
-      Dynamic Switch Enabled = 1
-      EarlyMedia Auth State Count = 4
-      Early Media
-         ---------------
-         |#  |Authstate|
-         ---------------
-         |  0|EARLY_MEDIA_STATE_ON|
-         |  1|EARLY_MEDIA_STATE_SENDRECV|
-         |  2|EARLY_MEDIA_STATE_SENDRECV|
-         |  3|EARLY_MEDIA_STATE_NONE|
-
-      EarlyMedia Method Count = 3
-      Early Media Method
-         ------------
-         |#  |Method|
-         ------------
-         |  0|EARLY_MEDIA_METHOD_SIP_MESSAGE_RINGING|
-         |  1|EARLY_MEDIA_METHOD_RTP_ACTIVE|
-         |  2|EARLY_MEDIA_METHOD_SIP_MESSAGE_RINGING|
-
-      EarlyMedia Indication Count = 3
-      Early Media Indication
-         ----------------
-         |#  |indication|
-         ----------------
-         |  0|EARLY_MEDIA_ACTION_EARLY_MEDIA_IND|
-         |  1|EARLY_MEDIA_ACTION_EARLY_MEDIA_IND|
-         |  2|EARLY_MEDIA_ACTION_EARLY_MEDIA_IND|
-
-   MultiTask Stats included = 0
-}
-                       """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB16F", packet_length=100,
-                               name="LTE PUCCH Power Control",
-                               subtitle="", datetime="2024 Jan 15  07:14:08.556", packet_text=
-                              """
-2024 Jan 15  07:14:08.556  [E1]  0xB16F  LTE PUCCH Power Control
-Subscription ID = 1
-Version = 49
-Number of Records = 50
-Report
-   -------------------------------------------------------------------------------------
-   |   |    |      |              |        |    |           |   |    |    |PUCCH|PUCCH |
-   |   |    |      |              |        |    |           |   |DL  |    |Tx   |Actual|
-   |   |    |      |              |PUCCH   |N   |           |N  |Path|    |Power|Tx    |
-   |#  |SFN |Sub-fn|DCI Format    |Format  |HARQ|TPC Command|CQI|Loss|g(i)|(dBm)|Power |
-   -------------------------------------------------------------------------------------
-   |  0| 597|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
-   |  1| 599|     3|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
-   |  2| 599|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
-   |  3| 599|     9|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
-   |  4| 600|     1|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
-   |  5| 600|     2|              |       1|   0|Not present|  0| 111|   1|   -2|    -2|
-   |  6| 600|     4|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
-   |  7| 600|     5|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
-   |  8| 604|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
-   |  9| 604|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 10| 604|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 11| 605|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
-   | 12| 607|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 13| 608|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 14| 608|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 15| 609|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 16| 611|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
-   | 17| 612|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 18| 612|     4|             2|      2a|   1|          0|  0| 110|   1|   -3|    -3|
-   | 19| 612|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 20| 612|     9|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 21| 613|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 22| 615|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
-   | 23| 616|     1|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 24| 616|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 25| 616|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
-   | 26| 617|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
-   | 27| 617|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 28| 619|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 29| 620|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 30| 620|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
-   | 31| 620|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 32| 620|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
-   | 33| 620|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 34| 621|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 35| 623|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
-   | 36| 624|     1|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
-   | 37| 624|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
-   | 38| 624|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
-   | 39| 624|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
-   | 40| 625|     8|             2|      1a|   1|          0|  0| 110|   0|   -4|    -4|
-   | 41| 627|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
-   | 42| 628|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
-   | 43| 628|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
-   | 44| 629|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
-   | 45| 629|     3|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
-   | 46| 629|     6|             2|      1a|   1|         -1|  0| 110|  -1|   -5|    -5|
-   | 47| 629|     8|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
-   | 48| 630|     9|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
-   | 49| 632|     2|              |       1|   0|Not present|  0| 110|  -1|   -5|    -5|
-   """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB0E3", packet_length=100,
-                               name="LTE NAS ESM Plain OTA Outgoing Message",
-                               subtitle="PDN connectivity request Msg", datetime="2024 Jan 15  07:17:10.651", packet_text=
-                               """
-2024 Jan 15  07:17:10.651  [70]  0xB0E3  LTE NAS ESM Plain OTA Outgoing Message  --  PDN connectivity request Msg
-Subscription ID = 1
-pkt_version = 1 (0x1)
-rel_number = 9 (0x9)
-rel_version_major = 5 (0x5)
-rel_version_minor = 0 (0x0)
-eps_bearer_id_or_skip_id = 0 (0x0)
-prot_disc = 2 (0x2) (EPS session management messages)
-trans_id = 12 (0xc)
-msg_type = 208 (0xd0) (PDN connectivity request)
-lte_esm_msg
-  pdn_connectivity_req
-    pdn_type = 3 (0x3) (Ipv4v6)
-    req_type = 1 (0x1) (initial request)
-    info_trans_flag_incl = 0 (0x0)
-    access_pt_name_incl = 1 (0x1)
-    access_pt_name_
-      num_acc_pt_val = 4 (0x4)
-      acc_pt_name_val[0] = 3 (0x3) (length)
-      acc_pt_name_val[1] = 105 (0x69) (i)
-      acc_pt_name_val[2] = 109 (0x6d) (m)
-      acc_pt_name_val[3] = 115 (0x73) (s)
-    prot_config_incl = 1 (0x1)
-    prot_config
-      ext = 1 (0x1)
-      conf_prot = 0 (0x0)
-      num_recs = 13 (0xd)
-      prot_or_container[0]
-        id = 32801 (0x8021) (IPCP)
-        prot_or_container
-          prot_len = 16 (0x10)
-          ipcp_prot
-            ipcp_prot_id = 1 (0x1) (CONF_REQ)
-            identifier = 0 (0x0)
-            rfc1332_conf_req
-              num_options = 2 (0x2)
-              conf_options[0]
-                type = 129 (0x81)
-                rfc1877_primary_dns_server_add
-                  length = 6 (0x6)
-                  ip_addr = 0 (0x0) (0.0.0.0)
-              conf_options[1]
-                type = 131 (0x83)
-                rfc1877_sec_dns_server_add
-                  length = 6 (0x6)
-                  ip_addr = 0 (0x0) (0.0.0.0)
-      prot_or_container[1]
-        id = 13 (0xd) (DNS Server IPv4 Address Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[2]
-        id = 3 (0x3) (DNS Server IPv6 Address Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[3]
-        id = 1 (0x1) (P-CSCF IPv6 Address Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[4]
-        id = 12 (0xc) (P-CSCF IPv4 Address Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[5]
-        id = 18 (0x12) (P-CSCF Re-selection support)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[6]
-        id = 2 (0x2) (IM CN Subsystem Signalling Flag)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[7]
-        id = 10 (0xa) (IP address allocation via NAS signalling)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[8]
-        id = 5 (0x5) (NWK Req Bearer Control indicator)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[9]
-        id = 16 (0x10) (Ipv4 Link MTU Request)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[10]
-        id = 17 (0x11) (MS support of Local address in TFT indicator)
-        prot_or_container
-          prot_len = 0 (0x0)
-      prot_or_container[11]
-        id = 26 (0x1a) (PDU Session ID)
-        prot_or_container
-          prot_len = 1 (0x1)
-          container
-            container_contents[0] = 2 (0x2)
-      prot_or_container[12]
-        id = 35 (0x23) (QoS Rules with the length of 2 Octs support indicator)
-        prot_or_container
-          prot_id_23_or_24_type
-            Qos_rules_len_2_octets
-              num_qos_rules = 0 (0x0)
-    dev_properties_incl = 0 (0x0)
-    nbifom_incl = 0 (0x0)
-    header_compression_config_inclu = 0 (0x0)
-    ext_prot_config_incl = 0 (0x0)
-                       """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB16E", packet_length=100,
-                               name="LTE PUSCH Power Control",
-                               subtitle="", datetime="2024 Jan 19  21:46:06.212", packet_text=
-                               """
-2024 Jan 19  21:46:06.212  [10]  0xB16E  LTE PUSCH Power Control
-Subscription ID = 1
-Version = 48
-cell_alpha PCC = 1
-cell_alpha ul_id 1 = 0
-cell_alpha ul_id 2 = 0
-cell_alpha ul_id 3 = 0
-Number of Records = 16
-Report
-   ------------------------------------------------------------------------------------------------
-   |     |    |      |      |               |   |Transport|    |    |      |   |PUSCH|PUSCH |     |
-   |     |    |      |      |               |   |Block    |DL  |    |      |   |Tx   |Actual|     |
-   |Cell |    |      |DCI   |               |Num|Size     |Path|    |TPC   |   |Power|Tx    |Max  |
-   |Index|SFN |Sub-fn|Format|Tx Type        |RBs|(bytes)  |Loss|F(i)|Frozen|TPC|(dBm)|Power |Power|
-   ------------------------------------------------------------------------------------------------
-   |    0| 676|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 685|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 694|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 703|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 712|     5|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 721|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 730|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 735|     5|     0|        Dynamic|  4|       18| 105|   5|     0|  0|   18|    18|   25|
-   |    0| 739|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 748|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 757|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 765|     5|     0|        Dynamic|  4|      193| 106|   5|     0|  0|   19|    19|   24|
-   |    0| 774|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-   |    0| 783|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-   |    0| 792|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-   |    0| 802|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-                       """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB139", packet_length=100,
-                               name="LTE LL1 PUSCH Tx Report",
-                               subtitle="", datetime="2024 Jan 19  21:46:04.057", packet_text=
-                               """
-2024 Jan 19  21:46:04.057  [8F]  0xB139  LTE LL1 PUSCH Tx Report
-Subscription ID = 1
-Version = 162
-Serving Cell ID = 147
-Number of Records = 1
-Dispatch SFN SF = 5865
-Records
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Cyclic   |Cyclic   |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Shift of |Shift of |    |    |
-   |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                 |                                                |               |DMRS     |DMRS     |DMRS|DMRS|
-   |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                 |                                                |               |Symbols  |Symbols  |Root|Root|
-   |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                 |                                                |               |Slot 0   |Slot 1   |Slot|Slot|
-   |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|DROP_PUSCH_REASON|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   |   5862|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   17|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999989296|        7|        0|  28|  28|
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
 
                        """)
         messages.append(msg)
