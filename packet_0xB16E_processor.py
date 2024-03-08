@@ -12,7 +12,6 @@ class Packet_0xB16E:
         self.result = []
 
     def extract_info(self):
-        print("entered extract info")
         self.dict.update(self.entry)
         non_table_capture = self.regular_pattern()
         table_capture = self.table_pattern()

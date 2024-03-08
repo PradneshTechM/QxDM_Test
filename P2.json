@@ -724,5 +724,151 @@
   "__KPI_type": "LTE Info",
   "__cell": "SCells",
   "__collection": "LTE"
-}
+},
+  "0xB139": {
+    "Subscription ID": {
+      "DB Field": "Subs ID",
+      "Field Name": "LTE [PCC] Subs ID"
+    },
+    "Serving Cell ID": {
+      "DB Field": "PCI",
+      "Field Name": "LTE [PCC] PCI"
+    },
+    "Records": [
+      {
+        "UL Carrier Index": {
+          "index": 1,
+          "DB Field": "UL Carrier Index"
+        },
+        "ACK": {
+          "index": 2,
+          "DB Field": "Ack",
+          "Field Name": "LTE [PCC] Ack"
+        },
+        "Num of RB": {
+          "index": 12,
+          "DB Field": "Num RBs",
+          "Field Name": "LTE [PCC] Num RBs"
+        },
+        "PUSCH TB Size (bytes)": {
+          "index": 15,
+          "DB Field": "TB Size(Bytes)",
+          "Field Name": "LTE [PCC] TB Size(Bytes)"
+        },
+        "PUSCH Mod Order": {
+          "index": 26,
+          "DB Field": "Modulation",
+          "Field Name": "LTE [PCC] Modulation"
+        },
+        "DROP_PUSCH_REASON": {
+          "index": 39,
+          "DB Field": "Reason",
+          "Field Name": "LTE [PCC] Reason"
+        },
+        "PUSCH Tx Power(dBm)": {
+          "index": 38,
+          "DB Field": "TX Power (dBm)",
+          "Field Name": "LTE [PCC] TX Power (dBm)"
+        }
+      }
+    ],
+    "__KPI_type": "LTE Info",
+    "__collection": "LTE",
+    "__cell": ["entry['__cell'] = entry.pop('UL Carrier Index')"],
+    "Packet_Type": "PUSCH"
+  },
+  "0xB060": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Number of SubPackets": {
+      "DB Field": "Number of SubPackets"
+    },
+    "SubPacket ID": {
+      "DB Field": "SubPacket ID"
+    },
+    "SubPacket Size": {
+      "DB Field": "SubPacket Size"
+    },
+    "DL Config V2.Sub Id": {
+      "DB Field": "DL Config V2.Sub Id"
+    },
+    "DL Config V2.Num Active Stag": {
+      "DB Field": "DL Config V2.Num Active Stag"
+    },
+    "UL Config V2.Sub Id": {
+      "DB Field": "UL Config V2.Sub Id"
+    },
+    "UL Config V2.SR resource present": {
+      "DB Field": "UL Config V2.SR resource present"
+    },
+    "UL Config V2.SR periodicity": {
+      "DB Field": "UL Config V2.SR periodicity"
+    },
+    "UL Config V2.BSR timer": {
+      "DB Field": "UL Config V2.BSR timer"
+    },
+    "UL Config V2.SPS Number of Tx release": {
+      "DB Field": "UL Config V2.SPS Number of Tx release"
+    },
+    "UL Config V2.Retx BSR timer": {
+      "DB Field": "UL Config V2.Retx BSR timer"
+    },
+        "Scell Tag Info": [
+      {
+        "STAG Id": {
+          "index": 1,
+          "DB Field": "STAG Id"
+        },
+        "Scell Id Mask": {
+          "index": 2,
+          "DB Field": "Scell Id Mask"
+        },
+        "Ta Timer Present": {
+          "index": 3,
+          "DB Field": "Ta Timer Present"
+        },
+        "TA Timer(ms)": {
+          "index": 4,
+          "DB Field": "TA Timer(ms)"
+        }
+      }
+    ],
+    "Cell Rach Info": [
+      {
+        "Scell Id": {
+          "index": 1,
+          "DB Field": "Scell Id"
+        },
+        "Preamble initial power(dB)": {
+          "index": 2,
+          "DB Field": "Preamble initial power(dB)"
+        },
+        "PRACH config": {
+          "index": 11,
+          "DB Field": "PRACH config"
+        },
+        "Root seq index": {
+          "index": 13,
+          "DB Field": "Root seq index"
+        },
+        "PRACH Freq Offset": {
+          "index": 14,
+          "DB Field": "PRACH Freq Offset"
+        },
+        "Contention resolution timer (ms)": {
+          "index": 7,
+          "DB Field": "Contention resolution timer (ms):"
+        },
+        "Preamble trans max": {
+          "index": 6,
+          "DB Field": "Preamble trans max"
+        }
+      }
+    ],
+    "Raw_Data": true,
+    "KPI_type": "LTE Info",
+    "__collection": "Event",
+    "__cell": "LTE"
+  }
 }
