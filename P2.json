@@ -462,6 +462,7 @@
   "Raw_Data": true,
   "__KPI_type": "NR Info",
   "__cell": ["entry['__cell'] = entry.pop('Serving Cell Index')"],
+   "Packet_Type": "PDSCH",
   "__collection": "Event"
 },
 "0xB176": {
@@ -723,6 +724,44 @@
    "Raw_Data": true,
   "__KPI_type": "LTE Info",
   "__cell": "SCells",
+   "Packet_Type": "SCCx",
   "__collection": "LTE"
-}
+},
+  "0xB0E2": {
+  "Subscription ID": {
+    "DB Field": "Subs ID"
+  },
+  "eps_bearer_id_or_skip_id": {
+    "DB Field": "eps_bearer_id_or_skip_id"
+  },
+  "prot_disc": {
+    "DB Field": "prot_disc"
+  },
+  "trans_id": {
+    "DB Field": "trans_id"
+  },
+  "Raw_Data": true,
+  "__collection": "Event",
+  "__cell": "LTE",
+    "Packet_Type": "msg_type",
+  "__KPI_type": "LTE Info"
+  },
+    "0xB808": {
+  "Subscription ID": {
+    "DB Field": "Subs ID"
+  },
+  "Raw_Data": false,
+  "__collection": "Event",
+  "__cell": "NR5G",
+  "__KPI_type": "NR Info"
+  },
+  "0xB809": {
+  "Subscription ID": {
+    "DB Field": "Subs ID"
+  },
+  "Raw_Data": false,
+  "__collection": "Event",
+  "__cell": "NR5G",
+  "__KPI_type": "NR Info"
+  }
 }

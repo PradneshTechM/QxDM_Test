@@ -8,6 +8,9 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB808_processor import Packet_0xB808
+from packet_0xB809_processor import Packet_0xB809
+from packet_0xB0E2_processor import Packet_0xB0E2
 from packet_0xB192_processor import Packet_0xB192
 from packet_0xB186_processor import Packet_0xB186
 from packet_0xB181_processor import Packet_0xB181
@@ -1291,8 +1294,7 @@ class ParsedRawMessage:
                 return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
             elif packet_name == '0xB8D8':
                 print("0xB8D8")
-                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],
-                                                  entry)
+                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],entry)
             elif packet_name == '0xB167':
                 print("0xB167")
                 return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
@@ -1392,11 +1394,20 @@ class ParsedRawMessage:
                 print('0x1D4D')
                 return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D'], entry)
             elif packet_name == '0xB16F':
-                    print('0xB16F')
-                    return Packet_0xB16F(packet_text, config2['0xB16F'], entry).extract_info()
+                print('0xB16F')
+                return Packet_0xB16F(packet_text, config2['0xB16F'], entry).extract_info()
             elif packet_name == '0xB0E3':
                 print('0xB0E3')
                 return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3'], entry)
+            elif packet_name == '0xB0E2':
+                print('0xB0E2')
+                return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2'], entry)
+            elif packet_name == '0xB808':
+                print('0xB808')
+                return Packet_0xB808.extract_info(packet_text, config2['0xB808'], entry)
+            elif packet_name == '0xB809':
+                print('0xB809')
+                return Packet_0xB809.extract_info(packet_text, config2['0xB809'], entry)
 
         # start here
 
@@ -1539,47 +1550,70 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
-        msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
-                               name="LTE ML1 Neighbor Cell Meas Request/Response",
-                               subtitle="", datetime="2024 Jan 15  07:17:28.048", packet_text=
-                               """2024 Jan 15  07:17:28.048  [C6]  0xB192  LTE ML1 Neighbor Cell Meas Request/Response
+        msg = ParsedRawMessage(index=0, packet_type="0xB809", packet_length=100,
+                               name="NR5G NAS MM5G Security Protected OTA Outgoing Msg",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.244",
+                               packet_text=
+                               """2024 Jan 15  07:17:09.244  [A9]  0xB809  NR5G NAS MM5G Security Protected OTA Outgoing Msg
 Subscription ID = 1
+Misc ID         = 0
 Version = 1
-Number of SubPackets = 2
-SubPacket ID = 26
-Idle Mode Neighbor Cell Measurement Request
-   Version = 2
-   SubPacket Size = 28 bytes
-   E-ARFCN = 700
-   Num Cells = 1
-   Num Rx Ant = 2
-   Dupexing Mode = FDD
-   Neighbor Cells
-      ------------------------------------------------
-      |   |    |              |Enabled |      |      |
-      |   |Cell|              |Tx      |TTL   |FTL   |
-      |#  |ID  |CP Type       |Antennas|Enable|Enable|
-      ------------------------------------------------
-      |  0| 459|        Normal|       2| false| false|
-
-SubPacket ID = 27
-Neighbor Cell Meas Result
-   Version = 56
-   SubPacket Size = 64 bytes
-   E-ARFCN = 700
-   Num Cells = 1
-   Duplexing Mode = FDD
-   Serving Cell Index = PCell
-   Neighbor Cells
-      ------------------------------------------------------------------------------------------------------------
-      |   |        |           |        |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
-      |   |        |FTL        |        |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
-      |   |Physical|Cumulative |        |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
-      |#  |Cell ID |Freq Offset|Bad CER |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
-      ------------------------------------------------------------------------------------------------------------
-      |  0|     459|          0|   FALSE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -66.06|
-      |  0|     459|          0|    TRUE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -76.06|
-
+Std Version = 15
+Std Major Version = 4
+Std Minor Version = 0
+Outgoing OTA Raw Data = { 
+   126, 4, 94, 156, 187, 109, 0, 241, 
+   205, 9, 232, 63, 245, 122, 13, 31, 
+   91, 80, 114, 108, 105, 33, 175, 214, 
+   143, 44, 136, 120, 50, 135, 168, 52, 
+   206, 236, 162, 153, 79, 147, 221, 67, 
+   165, 72, 35, 24, 177, 121, 33, 8, 
+   131, 20, 92, 248, 195, 157, 250, 29, 
+   105, 13, 204, 103, 97, 131, 61, 37, 
+   21, 106, 115, 114, 152, 246, 70, 8, 
+   106, 242, 14, 9, 241, 144, 57, 1, 
+   211, 233, 114, 140, 68, 112, 42, 189, 
+   11, 1, 2, 195, 95, 20, 129, 0, 
+   225, 31, 82, 120, 72, 172, 247, 28, 
+   239, 41, 5, 9, 39, 180, 57, 19, 
+   180, 0, 197, 49, 214, 31, 106, 13, 
+   123
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB808", packet_length=100,
+                               name="NR5G NAS MM5G Security Protected OTA Incoming Msg",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.243",
+                               packet_text=
+                               """2024 Jan 15  07:17:09.243  [3D]  0xB808  NR5G NAS MM5G Security Protected OTA Incoming Msg
+Subscription ID = 1
+Misc ID         = 0
+Version = 1
+Std Version = 15
+Std Major Version = 4
+Std Minor Version = 0
+Incoming OTA Raw Data = { 
+   126, 3, 97, 165, 249, 151, 0, 126, 
+   0, 93, 51, 9, 4, 240, 112, 240, 
+   112, 225, 87, 34, 54, 1, 2, 25, 
+   4, 240, 112, 192, 64
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0E2", packet_length=100,
+                               name="LTE NAS ESM Plain OTA Incoming Message",
+                               subtitle="ESM information request Msg", datetime="2024 Jan 15  07:16:06.121", packet_text=
+                               """2024 Jan 15  07:16:06.121  [62]  0xB0E2  LTE NAS ESM Plain OTA Incoming Message  --  ESM information request Msg
+Subscription ID = 1
+pkt_version = 1 (0x1)
+rel_number = 9 (0x9)
+rel_version_major = 5 (0x5)
+rel_version_minor = 0 (0x0)
+eps_bearer_id_or_skip_id = 0 (0x0)
+prot_disc = 2 (0x2) (EPS session management messages)
+trans_id = 9 (0x9)
+msg_type = 217 (0xd9) (ESM information request)
+lte_esm_msg
 """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
