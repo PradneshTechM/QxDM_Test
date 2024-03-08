@@ -8,6 +8,9 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB808_processor import Packet_0xB808
+from packet_0xB809_processor import Packet_0xB809
+from packet_0xB0E2_processor import Packet_0xB0E2
 from packet_0xB192_processor import Packet_0xB192
 from packet_0xB186_processor import Packet_0xB186
 from packet_0xB181_processor import Packet_0xB181
@@ -63,8 +66,6 @@ from packet_0x1D4D_processor import Packet_0x1D4D
 from packet_0xB16F_processor import Packet_0xB16F
 from packet_0xB0E3_processor import Packet_0xB0E3
 from packet_0xB16E_processor import Packet_0xB16E
-from packet_0xB139_processor import Packet_0xB139
-from packet_0xB060_processor import Packet_0xB060
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1293,8 +1294,7 @@ class ParsedRawMessage:
                 return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
             elif packet_name == '0xB8D8':
                 print("0xB8D8")
-                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],
-                                                  entry)
+                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],entry)
             elif packet_name == '0xB167':
                 print("0xB167")
                 return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
@@ -1393,21 +1393,21 @@ class ParsedRawMessage:
             elif packet_name == '0x1D4D':
                 print('0x1D4D')
                 return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D'], entry)
-            # elif packet_name == '0xB16F':
-            #         print('0xB16F')
-            #         return Packet_0xB16F(packet_text, config2['0xB16F'], entry).extract_info()
-            elif packet_name == '0xB16E':
-                print('0xB16E')
-                return Packet_0xB16E(packet_text, config2['0xB16E'], entry).extract_info()
+            elif packet_name == '0xB16F':
+                print('0xB16F')
+                return Packet_0xB16F(packet_text, config2['0xB16F'], entry).extract_info()
             elif packet_name == '0xB0E3':
                 print('0xB0E3')
                 return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3'], entry)
-            elif packet_name == '0xB139':
-                print('0xB139')
-                return Packet_0xB139(packet_text, config2['0xB139'], entry).extract_info()
-            elif packet_name == '0xB060':
-                print('0xB060')
-                return Packet_0xB060(packet_text, config2['0xB060'], entry).extract_info()
+            elif packet_name == '0xB0E2':
+                print('0xB0E2')
+                return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2'], entry)
+            elif packet_name == '0xB808':
+                print('0xB808')
+                return Packet_0xB808.extract_info(packet_text, config2['0xB808'], entry)
+            elif packet_name == '0xB809':
+                print('0xB809')
+                return Packet_0xB809.extract_info(packet_text, config2['0xB809'], entry)
 
         # start here
 
@@ -1550,47 +1550,70 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
-        msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
-                               name="LTE ML1 Neighbor Cell Meas Request/Response",
-                               subtitle="", datetime="2024 Jan 15  07:17:28.048", packet_text=
-                               """2024 Jan 15  07:17:28.048  [C6]  0xB192  LTE ML1 Neighbor Cell Meas Request/Response
+        msg = ParsedRawMessage(index=0, packet_type="0xB809", packet_length=100,
+                               name="NR5G NAS MM5G Security Protected OTA Outgoing Msg",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.244",
+                               packet_text=
+                               """2024 Jan 15  07:17:09.244  [A9]  0xB809  NR5G NAS MM5G Security Protected OTA Outgoing Msg
 Subscription ID = 1
+Misc ID         = 0
 Version = 1
-Number of SubPackets = 2
-SubPacket ID = 26
-Idle Mode Neighbor Cell Measurement Request
-   Version = 2
-   SubPacket Size = 28 bytes
-   E-ARFCN = 700
-   Num Cells = 1
-   Num Rx Ant = 2
-   Dupexing Mode = FDD
-   Neighbor Cells
-      ------------------------------------------------
-      |   |    |              |Enabled |      |      |
-      |   |Cell|              |Tx      |TTL   |FTL   |
-      |#  |ID  |CP Type       |Antennas|Enable|Enable|
-      ------------------------------------------------
-      |  0| 459|        Normal|       2| false| false|
-
-SubPacket ID = 27
-Neighbor Cell Meas Result
-   Version = 56
-   SubPacket Size = 64 bytes
-   E-ARFCN = 700
-   Num Cells = 1
-   Duplexing Mode = FDD
-   Serving Cell Index = PCell
-   Neighbor Cells
-      ------------------------------------------------------------------------------------------------------------
-      |   |        |           |        |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
-      |   |        |FTL        |        |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
-      |   |Physical|Cumulative |        |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
-      |#  |Cell ID |Freq Offset|Bad CER |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
-      ------------------------------------------------------------------------------------------------------------
-      |  0|     459|          0|   FALSE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -66.06|
-      |  0|     459|          0|    TRUE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -76.06|
-
+Std Version = 15
+Std Major Version = 4
+Std Minor Version = 0
+Outgoing OTA Raw Data = { 
+   126, 4, 94, 156, 187, 109, 0, 241, 
+   205, 9, 232, 63, 245, 122, 13, 31, 
+   91, 80, 114, 108, 105, 33, 175, 214, 
+   143, 44, 136, 120, 50, 135, 168, 52, 
+   206, 236, 162, 153, 79, 147, 221, 67, 
+   165, 72, 35, 24, 177, 121, 33, 8, 
+   131, 20, 92, 248, 195, 157, 250, 29, 
+   105, 13, 204, 103, 97, 131, 61, 37, 
+   21, 106, 115, 114, 152, 246, 70, 8, 
+   106, 242, 14, 9, 241, 144, 57, 1, 
+   211, 233, 114, 140, 68, 112, 42, 189, 
+   11, 1, 2, 195, 95, 20, 129, 0, 
+   225, 31, 82, 120, 72, 172, 247, 28, 
+   239, 41, 5, 9, 39, 180, 57, 19, 
+   180, 0, 197, 49, 214, 31, 106, 13, 
+   123
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB808", packet_length=100,
+                               name="NR5G NAS MM5G Security Protected OTA Incoming Msg",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.243",
+                               packet_text=
+                               """2024 Jan 15  07:17:09.243  [3D]  0xB808  NR5G NAS MM5G Security Protected OTA Incoming Msg
+Subscription ID = 1
+Misc ID         = 0
+Version = 1
+Std Version = 15
+Std Major Version = 4
+Std Minor Version = 0
+Incoming OTA Raw Data = { 
+   126, 3, 97, 165, 249, 151, 0, 126, 
+   0, 93, 51, 9, 4, 240, 112, 240, 
+   112, 225, 87, 34, 54, 1, 2, 25, 
+   4, 240, 112, 192, 64
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0E2", packet_length=100,
+                               name="LTE NAS ESM Plain OTA Incoming Message",
+                               subtitle="ESM information request Msg", datetime="2024 Jan 15  07:16:06.121", packet_text=
+                               """2024 Jan 15  07:16:06.121  [62]  0xB0E2  LTE NAS ESM Plain OTA Incoming Message  --  ESM information request Msg
+Subscription ID = 1
+pkt_version = 1 (0x1)
+rel_number = 9 (0x9)
+rel_version_major = 5 (0x5)
+rel_version_minor = 0 (0x0)
+eps_bearer_id_or_skip_id = 0 (0x0)
+prot_disc = 2 (0x2) (EPS session management messages)
+trans_id = 9 (0x9)
+msg_type = 217 (0xd9) (ESM information request)
+lte_esm_msg
 """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
@@ -3903,73 +3926,73 @@ CallStatusSummary {
 }
                        """)
         messages.append(msg)
- #        msg = ParsedRawMessage(index=0, packet_type="0xB16F", packet_length=100,
- #                               name="LTE PUCCH Power Control",
- #                               subtitle="", datetime="2024 Jan 15  07:14:08.556", packet_text=
- #                               """
- # 2024 Jan 15  07:14:08.556  [E1]  0xB16F  LTE PUCCH Power Control
- # Subscription ID = 1
- # Version = 49
- # Number of Records = 50
- # Report
- #    -------------------------------------------------------------------------------------
- #    |   |    |      |              |        |    |           |   |    |    |PUCCH|PUCCH |
- #    |   |    |      |              |        |    |           |   |DL  |    |Tx   |Actual|
- #    |   |    |      |              |PUCCH   |N   |           |N  |Path|    |Power|Tx    |
- #    |#  |SFN |Sub-fn|DCI Format    |Format  |HARQ|TPC Command|CQI|Loss|g(i)|(dBm)|Power |
- #    -------------------------------------------------------------------------------------
- #    |  0| 597|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
- #    |  1| 599|     3|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
- #    |  2| 599|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
- #    |  3| 599|     9|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
- #    |  4| 600|     1|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
- #    |  5| 600|     2|              |       1|   0|Not present|  0| 111|   1|   -2|    -2|
- #    |  6| 600|     4|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
- #    |  7| 600|     5|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
- #    |  8| 604|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
- #    |  9| 604|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 10| 604|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 11| 605|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
- #    | 12| 607|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 13| 608|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 14| 608|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 15| 609|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 16| 611|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
- #    | 17| 612|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 18| 612|     4|             2|      2a|   1|          0|  0| 110|   1|   -3|    -3|
- #    | 19| 612|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 20| 612|     9|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 21| 613|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 22| 615|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
- #    | 23| 616|     1|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 24| 616|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 25| 616|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
- #    | 26| 617|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
- #    | 27| 617|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 28| 619|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 29| 620|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 30| 620|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
- #    | 31| 620|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 32| 620|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
- #    | 33| 620|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 34| 621|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 35| 623|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
- #    | 36| 624|     1|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
- #    | 37| 624|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
- #    | 38| 624|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
- #    | 39| 624|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
- #    | 40| 625|     8|             2|      1a|   1|          0|  0| 110|   0|   -4|    -4|
- #    | 41| 627|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
- #    | 42| 628|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
- #    | 43| 628|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
- #    | 44| 629|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
- #    | 45| 629|     3|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
- #    | 46| 629|     6|             2|      1a|   1|         -1|  0| 110|  -1|   -5|    -5|
- #    | 47| 629|     8|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
- #    | 48| 630|     9|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
- #    | 49| 632|     2|              |       1|   0|Not present|  0| 110|  -1|   -5|    -5|
- #    """)
- #        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB16F", packet_length=100,
+                               name="LTE PUCCH Power Control",
+                               subtitle="", datetime="2024 Jan 15  07:14:08.556", packet_text=
+                               """
+ 2024 Jan 15  07:14:08.556  [E1]  0xB16F  LTE PUCCH Power Control
+ Subscription ID = 1
+ Version = 49
+ Number of Records = 50
+ Report
+    -------------------------------------------------------------------------------------
+    |   |    |      |              |        |    |           |   |    |    |PUCCH|PUCCH |
+    |   |    |      |              |        |    |           |   |DL  |    |Tx   |Actual|
+    |   |    |      |              |PUCCH   |N   |           |N  |Path|    |Power|Tx    |
+    |#  |SFN |Sub-fn|DCI Format    |Format  |HARQ|TPC Command|CQI|Loss|g(i)|(dBm)|Power |
+    -------------------------------------------------------------------------------------
+    |  0| 597|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
+    |  1| 599|     3|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
+    |  2| 599|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
+    |  3| 599|     9|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
+    |  4| 600|     1|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
+    |  5| 600|     2|              |       1|   0|Not present|  0| 111|   1|   -2|    -2|
+    |  6| 600|     4|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
+    |  7| 600|     5|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
+    |  8| 604|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    |  9| 604|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 10| 604|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 11| 605|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 12| 607|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 13| 608|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 14| 608|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 15| 609|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 16| 611|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 17| 612|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 18| 612|     4|             2|      2a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 19| 612|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 20| 612|     9|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 21| 613|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 22| 615|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 23| 616|     1|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 24| 616|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 25| 616|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 26| 617|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 27| 617|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 28| 619|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 29| 620|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 30| 620|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 31| 620|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 32| 620|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 33| 620|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 34| 621|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 35| 623|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 36| 624|     1|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
+    | 37| 624|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 38| 624|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 39| 624|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 40| 625|     8|             2|      1a|   1|          0|  0| 110|   0|   -4|    -4|
+    | 41| 627|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 42| 628|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 43| 628|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 44| 629|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 45| 629|     3|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
+    | 46| 629|     6|             2|      1a|   1|         -1|  0| 110|  -1|   -5|    -5|
+    | 47| 629|     8|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
+    | 48| 630|     9|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
+    | 49| 632|     2|              |       1|   0|Not present|  0| 110|  -1|   -5|    -5|
+    """)
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0E3", packet_length=100,
                                name="LTE NAS ESM Plain OTA Outgoing Message",
                                subtitle="PDN connectivity request Msg", datetime="2024 Jan 15  07:17:10.651",
@@ -4079,149 +4102,69 @@ lte_esm_msg
     ext_prot_config_incl = 0 (0x0)
                        """)
         messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB16E", packet_length=100,
-                               name="LTE PUSCH Power Control",
-                               subtitle="", datetime="2024 Jan 19  21:46:06.212", packet_text=
-                               """
-2024 Jan 19  21:46:06.212  [10]  0xB16E  LTE PUSCH Power Control
-Subscription ID = 1
-Version = 48
-cell_alpha PCC = 1
-cell_alpha ul_id 1 = 0
-cell_alpha ul_id 2 = 0
-cell_alpha ul_id 3 = 0
-Number of Records = 16
-Report
-   ------------------------------------------------------------------------------------------------
-   |     |    |      |      |               |   |Transport|    |    |      |   |PUSCH|PUSCH |     |
-   |     |    |      |      |               |   |Block    |DL  |    |      |   |Tx   |Actual|     |
-   |Cell |    |      |DCI   |               |Num|Size     |Path|    |TPC   |   |Power|Tx    |Max  |
-   |Index|SFN |Sub-fn|Format|Tx Type        |RBs|(bytes)  |Loss|F(i)|Frozen|TPC|(dBm)|Power |Power|
-   ------------------------------------------------------------------------------------------------
-   |    0| 676|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 685|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 694|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 703|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 712|     5|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 721|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 730|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 735|     5|     0|        Dynamic|  4|       18| 105|   5|     0|  0|   18|    18|   25|
-   |    0| 739|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 748|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 757|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-   |    0| 765|     5|     0|        Dynamic|  4|      193| 106|   5|     0|  0|   19|    19|   24|
-   |    0| 774|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-   |    0| 783|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-   |    0| 792|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-   |    0| 802|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-                       """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB139", packet_length=100,
-                               name="LTE LL1 PUSCH Tx Report",
-                               subtitle="", datetime="2024 Jan 19  21:46:04.057", packet_text=
-                               """
-2024 Jan 19  21:46:04.057  [8F]  0xB139  LTE LL1 PUSCH Tx Report
-Subscription ID = 1
-Version = 162
-Serving Cell ID = 147
-Number of Records = 1
-Dispatch SFN SF = 5865
-Records
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Cyclic   |Cyclic   |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Shift of |Shift of |    |    |
-   |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                 |                                                |               |DMRS     |DMRS     |DMRS|DMRS|
-   |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                 |                                                |               |Symbols  |Symbols  |Root|Root|
-   |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                 |                                                |               |Slot 0   |Slot 1   |Slot|Slot|
-   |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|DROP_PUSCH_REASON|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   |   5862|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   17|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999989296|        7|        0|  28|  28|
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
-
-                       """)
-        messages.append(msg)
-        msg = ParsedRawMessage(index=0, packet_type="0xB060", packet_length=100,
-                               name="LTE MAC Configuration",
-                               subtitle="", datetime="2024 Jan 15  07:14:07.591", packet_text=
-                               """
-2024 Jan 15  07:14:07.591  [0C]  0xB060  LTE MAC Configuration
-Subscription ID = 1
-Version = 1
-Number of SubPackets = 5
-SubPacket ID = 1
-SubPacket - ( DL Config SubPacket )
-   Version = 2
-   SubPacket Size = 12 bytes
-   DL Config V2
-      Sub Id = 1
-      Num Active Stag = 1
-      Scell Tag Info
-         ------------------------------
-         |   |    |Scell|Ta     |TA   |
-         |   |STAG|Id   |Timer  |Timer|
-         |#  |Id  |Mask |Present|(ms) |
-         ------------------------------
-         |  0| 255|  255|    255|10240|
-
-SubPacket ID = 2
-SubPacket - ( UL Config Subpacket )
-   Version = 2
-   SubPacket Size = 16 bytes
-   UL Config V2
-      Sub Id = 1
-      SR resource present = Yes (1)
-      SR periodicity = 10 ms
-      BSR timer = Infinity
-      SPS Number of Tx release = 0
-      Retx BSR timer = 320 ms
-SubPacket ID = 14
-SubPacket - (All Rach Config SubPacket) {
-   Version = 2
-   Subpacket Size = 712 bytes
-   Sub Id = 0
-   Valid Cell Cfg Mask = 00000000b
-   New Cell Cfg Mask = 00000000b
-   Cell Rach Info
-      -------------------------------------------------------------------------------------------------------------------------------------
-      |   |     |        |       |      |      |        |          |       |          |        |      |      |     |      |     |    |RA  |
-      |   |     |Preamble|Power  |      |      |        |          |       |          |        |      |      |     |      |     |    |rsp |
-      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |Delta   |      |CS    |Root |PRACH |High |Max |win |
-      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
-      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
-      -------------------------------------------------------------------------------------------------------------------------------------
-      |  0|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-
-}
-SubPacket ID = 4
-SubPacket - ( LC Config Subpacket )
-   Version = 2
-   SubPacket Size = 328 bytes
-   Version 2 {
-      Sub Id = 1
-      Number of deleted LC = 0
-      Number of added/modified LC = 1
-      ---------------------------------------------------
-      |     |          |          |          |Token     |
-      |     |          |          |          |bucket    |
-      |     |PBR       |          |          |size      |
-      |LC ID|(KBytes/s)|Priority  |LC group  |(bytes)   |
-      ---------------------------------------------------
-      |    1|     65535|         1|         0|         0|
-
-   }
-SubPacket ID = 18
-
-                       """)
-        messages.append(msg)
+#         msg = ParsedRawMessage(index=0, packet_type="0xB16E", packet_length=100,
+#                                name="LTE PUSCH Power Control",
+#                                subtitle="", datetime="2024 Jan 19  21:46:06.212", packet_text=
+#                                """
+# 2024 Jan 19  21:46:06.212  [10]  0xB16E  LTE PUSCH Power Control
+# Subscription ID = 1
+# Version = 48
+# cell_alpha PCC = 1
+# cell_alpha ul_id 1 = 0
+# cell_alpha ul_id 2 = 0
+# cell_alpha ul_id 3 = 0
+# Number of Records = 16
+# Report
+#    ------------------------------------------------------------------------------------------------
+#    |     |    |      |      |               |   |Transport|    |    |      |   |PUSCH|PUSCH |     |
+#    |     |    |      |      |               |   |Block    |DL  |    |      |   |Tx   |Actual|     |
+#    |Cell |    |      |DCI   |               |Num|Size     |Path|    |TPC   |   |Power|Tx    |Max  |
+#    |Index|SFN |Sub-fn|Format|Tx Type        |RBs|(bytes)  |Loss|F(i)|Frozen|TPC|(dBm)|Power |Power|
+#    ------------------------------------------------------------------------------------------------
+#    |    0| 676|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 685|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 694|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 703|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 712|     5|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 721|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 730|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 735|     5|     0|        Dynamic|  4|       18| 105|   5|     0|  0|   18|    18|   25|
+#    |    0| 739|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 748|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 757|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+#    |    0| 765|     5|     0|        Dynamic|  4|      193| 106|   5|     0|  0|   19|    19|   24|
+#    |    0| 774|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+#    |    0| 783|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+#    |    0| 792|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+#    |    0| 802|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+#                        """)
+#         messages.append(msg)
+#         msg = ParsedRawMessage(index=0, packet_type="0xB139", packet_length=100,
+#                                name="LTE LL1 PUSCH Tx Report",
+#                                subtitle="", datetime="2024 Jan 19  21:46:04.057", packet_text=
+#                                """
+# 2024 Jan 19  21:46:04.057  [8F]  0xB139  LTE LL1 PUSCH Tx Report
+# Subscription ID = 1
+# Version = 162
+# Serving Cell ID = 147
+# Number of Records = 1
+# Dispatch SFN SF = 5865
+# Records
+#    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Cyclic   |Cyclic   |    |    |
+#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Shift of |Shift of |    |    |
+#    |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                 |                                                |               |DMRS     |DMRS     |DMRS|DMRS|
+#    |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                 |                                                |               |Symbols  |Symbols  |Root|Root|
+#    |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                 |                                                |               |Slot 0   |Slot 1   |Slot|Slot|
+#    |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|DROP_PUSCH_REASON|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
+#    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#    |   5862|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   17|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999989296|        7|        0|  28|  28|
+#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
+#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
+#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
+#
+#                        """)
+#         messages.append(msg)
         #     msg = ParsedRawMessage(index = 0, packet_type = "0x1FE7", packet_length=100, name="QTrace Event", subtitle="QEVENT 84 - 2", datetime="", packet_text=
         #     """2023 Nov 17  01:59:04.733  [BC]  0x1FE7  QTrace Event  --  QEVENT 84 - 2
         # nr5g_mac_rach.c     9254     D     Sub-ID:1     Misc-ID:0     QEvent 0x41100854 | NR5GMAC_QSH_EVENT_RACH_MSG2 | RAID_MATCH, ca: 0 | MTPL exceeded: 1 | RAR PRUNE bmsk: 0

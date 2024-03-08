@@ -1506,5 +1506,46 @@
       "__cell": "PCell/SCelln",
       "__Raw_Data": true,
       "__KPI_type": "LTE Info"
+  },
+  "0xB196 -- PCell/SCelln": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Num Cells": {
+      "DB Field": "Num Cells"
+    },
+    "Cell Measurement List": [
+      {
+        "E-ARFCN": {
+          "index": 1,
+          "DB Field": "E-ARFCN"
+
+        },
+        "Physical Cell ID": {
+          "index": 2,
+          "DB Field": "Physical Cell ID"
+
+        },
+        "Valid Rx": {
+          "index": 3,
+          "DB Field": "Valid Rx"
+
+        },
+        "Inst RSRP Rx[0] (dBm)": {
+          "index": 4,
+          "DB Field": "Inst RSRP Rx[0] (dBm)"
+
+        },
+        "Inst RSRQ Rx[0] (dBm)": {
+          "index": 6,
+          "DB Field": "Inst RSRQ Rx[0] (dBm)"
+
+        }
+      }
+    ],
+      "__collection": "LTE",
+      "__cell": "PCell/SCelln",
+      "__Raw_Data": true,
+      "__KPI_type": "LTE Info"
   }
 }
