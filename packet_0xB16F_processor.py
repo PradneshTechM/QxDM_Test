@@ -1,13 +1,13 @@
 import re
 from kpi_utils import table_config, map_entry
 
-class Packet_0xB883:
+class Packet_0xB16F:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
         self.config = config
         self.entry = entry
         self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?'
-        self.pattern2 = r".*?\|Shift.*?\|Status\|.*?-+.*?\n(?P<table>[\s\S]*)"
+        self.pattern2 = r".*?\|\(dBm\)\|Power.*?\|.*?-+.*?\n(?P<table>[\s\S]*)"
         self.dict = {}
         self.result = []
 
@@ -37,7 +37,7 @@ class Packet_0xB883:
     def table_pattern(self):
         match = re.search(self.pattern2, self.packet_text, re.DOTALL)
         if match:
-            data = table_config(match, self.config['Records'], self.config)
+            data = table_config(match, self.config['Report'], self.config)
             return data
         else:
             print("No data rows found.")

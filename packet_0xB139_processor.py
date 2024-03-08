@@ -1,13 +1,13 @@
 import re
 from kpi_utils import table_config, map_entry
 
-class Packet_0xB883:
+class Packet_0xB139:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
         self.config = config
         self.entry = entry
-        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?'
-        self.pattern2 = r".*?\|Shift.*?\|Status\|.*?-+.*?\n(?P<table>[\s\S]*)"
+        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?Serving Cell ID = (?P<cell_id>[\d]+).*?'
+        self.pattern2 = r".*?\|0.*?\|1.*?\|.*?-+.*?\n(?P<table>[\s\S]*)"
         self.dict = {}
         self.result = []
 

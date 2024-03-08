@@ -125,7 +125,7 @@
     "__cell": "NR5G",
     "__KPI_type": "NR Info"
   },
-   "0xB883 -- PCC -- PUSCH": {
+  "0xB883": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
@@ -150,7 +150,6 @@
           "index": 10,
           "DB Field": "HARQ ID",
           "Field Name": "NR5G [PCC] HARQ ID"
-
         },
         "PUSCH Data.MCS": {
           "index": 12,
@@ -174,13 +173,13 @@
     "__collection": "NR5G",
     "__cell": [
       "if int(entry['Carrier ID']) == 0:",
-        "entry['__cell'] = 'PCC'",
+      "    entry['__cell'] = 'PCC'",
       "elif int(entry['Carrier ID']) >= 1:",
-        "entry['__cell'] = f'SCC{entry['Carrier ID']}'"
-      ],
+      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'"
+    ],
     "Packet_Type": "PUSCH"
   },
-  "0xB884 -- PCC": {
+  "0xB884": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
@@ -206,14 +205,14 @@
     "__collection": "NR5G",
     "__cell": [
       "if int(entry['Carrier ID']) == 0:",
-        "entry['__cell'] = 'PCC'",
+      "    entry['__cell'] = 'PCC'",
       "elif int(entry['Carrier ID']) >= 1:",
-        "entry['__cell'] = f'SCC{entry['Carrier ID']}'"
-      ],
+      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'"
+    ],
     "__Raw_Data": true,
     "__KPI_type": "NR Info"
   },
-  "0xB889 -- NR5G": {
+  "0xB889": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -241,5 +240,185 @@
     "__cell": "NR5G",
     "__Raw_Data": true,
     "__KPI_type": "NR Info"
+  },
+  "0x17F2": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "SipCallDur": {
+      "DB Field": "SipCallDur"
+    },
+    "CodecType": {
+      "DB Field": "CodecType"
+    },
+    "RAT Type": {
+      "DB Field": "RAT Type"
+    },
+    "__Raw_Data": true,
+    "__KPI_type": "Voice",
+    "__collection": "Event",
+    "__cell": "IMS"
+  },
+  "0x1D4D": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "CallStatusSummary.Common Call Stats.Call ID": {
+      "DB Field": "Call ID"
+    },
+    "CallStatusSummary.Common Call Stats.Call Status": {
+      "DB Field": "Call Status"
+    },
+    "CallStatusSummary.Common Call Stats.CallTypeAtCallOrig": {
+      "DB Field": "CallTypeAtCallOrig"
+    },
+    "CallStatusSummary.Common Call Stats.CallTypeAtCallEnd": {
+      "DB Field": "CallTypeAtCallEnd"
+    },
+    "CallStatusSummary.Common Call Stats.Direction of Call": {
+      "DB Field": "Direction of Call"
+    },
+    "CallStatusSummary.Common Call Stats.CallSetup Time": {
+      "DB Field": "CallSetup Time"
+    },
+    "CallStatusSummary.Common Call Stats.CallRingingRingback Time": {
+      "DB Field": "CallRingingRingback Time"
+    },
+    "CallStatusSummary.Common Call Stats.CallRatatOrig": {
+      "DB Field": "CallRatatOrig"
+    },
+    "CallStatusSummary.Common Call Stats.CallRatatEnd": {
+      "DB Field": "CallRatatEnd"
+    },
+    "CallStatusSummary.Common Call Stats.Call End Indication Supressed": {
+      "DB Field": "Call End Indication Supressed"
+    },
+    "CallStatusSummary.Common Call Stats.Redial at IMS layer Call type": {
+      "DB Field": "Redial at IMS layer Call type"
+    },
+    "CallStatusSummary.Common Call Stats.IsCallAutoRejected": {
+      "DB Field": "IsCallAutoRejected"
+    },
+    "CallStatusSummary.Common Call Stats.AutoRejectReason": {
+      "DB Field": "AutoRejectReason"
+    },
+    "CallStatusSummary.Codec Stats.LatestAudioCodec": {
+      "DB Field": "LatestAudioCodec"
+    },
+    "CallStatusSummary.HandoverStatsEnabled": {
+      "DB Field": "HandoverStatsEnabled"
+    },
+    "CallStatusSummary.EPSFBStatsEnabled": {
+      "DB Field": "EPSFBStatsEnabled"
+    },
+    "CallStatusSummary.SRVCCStatsEnabled": {
+      "DB Field": "SRVCCStatsEnabled"
+    },
+    "CallStatusSummary.CRSStatsEnabled": {
+      "DB Field": "CRSStatsEnabled"
+    },
+    "CallStatusSummary.EarlyMediaStatsEnabled": {
+      "DB Field": "EarlyMediaStatsEnabled"
+    },
+    "__Raw_Data": false,
+    "__KPI_type": "Voice",
+    "__collection": "Event",
+    "__cell": "IMS"
+  },
+  "0xB16F": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Report": [
+      {
+        "PUCCH Actual Tx Power": {
+          "index": 11,
+          "DB Field": "Actual Tx Power (dBm)"
+        }
+      }
+    ],
+    "__Raw_Data": true,
+    "__KPI_type": "LTE Info",
+    "__collection": "LTE",
+    "__cell": "PCC",
+    "Packet_Type": "PUCCH"
+  },
+  "0xB0E3": {
+    "msg_subtitle": {
+      "DB Field": "msg_subtitle"
+    },
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "eps_bearer_id_or_skip_id": {
+      "DB Field": "eps_bearer_id_or_skip_id",
+      "Field Name": "Event [LTE] eps_bearer_id_or_skip_id"
+    },
+    "prot_disc": {
+      "DB Field": "Protocol"
+    },
+    "msg_type": {
+      "DB Field": "Message",
+      "Field Name": "Event [LTE] Message"
+    },
+    "Raw Packet": {
+      "DB Field": "Raw Packet"
+    },
+    "__KPI_type": "LTE Info",
+    "__collection": "Event",
+    "__cell": "LTE",
+    "Packet_Type": ["entry['Packet_Type'] = entry.pop('msg_subtitle')"]
+  },
+  "0xB16E": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Report": [
+      {
+        "Cell Index": {
+          "index": 0,
+          "DB Field": "Cell Index"
+        },
+        "Tx Type": {
+          "index": 4,
+          "DB Field": "TX Mode"
+        },
+        "Transport Block Size (bytes)": {
+          "index": 6,
+          "DB Field": "TB Size(Bytes)"
+        },
+        "Num RBs": {
+          "index": 5,
+          "DB Field": "Num RBs"
+        },
+        "PUSCH Actual Tx Power": {
+          "index": 12,
+          "DB Field": "Actual Tx Power (dBm)"
+        }
+      }
+    ],
+    "__Raw_Data": true,
+    "__KPI_type": "LTE Info",
+    "__collection": "LTE",
+    "__cell":
+      ["if int(entry['Cell Index']) == 0:",
+      "    entry['__cell'] = 'PCC'",
+      "elif int(entry['Cell Index']) >= 1:",
+      "    entry['__cell'] = 'SCC(' + str(entry['Cell Index']) + ')'",
+      "entry.pop('Cell Index')                                      "],
+    "Packet_Type": "PUSCH"
+  },
+  "0xB139": {
+    "Subscription ID": {
+      "DB Field": "Subs ID",
+      "Field Name": "LTE [PCC] Subs ID"
+    },
+    "Serving Cell ID": {
+      "DB Field": "PCI",
+      "Field Name": "LTE [PCC] PCI"
+    }
+
   }
+
+
 }
