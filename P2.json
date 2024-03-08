@@ -341,7 +341,7 @@
     "__Raw_Data": true,
     "__KPI_type": "LTE Info",
     "__collection": "LTE",
-    "__cell": "PCC",
+    "__cell": "PCell",
     "Packet_Type": "PUCCH"
   },
   "0xB0E3": {
