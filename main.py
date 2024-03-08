@@ -8,6 +8,13 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB192_processor import Packet_0xB192
+from packet_0xB186_processor import Packet_0xB186
+from packet_0xB181_processor import Packet_0xB181
+from packet_0xB17E_processor import Packet_0xB17E
+from packet_0xB179_processor import Packet_0xB179
+from packet_0xB176_processor import Packet_0xB176
+from packet_0xB173_processor import Packet_0xB173
 from packet_0xB88A_processor import Packet_0xB88A
 from packet_0xB828_processor import Packet_0xB828
 from packet_0xB970_processor import Packet_0xB970
@@ -1352,6 +1359,27 @@ class ParsedRawMessage:
             elif packet_name == '0xB889':
                 print('0xB889')
                 return Packet_0xB889(packet_text, config2['0xB889 -- NR5G'], entry).extract_info()
+            elif packet_name == '0xB173':
+                print('0xB173')
+                return Packet_0xB173(packet_text, config2['0xB173'], entry).extract_info()
+            elif packet_name == '0xB176':
+                print('0xB176')
+                return Packet_0xB176.extract_info(packet_text, config2['0xB176'], entry)
+            elif packet_name == '0xB179':
+                print('0xB179')
+                return Packet_0xB179.extract_info(packet_text, config2['0xB179'], entry)
+            elif packet_name == '0xB17E':
+                print('0xB17E')
+                return Packet_0xB17E.extract_info(packet_text, config2['0xB17E'], entry)
+            elif packet_name == '0xB181':
+                print('0xB181')
+                return Packet_0xB181.extract_info(packet_text, config2['0xB181'], entry)
+            elif packet_name == '0xB186':
+                print('0xB186')
+                return Packet_0xB186.extract_info(packet_text, config2['0xB186'], entry)
+            elif packet_name == '0xB192':
+                print('0xB192')
+                return Packet_0xB192(packet_text, config2['0xB192'], entry).extract_info()
         # start here
 
         # remove empty (only whitespace) lines
@@ -1493,6 +1521,301 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+        msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
+                               name="LTE ML1 Neighbor Cell Meas Request/Response",
+                               subtitle="", datetime="2024 Jan 15  07:17:28.048", packet_text=
+                               """2024 Jan 15  07:17:28.048  [C6]  0xB192  LTE ML1 Neighbor Cell Meas Request/Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 26
+Idle Mode Neighbor Cell Measurement Request
+   Version = 2
+   SubPacket Size = 28 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Num Rx Ant = 2
+   Dupexing Mode = FDD
+   Neighbor Cells
+      ------------------------------------------------
+      |   |    |              |Enabled |      |      |
+      |   |Cell|              |Tx      |TTL   |FTL   |
+      |#  |ID  |CP Type       |Antennas|Enable|Enable|
+      ------------------------------------------------
+      |  0| 459|        Normal|       2| false| false|
+
+SubPacket ID = 27
+Neighbor Cell Meas Result
+   Version = 56
+   SubPacket Size = 64 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Duplexing Mode = FDD
+   Serving Cell Index = PCell
+   Neighbor Cells
+      ------------------------------------------------------------------------------------------------------------
+      |   |        |           |        |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
+      |   |        |FTL        |        |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
+      |   |Physical|Cumulative |        |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
+      |#  |Cell ID |Freq Offset|Bad CER |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+      ------------------------------------------------------------------------------------------------------------
+      |  0|     459|          0|   FALSE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -66.06|
+      |  0|     459|          0|    TRUE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -76.06|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
+                               name="LTE ML1 Neighbor Cell Meas Request/Response",
+                               subtitle="", datetime="2024 Jan 15  07:17:28.048", packet_text=
+                               """2024 Jan 15  07:17:28.048  [C6]  0xB192  LTE ML1 Neighbor Cell Meas Request/Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 26
+Idle Mode Neighbor Cell Measurement Request
+   Version = 2
+   SubPacket Size = 28 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Num Rx Ant = 2
+   Dupexing Mode = FDD
+   Neighbor Cells
+      ------------------------------------------------
+      |   |    |              |Enabled |      |      |
+      |   |Cell|              |Tx      |TTL   |FTL   |
+      |#  |ID  |CP Type       |Antennas|Enable|Enable|
+      ------------------------------------------------
+      |  0| 459|        Normal|       2| false| false|
+
+SubPacket ID = 27
+Neighbor Cell Meas Result
+   Version = 56
+   SubPacket Size = 64 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Duplexing Mode = FDD
+   Serving Cell Index = PCell
+   Neighbor Cells
+      ------------------------------------------------------------------------------------------------------------
+      |   |        |           |        |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
+      |   |        |FTL        |        |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
+      |   |Physical|Cumulative |        |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
+      |#  |Cell ID |Freq Offset|Bad CER |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+      ------------------------------------------------------------------------------------------------------------
+      |  0|     459|          0|   FALSE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -66.06|
+      |  0|     459|          0|    TRUE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -76.06|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB186", packet_length=100,
+                               name="LTE ML1 Reselection Candidates",
+                               subtitle="", datetime="2024 Jan 15  07:17:24.246", packet_text=
+                               """2024 Jan 15  07:17:24.246  [64]  0xB186  LTE ML1 Reselection Candidates
+Subscription ID = 1
+Version = 41
+Serving E-ARFCN = 5780
+Serving Cell ID = 147
+Num Reselection Candidates = 2
+Candidates[0]
+   Candidate Priority = 3.0
+   RAT Type = EUTRAN
+   LTE Candidate
+      E-ARFCN = 700
+      Cell ID = 147
+Candidates[1]
+   Candidate Priority = 3.0
+   RAT Type = EUTRAN
+   LTE Candidate
+      E-ARFCN = 66986
+      Cell ID = 147
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB181", packet_length=100,
+                               name="LTE ML1 Intra Frequency Cell Reselection",
+                               subtitle="", datetime="2024 Jan 15  07:15:49.491", packet_text=
+                               """2024 Jan 15  07:15:49.491  [E3]  0xB181  LTE ML1 Intra Frequency Cell Reselection
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 3
+SubPacket ID = 10
+Idle Mode Reselection Measurements Common
+   Version = 56
+   SubPacket Size = 12 bytes
+   Serving Cell E-ARFCN = 66986
+   Serving Cell Physical Cell ID = 147
+   Current UE Mobility State = Normal Mobility
+   Priority Categories Evaluated = NONE
+SubPacket ID = 5
+Idle Meas Serving Frequency Resel Info
+   Version = 25
+   SubPacket Size = 16 bytes
+   Standards Version = Release 9
+   Serving Cell Priority = 3
+   S Non-Intra Search = 4
+   Thresh Serving Low = 4
+   S Non Intra Search Q = 0 dB
+   Thres Serving Low Q = 0 dB
+SubPacket ID = 11
+Idle Mode Reselection Measurements LTE Frequency
+   Version = 58
+   SubPacket Size = 88 bytes
+   Instance = 0
+   Number of Layers = 5
+   Treselection = 0 s
+   Layer[0]
+      E-ARFCN = 66986
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 1
+      Thresh X High = 0
+      Thresh X Low = 4
+      Priority = 3
+      Neighbor Cells
+         -----------------------------------------------------------------------------------------------------
+         |   |        |      |RSSI   |      |RSRP   |RSRP   |RSRQ   |RSRQ   |            |        |          |
+         |   |Physical|Srxlev|Inst   |Q     |Average|Inst   |Average|Inst   |            |Rank    |Rank      |
+         |#  |ID      |(dB)  |(dBm)  |Offset|(dBm)  |(dBm)  |(dBm)  |(dBm)  |TReSelection|Interger|Fractional|
+         -----------------------------------------------------------------------------------------------------
+         |  0|     147|    37| -58.00|  0 dB| -88.75| -88.75| -13.25| -13.75|       65535|      79|     0.258|
+
+   Layer[1]
+      E-ARFCN = 9820
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 8
+      Thresh X Low = 0
+      Priority = 4
+   Layer[2]
+      E-ARFCN = 700
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 0
+      Thresh X Low = 0
+      Priority = 3
+   Layer[3]
+      E-ARFCN = 5780
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 0
+      Thresh X Low = 0
+      Priority = 2
+   Layer[4]
+      E-ARFCN = 5330
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 10
+      Thresh X Low = 62
+      Priority = 0
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB17E", packet_length=100,
+                               name="LTE ML1 UE Mobility State change",
+                               subtitle="", datetime="2024 Jan 15  07:16:06.698", packet_text=
+                               """2024 Jan 15  07:16:06.698  [53]  0xB17E  LTE ML1 UE Mobility State change 
+Subscription ID = 1
+Version = 56
+Version 56 {
+   E-ARFCN = 5780
+   Physical Cell ID = 147
+   Previous UE Mobility State = Normal Mobility
+   Current UE Mobility State = Normal Mobility
+   Camp Time = 978611309 ms
+   Current Time = 978612085 ms
+   High State End Time = Invalid
+   Medium State End Time = Invalid
+   t_cr_max = 30s
+   t_cr_max_hyst = 30s
+   n_cr_medium = 6
+   n_cr_high = 11
+   Number Of Cell Switches = 0
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB179", packet_length=100,
+                               name="LTE ML1 Connected Mode LTE Intra-Freq Meas Results",
+                               subtitle="", datetime="2024 Jan 15  07:16:06.024", packet_text=
+                               """2024 Jan 15  07:16:06.024  [0C]  0xB179  LTE ML1 Connected Mode LTE Intra-Freq Meas Results
+Subscription ID = 1
+Version = 56
+Serving Cell Index = PCell
+FW Serving Cell Index = PCell
+E-ARFCN = 5780
+Serving Physical Cell ID = 147
+Sub-frame Number = 908
+Serving Filtered RSRP = -76.56 dBm
+Serving Filtered RSRQ = -12.19 dB
+Number of Neighbor Cells = 1
+Number of Detected Cells = 0
+Neighbor Cells
+   --------------------------------
+   |   |        |Filtered|Filtered|
+   |   |Physical|RSRP    |RSRQ    |
+   |#  |Cell ID |(dBm)   |(dB)    |
+   --------------------------------
+   |  0|      53|  -84.81|  -18.75|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB176", packet_length=100,
+                               name="LTE Initial Acquisition Results",
+                               subtitle="", datetime="2024 Jan 15  07:16:05.831", packet_text=
+                               """2024 Jan 15  07:16:05.831  [47]  0xB176  LTE Initial Acquisition Results
+Subscription ID = 1
+Version = 32
+E-ARFCN = 5780
+Band = 17
+Duplex Mode = FDD
+Result = Success
+Min Search Half Frames = 1
+Min Search Half Frames Early Abort = 1
+Max Search Half Frames = 4
+Max PBCH Frames = 20
+Number of Blocked Cells = 0
+Number PBCH Decode Attemp Cells = 1
+Number of Search Results = 3
+Search Results
+   ----------------------------------------------------------------------
+   |   |       |      |        |        |Frequency|PSS        |         |
+   |   |Frame  |Sample|Physical|        |Offset   |Correlation|SSS Power|
+   |#  |Offset |Offset|Cell ID |CP      |(Hz)     |Result     |Value    |
+   ----------------------------------------------------------------------
+   |  0|Unknown|168914|     147|  Normal|      293|          0| 0.000806|
+   |  1|Unknown| 15330|      53|  Normal|      293|          0| 0.000092|
+   |  2|Unknown|168914|     295|  Normal|      293|          0| 0.000044|
+
+PBCH Decode Attempt Cells
+   ----------------------------------------------------------------------------
+   |   |       |      |          |Updated  |        |Number  |       |        |
+   |   |       |      |          |Frequency|        |of      |       |Number  |
+   |   |Frame  |Sample|MIB       |Offset   |Physical|Decode  |Decode |of Tx   |
+   |#  |Offset |Offset|Payload   |(Hz)     |Cell ID |Attempts|Result |Antennas|
+   ----------------------------------------------------------------------------
+   |  0|Unknown|168914|0x6044E000|        0|     147|       1|Success|       4|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB173", packet_length=100,
+                               name="LTE PDSCH Stat Indication",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.731", packet_text=
+                               """2024 Jan 15  07:15:35.731  [84]  0xB173  LTE PDSCH Stat Indication
+Subscription ID = 1
+Version = 48
+Num Records = 3
+Records
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |        |     |   |      |Num      |       |Transport Blocks                                                                                                                |    |    |     |       |
+   |   |        |     |   |      |Transport|Serving|    |  |   |      |         |     |Discarded|                                   |           |       |   |   |          |        |    |    |Alt  |       |
+   |   |Subframe|Frame|Num|Num   |Blocks   |Cell   |HARQ|  |   |CRC   |         |TB   |reTx     |                                   |Did        |TB Size|   |Num|Modulation|ACK/NACK|PMCH|Area|TBS  |Alt MCS|
+   |#  |Num     |Num  |RBs|Layers|Present  |Index  |ID  |RV|NDI|Result|RNTI Type|Index|Present  |Discarded ReTx                     |Recombining|(bytes)|MCS|RBs|Type      |Decision|ID  |ID  |Index|Enabled|
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|       0|  105|  3|     1|        1|  PCELL|   1| 0|  0|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  false|
+   |  1|       7|  113|  3|     1|        1|  PCELL|   4| 0|  1|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  false|
+   |  2|       5|  120|  3|     1|        1|  PCELL|   6| 0|  1|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  fals
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB970", packet_length=100,
                                name="NR5G ML1 Searcher Idle S Criteria",
                                subtitle="", datetime="2024 Jan 15  07:18:07.523 ", packet_text=
@@ -1733,7 +2056,7 @@ Records
    |#  |Slot|Numerology|Frame|Status|ID     |Id  |Opcode|ID  |Bandwidth|Type|Id     |Cell ID |EARFCN  |Index|TB Size |MU |MCS|Rbs|RV|Id   |RNTI Type     |ID  |TCI|Layers|Index    |State   |Status|Flag|NDI|Mode   |Decode|HARQ  |ReTx|Timeout|Timeout|Timeout|Timeout|Recomb|Valid|Mod Type|Mode |Num RX  |Mapping 0 |Mapping 1 |Mapping 2 |Mapping 3 |
    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
    |  0|   0|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   10|        C RNTI|   5|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
-   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|        C RNTI|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
+   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|       C RNTI2|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
 """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x156A", packet_length=100,
