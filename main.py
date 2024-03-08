@@ -66,6 +66,8 @@ from packet_0x1D4D_processor import Packet_0x1D4D
 from packet_0xB16F_processor import Packet_0xB16F
 from packet_0xB0E3_processor import Packet_0xB0E3
 from packet_0xB16E_processor import Packet_0xB16E
+from packet_0xB139_processor import Packet_0xB139
+from packet_0xB060_processor import Packet_0xB060
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1408,6 +1410,16 @@ class ParsedRawMessage:
             elif packet_name == '0xB809':
                 print('0xB809')
                 return Packet_0xB809.extract_info(packet_text, config2['0xB809'], entry)
+            elif packet_name == '0xB16E':
+                print('0xB16E')
+                return Packet_0xB16E(packet_text, config2['0xB16E'], entry).extract_info()
+            elif packet_name == '0xB139':
+                print('0xB139')
+                return Packet_0xB139(packet_text, config2['0xB139'], entry).extract_info()
+            elif packet_name == '0xB060':
+                print('0xB060')
+                return Packet_0xB060(packet_text, config2['0xB060'], entry).extract_info()
+
 
         # start here
 
@@ -4102,69 +4114,150 @@ lte_esm_msg
     ext_prot_config_incl = 0 (0x0)
                        """)
         messages.append(msg)
-#         msg = ParsedRawMessage(index=0, packet_type="0xB16E", packet_length=100,
-#                                name="LTE PUSCH Power Control",
-#                                subtitle="", datetime="2024 Jan 19  21:46:06.212", packet_text=
-#                                """
-# 2024 Jan 19  21:46:06.212  [10]  0xB16E  LTE PUSCH Power Control
-# Subscription ID = 1
-# Version = 48
-# cell_alpha PCC = 1
-# cell_alpha ul_id 1 = 0
-# cell_alpha ul_id 2 = 0
-# cell_alpha ul_id 3 = 0
-# Number of Records = 16
-# Report
-#    ------------------------------------------------------------------------------------------------
-#    |     |    |      |      |               |   |Transport|    |    |      |   |PUSCH|PUSCH |     |
-#    |     |    |      |      |               |   |Block    |DL  |    |      |   |Tx   |Actual|     |
-#    |Cell |    |      |DCI   |               |Num|Size     |Path|    |TPC   |   |Power|Tx    |Max  |
-#    |Index|SFN |Sub-fn|Format|Tx Type        |RBs|(bytes)  |Loss|F(i)|Frozen|TPC|(dBm)|Power |Power|
-#    ------------------------------------------------------------------------------------------------
-#    |    0| 676|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 685|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 694|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 703|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 712|     5|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 721|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 730|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 735|     5|     0|        Dynamic|  4|       18| 105|   5|     0|  0|   18|    18|   25|
-#    |    0| 739|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 748|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 757|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
-#    |    0| 765|     5|     0|        Dynamic|  4|      193| 106|   5|     0|  0|   19|    19|   24|
-#    |    0| 774|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-#    |    0| 783|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-#    |    0| 792|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-#    |    0| 802|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
-#                        """)
-#         messages.append(msg)
-#         msg = ParsedRawMessage(index=0, packet_type="0xB139", packet_length=100,
-#                                name="LTE LL1 PUSCH Tx Report",
-#                                subtitle="", datetime="2024 Jan 19  21:46:04.057", packet_text=
-#                                """
-# 2024 Jan 19  21:46:04.057  [8F]  0xB139  LTE LL1 PUSCH Tx Report
-# Subscription ID = 1
-# Version = 162
-# Serving Cell ID = 147
-# Number of Records = 1
-# Dispatch SFN SF = 5865
-# Records
-#    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Cyclic   |Cyclic   |    |    |
-#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Shift of |Shift of |    |    |
-#    |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                 |                                                |               |DMRS     |DMRS     |DMRS|DMRS|
-#    |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                 |                                                |               |Symbols  |Symbols  |Root|Root|
-#    |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                 |                                                |               |Slot 0   |Slot 1   |Slot|Slot|
-#    |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|DROP_PUSCH_REASON|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
-#    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#    |   5862|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   17|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999989296|        7|        0|  28|  28|
-#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
-#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
-#    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
-#
-#                        """)
-#         messages.append(msg)
+
+        msg = ParsedRawMessage(index=0, packet_type="0xB16E", packet_length=100,
+                               name="LTE PUSCH Power Control",
+                               subtitle="", datetime="2024 Jan 19  21:46:06.212", packet_text=
+                               """
+2024 Jan 19  21:46:06.212  [10]  0xB16E  LTE PUSCH Power Control
+Subscription ID = 1
+Version = 48
+cell_alpha PCC = 1
+cell_alpha ul_id 1 = 0
+cell_alpha ul_id 2 = 0
+cell_alpha ul_id 3 = 0
+Number of Records = 16
+Report
+   ------------------------------------------------------------------------------------------------
+   |     |    |      |      |               |   |Transport|    |    |      |   |PUSCH|PUSCH |     |
+   |     |    |      |      |               |   |Block    |DL  |    |      |   |Tx   |Actual|     |
+   |Cell |    |      |DCI   |               |Num|Size     |Path|    |TPC   |   |Power|Tx    |Max  |
+   |Index|SFN |Sub-fn|Format|Tx Type        |RBs|(bytes)  |Loss|F(i)|Frozen|TPC|(dBm)|Power |Power|
+   ------------------------------------------------------------------------------------------------
+   |    0| 676|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 685|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 694|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 703|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 712|     5|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 721|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 730|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 735|     5|     0|        Dynamic|  4|       18| 105|   5|     0|  0|   18|    18|   25|
+   |    0| 739|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 748|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 757|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 765|     5|     0|        Dynamic|  4|      193| 106|   5|     0|  0|   19|    19|   24|
+   |    0| 774|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+   |    0| 783|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+   |    0| 792|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+   |    0| 802|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB139", packet_length=100,
+                               name="LTE LL1 PUSCH Tx Report",
+                               subtitle="", datetime="2024 Jan 19  21:46:04.057", packet_text=
+                               """
+2024 Jan 19  21:46:04.057  [8F]  0xB139  LTE LL1 PUSCH Tx Report
+Subscription ID = 1
+Version = 162
+Serving Cell ID = 147
+Number of Records = 1
+Dispatch SFN SF = 5865
+Records
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Cyclic   |Cyclic   |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Shift of |Shift of |    |    |
+   |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                 |                                                |               |DMRS     |DMRS     |DMRS|DMRS|
+   |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                 |                                                |               |Symbols  |Symbols  |Root|Root|
+   |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                 |                                                |               |Slot 0   |Slot 1   |Slot|Slot|
+   |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|DROP_PUSCH_REASON|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   5862|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   17|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999989296|        7|        0|  28|  28|
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
+
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB060", packet_length=100,
+                               name="LTE MAC Configuration",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.591", packet_text=
+                               """
+2024 Jan 15  07:14:07.591  [0C]  0xB060  LTE MAC Configuration
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 5
+SubPacket ID = 1
+SubPacket - ( DL Config SubPacket )
+   Version = 2
+   SubPacket Size = 12 bytes
+   DL Config V2
+      Sub Id = 1
+      Num Active Stag = 1
+      Scell Tag Info
+         ------------------------------
+         |   |    |Scell|Ta     |TA   |
+         |   |STAG|Id   |Timer  |Timer|
+         |#  |Id  |Mask |Present|(ms) |
+         ------------------------------
+         |  0| 255|  255|    255|10240|
+
+SubPacket ID = 2
+SubPacket - ( UL Config Subpacket )
+   Version = 2
+   SubPacket Size = 16 bytes
+   UL Config V2
+      Sub Id = 1
+      SR resource present = Yes (1)
+      SR periodicity = 10 ms
+      BSR timer = Infinity
+      SPS Number of Tx release = 0
+      Retx BSR timer = 320 ms
+SubPacket ID = 14
+SubPacket - (All Rach Config SubPacket) {
+   Version = 2
+   Subpacket Size = 712 bytes
+   Sub Id = 0
+   Valid Cell Cfg Mask = 00000000b
+   New Cell Cfg Mask = 00000000b
+   Cell Rach Info
+      -------------------------------------------------------------------------------------------------------------------------------------
+      |   |     |        |       |      |      |        |          |       |          |        |      |      |     |      |     |    |RA  |
+      |   |     |Preamble|Power  |      |      |        |          |       |          |        |      |      |     |      |     |    |rsp |
+      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |Delta   |      |CS    |Root |PRACH |High |Max |win |
+      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
+      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
+      -------------------------------------------------------------------------------------------------------------------------------------
+      |  0|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+
+}
+SubPacket ID = 4
+SubPacket - ( LC Config Subpacket )
+   Version = 2
+   SubPacket Size = 328 bytes
+   Version 2 {
+      Sub Id = 1
+      Number of deleted LC = 0
+      Number of added/modified LC = 1
+      ---------------------------------------------------
+      |     |          |          |          |Token     |
+      |     |          |          |          |bucket    |
+      |     |PBR       |          |          |size      |
+      |LC ID|(KBytes/s)|Priority  |LC group  |(bytes)   |
+      ---------------------------------------------------
+      |    1|     65535|         1|         0|         0|
+
+   }
+SubPacket ID = 18
+
+                       """)
+        messages.append(msg)
         #     msg = ParsedRawMessage(index = 0, packet_type = "0x1FE7", packet_length=100, name="QTrace Event", subtitle="QEVENT 84 - 2", datetime="", packet_text=
         #     """2023 Nov 17  01:59:04.733  [BC]  0x1FE7  QTrace Event  --  QEVENT 84 - 2
         # nr5g_mac_rach.c     9254     D     Sub-ID:1     Misc-ID:0     QEvent 0x41100854 | NR5GMAC_QSH_EVENT_RACH_MSG2 | RAID_MATCH, ca: 0 | MTPL exceeded: 1 | RAR PRUNE bmsk: 0

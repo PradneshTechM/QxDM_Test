@@ -70,7 +70,7 @@ def simple_map_entry(data, config):
             mapped_data[new_key] = mapped_value  # Assign the processed value to the new key
 
     # After the loop, add additional keys to ensure they appear at the end
-    for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency', 'Packet_Type']:
+    for additional_key in ['__Raw_Data','__KPI_type','__collection','__cell', 'Packet_Type','__frequency']:
         if additional_key in config:
             # Inside simple_map_entry, when processing __cell:
             if additional_key in ['__cell', 'Packet_Type'] and isinstance(config[additional_key], list):
@@ -133,7 +133,7 @@ def table_config(data, config_table, config):
                     if row_value:  # Add to dict_1 only if row_value is not empty
                         dict_1[db_field] = row_value
             if dict_1:  # Check if dict_1 is not empty before printing or adding to carrier_ids
-                for additional_key in ['Raw_Data','__KPI_type','__cell', '__collection', '__frequency', 'Packet_Type']:
+                for additional_key in ['__Raw_Data','__KPI_type','__collection','__cell', 'Packet_Type','__frequency']:
                     if additional_key in config:
                         # Inside simple_map_entry, when processing __cell:
                         if additional_key in ['__cell','Packet_Type'] and isinstance(config[additional_key], list):
