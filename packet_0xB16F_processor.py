@@ -1,17 +1,16 @@
 import re
 from parser.kpi_utils import table_config, map_entry
 
-# from utils import map_entry, metadata
-#from json_comments import cell_PCC
-class Packet_0xB889:
+class Packet_0xB16F:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text
         self.config = config
         self.entry = entry
         self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?'
-        self.pattern2 = r".*?\|Start\|Index.*?\|.*?-+.*?\n(?P<table>[\s\S]*)"
+        self.pattern2 = r".*?\|\(dBm\)\|Power.*?\|.*?-+.*?\n(?P<table>[\s\S]*)"
         self.dict = {}
         self.result = []
+
     def extract_info(self):
         self.dict.update(self.entry)
         non_table_capture = self.regular_pattern()
@@ -38,7 +37,7 @@ class Packet_0xB889:
     def table_pattern(self):
         match = re.search(self.pattern2, self.packet_text, re.DOTALL)
         if match:
-            data = table_config(match, self.config['RACH Trigger'], self.config)
+            data = table_config(match, self.config['Report'], self.config)
             return data
         else:
             print("No data rows found.")

@@ -1,6 +1,6 @@
 import re
 from decimal import Decimal
-# from kpi_utils import map_entry
+# from parser.kpi_utils import map_entry
 
 
 class Packet_0xB8D8:

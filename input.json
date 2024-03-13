@@ -648,79 +648,57 @@
           "index": 9,
           "DB Field": "DL Bandwidth",
           "Field Name": "NR5G [PCC] DL Bandwidth"
-        }
-      },
-      {
+        },
         "PDSCH Status Info Physical cell ID": {
           "index": 12,
           "DB Field": "PCI",
           "Field Name": "NR5G [PCC] PCI"
-        }
-      },
-      {
+        },
         "PDSCH Status Info EARFCN": {
           "index": 13,
           "DB Field": "DL EARFCN",
           "Field Name": "NR5G [PCC] DL EARFCN"
-        }
-      },
-      {
+        },
         "PDSCH Status Info TB Size": {
           "index": 15,
           "DB Field": "TB Size(Bytes)",
           "Field Name": "NR5G [PCC] TB Size(Bytes)"
-        }
       },
-      {
         "PDSCH Status Info MCS": {
           "index": 17,
           "DB Field": "DL MCS",
           "Field Name": "NR5G [PCC] DL MCS"
-        }
-      },
-      {
+        },
         "PDSCH Status Info Num Rbs": {
           "index": 18,
           "DB Field": "Num RBs",
           "Field Name": "NR5G [PCC] Num RBs"
-        }
-      },
-      {
+        },
         "PDSCH Status Info HARQ Or MBSFN Area Id": {
           "index": 20,
           "DB Field": "HARQ ID",
           "Field Name": "NR5G [PCC] HARQ ID"
-        }
-      },
-      {
+        },
         "PDSCH Status Info RNTI Type": {
           "index": 21,
           "DB Field": "RNTI Type",
           "Field Name": "NR5G [PCC] RNTI Type"
-        }
       },
-      {
         "PDSCH Status Info Mod Type": {
           "index": 40,
           "DB Field": "Modulation",
           "Field Name": "NR5G [PCC] Modulation"
-        }
       },
-      {
         "PDSCH Status Info Num RX": {
           "index": 42,
           "DB Field": "Num RX",
           "Field Name": "NR5G [PCC] Num RX"
-        }
       },
-      {
         "PDSCH Status Info NDI": {
           "index": 29,
           "DB Field": "NDI",
           "Field Name": "NR5G [PCC] NDI"
-        }
       },
-      {
         "PDSCH Status Info Num Layers": {
           "index": 24,
           "DB Field": "Num Layers",
@@ -1485,6 +1463,47 @@
     ],
           "__collection": "LTE",
       "__cell": "LTE",
+      "__Raw_Data": true,
+      "__KPI_type": "LTE Info"
+  },
+  "0xB196 -- PCell/SCelln": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Num Cells": {
+      "DB Field": "Num Cells"
+    },
+    "Cell Measurement List": [
+      {
+        "E-ARFCN": {
+          "index": 1,
+          "DB Field": "E-ARFCN"
+
+        },
+        "Physical Cell ID": {
+          "index": 2,
+          "DB Field": "Physical Cell ID"
+
+        },
+        "Valid Rx": {
+          "index": 3,
+          "DB Field": "Valid Rx"
+
+        },
+        "Inst RSRP Rx[0] (dBm)": {
+          "index": 4,
+          "DB Field": "Inst RSRP Rx[0] (dBm)"
+
+        },
+        "Inst RSRQ Rx[0] (dBm)": {
+          "index": 6,
+          "DB Field": "Inst RSRQ Rx[0] (dBm)"
+
+        }
+      }
+    ],
+      "__collection": "LTE",
+      "__cell": "PCell/SCelln",
       "__Raw_Data": true,
       "__KPI_type": "LTE Info"
   },

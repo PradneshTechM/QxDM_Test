@@ -18,9 +18,9 @@ class Packet_0xB827:
             self.dict.update(non_table_capture)
         if table_capture:
             for row in table_capture:
-                for key, value in row.items():
-                    self.dict[key] = value
-                self.result.append(self.dict)
+                row_dict = self.dict.copy()
+                row_dict.update(row)
+                self.result.append(row_dict)
         return self.result  # Return the updated dictionary
 
     def regular_pattern(self):
