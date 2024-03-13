@@ -2,6 +2,9 @@ import sys
 import os
 from pymongo import MongoClient, GEO2D
 from pymongo.errors import BulkWriteError
+import math
+from datetime import datetime, timezone
+from utils import unaware_datetime_to_utc
 
 class DB:
   _DB_NAME = os.environ.get("DB_NAME") if os.environ.get("DB_NAME") else "qxdm_dev"
@@ -38,7 +41,7 @@ class DB:
   def get_default_client():
     return DB._DB_CLIENT
 
-  def insert_logs(logs: list, log_session, custom_collection):
+  def insert_logs(logs: list[dict], log_session, custom_collection):
     if custom_collection != 'default':
       logs_collection = log_session.db_instance[custom_collection]
     elif log_session.collection:
@@ -46,26 +49,24 @@ class DB:
     else:
       logs_collection = log_session.db_instance[DB._DB_TABLE]
       
+    now_utc = unaware_datetime_to_utc(datetime.now())
     
-    def deserialize(log): 
+    def deserialize(log: dict): 
       metadata = {}
       metadata["UID"] = log_session.serial
       
       # metadata["_logID"] = log_session.log_id
-      if log_session.test_case_id:
-        # test_case_id is split as such "tcid_execid_itid" (testcase id then execution id then iteration id)
-        split = log_session.test_case_id.split("_$#$_")
-        # metadata["_testCaseID"] = split[0]
-        if len(split) > 0:
-          metadata["Execution ID"] = split[0]
-        # else:
-        #   metadata["_executionID"] = None
-        if len(split) > 1:
-          metadata["Iteration ID"] = split[1]
-        # else:
-        #   metadata["_iterationID"] = None
+      
+      # if log_session.test_case_id:
+        # metadata["_testCaseID"] = log_session.test_case_id
+      if log_session.execution_id:
+        metadata["Execution ID"] = log_session.execution_id
+      if log_session.iteration_id:
+        metadata["Iteration ID"] = log_session.iteration_id
           
-          
+      metadata["CreatedTime"] = now_utc
+      metadata["LastModifiedTime"] = now_utc
+      
       # metadata["_device"] = {
       #   "serial": log_session.serial,
       #   "manufacturer": log_session.device["manufacturer"] if log_session.device and "manufacturer" in log_session.device else "",
@@ -84,9 +85,9 @@ class DB:
       # metadata["_filePath"] = os.path.basename(log_session.raw_logs[0])
       if log_session.device:
         if "location" in log_session.device: 
-          if "longitude"in  log_session.device["location"]:
+          if "longitude" in log_session.device["location"] and log_session.device["location"]["longitude"] != 0:
             metadata["Longitude"] = log_session.device["location"]["longitude"]
-          if "latitude"in  log_session.device["location"]:
+          if "latitude" in log_session.device["location"] and log_session.device["location"]["latitude"] != 0:
             metadata["Latitude"] = log_session.device["location"]["latitude"]
         # metadata["_server"] = {
         #   "url": log_session.app_url,
@@ -99,6 +100,23 @@ class DB:
       #     "name": log_session.user["name"] if log_session.user["name"] else "",
       #     "email": log_session.user["email"] if log_session.user["email"] else ""
       #   }
+           
+      # clear empty/NaN fields
+      for field in log.copy():
+        if (
+          field is None 
+          or field == "" 
+          or (isinstance(field, float) and math.isnan(field))
+        ):
+          del log[field] 
+          
+      # clear not needed fields
+      for field in log.copy():
+        if (
+          field == "__KPI_type" 
+        ):
+          del log[field]
+          
       return { **metadata, **log }
     
     deserialized_logs = list(map(deserialize, logs))

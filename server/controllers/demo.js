@@ -67,14 +67,17 @@ demoRouter.post('/diag', (request, response) => {
   if(request.body.mask) {
     data.mask = request.body.mask
   }
-  if(request.body.packets) {
-    data.packets = request.body.packets
-  }
   if(request.body.config) {
     data.config = request.body.config
   }
   if(request.body.testCaseID) {
     data.testCaseID = request.body.testCaseID
+  }
+  if(request.body.executionID) {
+    data.executionID = request.body.executionID
+  }
+  if(request.body.iterationID) {
+    data.iterationID = request.body.iterationID
   }
   if(request.body.db) {
     data.db = request.body.db

@@ -88,13 +88,17 @@ def QUTS_diag_connect(sid, data):
       else:
         mask_file = None
         
-      if 'packets' in data and data['packets'] is not None:
-        packets = data['packets']
-        logging.info(f'Using packet type list ({len(packets)} packets)')
-      else:
-        packets = None
+      # if 'packets' in data and data['packets'] is not None:
+      #   packets = data['packets']
+      #   logging.info(f'Using packet type list ({len(packets)} packets)')
+      # else:
+      #   packets = None
         
-      diag_service = quts.diag_connect(serial, packets, mask_file)
+      session = LogSession(id, serial, user=user, app_url=app_url, device=device)
+      sessions[id] = session
+      session.parse_config_json()
+      diag_service = quts.diag_connect(serial, session)
+      session.service = diag_service
 
       if diag_service:
         logging.info(f'Connected {serial} diag')
@@ -102,36 +106,42 @@ def QUTS_diag_connect(sid, data):
         raise Exception(f'Could not connect {serial} diag')
       sys.stdout.flush()
       
-      sessions[id] = LogSession(id, serial, service=diag_service, user=user, app_url=app_url, device=device)
-      if(packets):
-        sessions[id].packets = packets
-      
       if 'mask' in data and data['mask'] is not None:
         mask_file = data['mask']
-        sessions[id].mask_file = mask_file
+        session.mask_file = mask_file
       if 'config' in data and data['config'] is not None:
         config_file = data['config']
         logging.info(f'Using config file {config_file}')
         sys.stdout.flush()
-        sessions[id].config_file = config_file
+        session.config_file = config_file
         
       if 'testCaseID' in data and data['testCaseID'] is not None:
         test_case_id = data['testCaseID']
         logging.info(f'Test case: {test_case_id}')
         sys.stdout.flush()
-        sessions[id].test_case_id = test_case_id
+        session.test_case_id = test_case_id
+      if 'executionID' in data and data['executionID'] is not None:
+        execution_id = data['executionID']
+        logging.info(f'Execution ID: {execution_id}')
+        sys.stdout.flush()
+        session.execution_id = execution_id
+      if 'iterationID' in data and data['iterationID'] is not None:
+        iteration_id = data['iterationID']
+        logging.info(f'Iteration ID: {iteration_id}')
+        sys.stdout.flush()
+        session.iteration_id = iteration_id
         
       if 'db' in data and data['db'] is not None:
         logging.info(f'Using database: {data["db"]}')
         sys.stdout.flush()
-        sessions[id].db = data['db']
+        session.db = data['db']
         
       if 'collection' in data and data['collection'] is not None:
         logging.info(f'Using collection: {data["collection"]}')
         sys.stdout.flush()
-        sessions[id].collection = data["collection"]
+        session.collection = data["collection"]
         
-      sessions[id].init_db_connection()
+      session.init_db_connection()
       
       return {
         'data': {

@@ -15,10 +15,13 @@ import pythoncom
 import threading
 import yaml
 import parser.main as parser
-from functools import reduce
+from datetime import datetime
+from utils import unaware_datetime_to_utc
 
 import message
 from message import ParsedRawMessage
+from parser.main import ParsedRawMessage as Message
+from session import LogSession
 from db import DB
 
 _AUTOMATION_DELETE_LOGS_AFTER_PARSING = bool(os.environ.get("AUTOMATION_DELETE_LOGS_AFTER_PARSING", 'True').lower() in ('true', '1', 't'))
@@ -29,10 +32,12 @@ class HiddenPrints:
     def __enter__(self):
         self._original_stdout = sys.stdout
         sys.stdout = open(os.devnull, 'w')
+        pass
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         sys.stdout.close()
         sys.stdout = self._original_stdout
+        pass
 
 class QCAT:
     def __init__(self):
@@ -160,8 +165,9 @@ class QCATWorker(threading.Thread):
     packet_config = None
     packet_config_json = {}
     packet_frequency = {}
+    packet_types = []
     
-    def __init__(self, qcat, log_id, log_session, log_file, json_filepath):
+    def __init__(self, qcat, log_id, log_session: LogSession, log_file, json_filepath):
         threading.Thread.__init__(self)
         super().__init__()
         
@@ -171,15 +177,10 @@ class QCATWorker(threading.Thread):
             self.log_file = log_file
             self.json_filepath = json_filepath
             self.log_session = log_session
-            print("test_case_id")
-            print(self.log_session.test_case_id)
             self.config_file = self.log_session.config_file
-            self.packet_types = []
-            # if self.config_file:
-            #     self.packet_config = {}
-            #     self.parse_config()
-            self.parse_config_json()
-            # print(json.dumps(self.packet_config_json, indent=2))
+            self.packet_types = self.log_session.packet_types
+            self.packet_config_json = self.log_session.packet_config_json
+            self.packet_frequency = self.log_session.packet_frequency
             sys.stdout.flush()
             
             self.marshalled_qcat = pythoncom.CoMarshalInterThreadInterfaceInStream(pythoncom.IID_IDispatch, self.qcat)
@@ -226,40 +227,6 @@ class QCATWorker(threading.Thread):
             traceback.print_exc()
             sys.stderr.flush()
             sys.stdout.flush()
-            
-    def parse_config_json(self):
-        try:
-            with open("./parser/input.json", 'r') as f:
-                unparsed_config = json.load(f)
-                for key, value in unparsed_config.items():
-                    splited_key = key.split("--")
-                    packet_type = splited_key[0].strip()
-                    packet_name = None
-                    if len(splited_key) > 1: packet_name = splited_key[1].strip()
-                    packet_subtitle = None
-                    if len(splited_key) > 2: packet_subtitle = splited_key[2].strip()
-                    val = {
-                        "packet_type": packet_type
-                        # "fields": value
-                    }
-                    if packet_subtitle:
-                        val["packet_subtitle"] = packet_subtitle
-                    if packet_name:
-                        val["packet_name"] = packet_name
-                    if '__frequency' in value:
-                        self.packet_frequency[packet_type] = value['__frequency']
-                        val['packet_frequency'] = value['__frequency']
-                    self.packet_config_json[packet_type] = val
-                    self.packet_types.append(val["packet_type"])
-        except:
-            traceback.print_exc()
-            sys.stderr.flush()
-            sys.stdout.flush()
-            
-        print(self.packet_config_json)
-        print(self.packet_types)
-        print(self.packet_frequency)
-        sys.stdout.flush()
             
     
     def run(self) -> None:
@@ -310,9 +277,6 @@ class QCATWorker(threading.Thread):
             return False
         
     def checkPacketAllowedbyJsonConf(self, packet_type, now):
-        # print(packet_type)
-        # print(self.nextPacketAllowedat)
-        # sys.stdout.flush()
         result = False
         if packet_type not in self.packet_config_json:
             result = False
@@ -350,9 +314,9 @@ class QCATWorker(threading.Thread):
         packet_filter = self.qcat_worker.PacketFilter
         
         # assign packet filter before parsing
-        if self.log_session.packets is not None:
+        if self.log_session.packet_types is not None:
             packet_filter.SetAll(False) 
-            for packet in self.log_session.packets:
+            for packet in self.log_session.packet_types:
                 packet_type_as_int = int(packet, 16)
                 packet_filter.Set(packet_type_as_int, True) 
             packet_filter.Commit()
@@ -407,25 +371,10 @@ class QCATWorker(threading.Thread):
             sys.stdout.flush()
             if ((not self.packet_config_json) or (packet_type_hex in self.packet_config_json)):
                 now = datetime.strptime(datetimestring, '%Y %b %d  %H:%M:%S.%f')
-                # if self.checkPacketAllowedbyConf(packet_type_raw,now):
                 if self.checkPacketAllowedbyJsonConf(packet_type_hex, now):
-                    # print(True)
-                    # print(packet_type_hex)
-                    # print(packet_length)
-                    # print(name)
-                    # print(subtitle)
-                    # print(datetimestring)
-                    # print(text)
-                    raw_msg = parser.ParsedRawMessage(index, packet_type_hex, packet_length, name, packet_type_all, subtitle, datetimestring, text)
-                    # raw_msg = ParsedRawMessage(index, packet_type, packet_length, name, subtitle, datetimestring, text)
-                    # if self.packet_config:
-                    #     raw_msg.self_packet_config = self.packet_config[packet_type_raw]
-                    # else:
-                    #     raw_msg.self_packet_config = None
+                    raw_msg = parser.ParsedRawMessage(index, packet_type_hex, packet_length, name, packet_type_all, subtitle, datetimestring, text, now)
                     
                     raw_messages.append(raw_msg)
-                    # print(f' raw_messages {len(raw_messages)}')
-                    # sys.stdout.flush()
 
                     index += 1
                     total_count += 1
@@ -436,8 +385,6 @@ class QCATWorker(threading.Thread):
                         raw_messages = []
                     
                 else:
-                    # print(False)
-                    
                     pass
                             
             else:
@@ -461,10 +408,9 @@ class QCATWorker(threading.Thread):
         print('QCAT json log parsing started')
         def messages_listener(data):
             try:
-                messages = data["messages"]
+                messages: list[Message] = data["messages"]
                 chunk_num = data["chunk_num"]
                 log_id = data["log_id"]
-                # chunk_file = f'{self.json_filepath}.{chunk_num}'
                 
                 # parse to json
                 json_arr = {'default':[]}
@@ -483,15 +429,15 @@ class QCATWorker(threading.Thread):
                             continue
                             
                         count += 1
-                        # print(payload)
-                        # print(metadata)
-                        # sys.stdout.flush()
+                        
+                        timestamp: datetime = payload["Time"]
+                        # timestamp directly from QCAT is already in UTC
+                        # timestamp_as_utc = unaware_datetime_to_utc(timestamp)
+                        payload["Time"] = timestamp
                         
                         collection_name = 'default'
                         if "__collection" in payload:
                             collection_name = payload["__collection"]
-                            # print(collection_name)
-                            # sys.stdout.flush()
                             if collection_name not in json_arr:
                                 json_arr[collection_name] = []
                             del payload["__collection"]
@@ -501,42 +447,7 @@ class QCATWorker(threading.Thread):
                             **payload
                         })
                         
-                        # # seperate possible table rows into separate entries\
-                        # try:                   
-                        #     if  raw_msg.self_packet_config:
-                        #         if "rawDataTag" in raw_msg.self_packet_config:
-                        #             if not raw_msg.self_packet_config["rawDataTag"]:
-                        #                 del metadata["_rawPayload"]
-                        #         if "custom_dbcollection" in raw_msg.self_packet_config:
-                        #             collection_name = raw_msg.self_packet_config["custom_dbcollection"]
-                        #             sys.stdout.flush()
-                        #             if collection_name not in json_arr:
-                        #                 json_arr[collection_name]=[]
-                        # except:
-                        #     pass
-                            
-                        # if "TABLE" in payload and isinstance(payload["TABLE"], list):
-                        #     for item in payload["TABLE"]:
-
-                        #         json_arr[collection_name].append({
-                        #             **metadata,
-                        #             **item
-                        #         })
-                        # else:
-                        #     json_arr[collection_name].append({
-                        #         **metadata,
-                        #         **payload
-                        #     })
-                        
-                # stop writing chunks to json file since we're proactively inserting to db
-                # with open(chunk_file, 'w') as f:
-                #     json.dump(json_arr, f, indent = 2) 
-                    
-               
-
                 if json_arr:
-                    # print(json_arr)
-                    # all_coll_len = reduce(lambda coll1, coll2: len(coll1) + len(coll2), list(json_arr.values()))
                     print(f'Inserting chunk {chunk_num} for log {log_id} with {count} packets to db...')
                     sys.stdout.flush()
                     for collection_name in json_arr:
@@ -555,12 +466,12 @@ class QCATWorker(threading.Thread):
         pub.unsubscribe(messages_listener, self.log_id)
         
         # print(f'Successfuly parsed a total of {total_count} packets for log {self.log_id}!')
-        sys.stdout.flush()
-        sys.stderr.flush()
+        # sys.stdout.flush()
+        # sys.stderr.flush()
         
         if _AUTOMATION_DELETE_LOGS_AFTER_PARSING:
             if os.path.exists(self.log_file):
-                # os.remove(self.log_file)
+                os.remove(self.log_file)
                 print(f'deleted log {self.log_id} from disk at {self.log_file}')
             sys.stdout.flush()
             sys.stderr.flush()
