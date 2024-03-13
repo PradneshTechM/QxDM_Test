@@ -88,15 +88,15 @@ def QUTS_diag_connect(sid, data):
       else:
         mask_file = None
         
-      # if 'packets' in data and data['packets'] is not None:
-      #   packets = data['packets']
-      #   logging.info(f'Using packet type list ({len(packets)} packets)')
-      # else:
-      #   packets = None
+      if 'packets' in data and data['packets'] is not None:
+        packet_filter = data['packets']
+        logging.info(f'Using packet type list ({len(packet_filter)} packets)')
+      else:
+        packet_filter = None
         
       session = LogSession(id, serial, user=user, app_url=app_url, device=device)
       sessions[id] = session
-      session.parse_config_json()
+      session.parse_config_json(packet_filter)
       diag_service = quts.diag_connect(serial, session)
       session.service = diag_service
 

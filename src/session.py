@@ -41,13 +41,16 @@ class LogSession(Session):
   packet_config_json: dict = {}
   packet_frequency: dict = {}
   
-  def parse_config_json(self):
+  def parse_config_json(self, packet_filter: list[str] | None):
     try:
         with open("./parser/input.json", 'r') as f:
             unparsed_config = json.load(f)
             for key, value in unparsed_config.items():
                 splited_key = key.split("--")
                 packet_type = splited_key[0].strip()
+                if(packet_filter is not None and packet_type not in packet_filter):
+                  continue
+                
                 packet_name = None
                 if len(splited_key) > 1: packet_name = splited_key[1].strip()
                 packet_subtitle = None
@@ -69,6 +72,11 @@ class LogSession(Session):
         traceback.print_exc()
         sys.stderr.flush()
         sys.stdout.flush()
+        
+    print(self.packet_config_json)
+    print(self.packet_types)
+    sys.stdout.flush()
+    
   
   def init_db_connection(self):
     self.db_client = DB.get_default_client()
