@@ -20,7 +20,7 @@
     "__cell": "LTE",
     "Packet_Type": "EMM"
 },
-"0xB14D": {
+"0xB14D  LTE LL1 PUCCH CSF": {
     "Subscription ID": {
         "DB Field": "Subs ID"
     },
@@ -49,25 +49,7 @@
         "    entry['__cell'] = 'SCC(' + str(entry['Scell Index']) + ')'"
     ]
 },
-       "0x1832": {
-        "Subscription ID": {
-            "DB Field": "Subs ID",
-            "Field Name": "Event [IMS] Subs ID"
-        },
-        "Registration Type": {
-            "DB Field": "Message",
-            "Field Name": "Event [IMS] Message"
-        },
-        "Result": {
-            "DB Field": "Response",
-            "Field Name": "Event [IMS] Response"
-        },
-        "__Raw_Data": true,
-        "__collection": "Event",
-        "__cell": "IMS",
-        "Packet_Type": "IMS_SIP_REGISTER/INFORMAL_RESPONSE"
-    },
-   "0xB132": {
+   "0xB132  LTE LL1 PDSCH Decoding Results": {
         "Subscription ID": {
             "DB Field": "Subs ID",
             "Field Name": "LTE [PCC] Subs ID"
@@ -140,7 +122,7 @@
         "Packet_Type": "PDSCH",
         "__frequency": "Per Second"
     },
-     "0xB130": {
+     "0xB130  LTE LL1 PDCCH Decoding Result": {
         "Subscription ID": {
             "DB Field": "Subs ID"
         },
@@ -177,7 +159,7 @@
         "Packet_Type": "PDCCH"
     },
 
-    "0xB126": {
+    "0xB126  LTE LL1 PDSCH Demapper Configuration": {
         "Subscription ID": {
             "DB Field": "Subs ID"
         },
@@ -217,7 +199,7 @@
         "__cell": "PCC",
         "Packet_Type": "PDSCH"
     },
-    "0xB16B": {
+    "0xB16B  LTE PDCCH-PHICH Indication Report": {
         "Subscription ID": {
             "DB Field": "Subs ID"
         },
@@ -253,7 +235,7 @@
         "__cell": "PCC",
         "Packet_Type": "PDCCH-PHICH"
     },
-      "0xB063": {
+      "0xB063  LTE MAC DL Transport Block": {
         "Subscription ID": {
             "DB Field": "Subs ID"
         },

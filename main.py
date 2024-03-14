@@ -1448,22 +1448,22 @@ class ParsedRawMessage:
                 return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE  LTE NAS EMM State'], entry)
             elif packet_name == '0xB14D':
                 print('0xB14D')
-                return Packet_0xB14D.extract_info(packet_text, config3['0xB14D'], entry)
+                return Packet_0xB14D.extract_info(packet_text, config3['0xB14D  LTE LL1 PUCCH CSF'], entry)
             elif packet_name == '0xB132':
                 print('0xB132')
-                return Packet_0xB132(packet_text, config3['0xB132'], entry).extract_info()
+                return Packet_0xB132(packet_text, config3['0xB132  LTE LL1 PDSCH Decoding Results'], entry).extract_info()
             elif packet_name == '0xB130':
                 print('0xB130')
-                return Packet_0xB130(packet_text, config3['0xB130'], entry).extract_info()
+                return Packet_0xB130(packet_text, config3['0xB130  LTE LL1 PDCCH Decoding Result'], entry).extract_info()
             elif packet_name == '0xB126':
                 print('0xB126')
-                return Packet_0xB126(packet_text, config3['0xB126'], entry).extract_info()
+                return Packet_0xB126(packet_text, config3['0xB126  LTE LL1 PDSCH Demapper Configuration'], entry).extract_info()
             elif packet_name == '0xB16B':
                 print('0xB16B')
-                return Packet_0xB16B(packet_text, config3['0xB16B'], entry).extract_info()
+                return Packet_0xB16B(packet_text, config3['0xB16B  LTE PDCCH-PHICH Indication Report'], entry).extract_info()
             elif packet_name == '0xB063':
                 print('0xB063')
-                return Packet_0xB063(packet_text, config3['0xB063'], entry).extract_info()
+                return Packet_0xB063(packet_text, config3['0xB063  LTE MAC DL Transport Block'], entry).extract_info()
             elif packet_name == '0xB0A5':
                 print('0xB0A5')
                 return Packet_0xB0A5(packet_text, config3['0xB0A5'], entry).extract_info()
