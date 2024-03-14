@@ -36,8 +36,8 @@ class Packet_0xB0C0:
                     mapped_entry.pop("msg_subtitle", None)
                 if config['__Raw_Data']:
                     mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
-                if config['__KPI_type']:
-                    mapped_entry["__KPI_type"] = config.get('__KPI_type')
+                # if config['__KPI_type']:
+                #     mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
                 return mapped_entry
 

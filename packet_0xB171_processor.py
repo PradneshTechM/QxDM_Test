@@ -32,8 +32,8 @@ class Packet_0xB171:
                         row_dict['__cell'] = f'SCC{row_dict["Cell index"]}'
                 if self.config['Packet_Type']:
                     row_dict["Packet_Type"] = self.config.get('Packet_Type')
-                if self.config['__KPI_type']:
-                    row_dict["__KPI_type"] = self.config.get('__KPI_type')
+                # if self.config['__KPI_type']:
+                #     row_dict["__KPI_type"] = self.config.get('__KPI_type')
                 self.result.append(row_dict)
         return self.result
 

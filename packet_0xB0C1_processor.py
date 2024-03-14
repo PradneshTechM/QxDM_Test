@@ -30,8 +30,8 @@ class Packet_0xB0C1:
                 mapped_entry["Packet_Type"] = config.get('Packet_Type')
             if config['__Raw_Data']:
                 mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
-            if config['__KPI_type']:
-                mapped_entry["__KPI_type"] = config.get('__KPI_type')
+            # if config['__KPI_type']:
+            #     mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             return mapped_entry
 

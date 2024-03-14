@@ -271,7 +271,7 @@
         ],
         "Packet_Type": "MAC DL"
     },
-  "0xB0A5": {
+  "0xB0A5  LTE PDCP DL SRB Integrity Data PDU": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -311,7 +311,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB0A1": {
+  "0xB0A1  LTE PDCP DL Data PDU": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -348,7 +348,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB06E": {
+  "0xB06E  LTE MAC DL RAR Transport Block": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -397,7 +397,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB062": {
+  "0xB062  LTE MAC Rach Attempt": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -467,7 +467,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB1DA": {
+  "0xB1DA  LTE ML1 Antenna Switch Diversity": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -519,7 +519,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB081": {
+  "0xB081  LTE RLC DL Config Log packet": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -562,7 +562,7 @@
     "__cell": "LTE",
     "Packet_Type": "RLC DL Config"
   },
-  "0xB13C": {
+  "0xB13C  LTE LL1 PUCCH Tx Report": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -618,7 +618,7 @@
     "__cell": "LTE",
     "Packet_Type": "PUCCH"
   },
-  "0xB16C": {
+  "0xB16C  LTE DCI Information Report": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -667,7 +667,7 @@
     "__collection": "LTE",
     "__cell": "LTE"
   },
-  "0xB064": {
+  "0xB064  LTE MAC UL Transport Block": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -715,7 +715,7 @@
     "__cell": "LTE",
     "Packet_Type": "UL"
   },
-  "0xB0EF": {
+  "0xB0EF  LTE NAS EMM USIM card mode": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -726,7 +726,7 @@
     "__collection": "Event",
     "__cell": "SIM"
   },
-  "0xB0B5": {
+  "0xB0B5  LTE PDCP UL SRB Integrity Data PDU": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -756,7 +756,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB0B4": {
+  "0xB0B4  LTE PDCP UL Statistics Pkt": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -784,7 +784,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB0B1": {
+  "0xB0B1  LTE PDCP UL Data PDU": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -823,7 +823,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-      "0x1568": {
+      "0x1568  IMS RTP SN and Payload": {
         "Subscription ID": {
             "DB Field": "Subs ID"
         },
@@ -855,7 +855,7 @@
         "__collection": "Event",
         "__cell": "IMS"
     },
-      "0xB061": {
+      "0xB061  LTE MAC Rach Trigger": {
         "Subscription ID": {
             "DB Field": "Subs ID"
         },

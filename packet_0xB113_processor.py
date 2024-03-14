@@ -25,8 +25,8 @@ class Packet_0xB113:
                     row_dict['__collection'] = self.config.get('__collection')
                 if self.config['__cell']:
                     row_dict["__cell"] = self.config.get('__cell')
-                if self.config['__KPI_type']:
-                    row_dict["__KPI_type"] = self.config.get('__KPI_type')
+                # if self.config['__KPI_type']:
+                #     row_dict["__KPI_type"] = self.config.get('__KPI_type')
                 self.result.append(row_dict)
         return self.result
 
