@@ -1379,10 +1379,10 @@ class ParsedRawMessage:
                 return Packet_0xB88A.extract_info(packet_text, config2['0xB88A'], entry)
             elif packet_name == '0xB828':
                 print('0xB828')
-                return Packet_0xB828(packet_text, config2['0xB828'], entry).extract_info()
+                return Packet_0xB828(packet_text, config2['0xB828  NR5G RRC PLMN Search Response'], entry).extract_info()
             elif packet_name == '0xB970':
                 print('0xB970')
-                return Packet_0xB970.extract_info(packet_text, config2['0xB970'], entry)
+                return Packet_0xB970.extract_info(packet_text, config2['0xB970  NR5G ML1 Searcher Idle S Criteria'], entry)
             elif packet_name == '0xB883':
                 print('0xB883')
                 return Packet_0xB883(packet_text, config2['0xB883 -- PCC -- PUSCH'], entry).extract_info()
@@ -1394,25 +1394,25 @@ class ParsedRawMessage:
                 return Packet_0xB889(packet_text, config2['0xB889 -- NR5G'], entry).extract_info()
             elif packet_name == '0xB173':
                 print('0xB173')
-                return Packet_0xB173(packet_text, config2['0xB173'], entry).extract_info()
+                return Packet_0xB173(packet_text, config2['0xB173 LTE PDSCH Stat Indication'], entry).extract_info()
             elif packet_name == '0xB176':
                 print('0xB176')
-                return Packet_0xB176.extract_info(packet_text, config2['0xB176'], entry)
+                return Packet_0xB176.extract_info(packet_text, config2['0xB176  LTE Initial Acquisition Results'], entry)
             elif packet_name == '0xB179':
                 print('0xB179')
-                return Packet_0xB179.extract_info(packet_text, config2['0xB179'], entry)
+                return Packet_0xB179.extract_info(packet_text, config2['0xB179  LTE ML1 Connected Mode LTE Intra-Freq Meas Results'], entry)
             elif packet_name == '0xB17E':
                 print('0xB17E')
-                return Packet_0xB17E.extract_info(packet_text, config2['0xB17E'], entry)
+                return Packet_0xB17E.extract_info(packet_text, config2['0xB17E  LTE ML1 UE Mobility State change'], entry)
             elif packet_name == '0xB181':
                 print('0xB181')
-                return Packet_0xB181.extract_info(packet_text, config2['0xB181'], entry)
+                return Packet_0xB181.extract_info(packet_text, config2['0xB181  LTE ML1 Intra Frequency Cell Reselection'], entry)
             elif packet_name == '0xB186':
                 print('0xB186')
-                return Packet_0xB186.extract_info(packet_text, config2['0xB186'], entry)
+                return Packet_0xB186.extract_info(packet_text, config2['0xB186  LTE ML1 Reselection Candidates'], entry)
             elif packet_name == '0xB192':
                 print('0xB192')
-                return Packet_0xB192(packet_text, config2['0xB192'], entry).extract_info()
+                return Packet_0xB192(packet_text, config2['0xB192  LTE ML1 Neighbor Cell Meas Request/Response'], entry).extract_info()
             elif packet_name == '0x17F2':
                 print('0x17F2')
                 return Packet_0x17F2.extract_info(packet_text, config2['0x17F2'], entry)
@@ -1427,7 +1427,7 @@ class ParsedRawMessage:
                 return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3'], entry)
             elif packet_name == '0xB0E2':
                 print('0xB0E2')
-                return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2'], entry)
+                return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2  LTE NAS ESM Plain OTA Incoming Message'], entry)
             elif packet_name == '0xB808':
                 print('0xB808')
                 return Packet_0xB808.extract_info(packet_text, config2['0xB808'], entry)
@@ -1445,7 +1445,7 @@ class ParsedRawMessage:
                 return Packet_0xB060(packet_text, config2['0xB060'], entry).extract_info()
             elif packet_name == '0xB0EE':
                 print('0xB0EE')
-                return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE'], entry)
+                return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE  LTE NAS EMM State'], entry)
             elif packet_name == '0xB14D':
                 print('0xB14D')
                 return Packet_0xB14D.extract_info(packet_text, config3['0xB14D'], entry)

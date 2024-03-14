@@ -297,8 +297,7 @@
         "entry['__cell'] = f'SCell{entry['Cell index']}'"
     ],
     "Packet_Type": "PRACH",
-    "__Raw_Data": false,
-    "__KPI_type": "LTE Info"
+    "__Raw_Data": false
   },
   "0xB167": {
     "Subscription ID": {
@@ -407,8 +406,7 @@
         "entry['__cell'] = 'PCC'",
       "elif int(entry['Cell index']) >= 1:",
         "entry['__cell'] = f'SCC{entry['Cell index']}'"
-    ],
-    "__KPI_type": "LTE Info"
+    ]
   },
   "0xB16A": {
     "Subscription ID": {
@@ -595,8 +593,7 @@
       "elif int(entry['CC Id']) >= 1:",
         "entry['__cell'] = f'SCC{entry['CC Id']}'"
     ],
-    "__Raw_Data": false,
-    "__KPI_type": "NR Info"
+    "__Raw_Data": false
   },
   "0xB8A7 -- PCC": {
     "Subscription ID": {
@@ -638,7 +635,7 @@
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
     },
-    "Records": [
+    "PDSCH Status Info": [
       {
         "Carrier Id": {
           "index": 5,
@@ -834,8 +831,7 @@
     ],
     "__collection": "Event",
     "__cell": "NR5G",
-    "__Raw_Data": true,
-    "__KPI_type": "NR Info"
+    "__Raw_Data": true
   },
   "0xB823 -- NR5G": {
     "Subscription ID": {
@@ -884,8 +880,7 @@
       "DB Field": "Freq Band Indicator"
     },
     "__collection": "Event",
-    "__cell": "NR5G",
-    "__KPI_type": "NR Info"
+    "__cell": "NR5G"
   },
   "0xB822  -- NR5G": {
     "Subscription ID": {
@@ -917,8 +912,7 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "__Raw_Data": true,
-    "__KPI_type": "NR Info"
+    "__Raw_Data": true
   },
   "0xB821 -- NR5G -- Packet Subtitle": {
     "Subscription ID": {
@@ -949,8 +943,7 @@
     "__frequency": "Per Second",
     "__cell": "NR5G",
     "Packet_Type": ["entry['msg_subtitle']"],
-    "__Raw_Data": true,
-    "__KPI_type": "NR Info"
+    "__Raw_Data": true
   },
   "0xB80B -- NR5G -- Packet Subtitle": {
     "Subscription ID": {
@@ -1074,8 +1067,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "Packet_Type": "Cell Info",
-    "__KPI_type": "LTE Info"
+    "Packet_Type": "Cell Info"
   },
   "0xB0E4 -- LTE -- NAS": {
     "Subscription ID": {
@@ -1093,8 +1085,7 @@
     "__collection": "Event",
     "__cell": "LTE",
     "Packet_Type": "NAS",
-    "__Raw_Data": true,
-    "__KPI_type": "LTE Info"
+    "__Raw_Data": true
   },
   "0xB0EC -- LTE -- msg_type": {
     "Subscription ID": {
@@ -1115,8 +1106,7 @@
     "__collection": "Event",
     "__cell": "LTE",
     "Packet_Type": "msg_type",
-    "__Raw_Data": true,
-    "__KPI_type": "LTE Info"
+    "__Raw_Data": true
   },
   "0xB0ED -- LTE -- msg_type": {
     "lte_emm_msg.emm_attach_request.ms_netwk_cap.SRVCC to GERAN/UTRAN capability": {

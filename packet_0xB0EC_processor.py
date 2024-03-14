@@ -36,7 +36,6 @@ class Packet_0xB0EC:
                 mapped_entry["Packet_Type"] = entry["msg_subtitle"]
                 mapped_entry.pop("msg_subtitle", None)
             mapped_entry["__Raw_Data"] = config.get("__Raw_Data")
-            mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             # print(entry)
             # print(dict)

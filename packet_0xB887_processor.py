@@ -65,7 +65,7 @@ class Packet_0xB887:
             for row in rows:  # Iterate over each row
                 dict_1 = {}
                 row_values = row.split('|')  # Split the current row by the '|' character to get individual values
-                config_values = self.config['Records']
+                config_values = self.config['PDSCH Status Info']
                 for entry in config_values[0].items():  # Access the first (and only) item in the list, then iterate over its items
                     key, value = entry
                     db_field = value['DB Field']
