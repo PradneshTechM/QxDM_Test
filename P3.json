@@ -1,0 +1,674 @@
+{
+  "0xB0A5": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Subpacket ID": {
+      "DB Field": "Subpacket ID"
+    },
+    "Subpacket Size": {
+      "DB Field": "Subpacket Size"
+    },
+    "Ciphering keys for SRBs (hex)": {
+      "DB Field": "Ciphering keys for SRBs"
+    },
+    "Integrity Keys for SRBs (hex)": {
+      "DB Field": "Integrity Keys for SRBs"
+    },
+    "DL SRB Integrity Data PDU Subpacket": [
+      {
+        "cfg idx": {
+          "index": 0,
+          "DB Field": "cfg idx"
+        },
+        "mode": {
+          "index": 1,
+          "DB Field": "mode"
+        },
+        "sn length": {
+          "index": 2,
+          "DB Field": "sn length"
+        },
+        "bearer id": {
+          "index": 3,
+          "DB Field": "bearer id"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+  "0xB0A1": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Number Of Meta": {
+      "DB Field": "Number Of Meta"
+    },
+    "Number Of RB": {
+      "DB Field": "Number Of RB"
+    },
+    "Log Count": {
+      "DB Field": "Log Count"
+    },
+    "PDCP State": [
+      {
+        "RB Cfg Index": {
+          "index": 1,
+          "DB Field": "RB Cfg Index"
+        },
+        "PDCP SN Length": {
+          "index": 2,
+          "DB Field": "PDCP SN Length"
+        },
+        "RX Deliv": {
+          "index": 3,
+          "DB Field": "RX Deliv"
+        },
+        "Rx Next": {
+          "index": 4,
+          "DB Field": "Rx Next"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+  "0xB06E": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Number of SubPackets": {
+      "DB Field": "Number of SubPackets"
+    },
+    "SubPacket ID": {
+      "DB Field": "SubPacket ID"
+    },
+    "SubPacket": {
+      "DB Field": "SubPacket"
+    },
+    "__table": [
+      {
+        "Cell Id": {
+          "index": 1,
+          "DB Field": "Cell Id"
+        },
+        "RNTI Type": {
+          "index": 4,
+          "DB Field": "RNTI Type"
+        },
+        "HARQ Id": {
+          "index": 5,
+          "DB Field": "HARQ Id"
+        },
+        "T-C-RNTI": {
+          "index": 19,
+          "DB Field": "T-C-RNTI"
+        },
+        "UL Delay": {
+          "index": 17,
+          "DB Field": "UL Delay"
+        },
+        "TBS Index": {
+          "index": 15,
+          "DB Field": "TBS Index"
+        },
+        "Coding Scheme": {
+          "index": 14,
+          "DB Field": "Coding Scheme"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+  "0xB062": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Number of SubPackets": {
+      "DB Field": "Number of SubPackets"
+    },
+    "SubPacket ID": {
+      "DB Field": "SubPacket ID"
+    },
+    "SubPacket": {
+      "DB Field": "SubPacket"
+    },
+    "RACH Attempt V50.Sub Id": {
+      "DB Field": "Sub Id"
+    },
+    "RACH Attempt V50.CC Id": {
+      "DB Field": "CC Id"
+    },
+    "RACH Attempt V50.Retx counter": {
+      "DB Field": "Retx counter"
+    },
+    "RACH Attempt V50.Rach result": {
+      "DB Field": "Rach result"
+    },
+    "RACH Attempt V50.Contention procedure": {
+      "DB Field": "Contention procedure"
+    },
+    "Msg1 - RACH Access Preamble[0].Preamble Index": {
+      "DB Field": "Preamble Index"
+    },
+    "Msg1 - RACH Access Preamble[0].Preamble index mask": {
+      "DB Field": "Preamble index mask"
+    },
+    "Msg1 - RACH Access Preamble[0].Preamble power offset": {
+      "DB Field": "Preamble power offset"
+    },
+    "Msg1 - RACH Access Preamble[0].Pcmaxc": {
+      "DB Field": "Pcmaxc"
+    },
+    "Msg1 - RACH Access Preamble[0].Group Chosen": {
+      "DB Field": "Group Chosen"
+    },
+    "Msg2 - Random Access Response.Backoff Value": {
+      "DB Field": "Backoff Value"
+    },
+    "Msg2 - Random Access Response.Result": {
+      "DB Field": "Result"
+    },
+    "Msg2 - Random Access Response.TCRNTI": {
+      "DB Field": "TCRNTI"
+    },
+    "Msg2 - Random Access Response.TA value": {
+      "DB Field": "TA value"
+    },
+    "RACH Attempt V50.Earfcn": {
+      "DB Field": "Earfcn"
+    },
+    "RACH Attempt V50.P Max": {
+      "DB Field": "P Max"
+    },
+    "RACH Attempt V50.SCell ID": {
+      "DB Field": "SCell ID"
+    },
+    "RACH Attempt V50.Max Serv RSRP Present": {
+      "DB Field": "Max Serv RSRP Present"
+    },
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+  "0xB1DA": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Feature Enabled": {
+      "DB Field": "Feature Enabled"
+    },
+    "PRACH Switch Enabled": {
+      "DB Field": "PRACH Switch Enabled"
+    },
+    "Sub Id": {
+      "DB Field": "Sub Id"
+    },
+    "Phy Cell Id": {
+      "DB Field": "Phy Cell Id"
+    },
+    "Call State": {
+      "DB Field": "Call State"
+    },
+    "Switch Type": {
+      "DB Field": "Switch Type"
+    },
+    "EARFCN": {
+      "DB Field": "EARFCN"
+    },
+    "Gating Thresh": {
+      "DB Field": "Gating Thresh"
+    },
+    "__table": [
+      {
+        "Carrier Id": {
+          "index": 1,
+          "DB Field": "Carrier Id"
+        },
+        "Curr Delta (dBm)": {
+          "index": 2,
+          "DB Field": "Curr Delta (dBm)"
+        },
+        "Thresh Low (dBm)": {
+          "index": 4,
+          "DB Field": "Thresh Low (dBm)"
+        },
+        "Thresh High (dBm)": {
+          "index": 5,
+          "DB Field": "Thresh High (dBm)"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+  "0xB081": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Submit Reason": {
+      "DB Field": "Submit Reason"
+    },
+    "Config Mask": {
+      "DB Field": "Config Mask"
+    },
+    "RB Config": [
+      {
+        "RB Mode": {
+          "index": 1,
+          "DB Field": "RB Mode"
+        },
+        "RB Index": {
+          "index": 2,
+          "DB Field": "RB Index"
+        },
+        "RB Type": {
+          "index": 4,
+          "DB Field": "RB Type"
+        },
+        "PDCP RB Info.Config Action": {
+          "index": 5,
+          "DB Field": "Config Action"
+        },
+        "PDCP RB Info.RLC Path": {
+          "index": 6,
+          "DB Field": "RLC Path"
+        },
+        "PDCP RB Info.PDCP Path": {
+          "index": 7,
+          "DB Field": "PDC Path"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE",
+    "Packet_Type": "RLC DL Config"
+  },
+  "0xB13C": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Serving Cell ID": {
+      "DB Field": "Serving Cell ID"
+    },
+    "Records": [
+      {
+        "Current SFN SF": {
+          "index": 0,
+          "DB Field": "Current SFN SF"
+        },
+        "UL Carrier Index": {
+          "index": 1,
+          "DB Field": "UL Carrier Index"
+        },
+        "Format": {
+          "index": 4,
+          "DB Field": "Format"
+        },
+        "PUCCH Digital Gain (dB)": {
+          "index": 10,
+          "DB Field": "PUCCH Digital Gain (dB)"
+        },
+        "PUCCH Tx Power (dBm)": {
+          "index": 11,
+          "DB Field": "PUCCH Tx Power (dBm)"
+        },
+        "Num DL Carriers": {
+          "index": 12,
+          "DB Field": "Num DL Carriers"
+        },
+        "DL Carrier Index": {
+          "index": 13,
+          "DB Field": "DL Carrier Index"
+        },
+        "Num RB": {
+          "index": 14,
+          "DB Field": "Num RB"
+        },
+        "Drop Pucch": {
+          "index": 29,
+          "DB Field": "Drop Pucch"
+        },
+        "Tx Resampler": {
+          "index": 30,
+          "DB Field": "Tx Resampler"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "LTE",
+    "__cell": "LTE",
+    "Packet_Type": "PUCCH"
+  },
+  "0xB16C": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Duplex Mode": {
+      "DB Field": "Duplex Mode"
+    },
+    "Subframe Cfg": {
+      "DB Field": "Subframe Cfg"
+    },
+    "Number of Records": {
+      "DB Field": "Number of Records"
+    },
+    "DCI Info Records": [
+      {
+        "SFN": {
+          "index": 1,
+          "DB Field": "SFN"
+        },
+        "Sub-fn": {
+          "index": 2,
+          "DB Field": "Sub-fn"
+        },
+        "MCS Index": {
+          "index": 18,
+          "DB Field": "MCS Index"
+        },
+        "HARQ ID": {
+          "index": 12,
+          "DB Field": "HARQ ID"
+        },
+        "Rnti Type": {
+          "index": 14,
+          "DB Field": "Rnti Type"
+        },
+        "Modulation  Type": {
+          "index": 20,
+          "DB Field": "Modulation  Type"
+        },
+        "Number of Resource Blocks": {
+          "index": 26,
+          "DB Field": "Number of Resource Blocks"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "LTE",
+    "__cell": "LTE"
+  },
+  "0xB064": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "SubPacket ID": {
+      "DB Field": "SubPacket ID"
+    },
+    "Uplink Transport Block V3": [
+      {
+        "Sub Id": {
+          "index": 0,
+          "DB Field": "Sub Id"
+        },
+        "Cell Id": {
+          "index": 1,
+          "DB Field": "Cell Id"
+        },
+        "HARQ ID": {
+          "index": 2,
+          "DB Field": "HARQ ID"
+        },
+        "RNTI Type": {
+          "index": 3,
+          "DB Field": "RNTI Type"
+        },
+        "Sub-FN": {
+          "index": 4,
+          "DB Field": "Sub-FN"
+        },
+        "SFN": {
+          "index": 5,
+          "DB Field": "SFN"
+        },
+        "LC ID": {
+          "index": 13,
+          "DB Field": "LC ID"
+        },
+        "PHR Ind": {
+          "index": 20,
+          "DB Field": "PHR Ind"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "LTE",
+    "__cell": "LTE",
+    "Packet_Type": "UL"
+  },
+  "0xB0EF": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "IMSI": {
+      "DB Field": "IMSI"
+    },
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "SIM"
+  },
+  "0xB0B5": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "SRB Ciphering Keys": {
+      "DB Field": "SRB Ciphering Keys"
+    },
+    "SRB Integrity Keys": {
+      "DB Field": "SRB Integrity Keys"
+    },
+    "Entry": [
+      {
+        "Rb Info.Rb Mode": {
+          "index": 2,
+          "DB Field": "RB Mode"
+        },
+        "Rb Info.Bearer ID": {
+          "index": 4,
+          "DB Field": "Bearer ID"
+        },
+        "PDU Size": {
+          "index": 6,
+          "DB Field": "PDU Size"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+  "0xB0B4": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Per RB": [
+      {
+        "Bearer Type": {
+          "index": 1,
+          "DB Field": "Bearer Type"
+        },
+        "RB Type": {
+          "index": 3,
+          "DB Field": "RB Type"
+        },
+        "RB Mode": {
+          "index": 4,
+          "DB Field": "RB Mode"
+        },
+        "Pdcp Flow State": {
+          "index": 18,
+          "DB Field": "Pdcp Flow State"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+  "0xB0B1": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Num RB ID Configured": {
+      "DB Field": "Num RB ID Configured"
+    },
+    "PDUs": [
+      {
+        "RB Config Index": {
+          "index": 1,
+          "DB Field": "RB Config Index"
+        },
+        "System Time.System Frame Number ": {
+          "index": 3,
+          "DB Field": "System Frame Number "
+        },
+        "RLC SN": {
+          "index": 4,
+          "DB Field": "RLC SN"
+        },
+        "Start PDCP Count": {
+          "index": 6,
+          "DB Field": "Start PDCP Count"
+        },
+        "LSM.PDCP Count": {
+          "index": 9,
+          "DB Field": "PDCP Count"
+        },
+        "LSM.PDCP Payload": {
+          "index": 12,
+          "DB Field": "PDCP Payload"
+        }
+      }
+    ],
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE"
+  },
+      "0x1568": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "Direction": {
+            "DB Field": "Direction"
+        },
+        "Rat Type": {
+            "DB Field": "Rat Type"
+        },
+        "Ssrc": {
+            "DB Field": "Ssrc"
+        },
+        "Rtp Time stamp": {
+            "DB Field": "Rtp Time stamp"
+        },
+        "CodecType": {
+            "DB Field": "CodecType"
+        },
+        "mediaType": {
+            "DB Field": "mediaType"
+        },
+        "Logged Payload Size": {
+            "DB Field": "Logged Payload Size"
+        },
+        "PayLoad Size": {
+            "DB Field": "PayLoad Size"
+        },
+        "__Raw_Data": false,
+        "__collection": "Event",
+        "__cell": "IMS"
+    },
+      "0xB061": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "Number of SubPackets": {
+            "DB Field": "Number of SubPackets"
+        },
+        "SubPacket ID": {
+            "DB Field": "SubPacket ID"
+        },
+        "SubPacket": {
+            "DB Field": "SubPacket"
+        },
+        "RACH Config V9.Sub Id": {
+            "DB Field": "Sub Id"
+        },
+        "RACH Config V9.Num Active Cell": {
+            "DB Field": "Num Active Cell"
+        },
+        "RACH Config V9.Cell Rach Info[0].CC Id": {
+            "DB Field": "CC Id"
+        },
+        "RACH Config V9.Cell Rach Info[0].Preamble initial power": {
+            "DB Field": "Preamble initial power"
+        },
+        "RACH Config V9.Cell Rach Info[0].Power ramping step": {
+            "DB Field": "Power ramping step"
+        },
+        "RACH Config V9.Cell Rach Info[0].RA index1": {
+            "DB Field": "RA index1"
+        },
+        "RACH Config V9.Cell Rach Info[0].RA index2": {
+            "DB Field": "RA index2"
+        },
+        "RACH Config V9.Cell Rach Info[0].Preamble trans max": {
+            "DB Field": "Preamble trans max"
+        },
+        "RACH Config V9.Cell Rach Info[0].Contention resolution timer": {
+            "DB Field": "Contention resolution timer"
+        },
+        "RACH Config V9.Cell Rach Info[0].Message size Group_A": {
+            "DB Field": "Message size Group_A"
+        },
+        "RACH Config V9.Cell Rach Info[0].Power offset Group_B": {
+            "DB Field": "Power offset Group_B"
+        },
+        "RACH Config V9 -> Cell Rach Info[0] -> Delta preamble Msg3": {
+            "DB Field": "Delta preamble Msg3"
+        },
+        "RACH Config V9.Cell Rach Info[0].PRACH config": {
+            "DB Field": "PRACH config"
+        },
+        "RACH Config V9.Cell Rach Info[0].CS zone length": {
+            "DB Field": "CS zone length"
+        },
+        "RACH Config V9.Cell Rach Info[0].Root seq index": {
+            "DB Field": "Root seq index"
+        },
+        "RACH Config V9.Cell Rach Info[0].PRACH Freq Offset": {
+            "DB Field": "PRACH Freq Offset"
+        },
+        "RACH Config V9.Cell Rach Info[0].High speed flag": {
+            "DB Field": "High speed flag"
+        },
+        "RACH Config V9.Cell Rach Info[0].Max retx Msg3": {
+            "DB Field": "Max retx Msg3"
+        },
+        "RACH Config V9.Cell Rach Info[0].RA rsp win size": {
+            "DB Field": "RA rsp win size"
+        },
+        "RACH Reason V5.Rach reason": {
+            "DB Field": "Rach reason"
+        },
+        "RACH Reason V5.RACH Contention": {
+            "DB Field": "RACH Contention"
+        },
+        "RACH Reason V5.Msg3 size": {
+            "DB Field": "Msg3 size"
+        },
+        "RACH Reason V5.Radio condn": {
+            "DB Field": "Radio condn"
+        },
+        "RACH Reason V5.CRNTI": {
+            "DB Field": "CRNTI"
+        },
+        "__collection": "Event",
+        "__cell": "LTE"
+    }
+}

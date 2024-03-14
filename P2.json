@@ -18,7 +18,7 @@
     "UL BWP SCS": {
       "DB Field": "UL BWP SCS"
     },
-    "Raw_Data": true,
+    "__Raw_Data": true,
     "__collection": "Event",
     "__cell": "NR5G",
     "__KPI_type": "NR Info"
@@ -60,7 +60,7 @@
         }
       }
     ],
-    "Raw_Data": true,
+    "__Raw_Data": true,
     "__KPI_type": "NR Info",
     "__cell": "NR5G",
     "__collection": "Event"
@@ -120,7 +120,7 @@
     "Result": {
       "DB Field": "Result"
     },
-    "Raw_Data": false,
+    "__Raw_Data": false,
     "__collection": "Event",
     "__cell": "NR5G",
     "__KPI_type": "NR Info"
@@ -459,7 +459,7 @@
       }
     }
   ],
-  "Raw_Data": true,
+  "__Raw_Data": true,
   "__KPI_type": "NR Info",
   "__cell": ["entry['__cell'] = entry.pop('Serving Cell Index')"],
    "Packet_Type": "PDSCH",
@@ -502,7 +502,7 @@
   "Number of Search Results": {
     "DB Field": "Number of Search Results"
   },
-  "Raw_Data": true,
+  "__Raw_Data": true,
   "__collection": "Event",
   "__cell": "LTE",
   "__KPI_type": "LTE Info"
@@ -538,7 +538,7 @@
   "Number of Detected Cells": {
     "DB Field": "Number of Detected Cells"
   },
-  "Raw_Data": true,
+  "__Raw_Data": true,
   "__collection": "Event",
   "__cell": "LTE",
   "__KPI_type": "LTE Info"
@@ -562,7 +562,7 @@
   "Version 56.Camp Time": {
     "DB Field": "Camp Time"
   },
-  "Raw_Data": true,
+  "__Raw_Data": true,
   "__collection": "Event",
   "__cell": "LTE",
   "__KPI_type": "LTE Info"
@@ -592,7 +592,7 @@
   "Idle Mode Reselection Measurements Common.Priority Categories Evaluated": {
     "DB Field": "Priority Categories Evaluated"
   },
-  "Raw_Data": true,
+  "__Raw_Data": true,
   "__collection": "Event",
   "__cell": "LTE",
   "__KPI_type": "LTE Info"
@@ -634,7 +634,7 @@
   "Candidates[1].LTE Candidate.Cell ID": {
     "DB Field": "Candidates[1].LTE Candidate.Cell ID"
   },
-  "Raw_Data": true,
+  "__Raw_Data": true,
   "__collection": "Event",
   "__cell": "LTE",
   "__KPI_type": "LTE Info"
@@ -721,7 +721,7 @@
       }
     }
   ],
-   "Raw_Data": true,
+   "__Raw_Data": true,
   "__KPI_type": "LTE Info",
   "__cell": "SCells",
    "Packet_Type": "SCCx",
@@ -740,7 +740,7 @@
   "trans_id": {
     "DB Field": "trans_id"
   },
-  "Raw_Data": true,
+  "__Raw_Data": true,
   "__collection": "Event",
   "__cell": "LTE",
     "Packet_Type": "msg_type",
@@ -750,7 +750,7 @@
   "Subscription ID": {
     "DB Field": "Subs ID"
   },
-  "Raw_Data": false,
+  "__Raw_Data": false,
   "__collection": "Event",
   "__cell": "NR5G",
   "__KPI_type": "NR Info"
@@ -759,7 +759,7 @@
   "Subscription ID": {
     "DB Field": "Subs ID"
   },
-  "Raw_Data": false,
+  "__Raw_Data": false,
   "__collection": "Event",
   "__cell": "NR5G",
   "__KPI_type": "NR Info"
@@ -853,8 +853,8 @@
         }
       }
     ],
-    "Raw_Data": true,
-    "KPI_type": "LTE Info",
+    "__Raw_Data": true,
+    "__KPI_type": "LTE Info",
     "__collection": "Event",
     "__cell": "LTE"
   },
