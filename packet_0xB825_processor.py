@@ -59,14 +59,24 @@ class Packet_0xB825:
                             value = column_row_values[index+1].strip()
                             # nr5g_serving_cell_info[mapped_key] = value
                             entry[mapped_key] = value
+            # entry.pop("table", None)
 
                 # entry['NR5G Serving Cell Info'] = nr5g_serving_cell_info
             entry["__collection"] = config.get('__collection')
             entry["__frequency"] = config.get('__frequency')
 
-            # if config["__cell"]:
-            #     ccid= entry['nr5g_serving_cell_info'][0]
-            #     print(ccid)
+            if config["__cell"]:
+                if entry['table'] and entry['CC Id']:
+            #     print(entry)
+            #     # ccid= entry['nr5g_serving_cell_info'][0]
+                    if int(entry['CC Id']) == 0 or int(entry['CC Id']) == 8:
+                        entry["__cell"] = 'PCC'
+                    elif int(entry['CC Id']) >= 1:
+                        entry["__cell"] = f'SCC{entry["CC ID"]}'
+                # else:
+                #     pass
+
+
 
             if "__packet_message" in config:
                 entry["__packet_message"] = entry["connectivity_mode"]
@@ -80,10 +90,8 @@ class Packet_0xB825:
             entry["__Raw_Data"] = config.get("__Raw_Data")
             entry["__KPI_type"] = config.get('__KPI_type')
             # print("CC ID", entry['CC Id'])
-
-            entry.pop("table", None)
+            entry.pop("table",None)
             entry.pop("connectivity_mode", None)
             return entry
         else:
             return None
-
