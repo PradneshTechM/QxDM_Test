@@ -20,8 +20,7 @@
     },
     "__Raw_Data": true,
     "__collection": "Event",
-    "__cell": "NR5G",
-    "__KPI_type": "NR Info"
+    "__cell": "NR5G"
   },
   "0xB828": {
     "Subscription ID": {
@@ -61,7 +60,6 @@
       }
     ],
     "__Raw_Data": true,
-    "__KPI_type": "NR Info",
     "__cell": "NR5G",
     "__collection": "Event"
   },
@@ -122,10 +120,9 @@
     },
     "__Raw_Data": false,
     "__collection": "Event",
-    "__cell": "NR5G",
-    "__KPI_type": "NR Info"
+    "__cell": "NR5G"
   },
-   "0xB883 -- PCC -- PUSCH": {
+   "0xB883  NR5G MAC UL Physical Channel Schedule Report": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
@@ -170,17 +167,17 @@
       }
     ],
     "__Raw_Data": false,
-    "__KPI_type": "NR Info",
     "__collection": "NR5G",
     "__cell": [
       "if int(entry['Carrier ID']) == 0:",
       "    entry['__cell'] = 'PCC'",
       "elif int(entry['Carrier ID']) >= 1:",
-      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'"
+      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
+      "entry.pop('Carrier ID')"
     ],
     "Packet_Type": "PUSCH"
   },
-  "0xB884 -- PCC": {
+  "0xB884  NR5G MAC UL Physical Channel Power Control": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
@@ -208,12 +205,12 @@
       "if int(entry['Carrier ID']) == 0:",
       "    entry['__cell'] = 'PCC'",
       "elif int(entry['Carrier ID']) >= 1:",
-      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'"
+      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
+      "entry.pop('Carrier ID')"
     ],
-    "__Raw_Data": true,
-    "__KPI_type": "NR Info"
+    "__Raw_Data": true
   },
-  "0xB889 -- NR5G": {
+  "0xB889  NR5G MAC RACH Trigger": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -239,10 +236,9 @@
     ],
     "__collection": "Event",
     "__cell": "NR5G",
-    "__Raw_Data": true,
-    "__KPI_type": "NR Info"
+    "__Raw_Data": true
   },
-  "0x17F2": {
+  "0x17F2  IMS Voice Call Statistics": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -256,11 +252,10 @@
       "DB Field": "RAT Type"
     },
     "__Raw_Data": true,
-    "__KPI_type": "Voice",
     "__collection": "Event",
     "__cell": "IMS"
   },
-  "0x1D4D": {
+  "0x1D4D  IMS CALL SUMMARY STATS": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -322,11 +317,10 @@
       "DB Field": "EarlyMediaStatsEnabled"
     },
     "__Raw_Data": false,
-    "__KPI_type": "Voice",
     "__collection": "Event",
     "__cell": "IMS"
   },
-  "0xB16F": {
+  "0xB16F  LTE PUCCH Power Control": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -339,12 +333,11 @@
       }
     ],
     "__Raw_Data": true,
-    "__KPI_type": "LTE Info",
     "__collection": "LTE",
     "__cell": "PCell",
     "Packet_Type": "PUCCH"
   },
-  "0xB0E3": {
+  "0xB0E3  LTE NAS ESM Plain OTA Outgoing Message": {
     "msg_subtitle": {
       "DB Field": "msg_subtitle"
     },
@@ -365,12 +358,11 @@
     "Raw Packet": {
       "DB Field": "Raw Packet"
     },
-    "__KPI_type": "LTE Info",
     "__collection": "Event",
     "__cell": "LTE",
     "Packet_Type": ["entry['Packet_Type'] = entry.pop('msg_subtitle')"]
   },
-  "0xB16E": {
+  "0xB16E  LTE PUSCH Power Control": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -399,7 +391,6 @@
       }
     ],
     "__Raw_Data": true,
-    "__KPI_type": "LTE Info",
     "__collection": "LTE",
     "__cell":
       ["if int(entry['Cell Index']) == 0:",
@@ -460,7 +451,6 @@
     }
   ],
   "__Raw_Data": true,
-  "__KPI_type": "NR Info",
   "__cell": ["entry['__cell'] = entry.pop('Serving Cell Index')"],
    "Packet_Type": "PDSCH",
   "__collection": "Event"
@@ -504,9 +494,8 @@
   },
   "__Raw_Data": true,
   "__collection": "Event",
-  "__cell": "LTE",
-  "__KPI_type": "LTE Info"
-  },
+  "__cell": "LTE"
+},
 "0xB179": {
   "Subscription ID": {
     "DB Field": "Subs ID"
@@ -540,8 +529,7 @@
   },
   "__Raw_Data": true,
   "__collection": "Event",
-  "__cell": "LTE",
-  "__KPI_type": "LTE Info"
+  "__cell": "LTE"
   },
 "0xB17E": {
   "Subscription ID": {
@@ -564,8 +552,7 @@
   },
   "__Raw_Data": true,
   "__collection": "Event",
-  "__cell": "LTE",
-  "__KPI_type": "LTE Info"
+  "__cell": "LTE"
   },
 "0xB181": {
   "Subscription ID": {
@@ -594,8 +581,7 @@
   },
   "__Raw_Data": true,
   "__collection": "Event",
-  "__cell": "LTE",
-  "__KPI_type": "LTE Info"
+  "__cell": "LTE"
   },
 "0xB186": {
   "Subscription ID": {
@@ -611,10 +597,10 @@
     "DB Field": "Num Reselection Candidates"
   },
   "Candidates[0].Candidate Priority": {
-    "DB Field": "Candidates[0].Candidate Priority"
+    "DB Field": "Candidate Priority"
   },
   "Candidates[0].RAT Type": {
-    "DB Field": "Candidates[0].RAT Type"
+    "DB Field": "RAT Type"
   },
   "Candidates[0].LTE Candidate.E-ARFCN": {
     "DB Field": "Candidates[0].LTE Candidate.E-ARFCN"
@@ -636,8 +622,7 @@
   },
   "__Raw_Data": true,
   "__collection": "Event",
-  "__cell": "LTE",
-  "__KPI_type": "LTE Info"
+  "__cell": "LTE"
   },
  "0xB192": {
   "Subscription ID": {
@@ -722,7 +707,6 @@
     }
   ],
    "__Raw_Data": true,
-  "__KPI_type": "LTE Info",
   "__cell": "SCells",
    "Packet_Type": "SCCx",
   "__collection": "LTE"
@@ -731,8 +715,8 @@
   "Subscription ID": {
     "DB Field": "Subs ID"
   },
-  "eps_bearer_id_or_skip_id": {
-    "DB Field": "eps_bearer_id_or_skip_id"
+  "eps bearer id or skip id": {
+    "DB Field": "eps bearer id or skip id"
   },
   "prot_disc": {
     "DB Field": "prot_disc"
@@ -743,8 +727,7 @@
   "__Raw_Data": true,
   "__collection": "Event",
   "__cell": "LTE",
-    "Packet_Type": "msg_type",
-  "__KPI_type": "LTE Info"
+    "Packet_Type": "msg_type"
   },
     "0xB808": {
   "Subscription ID": {
@@ -752,8 +735,7 @@
   },
   "__Raw_Data": false,
   "__collection": "Event",
-  "__cell": "NR5G",
-  "__KPI_type": "NR Info"
+  "__cell": "NR5G"
   },
   "0xB809": {
   "Subscription ID": {
@@ -761,10 +743,9 @@
   },
   "__Raw_Data": false,
   "__collection": "Event",
-  "__cell": "NR5G",
-  "__KPI_type": "NR Info"
+  "__cell": "NR5G"
   },
-    "0xB060": {
+    "0xB060  LTE MAC Configuration": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -778,28 +759,28 @@
       "DB Field": "SubPacket Size"
     },
     "DL Config V2.Sub Id": {
-      "DB Field": "DL Config V2.Sub Id"
+      "DB Field": "DL Config V2 Sub Id"
     },
     "DL Config V2.Num Active Stag": {
-      "DB Field": "DL Config V2.Num Active Stag"
+      "DB Field": "DL Config V2 Num Active Stag"
     },
     "UL Config V2.Sub Id": {
-      "DB Field": "UL Config V2.Sub Id"
+      "DB Field": "UL Config V2 Sub Id"
     },
     "UL Config V2.SR resource present": {
-      "DB Field": "UL Config V2.SR resource present"
+      "DB Field": "UL Config V2 SR resource present"
     },
     "UL Config V2.SR periodicity": {
-      "DB Field": "UL Config V2.SR periodicity"
+      "DB Field": "UL Config V2 SR periodicity"
     },
     "UL Config V2.BSR timer": {
-      "DB Field": "UL Config V2.BSR timer"
+      "DB Field": "UL Config V2 BSR timer"
     },
     "UL Config V2.SPS Number of Tx release": {
-      "DB Field": "UL Config V2.SPS Number of Tx release"
+      "DB Field": "UL Config V2 SPS Number of Tx release"
     },
     "UL Config V2.Retx BSR timer": {
-      "DB Field": "UL Config V2.Retx BSR timer"
+      "DB Field": "UL Config V2 Retx BSR timer"
     },
         "Scell Tag Info": [
       {
@@ -854,11 +835,10 @@
       }
     ],
     "__Raw_Data": true,
-    "__KPI_type": "LTE Info",
     "__collection": "Event",
     "__cell": "LTE"
   },
-    "0xB139": {
+    "0xB139  LTE LL1 PUSCH Tx Report": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "LTE [PCC] Subs ID"
@@ -905,7 +885,6 @@
         }
       }
     ],
-    "__KPI_type": "LTE Info",
     "__collection": "LTE",
     "__cell": ["entry['__cell'] = entry.pop('UL Carrier Index')"],
     "Packet_Type": "PUSCH"

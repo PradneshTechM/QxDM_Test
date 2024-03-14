@@ -1385,13 +1385,13 @@ class ParsedRawMessage:
                 return Packet_0xB970.extract_info(packet_text, config2['0xB970'], entry)
             elif packet_name == '0xB883':
                 print('0xB883')
-                return Packet_0xB883(packet_text, config2['0xB883 -- PCC -- PUSCH'], entry).extract_info()
+                return Packet_0xB883(packet_text, config2['0xB883  NR5G MAC UL Physical Channel Schedule Report'], entry).extract_info()
             elif packet_name == '0xB884':
                 print('0xB884')
-                return Packet_0xB884(packet_text, config2['0xB884 -- PCC'], entry).extract_info()
+                return Packet_0xB884(packet_text, config2['0xB884  NR5G MAC UL Physical Channel Power Control'], entry).extract_info()
             elif packet_name == '0xB889':
                 print('0xB889')
-                return Packet_0xB889(packet_text, config2['0xB889 -- NR5G'], entry).extract_info()
+                return Packet_0xB889(packet_text, config2['0xB889  NR5G MAC RACH Trigger'], entry).extract_info()
             elif packet_name == '0xB173':
                 print('0xB173')
                 return Packet_0xB173(packet_text, config2['0xB173'], entry).extract_info()
@@ -1415,16 +1415,16 @@ class ParsedRawMessage:
                 return Packet_0xB192(packet_text, config2['0xB192'], entry).extract_info()
             elif packet_name == '0x17F2':
                 print('0x17F2')
-                return Packet_0x17F2.extract_info(packet_text, config2['0x17F2'], entry)
+                return Packet_0x17F2.extract_info(packet_text, config2['0x17F2  IMS Voice Call Statistics'], entry)
             elif packet_name == '0x1D4D':
                 print('0x1D4D')
-                return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D'], entry)
+                return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D  IMS CALL SUMMARY STATS'], entry)
             elif packet_name == '0xB16F':
                 print('0xB16F')
-                return Packet_0xB16F(packet_text, config2['0xB16F'], entry).extract_info()
+                return Packet_0xB16F(packet_text, config2['0xB16F  LTE PUCCH Power Control'], entry).extract_info()
             elif packet_name == '0xB0E3':
                 print('0xB0E3')
-                return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3'], entry)
+                return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3  LTE NAS ESM Plain OTA Outgoing Message'], entry)
             elif packet_name == '0xB0E2':
                 print('0xB0E2')
                 return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2'], entry)
@@ -1436,13 +1436,13 @@ class ParsedRawMessage:
                 return Packet_0xB809.extract_info(packet_text, config2['0xB809'], entry)
             elif packet_name == '0xB16E':
                 print('0xB16E')
-                return Packet_0xB16E(packet_text, config2['0xB16E'], entry).extract_info()
+                return Packet_0xB16E(packet_text, config2['0xB16E  LTE PUSCH Power Control'], entry).extract_info()
             elif packet_name == '0xB139':
                 print('0xB139')
-                return Packet_0xB139(packet_text, config2['0xB139'], entry).extract_info()
+                return Packet_0xB139(packet_text, config2['0xB139  LTE LL1 PUSCH Tx Report'], entry).extract_info()
             elif packet_name == '0xB060':
                 print('0xB060')
-                return Packet_0xB060(packet_text, config2['0xB060'], entry).extract_info()
+                return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
             elif packet_name == '0xB0EE':
                 print('0xB0EE')
                 return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE'], entry)
@@ -1466,49 +1466,49 @@ class ParsedRawMessage:
                 return Packet_0xB063(packet_text, config3['0xB063'], entry).extract_info()
             elif packet_name == '0xB0A5':
                 print('0xB0A5')
-                return Packet_0xB0A5(packet_text, config3['0xB0A5'], entry).extract_info()
+                return Packet_0xB0A5(packet_text, config3['0xB0A5  LTE PDCP DL SRB Integrity Data PDU'], entry).extract_info()
             elif packet_name == '0xB0A1':
                 print('0xB0A1')
-                return Packet_0xB0A1(packet_text, config3['0xB0A1'], entry).extract_info()
+                return Packet_0xB0A1(packet_text, config3['0xB0A1  LTE PDCP DL Data PDU'], entry).extract_info()
             elif packet_name == '0xB06E':
                 print('0xB06E')
-                return Packet_0xB06E(packet_text, config3['0xB06E'], entry).extract_info()
+                return Packet_0xB06E(packet_text, config3['0xB06E  LTE MAC DL RAR Transport Block'], entry).extract_info()
             elif packet_name == '0xB062':
                 print('0xB062')
-                return Packet_0xB062.extract_info(packet_text, config3['0xB062'], entry)
+                return Packet_0xB062.extract_info(packet_text, config3['0xB062  LTE MAC Rach Attempt'], entry)
             elif packet_name == '0xB1DA':
                 print('0xB1DA')
-                return Packet_0xB1DA(packet_text, config3['0xB1DA'], entry).extract_info()
+                return Packet_0xB1DA(packet_text, config3['0xB1DA  LTE ML1 Antenna Switch Diversity'], entry).extract_info()
             elif packet_name == '0xB081':
                 print('0xB081')
-                return Packet_0xB081(packet_text, config3['0xB081'], entry).extract_info()
+                return Packet_0xB081(packet_text, config3['0xB081  LTE RLC DL Config Log packet'], entry).extract_info()
             elif packet_name == '0xB13C':
                 print('0xB13C')
-                return Packet_0xB13C(packet_text, config3['0xB13C'], entry).extract_info()
+                return Packet_0xB13C(packet_text, config3['0xB13C  LTE LL1 PUCCH Tx Report'], entry).extract_info()
             elif packet_name == '0xB16C':
                 print('0xB16C')
-                return Packet_0xB16C(packet_text, config3['0xB16C'], entry).extract_info()
+                return Packet_0xB16C(packet_text, config3['0xB16C  LTE DCI Information Report'], entry).extract_info()
             elif packet_name == '0xB064':
                 print('0xB064')
-                return Packet_0xB064(packet_text, config3['0xB064'], entry).extract_info()
+                return Packet_0xB064(packet_text, config3['0xB064  LTE MAC UL Transport Block'], entry).extract_info()
             elif packet_name == '0xB0EF':
                 print('0xB0EF')
-                return Packet_0xB0EF.extract_info(packet_text, config3['0xB0EF'], entry)
+                return Packet_0xB0EF.extract_info(packet_text, config3['0xB0EF  LTE NAS EMM USIM card mode'], entry)
             elif packet_name == '0xB0B5':
                 print('0xB0B5')
-                return Packet_0xB0B5(packet_text, config3['0xB0B5'], entry).extract_info()
+                return Packet_0xB0B5(packet_text, config3['0xB0B5  LTE PDCP UL SRB Integrity Data PDU'], entry).extract_info()
             elif packet_name == '0xB0B4':
                 print('0xB0B4')
-                return Packet_0xB0B4(packet_text, config3['0xB0B4'], entry).extract_info()
+                return Packet_0xB0B4(packet_text, config3['0xB0B4  LTE PDCP UL Statistics Pkt'], entry).extract_info()
             elif packet_name == '0xB0B1':
                 print('0xB0B1')
-                return Packet_0xB0B1(packet_text, config3['0xB0B1'], entry).extract_info()
+                return Packet_0xB0B1(packet_text, config3['0xB0B1  LTE PDCP UL Data PDU'], entry).extract_info()
             elif packet_name == '0x1568':
                 print('0x1568')
-                return Packet_0x1568.extract_info(packet_text, config3['0x1568'], entry)
+                return Packet_0x1568.extract_info(packet_text, config3['0x1568  IMS RTP SN and Payload'], entry)
             elif packet_name == '0xB061':
                 print('0xB061')
-                return Packet_0xB061.extract_info(packet_text, config3['0xB061'], entry)
+                return Packet_0xB061.extract_info(packet_text, config3['0xB061  LTE MAC Rach Trigger'], entry)
         # start here
 
         # remove empty (only whitespace) lines

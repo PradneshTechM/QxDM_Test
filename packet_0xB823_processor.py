@@ -21,7 +21,7 @@ class Packet_0xB823:
                 modified_entry[new_key] = value
             modified_entry['__collection'] = config['__collection']
             modified_entry['__cell'] = config['__cell']
-            modified_entry['__KPI_type'] = config['__KPI_type']
+            # modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry
         else:
             # Return None or an empty dictionary if there is no match
