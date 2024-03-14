@@ -23,7 +23,6 @@ class Packet_0xB821:
             modified_entry['__frequency'] = config['__frequency']
             modified_entry['__cell'] = config['__cell']
             modified_entry['__Raw_Data'] = str(config['__Raw_Data'])
-            # modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry
         else:
             # Return None or an empty dictionary if there is no match

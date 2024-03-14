@@ -22,7 +22,7 @@ class Packet_0xB18F:
             for row in table_capture:
                 for key, value in row.items():
                     self.dict[key] = value
-                for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
+                for additional_key in ['__Raw_Data', '__collection', '__cell', '__frequency']:
                     if additional_key in self.config:
                         self.dict[additional_key] = self.config[additional_key]
                 self.result.append(self.dict)

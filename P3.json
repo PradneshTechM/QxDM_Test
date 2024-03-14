@@ -1,5 +1,5 @@
 {
-"0xB0EE": {
+"0xB0EE  LTE NAS EMM State": {
     "Subscription ID": {
         "DB Field": "Subs ID"
     },
@@ -18,8 +18,7 @@
     "__Raw_Data": false,
     "__collection": "Event",
     "__cell": "LTE",
-    "Packet_Type": "EMM",
-    "__KPI_type": "LTE Info"
+    "Packet_Type": "EMM"
 },
 "0xB14D": {
     "Subscription ID": {
@@ -48,8 +47,7 @@
         "    entry['__cell'] = 'PCC'",
         "elif int(entry['Cell Index']) >= 1:",
         "    entry['__cell'] = 'SCC(' + str(entry['Scell Index']) + ')'"
-    ],
-    "__KPI_type": "NR Info"
+    ]
 },
        "0x1832": {
         "Subscription ID": {
@@ -67,8 +65,7 @@
         "__Raw_Data": true,
         "__collection": "Event",
         "__cell": "IMS",
-        "Packet_Type": "IMS_SIP_REGISTER/INFORMAL_RESPONSE",
-        "__KPI_type": "Voice"
+        "Packet_Type": "IMS_SIP_REGISTER/INFORMAL_RESPONSE"
     },
    "0xB132": {
         "Subscription ID": {
@@ -109,7 +106,7 @@
                 }
             }
         ],
-        "TB Config": [
+          "TB Config": [
             {
                 "TB Config->RNTI": {
                     "index": 0,
@@ -141,7 +138,6 @@
         "__collection": "LTE",
         "__cell": "PCC",
         "Packet_Type": "PDSCH",
-        "__KPI_type": "LTE Info",
         "__frequency": "Per Second"
     },
      "0xB130": {
@@ -178,8 +174,7 @@
         "__Raw_Data": false,
         "__collection": "LTE",
         "__cell": "PCC",
-        "Packet_Type": "PDCCH",
-        "__KPI_type": "LTE Info"
+        "Packet_Type": "PDCCH"
     },
 
     "0xB126": {

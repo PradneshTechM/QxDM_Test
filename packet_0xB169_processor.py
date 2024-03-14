@@ -24,7 +24,6 @@ class Packet_0xB169:
             elif int(modified_entry['Cell Index']) >= 1:
                 modified_entry['_cell'] = 'SCC(' + modified_entry['Cell Index'] + ')'
             modified_entry['__collection'] = config['__collection']
-            # modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry
         else:
             None
