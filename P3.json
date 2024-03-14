@@ -1,0 +1,298 @@
+{
+"0xB0EE": {
+    "Subscription ID": {
+        "DB Field": "Subs ID"
+    },
+    "EMM state": {
+        "DB Field": "State"
+    },
+    "PLMN_ID": {
+        "DB Field": "PLMN"
+    },
+    "Guti valid": {
+        "DB Field": "GUTI"
+    },
+    "EMM sub-state": {
+        "DB Field": "Sub-State"
+    },
+    "__Raw_Data": false,
+    "__collection": "Event",
+    "__cell": "LTE",
+    "Packet_Type": "EMM",
+    "__KPI_type": "LTE Info"
+},
+"0xB14D": {
+    "Subscription ID": {
+        "DB Field": "Subs ID"
+    },
+    "Scell Index": {
+        "DB Field": "Scell Index"
+    },
+    "PUCCH Reporting Mode": {
+        "DB Field": "PUCCH Reporting Mode"
+    },
+    "PUCCH Report Type": {
+        "DB Field": "PUCCH Report Type"
+    },
+    "Rank Index": {
+        "DB Field": "Rank Index",
+        "Field Name": "LTE [PCC] Rank Index"
+    },
+    "CRI": {
+        "DB Field": "CRI"
+    },
+    "__Raw_Data": true,
+    "__collection": "Event",
+    "__cell":[
+        "if int(entry['Scell Index']) == 0:",
+        "    entry['__cell'] = 'PCC'",
+        "elif int(entry['Cell Index']) >= 1:",
+        "    entry['__cell'] = 'SCC(' + str(entry['Scell Index']) + ')'"
+    ],
+    "__KPI_type": "NR Info"
+},
+       "0x1832": {
+        "Subscription ID": {
+            "DB Field": "Subs ID",
+            "Field Name": "Event [IMS] Subs ID"
+        },
+        "Registration Type": {
+            "DB Field": "Message",
+            "Field Name": "Event [IMS] Message"
+        },
+        "Result": {
+            "DB Field": "Response",
+            "Field Name": "Event [IMS] Response"
+        },
+        "__Raw_Data": true,
+        "__collection": "Event",
+        "__cell": "IMS",
+        "Packet_Type": "IMS_SIP_REGISTER/INFORMAL_RESPONSE",
+        "__KPI_type": "Voice"
+    },
+   "0xB132": {
+        "Subscription ID": {
+            "DB Field": "Subs ID",
+            "Field Name": "LTE [PCC] Subs ID"
+        },
+        "Common Static Config -> Cell Id": {
+            "DB Field": "PCI"
+        },
+        "Common Static Config -> EARFCN": {
+            "DB Field": "DL EARFCN"
+        },
+        "Common Static Config -> System BW": {
+            "DB Field": "DL Bandwidth"
+        },
+        "Common Static Config -> Num HARQ": {
+            "DB Field": "HARQ ID"
+        },
+        "Common Static Config -> UE Category": {
+            "DB Field": "UE Category"
+        },
+        "Common Static Config -> TX Mode": {
+            "DB Field": "TX Mode"
+        },
+        "Common Static Config -> Num eNb Tx Ant": {
+            "DB Field": "No of Antenna"
+        },
+        "TB Info Record[0]": [
+            {
+                "TB Info Record[0] ->TB Top->Rank": {
+                    "index": 3,
+                    "DB Field": "Rank Index",
+                    "Field Name": "LTE [PCC] Rank Index"
+                },
+                "TB Info Record[0] ->TB Top->Num RX": {
+                    "index": 7,
+                    "DB Field": "Number of RX"
+                }
+            }
+        ],
+        "TB Config": [
+            {
+                "TB Config->RNTI": {
+                    "index": 0,
+                    "DB Field": "RNTI Type"
+                },
+                "TB Config->HARQ ID": {
+                    "index": 1,
+                    "DB Field": "HARQ ID"
+                },
+                "TB Config->MCS": {
+                    "index": 6,
+                    "DB Field": "MCS"
+                },
+                "TB Config->MOD": {
+                    "index": 7,
+                    "DB Field": "Modulation"
+                },
+                "TB Config->Num RB": {
+                    "index": 13,
+                    "DB Field": "Num RBs"
+                },
+                "TB Config->TB Size": {
+                    "index": 17,
+                    "DB Field": "TB Size(Bytes)"
+                }
+            }
+        ],
+        "__Raw_Data": false,
+        "__collection": "LTE",
+        "__cell": "PCC",
+        "Packet_Type": "PDSCH",
+        "__KPI_type": "LTE Info",
+        "__frequency": "Per Second"
+    },
+     "0xB130": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+       "Carrier Index": {
+            "DB Field": "Carrier Index"
+        },
+        "Hyopthesis": [
+            {
+                "BandWidth": {
+                    "index": 3,
+                    "DB Field": "DL Bandwidth"
+                },
+                "Prune Status": {
+                    "index": 22,
+                    "DB Field": "Prune Status"
+                },
+                "Num eNB Antennas": {
+                    "index": 8,
+                    "DB Field": "No of Antenna"
+                },
+                "Decode Status": {
+                    "index": 17,
+                    "DB Field": "RNTI Type"
+                },
+                "Aggregation Level": {
+                    "index": 13,
+                    "DB Field": "Aggregation Level"
+                }
+            }
+        ],
+        "__Raw_Data": false,
+        "__collection": "LTE",
+        "__cell": "PCC",
+        "Packet_Type": "PDCCH",
+        "__KPI_type": "LTE Info"
+    },
+
+    "0xB126": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "Carrier Index": {
+            "DB Field": "Carrier Index"
+        },
+        "Record": [
+            {
+                "PDSCH RNTI Type": {
+                    "index": 3,
+                    "DB Field": "RNTI Type"
+                },
+                "Number of Tx Antennas (M)": {
+                    "index": 4,
+                    "DB Field": "No of Antenna [TX]"
+                },
+                "Number of Rx Antennas (N)": {
+                    "index": 5,
+                    "DB Field": "No of Antenna [RX]"
+                },
+                "Spatial Rank": {
+                    "index": 6,
+                    "DB Field": "Spatial Rank"
+                },
+                "Frequency Selective PMI": {
+                    "index": 7,
+                    "DB Field": "Frequency Selective PMI"
+                },
+                "PMI Index": {
+                    "index": 8,
+                    "DB Field": "PMI Index"
+                }
+            }
+        ],
+        "__Raw_Data": false,
+        "__collection": "LTE",
+        "__cell": "PCC",
+        "Packet_Type": "PDSCH"
+    },
+    "0xB16B": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "Duplex Mode": {
+            "DB Field": "Duplex Mode"
+        },
+        "Records": [
+            {
+                "PDCCH Timing SFN": {
+                    "index": 3,
+                    "DB Field": "PDCCH Timing SFN"
+                },
+                "RNTI Type": {
+                    "index": 11,
+                    "DB Field": "RNTI Type"
+                },
+                "PDCCH Payload Size": {
+                    "index": 12,
+                    "DB Field": "Payload Size"
+                },
+                "Aggregation Level": {
+                    "index": 13,
+                    "DB Field": "Aggregation Level"
+                },
+                "PDCCH Serv Index": {
+                    "index": 10,
+                    "DB Field": "Serving Index"
+                }
+            }
+        ],
+        "__Raw_Data": false,
+        "__collection": "LTE",
+        "__cell": "PCC",
+        "Packet_Type": "PDCCH-PHICH"
+    },
+      "0xB063": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "TB Common Info[0]": [
+            {
+                "TB Common Info[0] -> TB Size": {
+                    "index": 1,
+                    "DB Field": "TB Size(Bytes)"
+                },
+                "RNTI Type": {
+                    "index": 6,
+                    "DB Field": "RNTI Type"
+                },
+                "HARQ ID": {
+                    "index": 8,
+                    "DB Field": "HARQ ID"
+                },
+                "CC ID": {
+                    "index": 7,
+                    "DB Field": "CC ID"
+                }
+            }
+        ],
+        "__Raw_Data": false,
+        "__collection": "LTE",
+        "__cell":[
+          "if int(entry['CC ID']) == 0:",
+          "    entry['__cell'] = 'PCC'",
+          "    entry.pop('CC ID')",
+          "elif int(entry['CC ID']) >= 1:",
+          "    entry['__cell'] = 'SCCn'",
+          "    entry.pop('CC ID')"
+        ],
+        "Packet_Type": "MAC DL"
+    }
+
+}

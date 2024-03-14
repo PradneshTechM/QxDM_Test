@@ -136,7 +136,7 @@ def table_config(data, config_table, config):
                 for additional_key in ['__Raw_Data','__KPI_type','__collection','__cell', 'Packet_Type','__frequency']:
                     if additional_key in config:
                         # Inside simple_map_entry, when processing __cell:
-                        if additional_key in ['__cell','Packet_Type'] and isinstance(config[additional_key], list):
+                        if additional_key in ['__cell','Packet_Type','__Raw_Data'] and isinstance(config[additional_key], list):
                             code_arr = [line.replace("\\", "") for line in config[additional_key]]
                             # evaluate(config[additionalkey], mapped_data)
                             # Pass mapped_data to evaluate, allowing the executed code to access/modify it
