@@ -8,6 +8,9 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB195_processor import Packet_0xB195
+from packet_0xB172_processor import Packet_0xB172
+from packet_0xB16D_processor import Packet_0xB16D
 from packet_0xB063_processor import Packet_0xB063
 from packet_0xB16B_processor import Packet_0xB16B
 from packet_0xB126_processor import Packet_0xB126
@@ -94,7 +97,6 @@ from packet_0xB840_processor import Packet_0xB840
 from packet_0xB841_processor import Packet_0xB841
 from packet_0xB873_processor import Packet_0xB873
 from packet_0xB111_processor import Packet_0xB111
-
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1439,10 +1441,10 @@ class ParsedRawMessage:
                 return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2  LTE NAS ESM Plain OTA Incoming Message'], entry)
             elif packet_name == '0xB808':
                 print('0xB808')
-                return Packet_0xB808.extract_info(packet_text, config2['0xB808'], entry)
+                return Packet_0xB808.extract_info(packet_text, config2['0xB808  NR5G NAS MM5G Security Protected OTA Incoming Msg'], entry)
             elif packet_name == '0xB809':
                 print('0xB809')
-                return Packet_0xB809.extract_info(packet_text, config2['0xB809'], entry)
+                return Packet_0xB809.extract_info(packet_text, config2['0xB809  NR5G NAS MM5G Security Protected OTA Outgoing Msg'], entry)
             elif packet_name == '0xB16E':
                 print('0xB16E')
                 return Packet_0xB16E(packet_text, config2['0xB16E  LTE PUSCH Power Control'], entry).extract_info()
@@ -1518,6 +1520,15 @@ class ParsedRawMessage:
             elif packet_name == '0xB061':
                 print('0xB061')
                 return Packet_0xB061.extract_info(packet_text, config3['0xB061  LTE MAC Rach Trigger'], entry)
+            elif packet_name == '0xB16D':
+                print('0xB16D')
+                return Packet_0xB16D.extract_info(packet_text, config4['0xB16D  LTE GM TX Report'], entry)
+            elif packet_name == '0xB172':
+                print('0xB172')
+                return Packet_0xB172(packet_text, config4['0xB172  LTE Uplink PKT Build Indication'], entry).extract_info()
+            elif packet_name == '0xB195':
+                print('0xB195')
+                return Packet_0xB195.extract_info(packet_text, config4['0xB195  LTE ML1 Connected Neighbor Meas Request/Response'], entry)
             elif packet_name == '0xB840':
                 print('0xB840')
                 return Packet_0xB840.extract_info(packet_text, config4['0xB840  NR5G PDCP DL Data Pdu'], entry)
@@ -1672,6 +1683,191 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+        msg = ParsedRawMessage(index=0, packet_type="0xB195", packet_length=100,
+                               name="LTE ML1 Connected Neighbor Meas Request/Response",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.801",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.801  [E3]  0xB195  LTE ML1 Connected Neighbor Meas Request/Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 30
+Connected Neighbor Meas Request
+   Version = 56
+   SubPacket Size = 32 bytes
+   E-ARFCN = 66986
+   Num Neighbor Cells = 1
+   Num Rx Ant = 2
+   Serving Cell Index = PCell
+   FW Serving Cell Index = 0
+   Num Ms Per Cell = 1 ms
+   Meas Req Act Time = 1396
+   Neighbor Cells
+      --------------------------------------------------------------------------
+      |   |    |              |   |        |Frame     |Frame     |Total |Total |
+      |   |    |              |eNb|        |Boundary  |Boundary  |Timing|Timing|
+      |   |Cell|              |Tx |TTL     |Ref       |Ref       |Adj   |Adj   |
+      |#  |ID  |CP Type       |Ant|Enable  |Time[0]   |Time[1]   |CIR[0]|CIR[1]|
+      --------------------------------------------------------------------------
+      |  0| 295|        Normal|  2|Disabled|     79157|     79157|     0|     0|
+
+SubPacket ID = 31
+Connected Neighbor Meas Response
+   Version = 57
+   SubPacket Size = 64 bytes
+   E-ARFCN = 66986
+   Num Cells = 1
+   Duplexing Mode = FDD
+   Serving Cell Index = PCell
+   FW Serving Cell Index = 0
+   Meas Resp Sfn = 1405
+   Neighbor Cells
+      ----------------------------------------------------------------------------------------------------------
+      |   |        |           |      |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
+      |   |        |FTL        |      |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
+      |   |Physical|Cumulative |BAD   |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
+      |#  |Cell ID |Freq Offset|CER   |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+      ----------------------------------------------------------------------------------------------------------
+      |  0|     295|          0|  TRUE|-102.63|-100.44| -100.44| -21.00| -19.88| -19.88| -72.63| -71.56| -71.56|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB172", packet_length=100,
+                               name="LTE Uplink PKT Build Indication",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.532",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.532  [3F]  0xB172  LTE Uplink PKT Build Indication
+Subscription ID = 1
+Version = 34
+Number of Records = 20
+PKT Build Record
+   --------------------------------------------------------------------------------------------
+   |   |     |    |      |Transport|       |              |    |    |       |         |       |
+   |   |Cell |Tx  |Tx    |Block    |EIB    |              |HARQ|Tx  |Corrupt|Commit   |       |
+   |#  |Index|Sfn |Sub-fn|Size     |Address|RNTI Type     |ID  |Type|CRC    |Time     |PB Mode|
+   --------------------------------------------------------------------------------------------
+   |  0|    0| 111|     9|     1572|      1|        C_RNTI|   7|ReTx|     No| 16218223|      0|
+   |  1|    0| 112|     0|     1431|      0|        C_RNTI|   0| New|     No| 16237423|      0|
+   |  2|    0| 112|     2|     1143|      1|        C_RNTI|   2| New|     No| 16275823|      0|
+   |  3|    0| 112|     3|     1572|      0|        C_RNTI|   3| New|     No| 16295023|      0|
+   |  4|    0| 112|     4|      967|      1|        C_RNTI|   4|ReTx|     No| 16314223|      0|
+   |  5|    0| 112|     5|     1572|      0|        C_RNTI|   5| New|     No| 16333423|      0|
+   |  6|    0| 112|     6|     1431|      1|        C_RNTI|   6|ReTx|     No| 16352623|      0|
+   |  7|    0| 112|     7|     1143|      0|        C_RNTI|   7| New|     No| 16371823|      0|
+   |  8|    0| 112|     8|     1431|      1|        C_RNTI|   0| New|     No| 16391022|      0|
+   |  9|    0| 112|     9|     1572|      0|        C_RNTI|   1|ReTx|     No| 16410222|      0|
+   | 10|    0| 113|     0|     1143|      1|        C_RNTI|   2|ReTx|     No| 16429422|      0|
+   | 11|    0| 113|     1|     1335|      0|        C_RNTI|   3| New|     No| 16448622|      0|
+   | 12|    0| 113|     2|     1572|      1|        C_RNTI|   4| New|     No| 16467822|      0|
+   | 13|    0| 113|     3|     1692|      0|        C_RNTI|   5| New|     No| 16487022|      0|
+   | 14|    0| 113|     4|      807|      1|        C_RNTI|   6| New|     No| 16506222|      0|
+   | 15|    0| 113|     5|     1335|      0|        C_RNTI|   7| New|     No| 16525422|      0|
+   | 16|    0| 113|     6|     1431|      1|        C_RNTI|   0| New|     No| 16544622|      0|
+   | 17|    0| 113|     7|     1335|      0|        C_RNTI|   1| New|     No| 16563822|      0|
+   | 18|    0| 113|     8|     1431|      1|        C_RNTI|   2| New|     No| 16583022|      0|
+   | 19|    0| 113|     9|      293|      0|        C_RNTI|   3| New|     No| 16602222|      0|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB16D", packet_length=100,
+                               name="LTE GM TX Report",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.512",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.512  [FF]  0xB16D  LTE GM TX Report
+Subscription ID = 1
+Version = 49
+Duplex Mode = 0
+UL DL Cfg = 15
+Reserved = 0
+Number of Records = 20
+Tx Report Records[0]
+   Chan Type = PUSCH
+   Cell Index = 0
+   Tx SFN = 109
+   Tx Sub Fn = 4
+   UL ACK/NAK Present Flag = ACK/NAK not present
+   ACK/NAK Reporting Mode = N/A
+   CSF Present Flag = 0
+   SRS Present Flag = 0
+   CA Mode Enabled = Disabled
+   SRS UE/Cell Specific = 0
+   ECA/ACK Reporting Mode = NO_ECA
+   Total Tx Power = 16 dBm
+   Dci 0 Present = 0
+   Transport Block Size = 1143
+   Redundancy Version = 0
+   HARQ ID = 6
+   Retransmission Index = 0
+   Modulation Type = 64 QAM
+   EIB Index = 0
+   Resource Block Start = 17
+   Number of Resource Blocks = 18
+   MCS Index = 15
+   Resource Allocation Type = 0
+   Resource Block Start 2 = 0
+   Number of Resource Blocks 2 = 0
+   Beta PUSCH = 5827
+   Num Antenna = 1
+   Cyclic Shift DMRS = 0
+   Freq Hopping Flag = Disabled
+   HARQ ACK Offset Index = 10
+   HARQ ACK Offset X = 10
+   CQI Offset Index = 8
+   RI Offset Index = 10
+   PUSCH Hopping Payload = 0
+   N_drms = 0
+   TTI Bundle Index = Invalid
+   CC Max TX Power = 22 dBm
+   Total Max TX Power = 22 dBm
+   Chain0 Mtpl = 21
+   Chain1 Mtpl = 24
+   AFC Rx Freq Error = 4401 Hz
+Tx Report Records[1]
+   Chan Type = PUSCH
+   Cell Index = 0
+   Tx SFN = 109
+   Tx Sub Fn = 5
+   UL ACK/NAK Present Flag = ACK/NAK not present
+   ACK/NAK Reporting Mode = N/A
+   CSF Present Flag = 0
+   SRS Present Flag = 0
+   CA Mode Enabled = Disabled
+   SRS UE/Cell Specific = 0
+   ECA/ACK Reporting Mode = NO_ECA
+   Total Tx Power = 15 dBm
+   Dci 0 Present = 0
+   Transport Block Size = 935
+   Redundancy Version = 0
+   HARQ ID = 7
+   Retransmission Index = 0
+   Modulation Type = 64 QAM
+   EIB Index = 0
+   Resource Block Start = 17
+   Number of Resource Blocks = 15
+   MCS Index = 15
+   Resource Allocation Type = 0
+   Resource Block Start 2 = 0
+   Number of Resource Blocks 2 = 0
+   Beta PUSCH = 5827
+   Num Antenna = 1
+   Cyclic Shift DMRS = 0
+   Freq Hopping Flag = Disabled
+   HARQ ACK Offset Index = 10
+   HARQ ACK Offset X = 10
+   CQI Offset Index = 8
+   RI Offset Index = 10
+   PUSCH Hopping Payload = 0
+   N_drms = 0
+   TTI Bundle Index = Invalid
+   CC Max TX Power = 22 dBm
+   Total Max TX Power = 22 dBm
+   Chain0 Mtpl = 21
+   Chain1 Mtpl = 24
+   AFC Rx Freq Error = 4401 Hz
+
+
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB063", packet_length=100,
                                name="LTE MAC DL Transport Block",
                                subtitle="", datetime="2024 Jan 15  07:15:51.030",

@@ -899,7 +899,7 @@
             "DB Field": "Message size Group_A"
         },
         "RACH Config V9.Cell Rach Info[0].Power offset Group_B": {
-            "DB Field": "Power offset Group_B"
+            "DB Field": "Power offset Group B"
         },
         "RACH Config V9 -> Cell Rach Info[0] -> Delta preamble Msg3": {
             "DB Field": "Delta preamble Msg3"
