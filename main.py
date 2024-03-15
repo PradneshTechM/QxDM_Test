@@ -90,6 +90,11 @@ from packet_0xB0B4_processor import Packet_0xB0B4
 from packet_0xB0B1_processor import Packet_0xB0B1
 from packet_0x1568_processor import Packet_0x1568
 from packet_0xB061_processor import Packet_0xB061
+from packet_0xB840_processor import Packet_0xB840
+from packet_0xB841_processor import Packet_0xB841
+from packet_0xB873_processor import Packet_0xB873
+from packet_0xB111_processor import Packet_0xB111
+
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1261,122 +1266,126 @@ class ParsedRawMessage:
                 config2 = json.load(f)
             with open('P3.json') as f:
                 config3 = json.load(f)
+            with open('P4.json') as f:
+                config4 = json.load(f)
+            with open('P5.json') as f:
+                config5 = json.load(f)
             if packet_name == '0xB0E5':
                 print("0xB0E5")
-                return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5 -- LTE -- NAS'], entry)
+                return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5  LTE NAS ESM Bearer Context Info'], entry)
             elif packet_name == "0x156E":
                 print("0x156E")
-                return Packet_0x156E.extract_info(packet_text, config['0x156E -- IMS -- IMS_SIP_INVITE'],entry)
+                return Packet_0x156E.extract_info(packet_text, config['0x156E  IMS SIP Message'],entry)
             elif packet_name == "0x156A":
                 print("0x156A")
-                return Packet_0x156A.extract_info(packet_text, config['0x156A -- IMS'],entry)
+                return Packet_0x156A.extract_info(packet_text, config['0x156A  IMS RTCP'],entry)
             elif packet_name == "0xB0C1":
                 print("0xB0C1")
-                return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1 -- LTE-- RRC'],entry)
+                return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1  LTE RRC MIB Message Log Packet'],entry)
             elif packet_name == "0xB0F7":
                 print("0xB0F7")
-                return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7 -- LTE'],entry)
+                return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7  LTE NAS EMM RRC Service Request'],entry)
             elif packet_name == "0xB80B":
                 print("0xB80B")
-                return Packet_0xB80B.extract_info(packet_text, config['0xB80B -- NR5G -- Packet Subtitle'],entry)
+                return Packet_0xB80B.extract_info(packet_text, config['0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg'],entry)
             elif packet_name == "0xB800":
                 print("0xB800")
-                return Packet_0xB800.extract_info(packet_text, config['0xB800 -- NR5G -- PDU session release req'],entry)
+                return Packet_0xB800.extract_info(packet_text, config['0xB800  NR5G NAS SM5G Plain OTA Incoming Msg'],entry)
             elif packet_name =="0xB0EC":
                 print("0xB0EC")
-                return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC -- LTE -- msg_type"],entry)
+                return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC  LTE NAS EMM Plain OTA Incoming Message"],entry)
             elif packet_name =="0xB0E4":
                 print("0xB0E4")
-                return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4 -- LTE -- NAS"],entry)
+                return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4  LTE NAS ESM Bearer Context State"],entry)
             elif packet_name =="0xB0C2":
                 print("0xB0C2")
-                return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2 -- Cell -- Cell Info"],entry)
+                return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2  LTE RRC Serving Cell Info Log Pkt"],entry)
             elif packet_name == "0x1832":
                 print("0x1832")
-                return Packet_0x1832.extract_info(packet_text, config["0x1832 -- IMS -- IMS_SIP_REGISTER/INFORMAL_RESPONSE"],entry)
+                return Packet_0x1832.extract_info(packet_text, config["0x1832  IMS Registration"],entry)
             elif packet_name == '0xB822':
                 print("0xB822")
-                return Packet_0xB822.extract_info(packet_text, config['0xB822  -- NR5G'], entry)
+                return Packet_0xB822.extract_info(packet_text, config['NR5G RRC MIB Info'], entry)
             elif packet_name == '0xB115':
                 print("0xB115")
-                return Packet_0xB115(packet_text, config['0xB115'], entry).extract_info()
+                return Packet_0xB115(packet_text, config['0xB115  LTE LL1 SSS Results'], entry).extract_info()
             elif packet_name == "0x1831":
                 print("0x1831")
-                return Packet_0x1831.extract_info(packet_text, config["0x1831 -- IMS -- Direction"],entry)
+                return Packet_0x1831.extract_info(packet_text, config["0x1831  IMS VoLTE Session End"],entry)
             elif packet_name == "0x1830":
                 print("0x1830")
-                return Packet_0x1830.extract_info(packet_text, config["0x1830 -- IMS -- Direction"],entry)
+                return Packet_0x1830.extract_info(packet_text, config["0x1830  IMS VoLTE Session Setup"],entry)
             elif packet_name == '0xB166':
                 print("0xB166")
-                return Packet_0xB166.extract_info(packet_text, config['0xB166 -- Pcell -- PRACH'], entry)
+                return Packet_0xB166.extract_info(packet_text, config['0xB166  LTE PRACH Configuration'], entry)
             elif packet_name == '0xB168':
                 print("0xB168")
-                return Packet_0xB168.extract_info(packet_text, config['0xB168 -- PCC'], entry)
+                return Packet_0xB168.extract_info(packet_text, config['0xB168  LTE Random Access Response (MSG2) Report'], entry)
             elif packet_name == '0xB169':
                 print("0xB169")
-                return Packet_0xB169.extract_info(packet_text, config['0xB169 -- PCC'], entry)
+                return Packet_0xB169.extract_info(packet_text, config['0xB169  LTE UE Identification Message (MSG3) Report'], entry)
             elif packet_name == '0xB16A':
                 print("0xB16A")
-                return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
+                return Packet_0xB16A.extract_info(packet_text, config['0xB16A  LTE Contention Resolution Message (MSG4) Report'], entry)
             elif packet_name == '0xB8D8':
                 print("0xB8D8")
-                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],entry)
+                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8  NR5G LL1 LOG SERVING SNR'],entry)
             elif packet_name == '0xB167':
                 print("0xB167")
-                return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
+                return Packet_0xB167.extract_info(packet_text, config["0xB167  LTE Random Access Request (MSG1) Report"],entry)
             elif packet_name == "0x1569":
                 print("0x1569")
-                return Packet_0x1569.extract_info(packet_text, config['0x1569 -- IMS'], entry)
+                return Packet_0x1569.extract_info(packet_text, config['0x1569  IMS RTP Packet Loss'], entry)
             elif packet_name == '0xB823':
                 print("0xB823")
-                return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
+                return Packet_0xB823.extract_info(packet_text, config['0xB823  NR5G RRC Serving Cell Info'], entry)
             elif packet_name == '0xB887':
                 print('0xB887')
-                return Packet_0xB887(packet_text, config['0xB887 -- PCC -- PDSCH'], entry).extract_info()
+                return Packet_0xB887(packet_text, config['0xB887  NR5G MAC PDSCH Status'], entry).extract_info()
             elif packet_name == '0xB801':
                 print('0xB801')
-                return Packet_0xB801.extract_info(packet_text, config["0xB801 -- NR5G -- Packet Subtitle"], entry)
+                return Packet_0xB801.extract_info(packet_text, config["0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg"], entry)
             elif packet_name == '0xB80A':
                 print('0xB80A')
-                return Packet_0xB80A.extract_info(packet_text, config["0xB80A -- NR5G -- Packet Subtitle"], entry)
+                return Packet_0xB80A.extract_info(packet_text, config["0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg"], entry)
             elif packet_name == '0xB825':
                 print('0xB825')
-                return Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+                return Packet_0xB825.extract_info(packet_text, config["0xB825  NR5G RRC Configuration Info"], entry)
             elif packet_name == "0xB97F":
                 print("0xB97F")
-                return Packet_0xB97F(packet_text, config['0xB97F -- PCC'], entry).extract_info()
+                return Packet_0xB97F(packet_text, config['0xB97F  NR5G ML1 Searcher Measurement Database Update Ext'], entry).extract_info()
                 # entry,table_lines = Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
                 # return _tables(table_lines, entry)
             elif packet_name == '0xB8A7':
                 print('0xB8A7')
-                return Packet_0xB8A7(packet_text, config['0xB8A7 -- PCC'], entry).extract_info()
+                return Packet_0xB8A7(packet_text, config['0xB8A7  NR5G MAC CSF Report'], entry).extract_info()
             elif packet_name == '0xB827':
                 print('0xB827')
-                return Packet_0xB827(packet_text, config['0xB827 -- NR5G'], entry).extract_info()
+                return Packet_0xB827(packet_text, config['0xB827  NR5G RRC PLMN Search Request'], entry).extract_info()
             elif packet_name == '0xB18F':
                 print('0xB18F')
-                return Packet_0xB18F(packet_text, config['0xB18F -- LTE'], entry).extract_info()
+                return Packet_0xB18F(packet_text, config['0xB18F  LTE ML1 AdvRx IC Cell List'], entry).extract_info()
             elif packet_name == '0xB821':
                 print('0xB821')
-                return Packet_0xB821.extract_info(packet_text, config['0xB821 -- NR5G -- Packet Subtitle'], entry)
+                return Packet_0xB821.extract_info(packet_text, config['0xB821  NR5G RRC OTA Packet'], entry)
             elif packet_name == '0xB0C0':
                 print('0xB0C0')
-                return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0 -- LTE -- Packet Subtitle'], entry)
+                return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0   LTE RRC OTA Packet'], entry)
             elif packet_name == '0xB113':
                 print('0xB113')
-                return Packet_0xB113(packet_text, config['0xB113 -- LTE'], entry).extract_info()
+                return Packet_0xB113(packet_text, config['0xB113  LTE LL1 PSS Results'], entry).extract_info()
             elif packet_name == '0xB171':
                 print('0xB171')
-                return Packet_0xB171(packet_text, config['0xB171 -- PCC -- SRS'], entry).extract_info()
+                return Packet_0xB171(packet_text, config['0xB171  LTE SRS Power Control Report'], entry).extract_info()
             elif packet_name == '0xB18E':
                 print('0xB18E')
-                return Packet_0xB18E(packet_text, config['0xB18E -- PCell/SCelln'], entry).extract_info()
+                return Packet_0xB18E(packet_text, config['0xB18E  LTE ML1 System Scan Results'], entry).extract_info()
             elif packet_name == '0xB196':
                 print('0xB196')
-                return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
+                return Packet_0xB196(packet_text, config['0xB196  LTE ML1 Cell Measurement Results'], entry).extract_info()
             elif packet_name == '0xB88A':
                 print('0xB88A')
-                return Packet_0xB88A.extract_info(packet_text, config2['0xB88A'], entry)
+                return Packet_0xB88A.extract_info(packet_text, config2['0xB88A  NR5G MAC RACH Attempt'], entry)
             elif packet_name == '0xB828':
                 print('0xB828')
                 return Packet_0xB828(packet_text, config2['0xB828  NR5G RRC PLMN Search Response'], entry).extract_info()
@@ -1509,6 +1518,18 @@ class ParsedRawMessage:
             elif packet_name == '0xB061':
                 print('0xB061')
                 return Packet_0xB061.extract_info(packet_text, config3['0xB061  LTE MAC Rach Trigger'], entry)
+            elif packet_name == '0xB840':
+                print('0xB840')
+                return Packet_0xB840.extract_info(packet_text, config4['0xB840  NR5G PDCP DL Data Pdu'], entry)
+            elif packet_name == '0xB841':
+                print('0xB841')
+                return Packet_0xB841.extract_info(packet_text, config4['0xB841  NR5G PDCP DL Control Pdu'], entry)
+            elif packet_name == '0xB873':
+                print('0xB873')
+                return Packet_0xB873.extract_info(packet_text, config4['0xB873  NR5G L2 UL BSR'], entry)
+            elif packet_name == '0xB111':
+                print('0xB111')
+                return Packet_0xB111(packet_text, config5['0xB111  LTE LL1 Rx Agc Log'], entry).extract_info()
         # start here
 
         # remove empty (only whitespace) lines
@@ -5203,6 +5224,230 @@ SubPacket - ( RACH Reason Subpacket )
       Msg3 size = 6 bytes
       Radio condn = 105 dB
       CRNTI = 0x7DEC
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB873", packet_length=100,
+                               name="NR5G L2 UL BSR",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.333", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.333  [F5]  0xB873  NR5G L2 UL BSR
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 3
+Meta
+   Num TTI = 11
+   LCID Prio Bitmask = 0
+TTI Info
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |             |    |       |                                                            |                    |      |          |     |    |BSR MCE Buffer                              |
+   |   |             |    |       |                                                            |                    |      |          |     |    |      |Short OR Short|Long OR Long Truncated|
+   |   |SysTime      |    |       |                                                            |                    |      |          |     |    |      |Truncated Bsr |Bsr                   |
+   |   |Slot  |      |Harq|Carrier|                                                            |                    |BSR   |LCG       |Num  |QOS |      |        |BSR  |                |BSR  |
+   |#  |Number|FN    |ID  |ID     |BSR Trigger Reason                                          |BSR Type            |Length|Bitmask   |LCIDs|LCID|Length|BSR LCG |Index|LCGx            |Index|
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|    14|   978|   0|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000010|    1|   4|      |       1|   13|                |     |
+   |  1|     4|   980|   3|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000010|    1|   4|      |       1|    8|                |     |
+   |  2|     5|   981|   5|      0|                                       T_PERIODIC_EXPIRY_BSR|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  3|    14|   981|   6|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  4|     4|   982|   7|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  5|    14|   982|   8|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  6|     4|   983|   9|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  7|    14|   983|  10|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  8|     5|   984|  11|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  9|    14|   984|  12|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   | 10|     4|   985|  13|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB840", packet_length=100,
+                               name="NR5G PDCP DL Data Pdu",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.319", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.319  [E7]  0xB840  NR5G PDCP DL Data Pdu
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 0
+Number Of Meta = 100
+Number Of RB = 1
+Number Of Log Count = 40
+PDCP State
+   ------------------------------------------------------------
+   |   |RB   |PDCP  |             |             |             |
+   |   |Cfg  |SN    |             |             |             |
+   |#  |Index|Length|RX_DELIV     |RX_NEXT      |NEXT COUNT   |
+   ------------------------------------------------------------
+   |  0|    5|    18|         2726|         2835|         2726|
+
+Meta Log Buffer
+   --------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |System    |        |   |RB   |     |    |               |         |         |             |             |             |             |             |
+   |   |Time      |RX      |Num|Cfg  |Key  |RLC |               |IP Packet|IP Packet|             |             |             |Number IP    |Number IP    |
+   |#  |Slot|Frame|Timetick|NLO|Index|Index|Path|Route Status   |Header[0]|Header[1]|Start Count  |End Count    |RLC end SN   |Pkts         |bytes        |
+   --------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|   0|  983|0.164870|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2568|         2568|          154|            1|         1430|
+   |  1|   3|  982|0.157799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2569|         2571|          154|            3|         4290|
+   |  2|   3|  982|0.157799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2572|         2572|          155|            1|         1430|
+   |  3|   3|  982|0.157883|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2573|         2573|          155|            1|         1430|
+   |  4|   3|  982|0.157883|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2574|         2574|          156|            1|         1430|
+   |  5|   4|  982|0.158798|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2575|         2577|          156|            3|         4290|
+   |  6|   4|  982|0.158798|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2578|         2578|          157|            1|         1430|
+   |  7|   4|  982|0.158881|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2579|         2579|          157|            1|         1430|
+   |  8|   4|  982|0.158881|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2580|         2580|          158|            1|         1430|
+   |  9|   7|  983|0.171792|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2581|         2582|          158|            2|         2860|
+   | 10|   7|  983|0.171792|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2583|         2583|          159|            1|         1430|
+   | 11|   8|  982|0.162863|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2584|         2585|          159|            2|         2860|
+   | 12|   8|  982|0.162863|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2586|         2586|          160|            1|         1430|
+   | 13|   9|  982|0.163793|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2587|         2588|          160|            2|         2860|
+   | 14|   9|  982|0.163793|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2589|         2589|          161|            1|         1430|
+   | 15|   9|  982|0.163870|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2590|         2591|          161|            2|         2860|
+   | 16|   9|  982|0.163870|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2592|         2592|          162|            1|         1430|
+   | 17|   1|  983|0.165799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2593|         2594|          162|            2|         2860|
+   | 18|   1|  983|0.165799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2595|         2595|          163|            1|         1430|
+   | 19|   1|  983|0.165882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2596|         2597|          163|            2|         2860|
+   | 20|   1|  983|0.165882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2598|         2598|          164|            1|         1430|
+   | 21|   2|  983|0.166800|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2599|         2600|          164|            2|         2860|
+   | 22|   2|  983|0.166800|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2601|         2601|          165|            1|         1430|
+   | 23|   2|  983|0.166884|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2602|         2603|          165|            2|         2860|
+   | 24|   2|  983|0.166884|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2604|         2604|          166|            1|         1430|
+   | 25|   4|  983|0.168799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2605|         2606|          166|            2|         2860|
+   | 26|   4|  983|0.168799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2607|         2607|          167|            1|         1430|
+   | 27|   4|  983|0.168882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2608|         2609|          167|            2|         2860|
+   | 28|   4|  983|0.168882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2610|         2610|          168|            1|         1430|
+   | 29|   5|  983|0.169772|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2611|         2612|          168|            2|         2860|
+   | 30|   5|  983|0.169772|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2613|         2613|          169|            1|         1430|
+   | 31|   5|  983|0.169850|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2614|         2615|          169|            2|         2860|
+   | 32|   5|  983|0.169850|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2616|         2616|          170|            1|         1430|
+   | 33|   7|  983|0.171866|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2617|         2617|          170|            1|         1430|
+   | 34|   7|  983|0.171866|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2618|         2618|          171|            1|         1430|
+   | 35|   8|  983|0.172799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2619|         2620|          171|            2|         2860|
+   | 36|   8|  983|0.172799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2621|         2621|          172|            1|         1430|
+   | 37|   8|  983|0.172882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2622|         2623|          172|            2|         2860|
+   | 38|   8|  983|0.172882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2624|         2624|          173|            1|         1430|
+   | 39|   9|  983|0.173796|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2625|         2626|          173|            2|         2860|
+   | 40|   9|  983|0.173796|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2627|         2627|          174|            1|         1430|
+   | 41|   9|  983|0.173875|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2628|         2628|          174|            1|         1430|
+   | 42|   9|  983|0.173875|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2629|         2629|          175|            1|         1430|
+   | 43|   0|  984|0.174762|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2630|         2630|          176|            1|         1430|
+   | 44|   8|  979|0.127693|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2631|         2631|            0|            1|         1430|
+   | 45|   9|  979|0.128193|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2632|         2632|            1|            1|         1430|
+   | 46|  11|  979|0.129190|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2633|         2633|            2|            1|         1430|
+   | 47|  10|  980|0.138696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2634|         2634|            3|            1|         1430|
+   | 48|  11|  980|0.139196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2635|         2635|            4|            1|         1430|
+   | 49|  16|  980|0.141696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2636|         2636|            5|            1|         1430|
+   | 50|  17|  980|0.142196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2637|         2637|            6|            1|         1430|
+   | 51|  19|  980|0.143196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2638|         2638|            7|            1|         1430|
+   | 52|   1|  981|0.144196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2639|         2639|            8|            1|         1430|
+   | 53|   6|  981|0.146696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2640|         2640|            9|            1|         1430|
+   | 54|   7|  981|0.147196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2641|         2641|           10|            1|         1430|
+   | 55|   9|  981|0.148196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2642|         2642|           11|            1|         1430|
+   | 56|  10|  981|0.148696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2643|         2643|           12|            1|         1430|
+   | 57|  11|  981|0.149196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2644|         2644|           13|            1|         1430|
+   | 58|  12|  981|0.149696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2645|         2645|           14|            1|         1430|
+   | 59|  16|  981|0.151696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2646|         2646|           15|            1|         1430|
+   | 60|  17|  981|0.152196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2647|         2647|           16|            1|         1430|
+   | 61|  18|  981|0.152696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2648|         2648|           17|            1|         1430|
+   | 62|  19|  981|0.153197|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2649|         2649|           18|            1|         1430|
+   | 63|   0|  982|0.153687|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2650|         2651|           20|            2|         2860|
+   | 64|   0|  982|0.153687|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2652|         2652|           21|            1|         1430|
+   | 65|   1|  982|0.154183|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2653|         2653|           22|            1|         1430|
+   | 66|   2|  982|0.154683|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2654|         2654|           23|            1|         1430|
+   | 67|   2|  982|0.154683|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2655|         2655|           24|            1|         1430|
+   | 68|   3|  982|0.154898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2656|         2656|           25|            1|         1430|
+   | 69|   6|  982|0.156696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2657|         2658|           27|            2|         2860|
+   | 70|   6|  982|0.156696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2659|         2659|           28|            1|         1430|
+   | 71|   7|  982|0.157197|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2660|         2660|           29|            1|         1430|
+   | 72|   7|  982|0.157197|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2661|         2661|           30|            1|         1430|
+   | 73|   8|  982|0.157696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2662|         2663|           32|            2|         2860|
+   | 74|   8|  982|0.157696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2664|         2664|           33|            1|         1430|
+   | 75|   9|  982|0.158196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2665|         2666|           35|            2|         2860|
+   | 76|   9|  982|0.158196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2667|         2667|           36|            1|         1430|
+   | 77|  10|  982|0.158709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2668|         2671|           40|            4|         5720|
+   | 78|  10|  982|0.158709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2672|         2672|           41|            1|         1430|
+   | 79|  11|  982|0.159203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2673|         2675|           44|            3|         4290|
+   | 80|  11|  982|0.159203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2676|         2676|           45|            1|         1430|
+   | 81|  12|  982|0.159703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2677|         2680|           49|            4|         5720|
+   | 82|  12|  982|0.159703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2681|         2681|           50|            1|         1430|
+   | 83|  13|  982|0.159898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2682|         2682|           51|            1|         1430|
+   | 84|  16|  982|0.161709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2683|         2686|           55|            4|         5720|
+   | 85|  16|  982|0.161709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2687|         2687|           56|            1|         1430|
+   | 86|  17|  982|0.162209|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2688|         2691|           60|            4|         5720|
+   | 87|  17|  982|0.162209|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2692|         2692|           61|            1|         1430|
+   | 88|  18|  982|0.162709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2693|         2695|           64|            3|         4290|
+   | 89|  18|  982|0.162709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2696|         2696|           65|            1|         1430|
+   | 90|  19|  982|0.163210|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2697|         2701|           70|            5|         7150|
+   | 91|  19|  982|0.163210|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2702|         2702|           71|            1|         1430|
+   | 92|   0|  983|0.163709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2703|         2709|           78|            7|        10010|
+   | 93|   0|  983|0.163709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2710|         2710|           79|            1|         1430|
+   | 94|   1|  983|0.164203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2711|         2715|           84|            5|         7150|
+   | 95|   1|  983|0.164203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2716|         2716|           85|            1|         1430|
+   | 96|   2|  983|0.164703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2717|         2721|           90|            5|         7150|
+   | 97|   2|  983|0.164703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2722|         2722|           91|            1|         1430|
+   | 98|   3|  983|0.164898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2723|         2724|           93|            2|         2860|
+   | 99|   3|  983|0.164898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2725|         2725|           94|            1|         1430|
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB841", packet_length=100,
+                               name="NR5G PDCP DL Control Pdu",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.180", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.180  [AD]  0xB841  NR5G PDCP DL Control Pdu
+Subscription ID = 1
+Misc ID         = 0
+Version = 4
+System Time
+   Frame = 970
+   Slot = 2
+Control PDU Size = 5
+Control PDU Type = STATUS_REPORT
+DC Bit = 0
+PDCP Type = STATUS_REPORT
+PDCP Status Report
+   FMC = 713
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB111", packet_length=100,
+                               name="LTE LL1 Rx Agc Log",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.171", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.171  [0E]  0xB111  LTE LL1 Rx Agc Log
+Subscription ID = 1
+Version = 164
+Number of Records = 16
+AGC Mode = Traffic
+Carrier Index = PCC
+is_lte_nr_slna = 0
+sf_offset = 2
+Records
+   ---------------------------------------------------------------------------------
+   |   |       |     |     |     |        |   |        |Broadband|Measured|Measured|
+   |   |Rx     |     |     |LNA  |Sub     |   |        |RSSI     |Total   |Inband  |
+   |   |Antenna|     |Sub  |Gain |frame   |LNA|DVGA    |Estimate |RSSI    |RSSI    |
+   |#  |Index  |Frame|Frame|State|Type    |ID |(dB)    |(dBm)    |(dBm)   |(dBm)   |
+   ---------------------------------------------------------------------------------
+   |  0|    Rx0|  969|    1|    1|      DL|  0|   -5.26|   -68.44|  -59.50|  -64.75|
+   |  1|    Rx1|  969|    1|    1|      DL|  1|   -3.39|   -67.06|  -61.00|  -66.25|
+   |  2|    Rx2|  969|    1|    0|      DL|  2|   -5.89|   -72.25|  -63.50|  -69.75|
+   |  3|    Rx3|  969|    1|    0|      DL|  3|   -8.47|   -72.13|  -62.50|  -68.75|
+   |  4|    Rx0|  969|    2|    1|      DL|  0|   -5.23|   -74.63|  -59.50|  -69.25|
+   |  5|    Rx1|  969|    2|    1|      DL|  1|   -3.36|   -71.06|  -61.00|  -71.25|
+   |  6|    Rx2|  969|    2|    0|      DL|  2|   -5.85|   -77.38|  -63.50|  -74.00|
+   |  7|    Rx3|  969|    2|    0|      DL|  3|   -8.45|   -77.69|  -62.50|  -72.50|
+   |  8|    Rx0|  969|    3|    1|      DL|  0|   -5.25|   -61.94|  -59.50|  -65.00|
+   |  9|    Rx1|  969|    3|    1|      DL|  1|   -3.37|   -63.88|  -61.25|  -67.75|
+   | 10|    Rx2|  969|    3|    0|      DL|  2|   -5.86|   -66.63|  -63.50|  -70.25|
+   | 11|    Rx3|  969|    3|    0|      DL|  3|   -8.47|   -65.69|  -62.50|  -68.75|
+   | 12|    Rx0|  969|    4|    1|      DL|  0|   -5.23|   -73.94|  -59.50|  -67.00|
+   | 13|    Rx1|  969|    4|    1|      DL|  1|   -3.36|   -70.75|  -61.25|  -69.25|
+   | 14|    Rx2|  969|    4|    0|      DL|  2|   -5.84|   -76.81|  -63.50|  -71.75|
+   | 15|    Rx3|  969|    4|    0|      DL|  3|   -8.45|   -76.50|  -62.50|  -70.25|
+
 """)
         messages.append(msg)
 

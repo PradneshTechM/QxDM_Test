@@ -1,5 +1,5 @@
 {
-  "0xB88A": {
+  "0xB88A  NR5G MAC RACH Attempt": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -169,12 +169,12 @@
     "__Raw_Data": false,
     "__collection": "NR5G",
     "__cell": [
-      "if int(entry['Carrier ID']) == 0:",
-      "    entry['__cell'] = 'PCC'",
-      "elif int(entry['Carrier ID']) >= 1:",
-      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
-      "entry.pop('Carrier ID')"
-    ],
+            "if int(entry['Carrier ID']) == 0:",
+            "\tentry['__cell'] = 'PCC'",
+            "elif int(entry['Carrier ID']) >= 1:",
+            "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
+            "entry.pop('Carrier ID')"
+        ],
     "Packet_Type": "PUSCH"
   },
   "0xB884  NR5G MAC UL Physical Channel Power Control": {
@@ -632,10 +632,10 @@
     "DB Field": "Number of SubPackets"
   },
   "Idle Mode Neighbor Cell Measurement Request.SubPacket Size": {
-    "DB Field": "Idle Mode Neighbor Cell Measurement Request.SubPacket Size"
+    "DB Field": "Idle Mode Neighbor Cell Measurement Request SubPacket Size"
   },
   "Idle Mode Neighbor Cell Measurement Request.E-ARFCN": {
-    "DB Field": "Idle Mode Neighbor Cell Measurement Request.E-ARFCN"
+    "DB Field": "Idle Mode Neighbor Cell Measurement Request E-ARFCN"
   },
   "Idle Mode Neighbor Cell Measurement Request.Num Cells": {
     "DB Field": "Idle Mode Neighbor Cell Measurement Request.Num Cells"

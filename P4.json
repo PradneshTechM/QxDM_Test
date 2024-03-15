@@ -1,9 +1,26 @@
 {
-  "0xB873  NR5G L2 UL BSR": {
-    "Subscription ID": {
-      "DB Field": "Subs ID"
+    "0xB840  NR5G PDCP DL Data Pdu": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "__Raw_Data": false,
+        "__collection": "Event",
+        "__cell": "NR5G"
+    },
+    "0xB841  NR5G PDCP DL Control Pdu": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "__Raw_Data": false,
+        "__collection": "Event",
+        "__cell": "NR5G"
+    },
+    "0xB873  NR5G L2 UL BSR": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "__Raw_Data": false,
+        "__collection": "Event",
+        "__cell": "NR5G"
     }
-  },
-  ""
-
 }

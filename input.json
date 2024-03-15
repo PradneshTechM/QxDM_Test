@@ -1,5 +1,5 @@
 {
-  "0x1830 -- IMS -- Direction": {
+  "0x1830  IMS VoLTE Session Setup": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [IMS] Subs ID"
@@ -27,7 +27,7 @@
     ],
     "__Raw_Data": true
   },
-  "0x1831 -- IMS -- Direction": {
+  "0x1831  IMS VoLTE Session End": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [IMS] Subs ID"
@@ -56,7 +56,7 @@
     ],
     "__Raw_Data": true
   },
-  "0x1832 -- IMS -- IMS_SIP_REGISTER/INFORMAL_RESPONSE": {
+  "0x1832  IMS Registration": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [IMS] Subs ID"
@@ -74,7 +74,7 @@
     "Packet_Type": "IMS_SIP_REGISTER/INFORMAL_RESPONSE",
     "__Raw_Data": true
   },
-  "0x156E -- IMS -- IMS_SIP_INVITE": {
+  "0x156E  IMS SIP Message": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [IMS] Subs ID"
@@ -101,10 +101,12 @@
       "DB Field": "Cseq",
       "Field Name": "Event [IMS] Cseq",
       "__comments": [
-        "parts = entry['CSeq'].split(' ', 1)",
-        "if len(parts) == 2:",
-        "entry['CSeq'], entry['Method'] = parts"
-      ]
+            "parts = entry['CSeq'].split(' '",
+            " 1)",
+            "if len(parts) == 2:",
+            " entry['CSeq']",
+            " entry['Method'] = parts"
+        ]
     },
     "P-Access-Network-Info": {
       "DB Field": "P-Access-Network-Info",
@@ -122,7 +124,7 @@
     ],
     "__Raw_Data": true
   },
-  "0xB0C1 -- LTE-- RRC": {
+  "0xB0C1  LTE RRC MIB Message Log Packet": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [LTE] Subs ID"
@@ -148,7 +150,7 @@
     "Packet_Type": "RRC",
     "__Raw_Data": true
   },
-  "0xB0E5 -- LTE -- NAS": {
+  "0xB0E5  LTE NAS ESM Bearer Context Info": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -169,7 +171,7 @@
     "Packet_Type": "NAS",
     "__Raw_Data": true
   },
-  "0xB113 -- LTE": {
+  "0xB113  LTE LL1 PSS Results": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -204,7 +206,7 @@
     "__collection": "Event",
     "__cell": "LTE"
   },
-  "0xB115": {
+  "0xB115  LTE LL1 SSS Results": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -249,7 +251,7 @@
       }
     ]
   },
-  "0xB166 -- Pcell -- PRACH": {
+  "0xB166  LTE PRACH Configuration": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -293,7 +295,7 @@
     "Packet_Type": "PRACH",
     "__Raw_Data": false
   },
-  "0xB167": {
+  "0xB167  LTE Random Access Request (MSG1) Report": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -344,7 +346,7 @@
     },
     "__cell": "LTE"
   },
-  "0xB168 -- PCC": {
+  "0xB168  LTE Random Access Response (MSG2) Report": {
     "Cell Index": {
       "DB Field": "Cell Index"
     },
@@ -374,7 +376,7 @@
       "entry['__cell'] = f'SCC{entry['Cell index']}'"
     ]
   },
-  "0xB169 -- PCC": {
+  "0xB169  LTE UE Identification Message (MSG3) Report": {
     "Cell Index": {
       "DB Field": "Cell Index"
     },
@@ -401,7 +403,7 @@
       "entry['__cell'] = f'SCC{entry['Cell index']}'"
     ]
   },
-  "0xB16A": {
+  "0xB16A  LTE Contention Resolution Message (MSG4) Report": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -421,7 +423,7 @@
       "DB Field": "Contention Result"
     }
   },
-  "0xB825 -- PCC -- NSA": {
+  "0xB825  NR5G RRC Configuration Info": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID",
@@ -528,7 +530,7 @@
     "Packet_Type": "entry['Connectivity Mode']",
     "__Raw_Data": false
   },
-  "0xB97F -- PCC": {
+  "0xB97F  NR5G ML1 Searcher Measurement Database Update Ext": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
@@ -586,7 +588,7 @@
     ],
     "__Raw_Data": false
   },
-  "0xB8A7 -- PCC": {
+  "0xB8A7  NR5G MAC CSF Report": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
@@ -620,12 +622,12 @@
     ],
     "__Raw_Data": false
   },
-  "0xB887 -- PCC -- PDSCH": {
+  "0xB887  NR5G MAC PDSCH Status": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
     },
-    "Records": [
+    "PDSCH Status Info": [
       {
         "Carrier Id": {
           "index": 5,
@@ -696,14 +698,14 @@
     "__collection": "NR5G",
     "__cell": [
       "if int(entry['Carrier Id']) == 0:",
-      "entry['__cell'] = 'PCC'",
+      " entry['__cell'] = 'PCC'",
       "elif int(entry['Carrier Id']) >= 1:",
       "entry['__cell'] = f'SCC{entry['Carrier Id']}'"
     ],
     "Packet_Type": "PDSCH",
     "__Raw_Data": false
   },
-  "0xB8D8 -- PCC -- Reference Signal = SSB": {
+  "0xB8D8  NR5G LL1 LOG SERVING SNR": {
     "Carrier Index": {
       "DB Field": "Carrier Index"
     },
@@ -746,7 +748,7 @@
     "Packet_Type": "Reference Signal = SSB",
     "__Raw_Data": false
   },
-  "0xB827 -- NR5G": {
+  "0xB827  NR5G RRC PLMN Search Request": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -812,7 +814,7 @@
     "__cell": "NR5G",
     "__Raw_Data": true
   },
-  "0xB823 -- NR5G": {
+  "0xB823  NR5G RRC Serving Cell Info": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -861,7 +863,7 @@
     "__collection": "Event",
     "__cell": "NR5G"
   },
-  "0xB822  -- NR5G": {
+  "NR5G RRC MIB Info": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -893,7 +895,7 @@
     "__cell": "NR5G",
     "__Raw_Data": true
   },
-  "0xB821 -- NR5G -- Packet Subtitle": {
+  "0xB821  NR5G RRC OTA Packet": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -926,7 +928,7 @@
     ],
     "__Raw_Data": true
   },
-  "0xB80B -- NR5G -- Packet Subtitle": {
+  "0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -942,7 +944,7 @@
       "entry['msg_subtitle']"
     ]
   },
-  "0xB80A -- NR5G -- Packet Subtitle": {
+  "0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -957,7 +959,7 @@
       "entry['msg_subtitle']"
     ]
   },
-  "0xB801 -- NR5G -- Packet Subtitle": {
+  "0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -976,7 +978,7 @@
       "entry['msg_subtitle']"
     ]
   },
-  "0xB0C0 -- LTE -- Packet Subtitle": {
+  "0xB0C0   LTE RRC OTA Packet": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [LTE] Subs ID"
@@ -1009,7 +1011,7 @@
     ],
     "__Raw_Data": true
   },
-  "0xB0C2 -- Cell -- Cell Info": {
+  "0xB0C2  LTE RRC Serving Cell Info Log Pkt": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1053,7 +1055,7 @@
     "__cell": "LTE",
     "Packet_Type": "Cell Info"
   },
-  "0xB0E4 -- LTE -- NAS": {
+  "0xB0E4  LTE NAS ESM Bearer Context State": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1071,7 +1073,7 @@
     "Packet_Type": "NAS",
     "__Raw_Data": true
   },
-  "0xB0EC -- LTE -- msg_type": {
+  "0xB0EC  LTE NAS EMM Plain OTA Incoming Message": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1187,7 +1189,7 @@
     "Packet_Type": "msg_type",
     "__Raw_Data": true
   },
-  "0xB800 -- NR5G -- PDU session release req": {
+  "0xB800  NR5G NAS SM5G Plain OTA Incoming Msg": {
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -1208,7 +1210,7 @@
     "__cell": "NR5G",
     "Packet_Type": "entry['msg_subtitle']"
   },
-  "0xB171 -- PCC -- SRS": {
+  "0xB171  LTE SRS Power Control Report": {
     "Cell Index": {
       "DB Field": "Cell Index"
     },
@@ -1240,7 +1242,7 @@
     ],
     "Packet_Type": "SRS"
   },
-  "0x1569 -- IMS": {
+  "0x1569  IMS RTP Packet Loss": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1262,7 +1264,7 @@
     "__collection": "Event",
     "__cell": "IMS"
   },
-  "0x156A -- IMS": {
+  "0x156A  IMS RTCP": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1282,7 +1284,7 @@
     "__cell": "IMS",
     "__Raw_Data": true
   },
-  "0xB0F7 -- LTE": {
+  "0xB0F7  LTE NAS EMM RRC Service Request": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1296,7 +1298,7 @@
     "__cell": "LTE",
     "__Raw_Data": true
   },
-  "0xB18E -- PCell/SCelln": {
+  "0xB18E  LTE ML1 System Scan Results": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1334,7 +1336,7 @@
     "__cell": "PCell/SCelln",
     "__Raw_Data": true
   },
-  "0xB18F -- LTE": {
+  "0xB18F  LTE ML1 AdvRx IC Cell List": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
@@ -1410,42 +1412,7 @@
     "__cell": "LTE",
     "__Raw_Data": true
   },
-  "0xB196": {
-    "Subscription ID": {
-      "DB Field": "Subs ID"
-    },
-    "Num Cells": {
-      "DB Field": "Num Cells"
-    },
-    "Cell Measurement List": [
-      {
-        "E-ARFCN": {
-          "index": 1,
-          "DB Field": "E-ARFCN"
-        },
-        "Physical Cell ID": {
-          "index": 2,
-          "DB Field": "Physical Cell ID"
-        },
-        "Valid Rx": {
-          "index": 3,
-          "DB Field": "Valid Rx"
-        },
-        "Inst RSRP Rx[0] (dBm)": {
-          "index": 4,
-          "DB Field": "Inst RSRP Rx[0] (dBm)"
-        },
-        "Inst RSRQ Rx[0] (dBm)": {
-          "index": 6,
-          "DB Field": "Inst RSRQ Rx[0] (dBm)"
-        }
-      }
-    ],
-    "__collection": "LTE",
-    "__cell": "PCell/SCelln",
-    "__Raw_Data": true
-  },
-  "0xB196 -- PCell/SCelln": {
+  "0xB196  LTE ML1 Cell Measurement Results": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },
