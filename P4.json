@@ -1,9 +1,110 @@
 {
-  "0xB873  NR5G L2 UL BSR": {
-    "Subscription ID": {
-      "DB Field": "Subs ID"
+    "0xB16D  LTE GM TX Report": {
+        "Subscription ID": {
+            "DB Field": "Subs ID",
+            "Field Name": "LTE [PCC] Subs ID"
+        },
+        "Chan Type": {
+            "DB Field": "Chan Type"
+        },
+        "Cell Index": {
+            "DB Field": "Cell Index"
+        },
+        "Total Tx Power": {
+            "DB Field": "TX Power (dBm)",
+            "Field Name": "LTE [PCC] TX Power (dBm)"
+        },
+        "Transport Block Size": {
+            "DB Field": "TB Size(Bytes)",
+            "Field Name": "LTE [PCC] TB Size(Bytes)"
+        },
+        "HARQ ID": {
+            "DB Field": "HARQ ID",
+            "Field Name": "LTE [PCC] HARQ ID"
+        },
+        "Retransmission Index": {
+            "DB Field": "Retransmission",
+            "Field Name": "LTE [PCC] Retransmission"
+        },
+        "Modulation Type": {
+            "DB Field": "Modulation",
+            "Field Name": "LTE [PCC] Modulation"
+        },
+        "Number of Resource Blocks": {
+            "DB Field": "Num RBs",
+            "Field Name": "LTE [PCC] Num RBs"
+        },
+        "MCS Index": {
+            "DB Field": "MCS",
+            "Field Name": "LTE [PCC] MCS"
+        },
+        "Num Antenna": {
+            "DB Field": "No of Antenna",
+            "Field Name": "LTE [PCC] No of Antenna"
+        },
+        "__Raw_Data": true,
+        "__collection": "LTE",
+        "__cell":[
+          "if int(entry['Cell Index']) == 0:",
+          "    entry['__cell'] = 'PCC'",
+          "    entry.pop('Cell Index')",
+          "elif int(entry['Cell Index']) >= 1:",
+          "    entry['__cell'] = 'SCCn'",
+          "    entry.pop('Cell Index')"
+        ],
+        "Packet_Type": ["entry['Packet_Type'] = entry.pop('Chan Type')"]
+    },
+    "0xB172  LTE Uplink PKT Build Indication": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "PKT Build Record": [
+            {
+                "Cell Index": {
+                    "index": 1,
+                    "DB Field": "Cell Index"
+                },
+                "RNTI Type": {
+                    "index": 6,
+                    "DB Field": "RNTI Type"
+                },
+                "HARQ ID": {
+                    "index": 7,
+                    "DB Field": "HARQ ID"
+                },
+                "Transport Block Size": {
+                    "index": 4,
+                    "DB Field": "TB Size(Bytes)"
+                }
+            }
+        ],
+        "__Raw_Data": false,
+        "__collection": "LTE",
+        "__cell":[
+          "if int(entry['Cell Index']) == 0:",
+          "    entry['__cell'] = 'PCC'",
+          "    entry.pop('Cell Index')",
+          "elif int(entry['Cell Index']) >= 1:",
+          "    entry['__cell'] = 'SCCn'",
+          "    entry.pop('Cell Index')"
+        ],
+        "Packet_Type": "Tx Type"
+    },
+    "0xB195  LTE ML1 Connected Neighbor Meas Request/Response": {
+        "Subscription ID": {
+            "DB Field": "Subs ID"
+        },
+        "E-ARFCN": {
+            "DB Field": "EARFCN"
+        },
+        "Serving cell Index": {
+            "DB Field": "Serving cell Index"
+        },
+        "Duplexing Mode": {
+            "DB Field": "Duplex Mode"
+        },
+        "__Raw_Data": false,
+        "__collection": "LTE",
+        "__cell": ["entry['__cell'] = entry.pop('Serving cell Index')"]
     }
-  },
-  ""
-
 }

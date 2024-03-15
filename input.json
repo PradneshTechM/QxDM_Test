@@ -625,7 +625,7 @@
       "DB Field": "Subs ID",
       "Field Name": "NR5G [PCC] Subs ID"
     },
-    "Records": [
+    "PDSCH Status Info": [
       {
         "Carrier Id": {
           "index": 5,
