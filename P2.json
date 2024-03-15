@@ -715,8 +715,8 @@
   "Subscription ID": {
     "DB Field": "Subs ID"
   },
-  "eps_bearer_id_or_skip_id": {
-    "DB Field": "eps_bearer_id_or_skip_id"
+  "eps bearer id or skip id": {
+    "DB Field": "eps bearer id or skip id"
   },
   "prot_disc": {
     "DB Field": "prot_disc"

@@ -21,7 +21,7 @@ class Packet_0xB0EC:
             # entry = match.groupdict()
             # print(entry)
 
-            key_mapping = {'subscription_id': config['Subscription ID']['DB Field'],
+            key_mapping = {'Subs_ID': config['Subscription ID']['DB Field'],
                            'prot_disc': config['prot_disc']['DB Field'],
                            'msg_type': config['msg_type']['DB Field'],
                            'lte_emm_msg': config['lte_emm_msg']['DB Field']

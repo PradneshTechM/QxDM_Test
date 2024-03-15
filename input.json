@@ -130,7 +130,7 @@
       "Field Name": "Event [LTE] Subs ID"
     },
     "Number of TX Antennas": {
-      "DB Field": "No. of Antenna"
+      "DB Field": "No of Antenna"
     },
     "Physical cell ID": {
       "DB Field": "PCI",
@@ -182,7 +182,7 @@
       "DB Field": "System Frame Number"
     },
     "Srch_type": {
-      "DB Field": "Srch_type"
+      "DB Field": "Srch-type"
     },
     "Earfcn": {
       "DB Field": "Earfcn"
@@ -1084,10 +1084,10 @@
       "DB Field": "Raw Payload"
     },
     "msg_type": {
-      "DB Field": "msg_type"
+      "DB Field": "msg type"
     },
     "lte_emm_msg": {
-      "DB Field": "lte_emm_msg"
+      "DB Field": "lte emm msg"
     },
     "__collection": "Event",
     "__cell": "LTE",
@@ -1328,7 +1328,7 @@
         },
         "NB_Energy (dBm/100KHz)": {
           "index": 5,
-          "DB Field": "NB_Energy (dBm/100KHz)"
+          "DB Field": "NB Energy (dBm/100KHz)"
         }
       }
     ],
