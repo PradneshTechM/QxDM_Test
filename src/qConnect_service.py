@@ -141,7 +141,8 @@ def QUTS_diag_connect(sid, data):
         sys.stdout.flush()
         session.collection = data["collection"]
         
-      session.init_db_connection()
+      # session db+collection init will happen on stop now
+      # session.init_db_and_collection()
       
       return {
         'data': {
@@ -225,6 +226,13 @@ def QUTS_log_stop(sid, data):
       raise Exception(f'log_id not found: {log_id}')
     if not log_sessions[log_id].service:
       raise Exception(f'No service for log_id: {log_id}')
+    
+    if 'db' in data:
+      log_sessions[log_id].db = data['db']
+      logging.info(f"Using custom db {data['db']}")
+      sys.stdout.flush()
+      
+    log_sessions[log_id].init_db_and_collection() 
 
     user = log_sessions[log_id].user
     user_id = user["email"].split('@', 1)[0]

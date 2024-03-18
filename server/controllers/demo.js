@@ -141,6 +141,10 @@ demoRouter.delete('/logs/:log_id', (request, response) => {
     log_id: request.params.log_id,
   }
   
+  if(request.body && request.body.db) {
+    data.db = request.body.db
+  }
+  
   const socket = request.app.get('socketio')
   
   socket.emit('QUTS_log_stop', data, async (res) => {

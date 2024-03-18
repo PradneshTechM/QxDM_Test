@@ -392,9 +392,6 @@ class QCATWorker(threading.Thread):
 
             if not packet.Next():
                 break
-
-                   
-            
         if index % CHUNK_SIZE != 0:
             pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": math.ceil(index / CHUNK_SIZE)})
         
@@ -465,9 +462,9 @@ class QCATWorker(threading.Thread):
         total_count = self.parse_raw(self.log_file)
         pub.unsubscribe(messages_listener, self.log_id)
         
-        # print(f'Successfuly parsed a total of {total_count} packets for log {self.log_id}!')
-        # sys.stdout.flush()
-        # sys.stderr.flush()
+        print(f'Successfuly parsed a total of {total_count} packets for log {self.log_id}!')
+        sys.stdout.flush()
+        sys.stderr.flush()
         
         if _AUTOMATION_DELETE_LOGS_AFTER_PARSING:
             if os.path.exists(self.log_file):

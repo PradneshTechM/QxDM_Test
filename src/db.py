@@ -25,7 +25,7 @@ class DB:
         DB._DB_CLIENT = MongoClient("localhost", 27017)
       else:
         print(f'Initializing database instance @{DB._DB_HOST}:{DB._DB_PORT}')
-        DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT), username=DB._DB_USER, password=DB._DB_PASS, authSource=DB._DB_NAME)
+        DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT), username=DB._DB_USER, password=DB._DB_PASS) # authSource=DB._DB_NAME
     if not DB._DB_INSTANCE:
       DB._DB_INSTANCE = DB._DB_CLIENT[DB._DB_NAME]
     print(f'Initialized database instance {DB._DB_NAME}')
