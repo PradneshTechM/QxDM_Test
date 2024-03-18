@@ -8,6 +8,8 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB16D_processor import Packet_0xB16D
+from packet_0xB193_processor import Packet_0xB193
 from packet_0xB195_processor import Packet_0xB195
 from packet_0xB172_processor import Packet_0xB172
 from packet_0xB16D_processor import Packet_0xB16D
@@ -1541,6 +1543,9 @@ class ParsedRawMessage:
             elif packet_name == '0xB111':
                 print('0xB111')
                 return Packet_0xB111(packet_text, config5['0xB111  LTE LL1 Rx Agc Log'], entry).extract_info()
+            elif packet_name == '0xB193':
+                print('0xB193')
+                return Packet_0xB193.extract_info(packet_text, config3['0xB193  LTE ML1 Serving Cell Meas Response'], entry)
         # start here
 
         # remove empty (only whitespace) lines
@@ -1683,6 +1688,62 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+        msg = ParsedRawMessage(index=0, packet_type="0xB193", packet_length=100,
+                               name=" LTE ML1 Serving Cell Meas Response",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.480",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.480  [14]  0xB193  LTE ML1 Serving Cell Meas Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 1
+SubPacket ID = 25
+Serving Cell Measurement Result
+   Version = 59
+   SubPacket Size = 160 bytes
+   E-ARFCN = 66986
+   Num of Cell = 1
+   Cells[0]
+      Valid Rx = RX0_RX1_RX2_RX3
+      Logical To Physical Rx Map = { 2, 3, 0, 1 }
+      Physical Cell ID = 147
+      Serving Cell Index = PCell
+      FW Serving Cell Index = 0
+      Is Serving Cell = 1
+      Current SFN = 108
+      Current Subframe Number = 2
+      Is Restricted = false
+      Cell Timing[0] = 79155
+      Cell Timing[1] = 79155
+      Cell Timing SFN[0] = 108
+      Cell Timing SFN[1] = 108
+      Inst RSRP Rx[0] = -90.13 dBm
+      Inst RSRP Rx[1] = -89.63 dBm
+      Inst RSRP Rx[2] = -92.69 dBm
+      Pathloss RSRP Rx[2] = -92.56 dBm
+      Pathloss RSRP Rx[3] = -94.50 dBm
+      Inst RSRP Rx[3] = -94.56 dBm
+      Inst Measured RSRP = -92.69 dBm
+      Filtered RSRP = -92.25 dBm
+      Inst RSRQ Rx[0] = -11.56 dB
+      Inst RSRQ Rx[1] = -12.31 dB
+      Inst RSRQ Rx[2] = -11.63 dB
+      Inst RSRQ Rx[3] = -11.06 dB
+      Post Ic Rsrq = -11.06 dB
+      Filtered RSRQ = -12.81 dB
+      Inst RSSI Rx[0] = -61.56 dBm
+      Inst RSSI Rx[1] = -60.25 dBm
+      Inst RSSI Rx[2] = -64.13 dBm
+      Inst RSSI Rx[3] = -66.44 dBm
+      Inst RSSI = -64.13 dBm
+      FTL SNR Rx[0] = 6.40 dB
+      FTL SNR Rx[1] = 6.00 dB
+      FTL SNR Rx[2] = 7.00 dB
+      FTL SNR Rx[3] = 7.20 dB
+      Projected Sir = 11.00 dB
+      Post Ic Rsrq = -11.06 dB
+
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB195", packet_length=100,
                                name="LTE ML1 Connected Neighbor Meas Request/Response",
                                subtitle="", datetime="2024 Jan 15  07:15:35.801",
@@ -1773,7 +1834,7 @@ PKT Build Record
                                name="LTE GM TX Report",
                                subtitle="", datetime="2024 Jan 15  07:15:35.512",
                                packet_text=
-                               """2024 Jan 15  07:15:35.512  [FF]  0xB16D  LTE GM TX Report
+                               """2024 Jan 15  07:16:21.165  [26]  0xB16D  LTE GM TX Report
 Subscription ID = 1
 Version = 49
 Duplex Mode = 0
@@ -1781,89 +1842,30 @@ UL DL Cfg = 15
 Reserved = 0
 Number of Records = 20
 Tx Report Records[0]
-   Chan Type = PUSCH
+   Chan Type = PUCCH
    Cell Index = 0
-   Tx SFN = 109
-   Tx Sub Fn = 4
+   Tx SFN = 524
+   Tx Sub Fn = 8
    UL ACK/NAK Present Flag = ACK/NAK not present
    ACK/NAK Reporting Mode = N/A
-   CSF Present Flag = 0
+   CSF Present Flag = 1
    SRS Present Flag = 0
    CA Mode Enabled = Disabled
    SRS UE/Cell Specific = 0
    ECA/ACK Reporting Mode = NO_ECA
-   Total Tx Power = 16 dBm
-   Dci 0 Present = 0
-   Transport Block Size = 1143
-   Redundancy Version = 0
-   HARQ ID = 6
-   Retransmission Index = 0
-   Modulation Type = 64 QAM
-   EIB Index = 0
-   Resource Block Start = 17
-   Number of Resource Blocks = 18
-   MCS Index = 15
-   Resource Allocation Type = 0
-   Resource Block Start 2 = 0
-   Number of Resource Blocks 2 = 0
-   Beta PUSCH = 5827
-   Num Antenna = 1
-   Cyclic Shift DMRS = 0
-   Freq Hopping Flag = Disabled
-   HARQ ACK Offset Index = 10
-   HARQ ACK Offset X = 10
-   CQI Offset Index = 8
-   RI Offset Index = 10
-   PUSCH Hopping Payload = 0
-   N_drms = 0
-   TTI Bundle Index = Invalid
-   CC Max TX Power = 22 dBm
-   Total Max TX Power = 22 dBm
-   Chain0 Mtpl = 21
-   Chain1 Mtpl = 24
-   AFC Rx Freq Error = 4401 Hz
-Tx Report Records[1]
-   Chan Type = PUSCH
-   Cell Index = 0
-   Tx SFN = 109
-   Tx Sub Fn = 5
-   UL ACK/NAK Present Flag = ACK/NAK not present
-   ACK/NAK Reporting Mode = N/A
-   CSF Present Flag = 0
-   SRS Present Flag = 0
-   CA Mode Enabled = Disabled
-   SRS UE/Cell Specific = 0
-   ECA/ACK Reporting Mode = NO_ECA
-   Total Tx Power = 15 dBm
-   Dci 0 Present = 0
-   Transport Block Size = 935
-   Redundancy Version = 0
-   HARQ ID = 7
-   Retransmission Index = 0
-   Modulation Type = 64 QAM
-   EIB Index = 0
-   Resource Block Start = 17
-   Number of Resource Blocks = 15
-   MCS Index = 15
-   Resource Allocation Type = 0
-   Resource Block Start 2 = 0
-   Number of Resource Blocks 2 = 0
-   Beta PUSCH = 5827
-   Num Antenna = 1
-   Cyclic Shift DMRS = 0
-   Freq Hopping Flag = Disabled
-   HARQ ACK Offset Index = 10
-   HARQ ACK Offset X = 10
-   CQI Offset Index = 8
-   RI Offset Index = 10
-   PUSCH Hopping Payload = 0
-   N_drms = 0
-   TTI Bundle Index = Invalid
-   CC Max TX Power = 22 dBm
-   Total Max TX Power = 22 dBm
-   Chain0 Mtpl = 21
-   Chain1 Mtpl = 24
-   AFC Rx Freq Error = 4401 Hz
+   Total Tx Power = -21 dBm
+   ACK/NAK Length = 0
+   Scheduling Request Present = NotPresent
+   Temp RNTI ACK Flag = NotPresent
+   BETA PUCCH = 5827
+   N 1 PUCCH = 0
+   N 2 PUCCH = 46
+   N 3 PUCCH = 0
+   CC Max TX Power = 25 dBm
+   Total Max TX Power = 25 dBm
+   Chain0 Mtpl = 24
+   Chain1 Mtpl = 0
+   AFC Rx Freq Error = 1050 Hz
 
 
 """)
