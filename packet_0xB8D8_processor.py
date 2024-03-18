@@ -52,7 +52,6 @@ class Packet_0xB8D8:
             if int(modified_entry['Carrier Index']) == 0:
                 modified_entry['_Cell'] = 'PCC'
             modified_entry['__Raw_Data'] = str(config['__Raw_Data'])
-            modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry
             # dict_1.update(data)
             # return dict_1

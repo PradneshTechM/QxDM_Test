@@ -1,0 +1,25 @@
+{
+  "0xB111  LTE LL1 Rx Agc Log": {
+    "Subscription ID": {
+      "DB Field": "Subs ID"
+    },
+    "Records": [
+      {
+        "Measured Total RSSI (dBm)": {
+          "index": 9,
+          "DB Field": "RSSI(dBm)"
+        },
+        "Rx Antenna Index": {
+          "index": 1,
+          "DB Field": "Rx Antenna Index"
+        },
+        "LNA ID": {
+          "index": 6,
+          "DB Field": "LNA ID"
+        }
+      }
+    ],
+    "__collection": "LTE",
+    "__cell": "PCC"
+  }
+}

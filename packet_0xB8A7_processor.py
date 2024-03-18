@@ -20,14 +20,15 @@ class Packet_0xB8A7:
             for row in table_capture:
                 row_dict = self.dict.copy()
                 row_dict.update(row)
-                for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
+                for additional_key in ['__collection', '__cell', '__Raw_Data', '__frequency']:
                     if additional_key in self.config:
-                        if additional_key == '__collection':
-                            row_dict[additional_key] = self.config[additional_key]
+                        if additional_key == '__cell':
                             if int(row_dict['Carrier ID']) == 0:
                                 row_dict['__cell'] = 'PCC'
+                                continue
                             elif int(row_dict['Carrier ID']) >= 1:
                                 row_dict['__cell'] = 'SCC(' + row_dict['Carrier ID'] + ')'
+                                continue
                         row_dict[additional_key] = self.config[additional_key]
                 self.result.append(row_dict)
         return self.result  # Return the updated dictionary

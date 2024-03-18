@@ -29,7 +29,7 @@ class Packet_0xB16A:
                     # Add the modified key and its value to the new dictionary
                     modified_entry[new_key] = value
             modified_entry['__cell'] = 'LTE'
-
+            modified_entry['Packet_Type'] = 'PDCCH'
             return modified_entry
         else:
             # Return None or an empty dictionary if there is no match

@@ -1,8 +1,8 @@
 import re
 from parser.kpi_utils import table_config, map_entry
 
-# from utils import map_entry, metadata
-#from json_comments import cell_PCC
+# from parser.utils import map_entry, metadata
+#from parser.json_comments import cell_PCC
 class Packet_0xB884:
     def __init__(self, packet_text, config, entry):
         self.packet_text = packet_text

@@ -1,5 +1,5 @@
 import re
-# from  kpi_utils import table_extract
+# from parser. kpi_utils import table_extract
 
 class Packet_0xB827:
     def __init__(self, packet_text, config, entry):
@@ -63,7 +63,7 @@ class Packet_0xB827:
                         if row_value:  # Add to dict_1 only if row_value is not empty
                             dict_1[db_field] = row_value
                 if dict_1:  # Check if dict_1 is not empty before printing or adding to carrier_ids
-                    for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
+                    for additional_key in ['__collection', '__cell', '__Raw_Data', '__frequency']:
                         if additional_key in self.config:
                             dict_1[additional_key] = self.config[additional_key]
                     carrier_ids.append(dict_1)

@@ -24,11 +24,15 @@ class Packet_0xB196:
                 if self.config['__collection']:
                     row_dict["__collection"] = self.config.get('__collection')
                 if self.config['__cell']:
+                    # if int(row_dict["Cell index"]) == 0:
+                    #     row_dict['__cell'] = 'PCC'
+                    # elif int(row_dict["Cell index"]) >= 1:
+                    #     row_dict['__cell'] = f'SCC{row_dict["Cell index"]}'
                     row_dict["__cell"] = self.config.get('__cell')
                 if self.config['__Raw_Data']:
                     row_dict["__Raw_Data"] = self.config.get('__Raw_Data')
-                if self.config['__KPI_type']:
-                    row_dict["__KPI_type"] = self.config.get('__KPI_type')
+                # if self.config['__KPI_type']:
+                #     row_dict["__KPI_type"] = self.config.get('__KPI_type')
                 self.result.append(row_dict)
         return self.result
 

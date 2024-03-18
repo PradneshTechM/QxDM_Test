@@ -29,7 +29,6 @@ class Packet_0xB166:
             modified_entry['__collection'] = config['__collection']
             modified_entry['Packet_Type'] = config['Packet_Type']
             modified_entry['__Raw_Data'] = str(config['__Raw_Data'])
-            modified_entry['__KPI_type'] = config['__KPI_type']
             dict_1.update(modified_entry)
             return dict_1
         else:
