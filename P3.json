@@ -942,6 +942,42 @@
         },
         "__collection": "Event",
         "__cell": "LTE"
+    },
+   "0xB193  LTE ML1 Serving Cell Meas Response": {
+        "Subscription ID": {
+            "DB Field": "Subs ID",
+            "Field Name": "LTE [Pcell] Subs ID"
+        },
+        "E-ARFCN": {
+            "DB Field": "DL EARFCN"
+        },
+        "Physical Cell ID": {
+            "DB Field": "PCI",
+            "Field Name": "LTE [Pcell] PCI"
+        },
+        "Serving Cell Index": {
+            "DB Field": "Serving Cell Index"
+        },
+        "Inst RSRP Rx[0]": {
+            "DB Field": "RSRP(dBm)",
+            "Field Name": "LTE [Pcell] RSRP(dBm)"
+        },
+        "Inst RSRQ Rx[0]": {
+            "DB Field": "RSRQ(dBm)",
+            "Field Name": "LTE [Pcell] RSRQ(dBm)"
+        },
+        "Inst RSSI Rx[0]": {
+            "DB Field": "RSSI(dBm)",
+            "Field Name": "LTE [Pcell] RSSI(dBm)"
+        },
+        "FTL SNR Rx[0]": {
+            "DB Field": "SINR(dBm)",
+            "Field Name": "LTE [Pcell] SINR(dBm)"
+        },
+        "__Raw_Data": true,
+        "__collection": "LTE",
+        "__cell": ["entry['__cell'] = entry.pop('Serving Cell Index')"],
+        "__frequency": "Per Second"
     }
 
 }

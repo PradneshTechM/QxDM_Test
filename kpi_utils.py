@@ -47,7 +47,10 @@ def simple_map_entry(data, config):
     for i, (config_key, config_value) in enumerate(config.items(), start=0):
 
         if i < len(data_values):
+            if not data_values[i]:
+                continue
             mapped_value = data_values[i]  # Use original value, adjusted for index starting at 0
+
 
             # Process the value based on 'Field Type' specified in config
             if 'Field Type' in config_value:
