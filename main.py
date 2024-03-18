@@ -2037,11 +2037,12 @@ Hypothesis
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB132", packet_length=100,
                                name="LTE LL1 PDSCH Decoding Results",
-                               subtitle="", datetime="2024 Jan 15  07:16:08.265",
+                               subtitle="", datetime="2024 Mar 18  11:30:31.362 ",
                                packet_text=
-                               """2024 Jan 15  07:16:08.265  [31]  0xB132  LTE LL1 PDSCH Decoding Results
+                               """
+2024 Mar 18  11:30:31.362  [DD]  0xB132  LTE LL1 PDSCH Decoding Results
 Subscription ID = 1
-Version = 168
+Version = 165
 Length = 160
 Drop Cnt = 0
 Num Records = 1
@@ -2049,48 +2050,46 @@ Common Static Config
    Context = LTE
    Variant Id = 0
    CxN Index = 0
-   Cell Id = 147
-   EARFCN = 5780
+   Cell Id = 391
+   EARFCN = 66536
    Carrier Index = 0
    Variant Carrier Index = 0
-   System BW = 10
-   NIR = 114192
+   System BW = 20
+   NIR = 228384
    Num HARQ = 8
-   UE Category = 20
-   TX Mode = TM4_CL_SM
+   UE Category = 15
+   TX Mode = TM2_TD_RANK1
    Num eNb Tx Ant = 4
-   Four_Layer_Capability = false
 TB Info Record[0]
    TB Top
-      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |     |     |     |    |       |      |    |    |     |    |      |         |        |         |           |         |    |    |     |    |Harq|     |   |   |     |      |      |      |
-      |     |     |MVC  |    |       |      |    |    |     |    |      |         |        |         |           |         |    |IO  |     |Harq|IO  |Num  |   |   |     |      |      |      |
-      |     |     |Clock|    |       |Bypass|    |Num |Start|QREN|RX01  |CB Bundle|TB DMA  |         |           |         |IO  |ST  |Num  |IO  |ST  |Harq |RP |SF |RB   |SC    |TB Ext|CB    |
-      |Frame|SubFN|(MHz)|Rank|LLR BW |Decode|ITER|RX  |CB ID|BMSK|poolID|Size     |Budget  |Onld Size|Offld Size |L2 Mode  |Fail|Fail|IOVec|Fail|Fail|Iovec|Idx|Gap|Start|Index |Enable|Enable|
-      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |  312|    4|  192|  R1|     6B|     0|   1| 2RX|    0|   2|     1|        1|    3778|        0|        408|   HEADER|   0|   0|    1|   0|   0|    1|  0|  0|    0|     0|  TRUE|  TRUE|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |     |     |MVC  |    |       |    |    |         |    |      |         |        |        |         |           |       |        |     |          |    |    |    |      |     |     |      |        |      |      |
+      |     |     |Clock|    |       |    |Num |         |IO  |Bypass|CB Bundle|Dejitter|TB DMA  |HARQ Onld|HARQ Offld |Onload |Offload |Start|          |IUSS|Tile|Tile|RX01  |Num  |RP   |SC    |Starting|TB Ext|CB    |
+      |Frame|SubFN|(MHz)|Rank|LLR BW |ITER|RX  |L2 Mode  |Fail|Decode|Size     |Depth   |Budget  |Size     |Size       |Perc   |Perc    |CB ID|MVC       |ID  |ID  |Mode|poolID|IOVec|Index|Index |RB Index|Enable|Enable|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  550|    5|  288|  R4|     6B|   1| 2RX| NO ALLOC|   0|     0|        1|       3|  130072|        0|         24|      0|       0|    0|    NORMAL|   0|   0|  SA|     0|    1|    0|     0|       0|  TRUE|  TRUE|
 
    TB Config
-      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |          |    |      |     |      |   |      |        |     |    |        |               |         |      |Num     |  |      |        |        |Force  |      |Alt|Hi  |    |Excess  |      |Max|        |     |    |
-      |          |HARQ|TB    |CW   |      |Num|      |        |     |Num |NCB     |               |         |      |Channel |  |CB    |        |DMA TO  |HARQ   |Bypass|MCS|MGMT|Max |HI Init |Hi    |HI |TX      |NDI  |Code|
-      |RNTI      |ID  |Index |Index|Num CB|Lay|MCS   |MOD     |ReTx |ReTx|Prime   |Discard Mode   |QED Mode |Num RB|Bits    |RV|Size  |TB Size |Dur     |Offload|HARQ  |En |En  |Iter|State   |Base  |Low|Scheme  |Value|Rate|
-      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |         C|   3|     0|    0|     1| 1L|    27|   64QAM|  1st|   0|   17292|     NO_DISCARD|   NO_QED|     9|    7344| 0|   720|     717|2.1e+002|  FALSE| FALSE|  0|   0|17HI|       0|     0|  0|   CL_SP|    1|0.784|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |          |    |      |     |      |      |      |        |     |    |        |               |         |      |Num     |  |      |        |DMA     |Force  |      |Alt   |Excess|    |Excess  |      |Max|        |     |    |
+      |          |HARQ|TB    |CW   |      |Num   |      |        |     |Num |NCB     |               |         |      |Channel |  |CB    |        |Timeout |HARQ   |Bypass|TBS   |Mgmt  |Max |HI Init |Hi    |HI |TX      |NDI  |Code|
+      |RNTI Type |ID  |Index |Index|Num CB|Layers|MCS   |MOD     |ReTx |ReTx|Prime   |Discard Mode   |QED Mode |Num RB|Bits    |RV|Size  |TB Size |Duration|Offload|HARQ  |Enable|Enable|Iter|State   |Base  |Low|Scheme  |Value|Rate|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |        SI|   0|     0|    0|     1|    4L|     9|    QPSK|  1st|   0|     972|     NO_DISCARD|   NO_QED|     4|    1088| 1|    40|      37|     213|   TRUE| FALSE|     0|     0|17HI|       0|     0|  0|     TXD|    0|0.294118|
 
    TB
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |TB Onload                                                        |TB Offload                                                       |                                                              |
-      |Excess    |          |            |                              |Excess    |          |            |                              |TB Decode                                                     |
-      |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |CB CRC Pass Bmsk         |Excess HI State |TB CRC     |TB Pass|
-      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |        50|      0xFF|        0xFF|            0x0000000000000000|        50|      0xFF|        0xFF|            0x0000000000000000|       0x0000000000000001|               0|   0x000000|      1|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Onload                                                          |TB Offload                                                         |                                                              |
+      |           |          |            |CB Timeout    |CB Timeout      |           |          |            |CB Timeout    |CB Timeout      |TB Decode                                                     |
+      |Excess Time|TB Pass HD|TB Pass HARQ|Status 0      |Status 1        |Excess Time|TB Pass HD|TB Pass HARQ|Status 0      |Status 1        |CB CRC Pass Bmsk         |Excess HI State |TB CRC     |TB Pass|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |        480|       255|         255|    0x00000000|      0x00000000|          0|         0|           0|    0x00000000|      0x00000000|       0x0000000000000001|               0|   0x000000|      1|
 
    TB Log Extend
       -------------------------------------------------------------------------------------------------------------------------------------------------------------
       |TB Ext 0   |TB Ext 1   |TB Ext 2   |TB Ext 3   |TB Ext 4   |TB Ext 5   |TB Ext 6   |TB Ext 7   |TB Ext 8   |TB Ext 9   |TB Ext 10  |TB Ext 11  |TB Ext 12  |
       -------------------------------------------------------------------------------------------------------------------------------------------------------------
-      | 0x02D10F83| 0x004004C8| 0x840804C8| 0xB676D400| 0x40600F00| 0x00000000| 0x00000000| 0x00000000| 0x00000000| 0x702D0201| 0x07C2E004| 0x00034898| 0x00000000|
+      | 0x020E1083| 0x00B8A00B| 0x00000220| 0x00400220| 0x3AF0B200| 0x40100000| 0x00000000| 0x00000000| 0x00000000| 0x00000000| 0x033C1C78| 0x00000000| 0x00000000|
 
    CB
       --------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -2098,8 +2097,8 @@ TB Info Record[0]
       |   |CB Onload                             |CB Offload                                |             |  |       |   |      |  |    |       |       |Skip  |DHB|
       |#  |On Dur|On Extract|On Time Remain|ON TO|Off Dur|Off Extract|Off Time Remain|Off TO|Energy Metric|ET|Min LLR|CRC|Num HI|HD|HARQ|CB Disc|CB Pass|Decode|IDX|
       --------------------------------------------------------------------------------------------------------------------------------------------------------------
-      |  0|     0|         0|            50|    0|      1|          0|             50|     0|       152567| 1|     36|  1|   3HI| 1|   0|      0|      1|     0|  0|
-""")
+      |  0|     0|         0|            25|    0|      0|          0|              0|     0|         9920| 1|    181|  1|   1HI| 1|   1|      0|      1|     0|  0|
+                               """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0EE", packet_length=100,
                                name="LTE NAS EMM State",
@@ -4740,35 +4739,34 @@ Report
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB139", packet_length=100,
                                name="LTE LL1 PUSCH Tx Report",
-                               subtitle="", datetime="2024 Jan 19  21:46:04.057", packet_text=
+                               subtitle="", datetime="2024 Mar 18  10:46:13.939", packet_text=
                                """
-2024 Jan 19  21:46:04.057  [8F]  0xB139  LTE LL1 PUSCH Tx Report
+2024 Mar 18  10:46:13.939  [D5]  0xB139  LTE LL1 PUSCH Tx Report
 Subscription ID = 1
-Version = 162
+Version = 161
 Serving Cell ID = 147
 Number of Records = 1
-Dispatch SFN SF = 5865
+Dispatch SFN SF = 238
 Records
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Cyclic   |Cyclic   |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Shift of |Shift of |    |    |
-   |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                 |                                                |               |DMRS     |DMRS     |DMRS|DMRS|
-   |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                 |                                                |               |Symbols  |Symbols  |Root|Root|
-   |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                 |                                                |               |Slot 0   |Slot 1   |Slot|Slot|
-   |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|DROP_PUSCH_REASON|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
-   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   |   5862|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   17|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999989296|        7|        0|  28|  28|
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
-   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
-
-                       """)
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                                                |               |Cyclic   |Cyclic   |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                                                |               |Shift of |Shift of |    |    |
+   |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                                                |               |DMRS     |DMRS     |DMRS|DMRS|
+   |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                                                |               |Symbols  |Symbols  |Root|Root|
+   |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                                                |               |Slot 0   |Slot 1   |Slot|Slot|
+   |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |    232|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       1|0x0000|   0|   0|    0|   33|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999990381|        7|        0|  28|  28|
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                                                |               |         |         |    |    |
+                      """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB060", packet_length=100,
                                name="LTE MAC Configuration",
-                               subtitle="", datetime="2024 Jan 15  07:14:07.591", packet_text=
+                               subtitle="", datetime="2024 Mar 18  10:46:13.872", packet_text=
                                """
-2024 Jan 15  07:14:07.591  [0C]  0xB060  LTE MAC Configuration
+2024 Mar 18  10:46:13.872  [2B]  0xB060  LTE MAC Configuration
 Subscription ID = 1
 Version = 1
 Number of SubPackets = 5
@@ -4793,34 +4791,34 @@ SubPacket - ( UL Config Subpacket )
    SubPacket Size = 16 bytes
    UL Config V2
       Sub Id = 1
-      SR resource present = Yes (1)
-      SR periodicity = 10 ms
+      SR resource present = No (0)
+      SR periodicity = 0 ms
       BSR timer = Infinity
       SPS Number of Tx release = 0
-      Retx BSR timer = 320 ms
+      Retx BSR timer = 2560 ms
 SubPacket ID = 14
 SubPacket - (All Rach Config SubPacket) {
-   Version = 2
-   Subpacket Size = 712 bytes
-   Sub Id = 0
-   Valid Cell Cfg Mask = 00000000b
-   New Cell Cfg Mask = 00000000b
+   Version = 1
+   Subpacket Size = 776 bytes
+   Sub Id = 1
+   Valid Cell Cfg Mask = 00000001b
+   New Cell Cfg Mask = 00000001b
    Cell Rach Info
-      -------------------------------------------------------------------------------------------------------------------------------------
-      |   |     |        |       |      |      |        |          |       |          |        |      |      |     |      |     |    |RA  |
-      |   |     |Preamble|Power  |      |      |        |          |       |          |        |      |      |     |      |     |    |rsp |
-      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |Delta   |      |CS    |Root |PRACH |High |Max |win |
-      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
-      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
-      -------------------------------------------------------------------------------------------------------------------------------------
-      |  0|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      -------------------------------------------------------------------------------------------------------------------------------------------
+      |   |     |        |       |      |      |        |          |       |          |     |        |      |      |     |      |     |    |RA  |
+      |   |     |Preamble|Power  |      |      |        |          |       |          |     |        |      |      |     |      |     |    |rsp |
+      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |     |Delta   |      |CS    |Root |PRACH |High |Max |win |
+      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |PMax |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
+      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |(dBm)|Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
+      -------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|    0|    -110|      2|    32|    48|      10|        64|     18|    -10 dB|   23|       6|     3|    12|    0|     7|    0|   5|  10|
+      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
 
 }
 SubPacket ID = 4
@@ -4829,19 +4827,11 @@ SubPacket - ( LC Config Subpacket )
    SubPacket Size = 328 bytes
    Version 2 {
       Sub Id = 1
-      Number of deleted LC = 0
-      Number of added/modified LC = 1
-      ---------------------------------------------------
-      |     |          |          |          |Token     |
-      |     |          |          |          |bucket    |
-      |     |PBR       |          |          |size      |
-      |LC ID|(KBytes/s)|Priority  |LC group  |(bytes)   |
-      ---------------------------------------------------
-      |    1|     65535|         1|         0|         0|
-
+      Number of deleted LC = 1
+      Deleted LCs = 1
+      Number of added/modified LC = 0
    }
 SubPacket ID = 18
-
                        """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0A5", packet_length=100,
@@ -5708,3 +5698,4 @@ Records
 
 if __name__ == "__main__":
     test_parsing()
+
