@@ -1334,7 +1334,8 @@
     ],
     "__collection": "LTE",
     "__cell": "PCell/SCelln",
-    "__Raw_Data": true
+    "__Raw_Data": true,
+    "Packet_Type": "lte_ml1_dlm_qsh_dbg.c"
   },
   "0xB18F  LTE ML1 AdvRx IC Cell List": {
     "Subscription ID": {
@@ -1419,6 +1420,9 @@
     "Num Cells": {
       "DB Field": "Num Cells"
     },
+    "Is 1Rx Mode": {
+      "DB Field": "Is 1Rx Mode"
+    },
     "Cell Measurement List": [
       {
         "E-ARFCN": {
@@ -1428,10 +1432,6 @@
         "Physical Cell ID": {
           "index": 2,
           "DB Field": "Physical Cell ID"
-        },
-        "Valid Rx": {
-          "index": 3,
-          "DB Field": "Valid Rx"
         },
         "Inst RSRP Rx[0] (dBm)": {
           "index": 4,
@@ -1445,6 +1445,7 @@
     ],
     "__collection": "LTE",
     "__cell": "PCell/SCelln",
-    "__Raw_Data": true
+    "__Raw_Data": true,
+    "Packet_Type": "lte_ml1_dlm_qsh_dbg.c"
   }
 }
