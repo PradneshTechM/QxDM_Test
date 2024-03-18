@@ -4742,12 +4742,12 @@ Report
                                name="LTE LL1 PUSCH Tx Report",
                                subtitle="", datetime="2024 Jan 19  21:46:04.057", packet_text=
                                """
-2024 Jan 19  21:46:04.057  [8F]  0xB139  LTE LL1 PUSCH Tx Report
+2024 Jan 15  07:15:37.131  [AD]  0xB139  LTE LL1 PUSCH Tx Report
 Subscription ID = 1
 Version = 162
 Serving Cell ID = 147
-Number of Records = 1
-Dispatch SFN SF = 5865
+Number of Records = 2
+Dispatch SFN SF = 2735
 Records
    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |Cyclic   |Cyclic   |    |    |
@@ -4757,18 +4757,21 @@ Records
    |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                 |                                                |               |Slot 0   |Slot 1   |Slot|Slot|
    |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|DROP_PUSCH_REASON|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
    ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-   |   5862|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   17|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999989296|        7|        0|  28|  28|
+   |   2729|    PCC|  None|Exists|Exists|   Disabled|   First|     0|      0|         0|   29|   29|  2|    PCC|     0|      0|  0.000|      0|00000000000010|           2|00000000000000000000000000000000|      0|      0|    192|OFF|     OFF|    QPSK|    195|       0|       0|  48|    384|        0|       0|0x0000|   0|   0|    0|    7|          NO_DROP|  0x24608289  0x00005020  0x00000000  0x00000000|  -0.3999987664|        5|        6|  27|  27|
    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
    |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
-
+   |   2735|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   27|   27|  4|    PCC|     0|    193|  0.680|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|   16QAM|    195|       0|       0|   0|      0|        0|       0|0x0000|   0|   0|    0|   10|          NO_DROP|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999987666|        7|       11|  42|  42|
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                 |                                                |               |         |         |    |    |
                        """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB060", packet_length=100,
                                name="LTE MAC Configuration",
-                               subtitle="", datetime="2024 Jan 15  07:14:07.591", packet_text=
+                               subtitle="", datetime="2024 Mar 18  10:46:13.872", packet_text=
                                """
-2024 Jan 15  07:14:07.591  [0C]  0xB060  LTE MAC Configuration
+2024 Mar 18  10:46:13.872  [2B]  0xB060  LTE MAC Configuration
 Subscription ID = 1
 Version = 1
 Number of SubPackets = 5
@@ -4793,34 +4796,34 @@ SubPacket - ( UL Config Subpacket )
    SubPacket Size = 16 bytes
    UL Config V2
       Sub Id = 1
-      SR resource present = Yes (1)
-      SR periodicity = 10 ms
+      SR resource present = No (0)
+      SR periodicity = 0 ms
       BSR timer = Infinity
       SPS Number of Tx release = 0
-      Retx BSR timer = 320 ms
+      Retx BSR timer = 2560 ms
 SubPacket ID = 14
 SubPacket - (All Rach Config SubPacket) {
-   Version = 2
-   Subpacket Size = 712 bytes
-   Sub Id = 0
-   Valid Cell Cfg Mask = 00000000b
-   New Cell Cfg Mask = 00000000b
+   Version = 1
+   Subpacket Size = 776 bytes
+   Sub Id = 1
+   Valid Cell Cfg Mask = 00000001b
+   New Cell Cfg Mask = 00000001b
    Cell Rach Info
-      -------------------------------------------------------------------------------------------------------------------------------------
-      |   |     |        |       |      |      |        |          |       |          |        |      |      |     |      |     |    |RA  |
-      |   |     |Preamble|Power  |      |      |        |          |       |          |        |      |      |     |      |     |    |rsp |
-      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |Delta   |      |CS    |Root |PRACH |High |Max |win |
-      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
-      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
-      -------------------------------------------------------------------------------------------------------------------------------------
-      |  0|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      -------------------------------------------------------------------------------------------------------------------------------------------
+      |   |     |        |       |      |      |        |          |       |          |     |        |      |      |     |      |     |    |RA  |
+      |   |     |Preamble|Power  |      |      |        |          |       |          |     |        |      |      |     |      |     |    |rsp |
+      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |     |Delta   |      |CS    |Root |PRACH |High |Max |win |
+      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |PMax |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
+      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |(dBm)|Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
+      -------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|    0|    -110|      2|    32|    48|      10|        64|     18|    -10 dB|   23|       6|     3|    12|    0|     7|    0|   5|  10|
+      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
 
 }
 SubPacket ID = 4
@@ -4829,16 +4832,9 @@ SubPacket - ( LC Config Subpacket )
    SubPacket Size = 328 bytes
    Version 2 {
       Sub Id = 1
-      Number of deleted LC = 0
-      Number of added/modified LC = 1
-      ---------------------------------------------------
-      |     |          |          |          |Token     |
-      |     |          |          |          |bucket    |
-      |     |PBR       |          |          |size      |
-      |LC ID|(KBytes/s)|Priority  |LC group  |(bytes)   |
-      ---------------------------------------------------
-      |    1|     65535|         1|         0|         0|
-
+      Number of deleted LC = 1
+      Deleted LCs = 1
+      Number of added/modified LC = 0
    }
 SubPacket ID = 18
 
