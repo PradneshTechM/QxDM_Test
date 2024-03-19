@@ -131,6 +131,8 @@ def table_config(data, config_table, config):
                 key, value = entry
                 db_field = value['DB Field']
                 index = value['index'] + 1
+                if not index:
+                    continue
                 if index < len(row_values):  # Check if the index is within the bounds of row_values
                     row_value = row_values[index].strip()
                     if row_value:  # Add to dict_1 only if row_value is not empty
