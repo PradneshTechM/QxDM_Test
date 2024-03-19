@@ -5,7 +5,7 @@ class Packet_0xB196:
         self.packet_text = packet_text
         self.config = config
         self.entry = entry
-        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?Num Cells = (?P<Num_Cells>[\d+]+).*?'
+        self.pattern1 = r'.*?Subscription ID = (?P<Subs_ID>[\d]+).*?Num Cells = (?P<Num_Cells>[\d+]+).*?Is 1Rx Mode = (?P<Is_1Rx_Mode>[\d+]+).*?'
         self.pattern2 = r".*?\|\(dBm\).*?\|.*?-+.*?\n(?P<table>[\s\S]*)"
         self.dict = {}
         self.result = []
@@ -31,8 +31,8 @@ class Packet_0xB196:
                     row_dict["__cell"] = self.config.get('__cell')
                 if self.config['__Raw_Data']:
                     row_dict["__Raw_Data"] = self.config.get('__Raw_Data')
-                # if self.config['__KPI_type']:
-                #     row_dict["__KPI_type"] = self.config.get('__KPI_type')
+                if self.config['Packet_Type']:
+                    row_dict["Packet_Type"] = self.config.get('Packet_Type')
                 self.result.append(row_dict)
         return self.result
 
@@ -45,7 +45,8 @@ class Packet_0xB196:
             # entry = match.groupdict()
             key_mapping = {
                 'Subs_ID': config['Subscription ID']['DB Field'],
-                'Num_Cells': config['Num Cells']['DB Field']
+                'Num_Cells': config['Num Cells']['DB Field'],
+                'Is_1Rx_Mode': config['Is 1Rx Mode']['DB Field']
 
             }
             mapped_entry = {key_mapping.get(key, key): value for key, value in regular_dict.items()}

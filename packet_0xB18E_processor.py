@@ -27,8 +27,9 @@ class Packet_0xB18E:
                     row_dict["__cell"] = self.config.get('__cell')
                 if self.config['__Raw_Data']:
                     row_dict["__Raw_Data"] = self.config.get('__Raw_Data')
-                # if self.config['__KPI_type']:
-                #     row_dict["__KPI_type"] = self.config.get('__KPI_type')
+                if self.config['Packet_Type']:
+                    row_dict["Packet_Type"] = self.config.get('Packet_Type')
+
                 self.result.append(row_dict)
         return self.result
 
