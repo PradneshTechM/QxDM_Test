@@ -4766,9 +4766,9 @@ Records
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB060", packet_length=100,
                                name="LTE MAC Configuration",
-                               subtitle="", datetime="2024 Mar 18  10:46:13.872", packet_text=
+                               subtitle="", datetime="2024 Jan 15  07:14:10.390", packet_text=
                                """
-2024 Mar 18  10:46:13.872  [2B]  0xB060  LTE MAC Configuration
+2024 Jan 15  07:14:10.390  [20]  0xB060  LTE MAC Configuration
 Subscription ID = 1
 Version = 1
 Number of SubPackets = 5
@@ -4793,34 +4793,34 @@ SubPacket - ( UL Config Subpacket )
    SubPacket Size = 16 bytes
    UL Config V2
       Sub Id = 1
-      SR resource present = No (0)
-      SR periodicity = 0 ms
-      BSR timer = Infinity
+      SR resource present = Yes (1)
+      SR periodicity = 10 ms
+      BSR timer = 5 ms
       SPS Number of Tx release = 0
-      Retx BSR timer = 2560 ms
+      Retx BSR timer = 320 ms
 SubPacket ID = 14
 SubPacket - (All Rach Config SubPacket) {
-   Version = 1
-   Subpacket Size = 776 bytes
-   Sub Id = 1
-   Valid Cell Cfg Mask = 00000001b
-   New Cell Cfg Mask = 00000001b
+   Version = 2
+   Subpacket Size = 712 bytes
+   Sub Id = 0
+   Valid Cell Cfg Mask = 00000000b
+   New Cell Cfg Mask = 00000000b
    Cell Rach Info
-      -------------------------------------------------------------------------------------------------------------------------------------------
-      |   |     |        |       |      |      |        |          |       |          |     |        |      |      |     |      |     |    |RA  |
-      |   |     |Preamble|Power  |      |      |        |          |       |          |     |        |      |      |     |      |     |    |rsp |
-      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |     |Delta   |      |CS    |Root |PRACH |High |Max |win |
-      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |PMax |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
-      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |(dBm)|Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
-      -------------------------------------------------------------------------------------------------------------------------------------------
-      |  0|    0|    -110|      2|    32|    48|      10|        64|     18|    -10 dB|   23|       6|     3|    12|    0|     7|    0|   5|  10|
-      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
-      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|    0|       0|     0|     0|    0|     0|    0|   0|   0|
+      -------------------------------------------------------------------------------------------------------------------------------------
+      |   |     |        |       |      |      |        |          |       |          |        |      |      |     |      |     |    |RA  |
+      |   |     |Preamble|Power  |      |      |        |          |       |          |        |      |      |     |      |     |    |rsp |
+      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |Delta   |      |CS    |Root |PRACH |High |Max |win |
+      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
+      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
+      -------------------------------------------------------------------------------------------------------------------------------------
+      |  0|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
 
 }
 SubPacket ID = 4
@@ -4829,11 +4829,21 @@ SubPacket - ( LC Config Subpacket )
    SubPacket Size = 328 bytes
    Version 2 {
       Sub Id = 1
-      Number of deleted LC = 1
-      Deleted LCs = 1
-      Number of added/modified LC = 0
+      Number of deleted LC = 0
+      Number of added/modified LC = 3
+      ---------------------------------------------------
+      |     |          |          |          |Token     |
+      |     |          |          |          |bucket    |
+      |     |PBR       |          |          |size      |
+      |LC ID|(KBytes/s)|Priority  |LC group  |(bytes)   |
+      ---------------------------------------------------
+      |    2|     65535|         3|         0|         0|
+      |    3|     65535|         9|         0|   6553500|
+      |    4|         8|        12|         3|      2400|
+
    }
 SubPacket ID = 18
+
                        """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0A5", packet_length=100,

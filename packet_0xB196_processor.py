@@ -24,11 +24,11 @@ class Packet_0xB196:
                 if self.config['__collection']:
                     row_dict["__collection"] = self.config.get('__collection')
                 if self.config['__cell']:
-                    # if int(row_dict["Cell index"]) == 0:
-                    #     row_dict['__cell'] = 'PCC'
-                    # elif int(row_dict["Cell index"]) >= 1:
-                    #     row_dict['__cell'] = f'SCC{row_dict["Cell index"]}'
-                    row_dict["__cell"] = self.config.get('__cell')
+                    if int(row_dict['#']) == 0:
+                        row_dict['__cell'] = 'PCell'
+                    elif int(row_dict['#']) >= 1:
+                        row_dict['__cell'] = f"SCell{row_dict['#']}"
+                    row_dict.pop('#')
                 if self.config['__Raw_Data']:
                     row_dict["__Raw_Data"] = self.config.get('__Raw_Data')
                 if self.config['Packet_Type']:
@@ -71,6 +71,7 @@ class Packet_0xB196:
                     if len(row_values) >= 7:  # Ensure there are enough values in the row to avoid IndexError
                         dict_1 = {}
                         # Extracting values from row by index
+                        hash = row_values[1].strip()
                         e_arfcn = row_values[2].strip()
                         pci = row_values[3].strip()
                         valid_rx = row_values[4].strip()
@@ -78,6 +79,8 @@ class Packet_0xB196:
                         inst_rsrq = row_values[7].strip()
 
                         # Checking if each value contains a value
+                        if hash:
+                            dict_1['#'] = hash
                         if e_arfcn:
                             dict_1['E-ARFCN'] = e_arfcn
                         if pci:

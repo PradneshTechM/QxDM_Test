@@ -51,7 +51,6 @@ def simple_map_entry(data, config):
                 continue
             mapped_value = data_values[i]  # Use original value, adjusted for index starting at 0
 
-
             # Process the value based on 'Field Type' specified in config
             if 'Field Type' in config_value:
                 if config_value['Field Type'] == 'Positive Number':
@@ -68,6 +67,15 @@ def simple_map_entry(data, config):
             #     # Handle result, e.g., add to mapped_data if result is not None
             #     if result is not None:
             #         mapped_data[some_key] = result
+            # if '__comments' in config_value and isinstance(config_value['__comments'], list):
+            #     code_arr = [line.replace("\\", "") for line in config_value['__comments']]
+            #     result = evaluate(code_arr, mapped_value)
+            #     if result is not None:
+            #         mapped_data.update(result)  # Example of using the result. Adjust as needed.
+            #
+            #     else:
+            #         # If __cell doesn't meet the criteria, skip execution
+            #         continue
 
             new_key = config_value.get('DB Field', config_key)  # Get the new key name
             mapped_data[new_key] = mapped_value  # Assign the processed value to the new key

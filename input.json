@@ -101,11 +101,9 @@
       "DB Field": "Cseq",
       "Field Name": "Event [IMS] Cseq",
       "__comments": [
-            "parts = entry['CSeq'].split(' '",
-            " 1)",
+            "parts = entry['CSeq'].split(' ', 1)",
             "if len(parts) == 2:",
-            " entry['CSeq']",
-            " entry['Method'] = parts"
+            "    entry['CSeq'], entry['Method'] = parts"
         ]
     },
     "P-Access-Network-Info": {
@@ -1310,6 +1308,10 @@
     },
     "Candidates": [
       {
+        "#": {
+          "index": 0,
+          "DB Field": "#"
+        },
         "EARFCN": {
           "index": 1,
           "DB Field": "EARFCN"
@@ -1333,7 +1335,13 @@
       }
     ],
     "__collection": "LTE",
-    "__cell": "PCell/SCelln",
+    "__cell": [
+      "if int(entry['#']) == 0:",
+      "    entry['__cell'] = 'PCC'",
+      "elif int(entry['#']) >= 1:",
+      "    entry['__cell'] = 'SCC(entry['#'])'",
+      "entry.pop('#')"
+    ],
     "__Raw_Data": true,
     "Packet_Type": "lte_ml1_dlm_qsh_dbg.c"
   },
