@@ -1,5 +1,4 @@
-import re
-
+import regex as re
 
 class Packet_0xB16A:
     def extract_info(packet_text,config=None, entry= None):

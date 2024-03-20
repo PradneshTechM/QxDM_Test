@@ -69,12 +69,13 @@
         "__Raw_Data": true,
         "__collection": "LTE",
         "__cell":[
-          "if int(entry['Cell Index']) == 0:",
-          "    entry['__cell'] = 'PCC'",
-          "    entry.pop('Cell Index')",
-          "elif int(entry['Cell Index']) >= 1:",
-          "    entry['__cell'] = 'SCCn'",
-          "    entry.pop('Cell Index')"
+            "if 'Cell Index' in entry:",
+            "   if int(entry['Cell Index']) == 0:",
+            "       entry['__cell'] = 'PCC'",
+            "       entry.pop('Cell Index')",
+            "   elif int(entry['Cell Index']) >= 1:",
+            "       entry['__cell'] = 'SCCn'",
+            "       entry.pop('Cell Index')"
         ],
         "Packet_Type": ["entry['Packet_Type'] = entry.pop('Chan Type')"]
     },
@@ -105,10 +106,11 @@
         "__Raw_Data": false,
         "__collection": "LTE",
         "__cell":[
-          "if int(entry['Cell Index']) == 0:",
+          "if 'Cell Index' in entry:",
+          " if int(entry['Cell Index']) == 0:",
           "    entry['__cell'] = 'PCC'",
           "    entry.pop('Cell Index')",
-          "elif int(entry['Cell Index']) >= 1:",
+          " elif int(entry['Cell Index']) >= 1:",
           "    entry['__cell'] = 'SCCn'",
           "    entry.pop('Cell Index')"
         ],
@@ -129,6 +131,8 @@
         },
         "__Raw_Data": false,
         "__collection": "LTE",
-        "__cell": ["entry['__cell'] = entry.pop('Serving cell Index')"]
+        "__cell": [
+            "if 'Serving cell Index' in entry:",
+            "   entry['__cell'] = entry.pop('Serving cell Index')"]
     }
 }
