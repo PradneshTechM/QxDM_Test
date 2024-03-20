@@ -1,0 +1,4 @@
+[project]
+name = "qConnect"
+version = "1.0.0"
+description = "qConnect py src"

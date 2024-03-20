@@ -392,6 +392,7 @@ class QCATWorker(threading.Thread):
 
             if not packet.Next():
                 break
+                    
         if index % CHUNK_SIZE != 0:
             pub.sendMessage(self.log_id, data={"log_id": self.log_id, "messages": raw_messages, "chunk_num": math.ceil(index / CHUNK_SIZE)})
         

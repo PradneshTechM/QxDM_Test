@@ -21,3 +21,4 @@ pandas
 pyyaml
 openpyxl
 cryptography
+regex

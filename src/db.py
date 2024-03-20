@@ -114,6 +114,7 @@ class DB:
       for field in log.copy():
         if (
           field == "__KPI_type" 
+          or field == "__frequency" 
         ):
           del log[field]
           
