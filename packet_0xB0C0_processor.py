@@ -1,4 +1,4 @@
-import re
+import regex as re
 
 class Packet_0xB0C0:
     def __init__(self):
@@ -27,14 +27,14 @@ class Packet_0xB0C0:
                 # for entry, value in mapped_entry.items():
                 #     if value is None:
                 #         mapped_entry.pop(entry, None)
-                if config['__collection']:
+                if '__collection' in config:
                     mapped_entry["__collection"] = config.get('__collection')
-                if config['__cell']:
+                if '__cell' in config:
                     mapped_entry["__cell"] = config.get('__cell')
-                if config['Packet_Type']:
+                if 'Packet_Type' in config:
                     mapped_entry["Packet_Type"] = entry['msg_subtitle']
                     mapped_entry.pop("msg_subtitle", None)
-                if config['__Raw_Data']:
+                if '__Raw_Data' in config:
                     mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
                 # if config['__KPI_type']:
                 #     mapped_entry["__KPI_type"] = config.get('__KPI_type')

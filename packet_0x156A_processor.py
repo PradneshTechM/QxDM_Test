@@ -1,4 +1,4 @@
-import re
+import regex as re
 
 class Packet_0x156A:
     def __init__(self):
@@ -19,11 +19,11 @@ class Packet_0x156A:
                 'codec_type': config['Codec Type']['DB Field']
             }
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
-            if config['__collection']:
+            if '__collection' in config:
                 mapped_entry["__collection"] = config.get('__collection')
-            if config['__cell']:
+            if '__cell' in config:
                 mapped_entry["__cell"] = config.get('__cell')
-            if config['__Raw_Data']:
+            if '__Raw_Data' in config:
                 mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
             # if config['__KPI_type']:
             #     mapped_entry["__KPI_type"] = config.get('__KPI_type')

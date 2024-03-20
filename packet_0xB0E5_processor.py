@@ -1,4 +1,4 @@
-import re
+import regex as re
 
 
 class Packet_0xB0E5:
@@ -22,13 +22,13 @@ class Packet_0xB0E5:
                 new_key = key.replace('_', ' ')
                 # Add the modified key and its value to the new dictionary
                 modified_entry[new_key] = value
-            if config['__collection']:
+            if '__collection' in config:
                 modified_entry['__collection'] = config['__collection']
-            if config['__cell']:
+            if '__cell' in config:
                 modified_entry['__cell'] = config['__cell']
-            if config['Packet_Type']:
+            if 'Packet_Type' in config:
                 modified_entry['Packet_Type'] = config['Packet_Type']
-            if config['__Raw_Data']:
+            if '__Raw_Data' in config:
                 modified_entry['__Raw_Data'] = str(config['__Raw_Data'])
             # if config['__KPI_type']:
             #     modified_entry['__KPI_type'] = config['__KPI_type']

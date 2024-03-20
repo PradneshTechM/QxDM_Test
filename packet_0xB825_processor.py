@@ -1,4 +1,4 @@
-import re
+import regex as re
 from json_comments import LTE_bands_0xB825
 class Packet_0xB825:
     # def __int__(self):
@@ -65,7 +65,7 @@ class Packet_0xB825:
             entry["__collection"] = config.get('__collection')
             entry["__frequency"] = config.get('__frequency')
 
-            if config["__cell"]:
+            if '__cell' in config:
                 if entry['table'] and entry['CC Id']:
             #     print(entry)
             #     # ccid= entry['nr5g_serving_cell_info'][0]
@@ -73,6 +73,7 @@ class Packet_0xB825:
                         entry["__cell"] = 'PCC'
                     elif int(entry['CC Id']) >= 1:
                         entry["__cell"] = f'SCC{entry["CC ID"]}'
+                    entry.pop('CC Id')
                 # else:
                 #     pass
 
@@ -87,8 +88,10 @@ class Packet_0xB825:
             # if "__packet_message" in config:
             #     entry["__packet_message"] = entry["msg_subtitle"]
             #     entry.pop("msg_subtitle", None)
-            entry["__Raw_Data"] = config.get("__Raw_Data")
-            entry["__KPI_type"] = config.get('__KPI_type')
+            if '__Raw_Data' in config:
+                entry["__Raw_Data"] = config.get("__Raw_Data")
+            if '__KPI_type' in config:
+                entry["__KPI_type"] = config.get('__KPI_type')
             # print("CC ID", entry['CC Id'])
             entry.pop("table",None)
             entry.pop("connectivity_mode", None)

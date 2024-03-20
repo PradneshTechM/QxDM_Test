@@ -169,11 +169,12 @@
     "__Raw_Data": false,
     "__collection": "NR5G",
     "__cell": [
-      "if int(entry['Carrier ID']) == 0:",
-      "    entry['__cell'] = 'PCC'",
-      "elif int(entry['Carrier ID']) >= 1:",
-      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
-      "entry.pop('Carrier ID')"
+      "if 'Carrier ID' in entry:",
+      "    if int(entry['Carrier ID']) == 0:",
+      "        entry['__cell'] = 'PCC'",
+      "    elif int(entry['Carrier ID']) >= 1:",
+      "        entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
+      "    entry.pop('Carrier ID')"
     ],
     "Packet_Type": "PUSCH"
   },
@@ -202,11 +203,12 @@
     ],
     "__collection": "NR5G",
     "__cell": [
-      "if int(entry['Carrier ID']) == 0:",
-      "    entry['__cell'] = 'PCC'",
-      "elif int(entry['Carrier ID']) >= 1:",
-      "    entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
-      "entry.pop('Carrier ID')"
+      "if 'Carrier ID' in entry:",
+      "    if int(entry['Carrier ID']) == 0:",
+      "        entry['__cell'] = 'PCC'",
+      "    elif int(entry['Carrier ID']) >= 1:",
+      "        entry['__cell'] = 'SCC(' + str(entry['Carrier ID']) + ')'",
+      "    entry.pop('Carrier ID')"
     ],
     "__Raw_Data": true
   },
@@ -360,7 +362,10 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "Packet_Type": ["entry['Packet_Type'] = entry.pop('msg_subtitle')"]
+    "Packet_Type": [
+      "if 'msg_subtitle' in entry:",
+      "    entry['Packet_Type'] = entry['msg_subtitle']",
+      "entry.pop('msg_subtitle')"]
   },
   "0xB16E  LTE PUSCH Power Control": {
     "Subscription ID": {
@@ -393,11 +398,13 @@
     "__Raw_Data": true,
     "__collection": "LTE",
     "__cell":
-      ["if int(entry['Cell Index']) == 0:",
-      "    entry['__cell'] = 'PCC'",
-      "elif int(entry['Cell Index']) >= 1:",
-      "    entry['__cell'] = 'SCC(' + str(entry['Cell Index']) + ')'",
-      "entry.pop('Cell Index')                                      "],
+      [
+      "if 'Cell Index' in entry:",
+      "    if int(entry['Cell Index']) == 0:",
+      "        entry['__cell'] = 'PCC'",
+      "    elif int(entry['Cell Index']) >= 1:",
+      "        entry['__cell'] = 'SCC(' + str(entry['Cell Index']) + ')'",
+      "    entry.pop('Cell Index')"],
     "Packet_Type": "PUSCH"
   },
  "0xB173 LTE PDSCH Stat Indication": {
@@ -745,7 +752,7 @@
   "__collection": "Event",
   "__cell": "NR5G"
   },
-     "0xB060  LTE MAC Configuration": {
+  "0xB060  LTE MAC Configuration": {
     "Subscription ID": {
       "DB Field": "Subs ID"
     },

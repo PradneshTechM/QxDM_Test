@@ -1,4 +1,4 @@
-import re
+import regex as re
 
 class Packet_0xB18E:
     def __init__(self, packet_text, config, entry):
@@ -21,17 +21,17 @@ class Packet_0xB18E:
                 row_dict = self.dict.copy()
                 for key, value in row.items():
                     row_dict[key] = value
-                if self.config['__collection']:
+                if '__collection' in self.config:
                     row_dict["__collection"] = self.config.get('__collection')
-                if self.config['__cell']:
+                if '__cell' in self.config:
                     if int(row_dict['#']) == 0:
                         row_dict['__cell'] = 'PCell'
                     elif int(row_dict['#']) >= 1:
                         row_dict['__cell'] = f"SCell{row_dict['#']}"
                     row_dict.pop('#')
-                if self.config['__Raw_Data']:
+                if '__Raw_Data' in self.config:
                     row_dict["__Raw_Data"] = self.config.get('__Raw_Data')
-                if self.config['Packet_Type']:
+                if 'Packet_Type' in self.config:
                     row_dict["Packet_Type"] = self.config.get('Packet_Type')
 
                 self.result.append(row_dict)

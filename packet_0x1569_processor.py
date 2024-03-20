@@ -1,4 +1,4 @@
-import re
+import regex as re
 # import kpi_utils
 # import json
 class Packet_0x1569:
@@ -10,19 +10,6 @@ class Packet_0x1569:
         match = re.match(pattern, lines, re.DOTALL)
         if match:
             entry.update(match.groupdict())
-            # key_mapping = {'subscription_id': 'Subscription ID', 'sequence_number': 'Sequence Number',
-            #                'ssrc': 'SSRC', 'codec_type': 'codecType',
-            #                'loss_type': 'LossType', 'total_packets_count': 'Total Packets Count'}
-            # with open('config.json') as f:
-            #     config = json.load(f)
-            # key_mapping = {
-            #     'subscription_id': 'Subscription ID',
-            #     'sequence_number': 'Sequence Number',
-            #     'ssrc': 'SSRC',
-            #     'codec_type': 'codecType',
-            #     'loss_type': 'LossType',
-            #     'total_packets_count': 'Total Packets Count'
-            # }
             key_mapping = {
                 'subscription_id': config['Subscription ID']['DB Field'],
                 'sequence_number': config['Sequence Number']['DB Field'],
@@ -35,9 +22,12 @@ class Packet_0x1569:
 
             # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
             mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
-            mapped_entry["__collection"] = config.get('__collection')
-            mapped_entry["__cell"] = config.get('__cell')
-            mapped_entry["__KPI_type"] = config.get('__KPI_type')
+            if '__collection' in config:
+                mapped_entry["__collection"] = config.get('__collection')
+            if '__cell' in config:
+                mapped_entry["__cell"] = config.get('__cell')
+            if '__KPI_type' in config:
+                mapped_entry["__KPI_type"] = config.get('__KPI_type')
             # mapped_entry = kpi_utils.map_entry(entry,config, key_mapping)
 
             # print(lines)

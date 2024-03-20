@@ -1,4 +1,4 @@
-import re
+import regex as re
 
 class Packet_0xB800:
     def __init__(self):
@@ -18,10 +18,10 @@ class Packet_0xB800:
                 'eps_qos.qci': config['eps_qos.qci']['DB Field']
             }
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
-            if config['__collection']:
+            if '__collection' in config:
                 mapped_entry["__collection"] = config.get('__collection')
             # mapped_entry["__frequency"] = config.get('__frequency')
-            if config['__cell']:
+            if '__cell' in config:
                 mapped_entry["__cell"] = config.get('__cell')
 
             # mapped_entry["__packet_message"] = entry['msg_subtitle']
