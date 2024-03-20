@@ -458,7 +458,9 @@
     }
   ],
   "__Raw_Data": true,
-  "__cell": ["entry['__cell'] = entry.pop('Serving Cell Index')"],
+  "__cell": [
+    "if 'Serving Cell Index in entry':",
+    " entry['__cell'] = entry.pop('Serving Cell Index')"],
    "Packet_Type": "PDSCH",
   "__collection": "Event"
 },

@@ -43,9 +43,10 @@
     "__Raw_Data": true,
     "__collection": "Event",
     "__cell":[
-        "if int(entry['Scell Index']) == 0:",
+        "if 'Scell Index' or 'Cell Index' in entry:",
+        " if int(entry['Scell Index']) == 0:",
         "    entry['__cell'] = 'PCC'",
-        "elif int(entry['Cell Index']) >= 1:",
+        " elif int(entry['Cell Index']) >= 1:",
         "    entry['__cell'] = 'SCC(' + str(entry['Scell Index']) + ')'"
     ]
 },
@@ -262,10 +263,11 @@
         "__Raw_Data": false,
         "__collection": "LTE",
         "__cell":[
-          "if int(entry['CC ID']) == 0:",
+          "if 'CC ID' in entry:",
+          " if int(entry['CC ID']) == 0:",
           "    entry['__cell'] = 'PCC'",
           "    entry.pop('CC ID')",
-          "elif int(entry['CC ID']) >= 1:",
+          " elif int(entry['CC ID']) >= 1:",
           "    entry['__cell'] = 'SCCn'",
           "    entry.pop('CC ID')"
         ],
@@ -976,7 +978,9 @@
         },
         "__Raw_Data": true,
         "__collection": "LTE",
-        "__cell": ["entry['__cell'] = entry.pop('Serving Cell Index')"],
+        "__cell": [
+          "if 'Serving Cell Index' in entry:",
+          " entry['__cell'] = entry.pop('Serving Cell Index')"],
         "__frequency": "Per Second"
     }
 
