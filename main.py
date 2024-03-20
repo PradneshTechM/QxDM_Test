@@ -1,12 +1,11 @@
 from enum import Enum
-import re
+import regex as re
 import logging
 import sys
 import traceback
 import json
 import datetime
 from typing import List, Tuple, Any, Dict
-import yaml
 
 from parser.packet_0xB16D_processor import Packet_0xB16D
 from parser.packet_0xB193_processor import Packet_0xB193
@@ -166,7 +165,7 @@ class ParsedRawMessage:
             logging.info(self.index)
             sys.stdout.flush()
             sys.stderr.flush()
-            return None, None
+            return None
         
         def serialize(payload):
             metadata = {
@@ -1016,18 +1015,18 @@ class ParsedRawMessage:
             elif packet_name == '0xB139':
                 print('0xB139')
                 return Packet_0xB139(packet_text, config2['0xB139  LTE LL1 PUSCH Tx Report'], entry).extract_info()
-            # elif packet_name == '0xB060':
-            #     print('0xB060')
-            #     return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
+            elif packet_name == '0xB060':
+                print('0xB060')
+                return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
             elif packet_name == '0xB0EE':
                 print('0xB0EE')
                 return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE  LTE NAS EMM State'], entry)
             elif packet_name == '0xB14D':
                 print('0xB14D')
                 return Packet_0xB14D.extract_info(packet_text, config3['0xB14D  LTE LL1 PUCCH CSF'], entry)
-            # elif packet_name == '0xB132':
-            #     print('0xB132')
-            #     return Packet_0xB132(packet_text, config3['0xB132  LTE LL1 PDSCH Decoding Results'], entry).extract_info()
+            elif packet_name == '0xB132':
+                print('0xB132')
+                return Packet_0xB132(packet_text, config3['0xB132  LTE LL1 PDSCH Decoding Results'], entry).extract_info()
             elif packet_name == '0xB130':
                 print('0xB130')
                 return Packet_0xB130(packet_text, config3['0xB130  LTE LL1 PDCCH Decoding Result'], entry).extract_info()

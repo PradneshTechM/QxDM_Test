@@ -1,4 +1,4 @@
-import re
+import regex as re
 # from parser.kpi_utils import table_extract, map_entry
 class Packet_0xB18F:
     def __init__(self, packet_text, config, entry):

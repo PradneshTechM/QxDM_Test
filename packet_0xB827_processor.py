@@ -1,4 +1,4 @@
-import re
+import regex as re
 # from parser. kpi_utils import table_extract
 
 class Packet_0xB827:

@@ -1,4 +1,4 @@
-import re
+import regex as re
 from parser.kpi_utils import simple_map_entry
 class Packet_0xB808:
     def extract_info(packet_text,config=None, entry=None):

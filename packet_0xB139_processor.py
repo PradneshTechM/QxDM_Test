@@ -1,4 +1,4 @@
-import re
+import regex as re
 from parser.kpi_utils import table_config, map_entry
 
 class Packet_0xB139:

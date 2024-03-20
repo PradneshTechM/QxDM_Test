@@ -1,4 +1,4 @@
-import re
+import regex as re
 from decimal import Decimal
 # from parser.kpi_utils import map_entry
 

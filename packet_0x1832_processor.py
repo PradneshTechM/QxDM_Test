@@ -1,4 +1,4 @@
-import re
+import regex as re
 # import json
 class Packet_0x1832:
     def extract_info(lines, config, entry):

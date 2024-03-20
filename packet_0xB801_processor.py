@@ -1,4 +1,4 @@
-import re
+import regex as re
 class Packet_0xB801:
     # def __int__(self):
     #     print("New")

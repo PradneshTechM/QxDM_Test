@@ -1,4 +1,4 @@
-import re
+import regex as re
 from parser.json_comments import LTE_bands_0xB825
 class Packet_0xB825:
     # def __int__(self):

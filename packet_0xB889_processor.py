@@ -1,4 +1,4 @@
-import re
+import regex as re
 from parser.kpi_utils import table_config, map_entry
 
 # from parser.utils import map_entry, metadata

@@ -1,4 +1,4 @@
-import re
+import regex as re
 # from parser.utils import map_entry, metadata
 #from parser.json_comments import cell_PCC
 class Packet_0xB171:

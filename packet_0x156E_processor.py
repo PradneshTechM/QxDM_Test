@@ -1,4 +1,4 @@
-import re
+import regex as re
 import parser.utils
 
 class Packet_0x156E:

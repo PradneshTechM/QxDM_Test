@@ -1,4 +1,4 @@
-import re
+import regex as re
 from parser.kpi_utils import simple_map_entry
 
 class Packet_0xB0E3:

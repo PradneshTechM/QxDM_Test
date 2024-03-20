@@ -1,4 +1,4 @@
-import re
+import regex as re
 # import kpi_utils
 # import json
 class Packet_0x1569:
