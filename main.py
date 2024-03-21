@@ -1888,7 +1888,7 @@ TB Log Buff
          |   |           |Num Pad    |     |        |Reparse|               |CC|HARQ|MAC|MAC Hdr |
          |#  |TB Size    |Bytes      |Frame|SubFrame|Flag   |RNTI Type      |ID|ID  |Sdu|Len     |
          -----------------------------------------------------------------------------------------
-         |  0|         18|         13|  638|       0|      1|         C_RNTI| 0|   2|  1|       3|
+         |  0|         18|         13|  638|       0|      1|         C_RNTI| RF|   2|  1|       3|
 
       MAC Sdu Info[0]
          MAC Sdu Info Table[0]

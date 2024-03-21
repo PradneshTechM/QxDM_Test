@@ -264,12 +264,14 @@
         "__collection": "LTE",
         "__cell":[
           "if 'CC ID' in entry:",
-          " if int(entry['CC ID']) == 0:",
-          "    entry['__cell'] = 'PCC'",
-          "    entry.pop('CC ID')",
-          " elif int(entry['CC ID']) >= 1:",
-          "    entry['__cell'] = 'SCCn'",
-          "    entry.pop('CC ID')"
+          " if entry['CC ID'].isdigit():",
+          "   if int(entry['CC ID']) == 0:",
+          "     entry['__cell'] = 'PCC'",
+          "     entry.pop('CC ID')",
+          "   elif int(entry['CC ID']) >= 1:",
+          "     entry['__cell'] = 'SCCn'",
+          "     entry.pop('CC ID')",
+          "entry.pop('CC ID')"
         ],
         "Packet_Type": "MAC DL"
     },
