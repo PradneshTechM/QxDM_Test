@@ -33,6 +33,9 @@
       "DB Field": "Subs ID",
       "Field Name": "Event [IMS] Subs ID"
     },
+    "Direction": {
+      "DB Field": "Direction"
+    },
     "End Cause": {
       "DB Field": "Cause",
       "Field Name": "Event [IMS] Cause"
@@ -53,9 +56,10 @@
     "__frequency": "Event [One]",
     "__cell": "IMS",
     "Packet_Type": [
-      "if 'Packet_Type' in entry:",
-      "    entry['Packet_Type'] = entry['Direction']"
-    ],
+    "if 'Packet_Type' in entry:",
+    "    entry['Packet_Type'] = entry['Direction']",
+    "    entry.pop('Direction')"
+  ],
     "__Raw_Data": true
   },
   "0x1832  IMS Registration": {
@@ -933,6 +937,9 @@
     "__Raw_Data": true
   },
   "0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg": {
+    "msg_subtitle": {
+      "DB Field": "msg_subtitle"
+    },
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -985,6 +992,9 @@
     ]
   },
   "0xB0C0   LTE RRC OTA Packet": {
+    "msg_subtitle": {
+      "DB Field": "msg_subtitle"
+    },
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [LTE] Subs ID"
@@ -1013,7 +1023,8 @@
     "__frequency": "Per Second",
     "__cell": "LTE",
     "Packet_Type": [
-      "entry['msg_subtitle']"
+      "entry['Packet_Type'] = entry['msg_subtitle']",
+      "entry.pop('msg_subtitle')"
     ],
     "__Raw_Data": true
   },
@@ -1196,6 +1207,9 @@
     "__Raw_Data": true
   },
   "0xB800  NR5G NAS SM5G Plain OTA Incoming Msg": {
+    "msg_subtitle": {
+      "DB Field": "msg_subtitle"
+    },
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -1214,7 +1228,12 @@
     },
     "__collection": "Event",
     "__cell": "NR5G",
-    "Packet_Type": "entry['msg_subtitle']"
+    "Packet_Type":
+      [
+      "if 'msg_subtitle' in entry:",
+      "    entry['Packet_Type'] = entry['msg_subtitle']",
+      "    entry.pop('msg_subtitle')"
+    ]
   },
   "0xB171  LTE SRS Power Control Report": {
     "Cell Index": {
@@ -1242,9 +1261,9 @@
     "__collection": "LTE",
     "__cell": [
       "if int(entry['Cell index']) == 0:",
-      "entry['__cell'] = 'PCC'",
+      "    entry['__cell'] = 'PCC'",
       "elif int(entry['Cell index']) >= 1:",
-      "entry['__cell'] = f'SCC{entry['Cell index']}'"
+      "    entry['__cell'] = f\"SCC{entry['Cell index']}\""
     ],
     "Packet_Type": "SRS"
   },
@@ -1345,9 +1364,9 @@
     "__collection": "LTE",
     "__cell": [
       "if int(entry['#']) == 0:",
-      "    entry['__cell'] = 'PCC'",
+      "    entry['__cell'] = 'PCell'",
       "elif int(entry['#']) >= 1:",
-      "    entry['__cell'] = 'SCC(entry['#'])'",
+      "    entry['__cell'] = f\"SCell{entry['#']}\"",
       "entry.pop('#')"
     ],
     "__Raw_Data": true,
@@ -1441,6 +1460,10 @@
     },
     "Cell Measurement List": [
       {
+        "#": {
+          "index": 0,
+          "DB Field": "#"
+        },
         "E-ARFCN": {
           "index": 1,
           "DB Field": "E-ARFCN"
@@ -1460,7 +1483,13 @@
       }
     ],
     "__collection": "LTE",
-    "__cell": "PCell/SCelln",
+    "__cell": [
+      "if int(entry['#']) == 0:",
+      "    entry['__cell'] = 'PCell'",
+      "elif int(entry['#']) >= 1:",
+      "    entry['__cell'] = f\"SCell{entry['#']}\"",
+      "entry.pop('#')"
+    ],
     "__Raw_Data": true,
     "Packet_Type": "lte_ml1_dlm_qsh_dbg.c"
   }
