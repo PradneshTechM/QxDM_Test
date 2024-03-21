@@ -23,7 +23,8 @@
     "__frequency": "Event [One]",
     "__cell": "IMS",
     "Packet_Type": [
-      "entry['Packet_Type'] = entry['Direction']"
+      "if 'Packet_Type' in entry:",
+      "    entry['Packet_Type'] = entry['Direction']"
     ],
     "__Raw_Data": true
   },
@@ -52,7 +53,8 @@
     "__frequency": "Event [One]",
     "__cell": "IMS",
     "Packet_Type": [
-      "entry['Packet_Type'] = entry['Direction']"
+      "if 'Packet_Type' in entry:",
+      "    entry['Packet_Type'] = entry['Direction']"
     ],
     "__Raw_Data": true
   },

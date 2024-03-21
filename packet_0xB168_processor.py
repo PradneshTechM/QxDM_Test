@@ -1,6 +1,5 @@
 import regex as re
 
-
 class Packet_0xB168:
     def extract_info(packet_text, config=None, entry=None):
 
@@ -21,10 +20,11 @@ class Packet_0xB168:
                 new_key = key.replace('_', ' ')
                 # Add the modified key and its value to the new dictionary
                 modified_entry[new_key] = value
-            if int(modified_entry['Cell Index']) == 0:
-                modified_entry['_cell'] = 'PCC'
-            elif int(modified_entry['Cell Index']) >= 1:
-                modified_entry['_cell'] = 'SCC(' + modified_entry['Cell Index'] + ')'
+            if 'Cell Index' in modified_entry:
+                if int(modified_entry['Cell Index']) == 0:
+                    modified_entry['_cell'] = 'PCC'
+                elif int(modified_entry['Cell Index']) >= 1:
+                    modified_entry['_cell'] = 'SCC(' + modified_entry['Cell Index'] + ')'
             modified_entry['__collection'] = config['__collection']
             # modified_entry['__KPI_type'] = config['__KPI_type']
             return modified_entry

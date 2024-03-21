@@ -15,13 +15,13 @@ class Packet_0xB80B:
                 'nr5g_mm_msg': config['nr5g_mm_msg']['DB Field']
             }
             mapped_entry = {key_mapping.get(key, key): value for key, value in entry.items()}
-            if config['__collection']:
+            if '__collection' in config:
                 mapped_entry["__collection"] = config.get('__collection')
-            if config['__frequency']:
+            if '__frequency' in config:
                 mapped_entry["__frequency"] = config.get('__frequency')
-            if config['__cell']:
+            if '__cell' in config:
                 mapped_entry["__cell"] = config.get('__cell')
-            if "Packet_Type" in config:
+            if 'Packet_Type' in config:
                 mapped_entry["Packet_Type"] = entry["msg_subtitle"]
                 mapped_entry.pop("msg_subtitle", None)
             # mapped_entry["__packet_message"] = entry['msg_subtitle']

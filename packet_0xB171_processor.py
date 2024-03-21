@@ -22,15 +22,15 @@ class Packet_0xB171:
                 for key, value in row.items():
                     row_dict[key] = value
                     # self.dict[key] = value
-                if self.config['__collection']:
+                if '__collection' in self.config:
                     row_dict['__collection'] = self.config.get('__collection')
-                if self.config['__cell']:
+                if '__cell' in self.config:
                     # row_dict = cell_PCC(["if _obj['Cell Index']==0:","__cell = 'PCC'" ,"elif _obj['Cell Index']>=1:,","__cell = 'SCC(_obj['Cell Index'])'"], row_dict)
                     if int(row_dict["Cell index"]) == 0:
                         row_dict['__cell'] = 'PCC'
                     elif int(row_dict["Cell index"]) >= 1:
                         row_dict['__cell'] = f'SCC{row_dict["Cell index"]}'
-                if self.config['Packet_Type']:
+                if 'Packet_Type' in self.config:
                     row_dict["Packet_Type"] = self.config.get('Packet_Type')
                 # if self.config['__KPI_type']:
                 #     row_dict["__KPI_type"] = self.config.get('__KPI_type')

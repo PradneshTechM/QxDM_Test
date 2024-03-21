@@ -25,15 +25,15 @@ class Packet_0xB97F:
                     # self.dict[key] = value
                 # print(self.dict)
 
-                if self.config['__collection']:
+                if '__collection' in self.config:
                     row_dict["__collection"] = self.config.get('__collection')
-                if self.config['__cell']:
+                if '__cell' in self.config:
                     if int(row_dict['CC_ID']) == 0:
                         row_dict["__cell"] = 'PCC'
                     elif int(row_dict['CC_ID']) >= 1:
                         row_dict["__cell"] = f'SCC{row_dict["CC_ID"]}'
                         # row_dict["__cell"] = self.config.get('__cell')
-                if self.config['__Raw_Data']:
+                if '__Raw_Data' in self.config:
                     row_dict["__Raw_Data"] = self.config.get('__Raw_Data')
                 self.result.append(row_dict)
                 # self.result.append(self.dict)

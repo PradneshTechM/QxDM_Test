@@ -27,13 +27,16 @@ class Packet_0xB80A:
 
             # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
             mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
-            mapped_entry["__collection"] = config.get('__collection')
-            mapped_entry["__cell"] = config.get('__cell')
+            if '__collection' in config:
+                mapped_entry["__collection"] = config.get('__collection')
+            if '__cell' in config:
+                mapped_entry["__cell"] = config.get('__cell')
             if "Packet_Type" in config:
                 mapped_entry["Packet_Type"] = entry["msg_subtitle"]
                 mapped_entry.pop("msg_subtitle", None)
             # mapped_entry["__Raw_Data"] = config.get("__Raw_Data")
-            mapped_entry["__KPI_type"] = config.get('__KPI_type')
+            if '__KPI_type' in config:
+                mapped_entry["__KPI_type"] = config.get('__KPI_type')
 
             # print(entry)
             # print(dict)
