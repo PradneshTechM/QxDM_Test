@@ -42,12 +42,15 @@ class DB:
     return DB._DB_CLIENT
 
   def insert_logs(logs: list[dict], log_session, custom_collection):
+    sys.stdout.flush()
     if custom_collection != 'default':
       logs_collection = log_session.db_instance[custom_collection]
     elif log_session.collection:
       logs_collection = log_session.db_instance[log_session.collection]
     else:
       logs_collection = log_session.db_instance[DB._DB_TABLE]
+    print(f"Inserting into {log_session.db_instance.name}.{logs_collection.name} collection")
+    sys.stdout.flush()
       
     now_utc = unaware_datetime_to_utc(datetime.now())
     
