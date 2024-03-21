@@ -297,7 +297,7 @@
       " entry['__cell'] = 'PCell'",
       " entry.pop('Cell Index')",
       "elif int(entry['Cell Index']) >= 1:",
-      " entry['__cell'] = f'SCell{entry.pop('Cell Index')}'"
+      " entry['__cell'] = f\"SCell{entry.pop('Cell Index')}\""
     ],
     "Packet_Type": "PRACH",
     "__Raw_Data": false
@@ -381,7 +381,7 @@
       " entry['__cell'] = 'PCC'",
       " entry.pop('Cell Index')",
       "elif int(entry['Cell Index']) >= 1:",
-      " entry['__cell'] = f'SCC{entry.pop('Cell Index')}'"
+      " entry['__cell'] = f\"SCC{entry.pop('Cell Index')}\""
     ]
   },
   "0xB169  LTE UE Identification Message (MSG3) Report": {
@@ -409,7 +409,7 @@
       " entry['__cell'] = 'PCC'",
       " entry.pop('Cell Index')",
       "elif int(entry['Cell Index']) >= 1:",
-      " entry['__cell'] = f'SCC{entry.pop('Cell Index')}'"
+      " entry['__cell'] = f\"SCC{entry.pop('Cell Index')}\""
     ]
   },
   "0xB16A  LTE Contention Resolution Message (MSG4) Report": {
@@ -632,7 +632,7 @@
       "   entry['__cell'] = 'PCC'",
       "   entry.pop('Carrier ID')",
       " elif int(entry['Carrier ID']) >= 1:",
-      "   entry['__cell'] = f'SCC{entry.pop('Carrier ID')}'"
+      "   entry['__cell'] = f\"SCC{entry.pop('Carrier ID')}\""
     ],
     "__Raw_Data": false
   },
@@ -712,11 +712,11 @@
     "__collection": "NR5G",
     "__cell": [
       "if 'Carrier Id' in entry:",
-      " if int(entry['Carrier Id']) == 0:",
-      "   entry['__cell'] = 'PCC'",
-      "   entry.pop('Carrier Id')",
-      " elif int(entry['Carrier Id']) >= 1:",
-      "   entry['__cell'] = f'SCC{entry.pop('Carrier Id')}'"
+      "    if int(entry['Carrier Id']) == 0:",
+      "        entry['__cell'] = 'PCC'",
+      "        entry.pop('Carrier Id')",
+      "    elif int(entry['Carrier Id']) >= 1:",
+      "        entry['__cell'] = f\"SCC{entry.pop('Carrier Id')}\""
     ],
     "Packet_Type": "PDSCH",
     "__Raw_Data": false
