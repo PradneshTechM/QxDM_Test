@@ -289,10 +289,11 @@
     },
     "__collection": "LTE",
     "__cell": [
-      "if int(entry['Cell index']) == 0:",
-      "entry['__cell'] = 'PCell'",
-      "elif int(entry['Cell index']) >= 1:",
-      "entry['__cell'] = f'SCell{entry['Cell index']}'"
+      "if int(entry['Cell Index']) == 0:",
+      " entry['__cell'] = 'PCell'",
+      " entry.pop('Cell Index')",
+      "elif int(entry['Cell Index']) >= 1:",
+      " entry['__cell'] = f'SCell{entry.pop('Cell Index')}'"
     ],
     "Packet_Type": "PRACH",
     "__Raw_Data": false
@@ -372,10 +373,11 @@
     },
     "__collection": "LTE",
     "__cell": [
-      "if int(entry['Cell index']) == 0:",
-      "entry['__cell'] = 'PCC'",
-      "elif int(entry['Cell index']) >= 1:",
-      "entry['__cell'] = f'SCC{entry['Cell index']}'"
+      "if int(entry['Cell Index']) == 0:",
+      " entry['__cell'] = 'PCC'",
+      " entry.pop('Cell Index')",
+      "elif int(entry['Cell Index']) >= 1:",
+      " entry['__cell'] = f'SCC{entry.pop('Cell Index')}'"
     ]
   },
   "0xB169  LTE UE Identification Message (MSG3) Report": {
@@ -399,10 +401,11 @@
     },
     "__collection": "LTE",
     "__cell": [
-      "if int(entry['Cell index']) == 0:",
-      "entry['__cell'] = 'PCC'",
-      "elif int(entry['Cell index']) >= 1:",
-      "entry['__cell'] = f'SCC{entry['Cell index']}'"
+      "if int(entry['Cell Index']) == 0:",
+      " entry['__cell'] = 'PCC'",
+      " entry.pop('Cell Index')",
+      "elif int(entry['Cell Index']) >= 1:",
+      " entry['__cell'] = f'SCC{entry.pop('Cell Index')}'"
     ]
   },
   "0xB16A  LTE Contention Resolution Message (MSG4) Report": {
@@ -527,9 +530,10 @@
     "__frequency": "Event",
     "__cell": [
       "if int(entry['CC Id']) == 0 or int(entry['CC Id']) == 8:",
-      "entry['__cell'] ='PCC'",
+      " entry['__cell'] ='PCC'",
+      " entry.pop('CC Id')",
       "elif int(entry['CC Id']) in range(1,8) or int(entry['CC Id']) in range(9,16):",
-      "entry['__cell'] = f'SCC{entry['CC Id']}' where x in range(1,8)"
+      " entry['__cell'] = f'SCC{entry.pop('CC Id')}' where x in range(1,8)"
     ],
     "Packet_Type": "entry['Connectivity Mode']",
     "__Raw_Data": false
@@ -619,10 +623,12 @@
     ],
     "__collection": "NR5G",
     "__cell": [
-      "if int(entry['Carrier Id']) == 0:",
-      "entry['__cell'] = 'PCC'",
-      "elif int(entry['Carrier Id']) >= 1:",
-      "entry['__cell'] = f'SCC{entry['Carrier Id']}'"
+      "if 'Carrier ID' in entry:",
+      " if int(entry['Carrier ID']) == 0:",
+      "   entry['__cell'] = 'PCC'",
+      "   entry.pop('Carrier ID')",
+      " elif int(entry['Carrier ID']) >= 1:",
+      "   entry['__cell'] = f'SCC{entry.pop('Carrier ID')}'"
     ],
     "__Raw_Data": false
   },
@@ -701,10 +707,12 @@
     ],
     "__collection": "NR5G",
     "__cell": [
-      "if int(entry['Carrier Id']) == 0:",
-      " entry['__cell'] = 'PCC'",
-      "elif int(entry['Carrier Id']) >= 1:",
-      "entry['__cell'] = f'SCC{entry['Carrier Id']}'"
+      "if 'Carrier Id' in entry:",
+      " if int(entry['Carrier Id']) == 0:",
+      "   entry['__cell'] = 'PCC'",
+      "   entry.pop('Carrier Id')",
+      " elif int(entry['Carrier Id']) >= 1:",
+      "   entry['__cell'] = f'SCC{entry.pop('Carrier Id')}'"
     ],
     "Packet_Type": "PDSCH",
     "__Raw_Data": false
@@ -900,6 +908,10 @@
     "__Raw_Data": true
   },
   "0xB821  NR5G RRC OTA Packet": {
+    "subtitle": {
+      "DB Field": "subtitle",
+      "Field Name": "Event [NR5G] Subs ID"
+    },
     "Subscription ID": {
       "DB Field": "Subs ID",
       "Field Name": "Event [NR5G] Subs ID"
@@ -927,9 +939,7 @@
     "__collection": "Event",
     "__frequency": "Per Second",
     "__cell": "NR5G",
-    "Packet_Type": [
-      "entry['msg_subtitle']"
-    ],
+    "Packet_Type": ["entry['Packet_Type'] = entry.pop('subtitle')"],
     "__Raw_Data": true
   },
   "0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg": {
@@ -1086,9 +1096,6 @@
     "prot_disc": {
       "DB Field": "Protocol"
     },
-    "Raw Payload": {
-      "DB Field": "Raw Payload"
-    },
     "msg_type": {
       "DB Field": "msg type"
     },
@@ -1097,7 +1104,7 @@
     },
     "__collection": "Event",
     "__cell": "LTE",
-    "Packet_Type": "msg_type",
+    "Packet_Type": ["entry['Packet_Type'] = entry.pop('msg type')"],
     "__Raw_Data": true
   },
   "0xB0ED -- LTE -- msg_type": {
