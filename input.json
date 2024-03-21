@@ -249,7 +249,9 @@
           "DB Field": "Frame Boundary Range"
         }
       }
-    ]
+    ],
+    "__collection": "Event",
+    "__cell": "LTE"
   },
   "0xB166  LTE PRACH Configuration": {
     "Subscription ID": {
@@ -421,7 +423,9 @@
     },
     "Contention Result": {
       "DB Field": "Contention Result"
-    }
+    },
+    "__cell": "LTE",
+    "Packet_Type": "PDCCH"
   },
   "0xB825  NR5G RRC Configuration Info": {
     "Subscription ID": {
@@ -941,7 +945,9 @@
     "__frequency": "Event [One]",
     "__cell": "NR5G",
     "Packet_Type": [
-      "entry['msg_subtitle']"
+      "if 'msg_subtitle' in entry:",
+      "    entry['Packet_Type'] = entry['msg_subtitle']",
+      "    entry.pop('msg_subtitle')"
     ]
   },
   "0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg": {
