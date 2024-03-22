@@ -46,8 +46,6 @@ class Packet_0xB0C2:
             mapped_entry["__cell"] = config.get('__cell')
             if "Packet_Type" in config:
                 mapped_entry["Packet_Type"] = config.get('Packet_Type')
-            mapped_entry["__KPI_type"] = config.get('__KPI_type')
-
             # print(entry)
             # print(dict)
             # return True

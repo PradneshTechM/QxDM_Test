@@ -8,6 +8,31 @@ import os
 import datetime
 from typing import List, Tuple, Any, Dict
 import yaml
+from packet_0xB16D_processor import Packet_0xB16D
+from packet_0xB193_processor import Packet_0xB193
+from packet_0xB195_processor import Packet_0xB195
+from packet_0xB172_processor import Packet_0xB172
+from packet_0xB16D_processor import Packet_0xB16D
+from packet_0xB063_processor import Packet_0xB063
+from packet_0xB16B_processor import Packet_0xB16B
+from packet_0xB126_processor import Packet_0xB126
+from packet_0xB130_processor import Packet_0xB130
+from packet_0xB132_processor import Packet_0xB132
+from packet_0xB14D_processor import Packet_0xB14D
+from packet_0xB0EE_processor import Packet_0xB0EE
+from packet_0xB808_processor import Packet_0xB808
+from packet_0xB809_processor import Packet_0xB809
+from packet_0xB0E2_processor import Packet_0xB0E2
+from packet_0xB192_processor import Packet_0xB192
+from packet_0xB186_processor import Packet_0xB186
+from packet_0xB181_processor import Packet_0xB181
+from packet_0xB17E_processor import Packet_0xB17E
+from packet_0xB179_processor import Packet_0xB179
+from packet_0xB176_processor import Packet_0xB176
+from packet_0xB173_processor import Packet_0xB173
+from packet_0xB88A_processor import Packet_0xB88A
+from packet_0xB828_processor import Packet_0xB828
+from packet_0xB970_processor import Packet_0xB970
 from packet_0xB887_processor import Packet_0xB887
 from packet_0xB0F7_processor import Packet_0xB0F7
 from packet_0x156A_processor import Packet_0x156A
@@ -48,6 +73,32 @@ from packet_0xB196_processor import Packet_0xB196
 from packet_0xB883_processor import Packet_0xB883
 from packet_0xB884_processor import Packet_0xB884
 from packet_0xB889_processor import Packet_0xB889
+from packet_0x17F2_processor import Packet_0x17F2
+from packet_0x1D4D_processor import Packet_0x1D4D
+from packet_0xB16F_processor import Packet_0xB16F
+from packet_0xB0E3_processor import Packet_0xB0E3
+from packet_0xB16E_processor import Packet_0xB16E
+from packet_0xB139_processor import Packet_0xB139
+from packet_0xB060_processor import Packet_0xB060
+from packet_0xB0A5_processor import Packet_0xB0A5
+from packet_0xB0A1_processor import Packet_0xB0A1
+from packet_0xB06E_processor import Packet_0xB06E
+from packet_0xB062_processor import Packet_0xB062
+from packet_0xB1DA_processor import Packet_0xB1DA
+from packet_0xB081_processor import Packet_0xB081
+from packet_0xB13C_processor import Packet_0xB13C
+from packet_0xB16C_processor import Packet_0xB16C
+from packet_0xB064_processor import Packet_0xB064
+from packet_0xB0EF_processor import Packet_0xB0EF
+from packet_0xB0B5_processor import Packet_0xB0B5
+from packet_0xB0B4_processor import Packet_0xB0B4
+from packet_0xB0B1_processor import Packet_0xB0B1
+from packet_0x1568_processor import Packet_0x1568
+from packet_0xB061_processor import Packet_0xB061
+from packet_0xB840_processor import Packet_0xB840
+from packet_0xB841_processor import Packet_0xB841
+from packet_0xB873_processor import Packet_0xB873
+from packet_0xB111_processor import Packet_0xB111
 
 # Enum: Custom data type that contains fixed set of unique values
 # Enum basically represents a list of different ways to check if something is correct
@@ -1217,131 +1268,284 @@ class ParsedRawMessage:
                 config = json.load(f)
             with open('P2.json') as f:
                 config2 = json.load(f)
+            with open('P3.json') as f:
+                config3 = json.load(f)
+            with open('P4.json') as f:
+                config4 = json.load(f)
+            with open('P5.json') as f:
+                config5 = json.load(f)
             if packet_name == '0xB0E5':
                 print("0xB0E5")
-                return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5 -- LTE -- NAS'], entry)
+                return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5  LTE NAS ESM Bearer Context Info'], entry)
             elif packet_name == "0x156E":
                 print("0x156E")
-                return Packet_0x156E.extract_info(packet_text, config['0x156E -- IMS -- IMS_SIP_INVITE'],entry)
+                return Packet_0x156E.extract_info(packet_text, config['0x156E  IMS SIP Message'],entry)
             elif packet_name == "0x156A":
                 print("0x156A")
-                return Packet_0x156A.extract_info(packet_text, config['0x156A -- IMS'],entry)
+                return Packet_0x156A.extract_info(packet_text, config['0x156A  IMS RTCP'],entry)
             elif packet_name == "0xB0C1":
                 print("0xB0C1")
-                return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1 -- LTE-- RRC'],entry)
+                return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1  LTE RRC MIB Message Log Packet'],entry)
             elif packet_name == "0xB0F7":
                 print("0xB0F7")
-                return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7 -- LTE'],entry)
+                return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7  LTE NAS EMM RRC Service Request'],entry)
             elif packet_name == "0xB80B":
                 print("0xB80B")
-                return Packet_0xB80B.extract_info(packet_text, config['0xB80B -- NR5G -- Packet Subtitle'],entry)
+                return Packet_0xB80B.extract_info(packet_text, config['0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg'],entry)
             elif packet_name == "0xB800":
                 print("0xB800")
-                return Packet_0xB800.extract_info(packet_text, config['0xB800 -- NR5G -- PDU session release req'],entry)
+                return Packet_0xB800.extract_info(packet_text, config['0xB800  NR5G NAS SM5G Plain OTA Incoming Msg'],entry)
             elif packet_name =="0xB0EC":
                 print("0xB0EC")
-                return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC -- LTE -- msg_type"],entry)
+                return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC  LTE NAS EMM Plain OTA Incoming Message"],entry)
             elif packet_name =="0xB0E4":
                 print("0xB0E4")
-                return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4 -- LTE -- NAS"],entry)
+                return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4  LTE NAS ESM Bearer Context State"],entry)
             elif packet_name =="0xB0C2":
                 print("0xB0C2")
-                return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2 -- Cell -- Cell Info"],entry)
+                return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2  LTE RRC Serving Cell Info Log Pkt"],entry)
             elif packet_name == "0x1832":
                 print("0x1832")
-                return Packet_0x1832.extract_info(packet_text, config["0x1832 -- IMS -- IMS_SIP_REGISTER/INFORMAL_RESPONSE"],entry)
+                return Packet_0x1832.extract_info(packet_text, config["0x1832  IMS Registration"],entry)
             elif packet_name == '0xB822':
                 print("0xB822")
-                return Packet_0xB822.extract_info(packet_text, config['0xB822  -- NR5G'], entry)
+                return Packet_0xB822.extract_info(packet_text, config['NR5G RRC MIB Info'], entry)
             elif packet_name == '0xB115':
                 print("0xB115")
-                return Packet_0xB115(packet_text, config['0xB115'], entry).extract_info()
+                return Packet_0xB115(packet_text, config['0xB115  LTE LL1 SSS Results'], entry).extract_info()
             elif packet_name == "0x1831":
                 print("0x1831")
-                return Packet_0x1831.extract_info(packet_text, config["0x1831 -- IMS -- Direction"],entry)
+                return Packet_0x1831.extract_info(packet_text, config["0x1831  IMS VoLTE Session End"],entry)
             elif packet_name == "0x1830":
                 print("0x1830")
-                return Packet_0x1830.extract_info(packet_text, config["0x1830 -- IMS -- Direction"],entry)
+                return Packet_0x1830.extract_info(packet_text, config["0x1830  IMS VoLTE Session Setup"],entry)
             elif packet_name == '0xB166':
                 print("0xB166")
-                return Packet_0xB166.extract_info(packet_text, config['0xB166 -- Pcell -- PRACH'], entry)
+                return Packet_0xB166.extract_info(packet_text, config['0xB166  LTE PRACH Configuration'], entry)
             elif packet_name == '0xB168':
                 print("0xB168")
-                return Packet_0xB168.extract_info(packet_text, config['0xB168 -- PCC'], entry)
+                return Packet_0xB168.extract_info(packet_text, config['0xB168  LTE Random Access Response (MSG2) Report'], entry)
             elif packet_name == '0xB169':
                 print("0xB169")
-                return Packet_0xB169.extract_info(packet_text, config['0xB169 -- PCC'], entry)
+                return Packet_0xB169.extract_info(packet_text, config['0xB169  LTE UE Identification Message (MSG3) Report'], entry)
             elif packet_name == '0xB16A':
                 print("0xB16A")
-                return Packet_0xB16A.extract_info(packet_text, config['0xB16A'], entry)
+                return Packet_0xB16A.extract_info(packet_text, config['0xB16A  LTE Contention Resolution Message (MSG4) Report'], entry)
             elif packet_name == '0xB8D8':
                 print("0xB8D8")
-                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8 -- PCC -- Reference Signal = SSB'],
-                                                  entry)
+                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8  NR5G LL1 LOG SERVING SNR'],entry)
             elif packet_name == '0xB167':
                 print("0xB167")
-                return Packet_0xB167.extract_info(packet_text, config["0xB167"],entry)
+                return Packet_0xB167.extract_info(packet_text, config["0xB167  LTE Random Access Request (MSG1) Report"],entry)
             elif packet_name == "0x1569":
                 print("0x1569")
-                return Packet_0x1569.extract_info(packet_text, config['0x1569 -- IMS'], entry)
+                return Packet_0x1569.extract_info(packet_text, config['0x1569  IMS RTP Packet Loss'], entry)
             elif packet_name == '0xB823':
                 print("0xB823")
-                return Packet_0xB823.extract_info(packet_text, config['0xB823 -- NR5G'], entry)
+                return Packet_0xB823.extract_info(packet_text, config['0xB823  NR5G RRC Serving Cell Info'], entry)
             elif packet_name == '0xB887':
                 print('0xB887')
-                return Packet_0xB887(packet_text, config['0xB887 -- PCC -- PDSCH'], entry).extract_info()
+                return Packet_0xB887(packet_text, config['0xB887  NR5G MAC PDSCH Status'], entry).extract_info()
             elif packet_name == '0xB801':
                 print('0xB801')
-                return Packet_0xB801.extract_info(packet_text, config["0xB801 -- NR5G -- Packet Subtitle"], entry)
+                return Packet_0xB801.extract_info(packet_text, config["0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg"], entry)
             elif packet_name == '0xB80A':
                 print('0xB80A')
-                return Packet_0xB80A.extract_info(packet_text, config["0xB80A -- NR5G -- Packet Subtitle"], entry)
+                return Packet_0xB80A.extract_info(packet_text, config["0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg"], entry)
             elif packet_name == '0xB825':
                 print('0xB825')
-                return Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+                return Packet_0xB825.extract_info(packet_text, config["0xB825  NR5G RRC Configuration Info"], entry)
             elif packet_name == "0xB97F":
                 print("0xB97F")
-                return Packet_0xB97F(packet_text, config['0xB97F -- PCC'], entry).extract_info()
+                return Packet_0xB97F(packet_text, config['0xB97F  NR5G ML1 Searcher Measurement Database Update Ext'], entry).extract_info()
                 # entry,table_lines = Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
                 # return _tables(table_lines, entry)
             elif packet_name == '0xB8A7':
                 print('0xB8A7')
-                return Packet_0xB8A7(packet_text, config['0xB8A7 -- PCC'], entry).extract_info()
+                return Packet_0xB8A7(packet_text, config['0xB8A7  NR5G MAC CSF Report'], entry).extract_info()
             elif packet_name == '0xB827':
                 print('0xB827')
-                return Packet_0xB827(packet_text, config['0xB827 -- NR5G'], entry).extract_info()
+                return Packet_0xB827(packet_text, config['0xB827  NR5G RRC PLMN Search Request'], entry).extract_info()
             elif packet_name == '0xB18F':
                 print('0xB18F')
-                return Packet_0xB18F(packet_text, config['0xB18F -- LTE'], entry).extract_info()
+                return Packet_0xB18F(packet_text, config['0xB18F  LTE ML1 AdvRx IC Cell List'], entry).extract_info()
             elif packet_name == '0xB821':
                 print('0xB821')
-                return Packet_0xB821.extract_info(packet_text, config['0xB821 -- NR5G -- Packet Subtitle'], entry)
+                return Packet_0xB821.extract_info(packet_text, config['0xB821  NR5G RRC OTA Packet'], entry)
             elif packet_name == '0xB0C0':
                 print('0xB0C0')
-                return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0 -- LTE -- Packet Subtitle'], entry)
+                return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0   LTE RRC OTA Packet'], entry)
             elif packet_name == '0xB113':
                 print('0xB113')
-                return Packet_0xB113(packet_text, config['0xB113 -- LTE'], entry).extract_info()
+                return Packet_0xB113(packet_text, config['0xB113  LTE LL1 PSS Results'], entry).extract_info()
             elif packet_name == '0xB171':
                 print('0xB171')
-                return Packet_0xB171(packet_text, config['0xB171 -- PCC -- SRS'], entry).extract_info()
+                return Packet_0xB171(packet_text, config['0xB171  LTE SRS Power Control Report'], entry).extract_info()
             elif packet_name == '0xB18E':
                 print('0xB18E')
-                return Packet_0xB18E(packet_text, config['0xB18E -- PCell/SCelln'], entry).extract_info()
+                return Packet_0xB18E(packet_text, config['0xB18E  LTE ML1 System Scan Results'], entry).extract_info()
             elif packet_name == '0xB196':
                 print('0xB196')
-                return Packet_0xB196(packet_text, config['0xB196 -- PCell/SCelln'], entry).extract_info()
+                return Packet_0xB196(packet_text, config['0xB196  LTE ML1 Cell Measurement Results'], entry).extract_info()
+            elif packet_name == '0xB88A':
+                print('0xB88A')
+                return Packet_0xB88A.extract_info(packet_text, config2['0xB88A  NR5G MAC RACH Attempt'], entry)
+            elif packet_name == '0xB828':
+                print('0xB828')
+                return Packet_0xB828(packet_text, config2['0xB828  NR5G RRC PLMN Search Response'], entry).extract_info()
+            elif packet_name == '0xB970':
+                print('0xB970')
+                return Packet_0xB970.extract_info(packet_text, config2['0xB970  NR5G ML1 Searcher Idle S Criteria'], entry)
             elif packet_name == '0xB883':
                 print('0xB883')
-                return Packet_0xB883(packet_text, config2['0xB883 -- PCC -- PUSCH'], entry).extract_info()
+                return Packet_0xB883(packet_text, config2['0xB883  NR5G MAC UL Physical Channel Schedule Report'], entry).extract_info()
             elif packet_name == '0xB884':
                 print('0xB884')
-                return Packet_0xB884(packet_text, config2['0xB884 -- PCC'], entry).extract_info()
+                return Packet_0xB884(packet_text, config2['0xB884  NR5G MAC UL Physical Channel Power Control'], entry).extract_info()
             elif packet_name == '0xB889':
                 print('0xB889')
-                return Packet_0xB889(packet_text, config2['0xB889 -- NR5G'], entry).extract_info()
-
-
+                return Packet_0xB889(packet_text, config2['0xB889  NR5G MAC RACH Trigger'], entry).extract_info()
+            elif packet_name == '0xB173':
+                print('0xB173')
+                return Packet_0xB173(packet_text, config2['0xB173 LTE PDSCH Stat Indication'], entry).extract_info()
+            elif packet_name == '0xB176':
+                print('0xB176')
+                return Packet_0xB176.extract_info(packet_text, config2['0xB176  LTE Initial Acquisition Results'], entry)
+            elif packet_name == '0xB179':
+                print('0xB179')
+                return Packet_0xB179.extract_info(packet_text, config2['0xB179  LTE ML1 Connected Mode LTE Intra-Freq Meas Results'], entry)
+            elif packet_name == '0xB17E':
+                print('0xB17E')
+                return Packet_0xB17E.extract_info(packet_text, config2['0xB17E  LTE ML1 UE Mobility State change'], entry)
+            elif packet_name == '0xB181':
+                print('0xB181')
+                return Packet_0xB181.extract_info(packet_text, config2['0xB181  LTE ML1 Intra Frequency Cell Reselection'], entry)
+            elif packet_name == '0xB186':
+                print('0xB186')
+                return Packet_0xB186.extract_info(packet_text, config2['0xB186  LTE ML1 Reselection Candidates'], entry)
+            elif packet_name == '0xB192':
+                print('0xB192')
+                return Packet_0xB192(packet_text, config2['0xB192  LTE ML1 Neighbor Cell Meas Request/Response'], entry).extract_info()
+            elif packet_name == '0x17F2':
+                print('0x17F2')
+                return Packet_0x17F2.extract_info(packet_text, config2['0x17F2  IMS Voice Call Statistics'], entry)
+            elif packet_name == '0x1D4D':
+                print('0x1D4D')
+                return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D  IMS CALL SUMMARY STATS'], entry)
+            elif packet_name == '0xB16F':
+                print('0xB16F')
+                return Packet_0xB16F(packet_text, config2['0xB16F  LTE PUCCH Power Control'], entry).extract_info()
+            elif packet_name == '0xB0E3':
+                print('0xB0E3')
+                return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3  LTE NAS ESM Plain OTA Outgoing Message'], entry)
+            elif packet_name == '0xB0E2':
+                print('0xB0E2')
+                return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2  LTE NAS ESM Plain OTA Incoming Message'], entry)
+            elif packet_name == '0xB808':
+                print('0xB808')
+                return Packet_0xB808.extract_info(packet_text, config2['0xB808  NR5G NAS MM5G Security Protected OTA Incoming Msg'], entry)
+            elif packet_name == '0xB809':
+                print('0xB809')
+                return Packet_0xB809.extract_info(packet_text, config2['0xB809  NR5G NAS MM5G Security Protected OTA Outgoing Msg'], entry)
+            elif packet_name == '0xB16E':
+                print('0xB16E')
+                return Packet_0xB16E(packet_text, config2['0xB16E  LTE PUSCH Power Control'], entry).extract_info()
+            elif packet_name == '0xB139':
+                print('0xB139')
+                return Packet_0xB139(packet_text, config2['0xB139  LTE LL1 PUSCH Tx Report'], entry).extract_info()
+            elif packet_name == '0xB060':
+                print('0xB060')
+                return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
+            elif packet_name == '0xB0EE':
+                print('0xB0EE')
+                return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE  LTE NAS EMM State'], entry)
+            elif packet_name == '0xB14D':
+                print('0xB14D')
+                return Packet_0xB14D.extract_info(packet_text, config3['0xB14D  LTE LL1 PUCCH CSF'], entry)
+            elif packet_name == '0xB132':
+                print('0xB132')
+                return Packet_0xB132(packet_text, config3['0xB132  LTE LL1 PDSCH Decoding Results'], entry).extract_info()
+            elif packet_name == '0xB130':
+                print('0xB130')
+                return Packet_0xB130(packet_text, config3['0xB130  LTE LL1 PDCCH Decoding Result'], entry).extract_info()
+            elif packet_name == '0xB126':
+                print('0xB126')
+                return Packet_0xB126(packet_text, config3['0xB126  LTE LL1 PDSCH Demapper Configuration'], entry).extract_info()
+            elif packet_name == '0xB16B':
+                print('0xB16B')
+                return Packet_0xB16B(packet_text, config3['0xB16B  LTE PDCCH-PHICH Indication Report'], entry).extract_info()
+            elif packet_name == '0xB063':
+                print('0xB063')
+                return Packet_0xB063(packet_text, config3['0xB063  LTE MAC DL Transport Block'], entry).extract_info()
+            elif packet_name == '0xB0A5':
+                print('0xB0A5')
+                return Packet_0xB0A5(packet_text, config3['0xB0A5  LTE PDCP DL SRB Integrity Data PDU'], entry).extract_info()
+            elif packet_name == '0xB0A1':
+                print('0xB0A1')
+                return Packet_0xB0A1(packet_text, config3['0xB0A1  LTE PDCP DL Data PDU'], entry).extract_info()
+            elif packet_name == '0xB06E':
+                print('0xB06E')
+                return Packet_0xB06E(packet_text, config3['0xB06E  LTE MAC DL RAR Transport Block'], entry).extract_info()
+            elif packet_name == '0xB062':
+                print('0xB062')
+                return Packet_0xB062.extract_info(packet_text, config3['0xB062  LTE MAC Rach Attempt'], entry)
+            elif packet_name == '0xB1DA':
+                print('0xB1DA')
+                return Packet_0xB1DA(packet_text, config3['0xB1DA  LTE ML1 Antenna Switch Diversity'], entry).extract_info()
+            elif packet_name == '0xB081':
+                print('0xB081')
+                return Packet_0xB081(packet_text, config3['0xB081  LTE RLC DL Config Log packet'], entry).extract_info()
+            elif packet_name == '0xB13C':
+                print('0xB13C')
+                return Packet_0xB13C(packet_text, config3['0xB13C  LTE LL1 PUCCH Tx Report'], entry).extract_info()
+            elif packet_name == '0xB16C':
+                print('0xB16C')
+                return Packet_0xB16C(packet_text, config3['0xB16C  LTE DCI Information Report'], entry).extract_info()
+            elif packet_name == '0xB064':
+                print('0xB064')
+                return Packet_0xB064(packet_text, config3['0xB064  LTE MAC UL Transport Block'], entry).extract_info()
+            elif packet_name == '0xB0EF':
+                print('0xB0EF')
+                return Packet_0xB0EF.extract_info(packet_text, config3['0xB0EF  LTE NAS EMM USIM card mode'], entry)
+            elif packet_name == '0xB0B5':
+                print('0xB0B5')
+                return Packet_0xB0B5(packet_text, config3['0xB0B5  LTE PDCP UL SRB Integrity Data PDU'], entry).extract_info()
+            elif packet_name == '0xB0B4':
+                print('0xB0B4')
+                return Packet_0xB0B4(packet_text, config3['0xB0B4  LTE PDCP UL Statistics Pkt'], entry).extract_info()
+            elif packet_name == '0xB0B1':
+                print('0xB0B1')
+                return Packet_0xB0B1(packet_text, config3['0xB0B1  LTE PDCP UL Data PDU'], entry).extract_info()
+            elif packet_name == '0x1568':
+                print('0x1568')
+                return Packet_0x1568.extract_info(packet_text, config3['0x1568  IMS RTP SN and Payload'], entry)
+            elif packet_name == '0xB061':
+                print('0xB061')
+                return Packet_0xB061.extract_info(packet_text, config3['0xB061  LTE MAC Rach Trigger'], entry)
+            elif packet_name == '0xB16D':
+                print('0xB16D')
+                return Packet_0xB16D.extract_info(packet_text, config4['0xB16D  LTE GM TX Report'], entry)
+            elif packet_name == '0xB172':
+                print('0xB172')
+                return Packet_0xB172(packet_text, config4['0xB172  LTE Uplink PKT Build Indication'], entry).extract_info()
+            elif packet_name == '0xB195':
+                print('0xB195')
+                return Packet_0xB195.extract_info(packet_text, config4['0xB195  LTE ML1 Connected Neighbor Meas Request/Response'], entry)
+            elif packet_name == '0xB840':
+                print('0xB840')
+                return Packet_0xB840.extract_info(packet_text, config4['0xB840  NR5G PDCP DL Data Pdu'], entry)
+            elif packet_name == '0xB841':
+                print('0xB841')
+                return Packet_0xB841.extract_info(packet_text, config4['0xB841  NR5G PDCP DL Control Pdu'], entry)
+            elif packet_name == '0xB873':
+                print('0xB873')
+                return Packet_0xB873.extract_info(packet_text, config4['0xB873  NR5G L2 UL BSR'], entry)
+            elif packet_name == '0xB111':
+                print('0xB111')
+                return Packet_0xB111(packet_text, config5['0xB111  LTE LL1 Rx Agc Log'], entry).extract_info()
+            elif packet_name == '0xB193':
+                print('0xB193')
+                return Packet_0xB193.extract_info(packet_text, config3['0xB193  LTE ML1 Serving Cell Meas Response'], entry)
         # start here
 
         # remove empty (only whitespace) lines
@@ -1352,6 +1556,7 @@ class ParsedRawMessage:
         # entry = {"Time": self.datetime, "Source": "QxDM", "Subtitle": self.subtitle}
         packet_name = None
         # if self.subtitle:
+
         if self.subtitle == "" or self.subtitle == " ":
             packet_name = self.packet_type_hex + ' '+ self.name
         else:
@@ -1483,9 +1688,930 @@ def test_parsing():
 
     def test_table_parsing():
         messages: List[ParsedRawMessage] = []
+        msg = ParsedRawMessage(index=0, packet_type="0xB193", packet_length=100,
+                               name=" LTE ML1 Serving Cell Meas Response",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.480",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.480  [14]  0xB193  LTE ML1 Serving Cell Meas Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 1
+SubPacket ID = 25
+Serving Cell Measurement Result
+   Version = 59
+   SubPacket Size = 160 bytes
+   E-ARFCN = 66986
+   Num of Cell = 1
+   Cells[0]
+      Valid Rx = RX0_RX1_RX2_RX3
+      Logical To Physical Rx Map = { 2, 3, 0, 1 }
+      Physical Cell ID = 147
+      Serving Cell Index = PCell
+      FW Serving Cell Index = 0
+      Is Serving Cell = 1
+      Current SFN = 108
+      Current Subframe Number = 2
+      Is Restricted = false
+      Cell Timing[0] = 79155
+      Cell Timing[1] = 79155
+      Cell Timing SFN[0] = 108
+      Cell Timing SFN[1] = 108
+      Inst RSRP Rx[0] = -90.13 dBm
+      Inst RSRP Rx[1] = -89.63 dBm
+      Inst RSRP Rx[2] = -92.69 dBm
+      Pathloss RSRP Rx[2] = -92.56 dBm
+      Pathloss RSRP Rx[3] = -94.50 dBm
+      Inst RSRP Rx[3] = -94.56 dBm
+      Inst Measured RSRP = -92.69 dBm
+      Filtered RSRP = -92.25 dBm
+      Inst RSRQ Rx[0] = -11.56 dB
+      Inst RSRQ Rx[1] = -12.31 dB
+      Inst RSRQ Rx[2] = -11.63 dB
+      Inst RSRQ Rx[3] = -11.06 dB
+      Post Ic Rsrq = -11.06 dB
+      Filtered RSRQ = -12.81 dB
+      Inst RSSI Rx[0] = -61.56 dBm
+      Inst RSSI Rx[1] = -60.25 dBm
+      Inst RSSI Rx[2] = -64.13 dBm
+      Inst RSSI Rx[3] = -66.44 dBm
+      Inst RSSI = -64.13 dBm
+      FTL SNR Rx[0] = 6.40 dB
+      FTL SNR Rx[1] = 6.00 dB
+      FTL SNR Rx[2] = 7.00 dB
+      FTL SNR Rx[3] = 7.20 dB
+      Projected Sir = 11.00 dB
+      Post Ic Rsrq = -11.06 dB
 
-        def test_table_parsing():
-            messages: List[ParsedRawMessage] = []
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB195", packet_length=100,
+                               name="LTE ML1 Connected Neighbor Meas Request/Response",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.801",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.801  [E3]  0xB195  LTE ML1 Connected Neighbor Meas Request/Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 30
+Connected Neighbor Meas Request
+   Version = 56
+   SubPacket Size = 32 bytes
+   E-ARFCN = 66986
+   Num Neighbor Cells = 1
+   Num Rx Ant = 2
+   Serving Cell Index = PCell
+   FW Serving Cell Index = 0
+   Num Ms Per Cell = 1 ms
+   Meas Req Act Time = 1396
+   Neighbor Cells
+      --------------------------------------------------------------------------
+      |   |    |              |   |        |Frame     |Frame     |Total |Total |
+      |   |    |              |eNb|        |Boundary  |Boundary  |Timing|Timing|
+      |   |Cell|              |Tx |TTL     |Ref       |Ref       |Adj   |Adj   |
+      |#  |ID  |CP Type       |Ant|Enable  |Time[0]   |Time[1]   |CIR[0]|CIR[1]|
+      --------------------------------------------------------------------------
+      |  0| 295|        Normal|  2|Disabled|     79157|     79157|     0|     0|
+
+SubPacket ID = 31
+Connected Neighbor Meas Response
+   Version = 57
+   SubPacket Size = 64 bytes
+   E-ARFCN = 66986
+   Num Cells = 1
+   Duplexing Mode = FDD
+   Serving Cell Index = PCell
+   FW Serving Cell Index = 0
+   Meas Resp Sfn = 1405
+   Neighbor Cells
+      ----------------------------------------------------------------------------------------------------------
+      |   |        |           |      |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
+      |   |        |FTL        |      |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
+      |   |Physical|Cumulative |BAD   |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
+      |#  |Cell ID |Freq Offset|CER   |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+      ----------------------------------------------------------------------------------------------------------
+      |  0|     295|          0|  TRUE|-102.63|-100.44| -100.44| -21.00| -19.88| -19.88| -72.63| -71.56| -71.56|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB172", packet_length=100,
+                               name="LTE Uplink PKT Build Indication",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.532",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.532  [3F]  0xB172  LTE Uplink PKT Build Indication
+Subscription ID = 1
+Version = 34
+Number of Records = 20
+PKT Build Record
+   --------------------------------------------------------------------------------------------
+   |   |     |    |      |Transport|       |              |    |    |       |         |       |
+   |   |Cell |Tx  |Tx    |Block    |EIB    |              |HARQ|Tx  |Corrupt|Commit   |       |
+   |#  |Index|Sfn |Sub-fn|Size     |Address|RNTI Type     |ID  |Type|CRC    |Time     |PB Mode|
+   --------------------------------------------------------------------------------------------
+   |  0|    0| 111|     9|     1572|      1|        C_RNTI|   7|ReTx|     No| 16218223|      0|
+   |  1|    0| 112|     0|     1431|      0|        C_RNTI|   0| New|     No| 16237423|      0|
+   |  2|    0| 112|     2|     1143|      1|        C_RNTI|   2| New|     No| 16275823|      0|
+   |  3|    0| 112|     3|     1572|      0|        C_RNTI|   3| New|     No| 16295023|      0|
+   |  4|    0| 112|     4|      967|      1|        C_RNTI|   4|ReTx|     No| 16314223|      0|
+   |  5|    0| 112|     5|     1572|      0|        C_RNTI|   5| New|     No| 16333423|      0|
+   |  6|    0| 112|     6|     1431|      1|        C_RNTI|   6|ReTx|     No| 16352623|      0|
+   |  7|    0| 112|     7|     1143|      0|        C_RNTI|   7| New|     No| 16371823|      0|
+   |  8|    0| 112|     8|     1431|      1|        C_RNTI|   0| New|     No| 16391022|      0|
+   |  9|    0| 112|     9|     1572|      0|        C_RNTI|   1|ReTx|     No| 16410222|      0|
+   | 10|    0| 113|     0|     1143|      1|        C_RNTI|   2|ReTx|     No| 16429422|      0|
+   | 11|    0| 113|     1|     1335|      0|        C_RNTI|   3| New|     No| 16448622|      0|
+   | 12|    0| 113|     2|     1572|      1|        C_RNTI|   4| New|     No| 16467822|      0|
+   | 13|    0| 113|     3|     1692|      0|        C_RNTI|   5| New|     No| 16487022|      0|
+   | 14|    0| 113|     4|      807|      1|        C_RNTI|   6| New|     No| 16506222|      0|
+   | 15|    0| 113|     5|     1335|      0|        C_RNTI|   7| New|     No| 16525422|      0|
+   | 16|    0| 113|     6|     1431|      1|        C_RNTI|   0| New|     No| 16544622|      0|
+   | 17|    0| 113|     7|     1335|      0|        C_RNTI|   1| New|     No| 16563822|      0|
+   | 18|    0| 113|     8|     1431|      1|        C_RNTI|   2| New|     No| 16583022|      0|
+   | 19|    0| 113|     9|      293|      0|        C_RNTI|   3| New|     No| 16602222|      0|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB16D", packet_length=100,
+                               name="LTE GM TX Report",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.512",
+                               packet_text=
+                               """2024 Jan 15  07:16:21.165  [26]  0xB16D  LTE GM TX Report
+Subscription ID = 1
+Version = 49
+Duplex Mode = 0
+UL DL Cfg = 15
+Reserved = 0
+Number of Records = 20
+Tx Report Records[0]
+   Chan Type = PUCCH
+   Cell Index = 0
+   Tx SFN = 524
+   Tx Sub Fn = 8
+   UL ACK/NAK Present Flag = ACK/NAK not present
+   ACK/NAK Reporting Mode = N/A
+   CSF Present Flag = 1
+   SRS Present Flag = 0
+   CA Mode Enabled = Disabled
+   SRS UE/Cell Specific = 0
+   ECA/ACK Reporting Mode = NO_ECA
+   Total Tx Power = -21 dBm
+   ACK/NAK Length = 0
+   Scheduling Request Present = NotPresent
+   Temp RNTI ACK Flag = NotPresent
+   BETA PUCCH = 5827
+   N 1 PUCCH = 0
+   N 2 PUCCH = 46
+   N 3 PUCCH = 0
+   CC Max TX Power = 25 dBm
+   Total Max TX Power = 25 dBm
+   Chain0 Mtpl = 24
+   Chain1 Mtpl = 0
+   AFC Rx Freq Error = 1050 Hz
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB063", packet_length=100,
+                               name="LTE MAC DL Transport Block",
+                               subtitle="", datetime="2024 Jan 15  07:15:51.030",
+                               packet_text=
+                               """2024 Jan 15  07:15:51.030  [03]  0xB063  LTE MAC DL Transport Block
+Subscription ID = 1
+Version = 50
+TB Log Buff
+   Config Info
+      Num Tb = 1
+      Reason = 0
+   TB Info[0]
+      TB Common Info[0]
+         -----------------------------------------------------------------------------------------
+         |   |           |           |     |        |       |               |  |    |Num|        |
+         |   |           |Num Pad    |     |        |Reparse|               |CC|HARQ|MAC|MAC Hdr |
+         |#  |TB Size    |Bytes      |Frame|SubFrame|Flag   |RNTI Type      |ID|ID  |Sdu|Len     |
+         -----------------------------------------------------------------------------------------
+         |  0|         18|         13|  638|       0|      1|         C_RNTI| RF|   2|  1|       3|
+
+      MAC Sdu Info[0]
+         MAC Sdu Info Table[0]
+            --------------------------------------------------------------------------------------------------------------
+            |   |                                  |SDU CE Info                                          |               |
+            |   |                                  |RLC PDCP Info                                |       |               |
+            |   |MAC Common Info                   |       |  | |  | |  |   |       |Num |       |       |Dynamic Log    |
+            |   |Is |                      |       |       |  | |  | |  |   |       |PDCP|Num    |Mac CE |Info           |
+            |#  |MCE|LCID                  |Sdu Len|SN     |DC|P|RF|E|FI|LSF|SO     |Grp |NLOs   |Payload|Li Num|Li Len  |
+            --------------------------------------------------------------------------------------------------------------
+            |  0|  0|                     2|      2|      0| 0|0| 0|0| 0|  0|      0|   0|      0|       |      |        |
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB16B", packet_length=100,
+                               name="LTE PDCCH-PHICH Indication Report",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.491",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.491  [C2]  0xB16B  LTE PDCCH-PHICH Indication Report
+Subscription ID = 1
+Version = 49
+Duplex Mode = FDD
+Number of Records = 25
+Info Records
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |       |       |      |      |Force|PHICH                    |PDCCH Info                                                                                                    |        |            |
+   |   |Num    |Num    |PDCCH |PDCCH |Send |     |       |     |PHICH|Serv |              |PDCCH  |           |      |          |     |      |       |      |     |     |     |     |Dl      |            |
+   |   |PDCCH  |PHICH  |Timing|Timing|PDCCH|Cell |PHICH  |PHICH|1    |Cell |              |Payload|Aggregation|Search|SPS Grant |New  |Num DL|Is Ul  |Interf|S0   |S1   |S2   |S3   |Subframe|Full Mode   |
+   |#  |Results|Results|SFN   |Sub-fn|Ind  |Index|Present|Value|Value|Index|RNTI Type     |Size   |Level      |Space |Type      |DL Tx|Trblks|Dropped|Active|Index|Index|Index|Index|Count   |Events Mask |
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|      1|      1|   107|     0|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373936|      0x0000|
+   |  1|      0|      1|   107|     1|    0|    0|    Yes|  ACK|     |     |              |       |           |      |          |     |      |       |      |     |     |     |     |  373937|      0x0000|
+   |  2|      1|      1|   107|     2|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373938|      0x0000|
+   |  3|      1|      1|   107|     3|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373939|      0x0000|
+   |  4|      1|      1|   107|     4|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373940|      0x0000|
+   |  5|      1|      0|   107|     5|    0|     |       |     |     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373941|      0x0000|
+   |  6|      1|      1|   107|     6|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373942|      0x0000|
+   |  7|      1|      1|   107|     7|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373943|      0x0000|
+   |  8|      0|      1|   107|     8|    0|    0|    Yes|  ACK|     |     |              |       |           |      |          |     |      |       |      |     |     |     |     |  373944|      0x0000|
+   |  9|      1|      0|   107|     9|    0|     |       |     |     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373945|      0x0000|
+   | 10|      1|      1|   108|     0|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg1|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373946|      0x0000|
+   | 11|      1|      1|   108|     1|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373947|      0x0000|
+   | 12|      0|      1|   108|     2|    0|    0|    Yes|  NAK|     |     |              |       |           |      |          |     |      |       |      |     |     |     |     |  373948|      0x0000|
+   | 13|      1|      1|   108|     3|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373949|      0x0000|
+   | 14|      1|      1|   108|     4|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373950|      0x0000|
+   | 15|      0|      1|   108|     5|    0|    0|    Yes|  ACK|     |     |              |       |           |      |          |     |      |       |      |     |     |     |     |  373951|      0x0000|
+   | 16|      1|      0|   108|     6|    0|     |       |     |     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373952|      0x0000|
+   | 17|      0|      1|   108|     7|    0|    0|    Yes|  ACK|     |     |              |       |           |      |          |     |      |       |      |     |     |     |     |  373953|      0x0000|
+   | 18|      1|      1|   108|     8|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373954|      0x0000|
+   | 19|      1|      1|   108|     9|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373955|      0x0000|
+   | 20|      1|      1|   109|     0|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373956|      0x0000|
+   | 21|      1|      1|   109|     1|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373957|      0x0000|
+   | 22|      1|      1|   109|     2|    0|    0|    Yes|  ACK|     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373958|      0x0000|
+   | 23|      1|      0|   109|     3|    0|     |       |     |     |    0|        C_RNTI|     43|       Agg2|    UE|          |    0|     0|      0|     0|    0|    0|    0|    0|  373959|      0x0000|
+   | 24|      0|      1|   109|     4|    0|    0|    Yes|  ACK|     |     |              |       |           |      |          |     |      |       |      |     |     |     |     |  373960|      0x0000|
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB126", packet_length=100,
+                               name="LTE LL1 PDSCH Demapper Configuration",
+                               subtitle="", datetime="2024 Jan 15  07:15:36.201",
+                               packet_text=
+                               """2024 Jan 15  07:15:36.201  [1A]  0xB126  LTE LL1 PDSCH Demapper Configuration
+Subscription ID = 1
+Version = 163
+Carrier Index = PCC
+Num of Records = 20
+Records
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |Sub-frame |System Frame|                |Number of Tx|Number of Rx|Spatial|Frequency    |PMI  |                                |                    |                    |                  |                  |
+   |#  |Number    |Number      |PDSCH RNTI Type |Antennas (M)|Antennas (N)|Rank   |Selective PMI|Index|Transmission Scheme             |RB Allocation Slot 0|RB Allocation Slot 1|UERS Port Enabled |QICE Skip Reason  |
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|         0|         178|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0000FC00001FFFF8|  0x0000FC00001FFFF8|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  1|         2|         178|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x00001C00001FFFFF|  0x00001C00001FFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  2|         3|         178|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFC7FFFFFF|  0x0003FFFFC7FFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  3|         4|         178|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  4|         5|         178|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003000038FFFFC0|  0x0003000038FFFFC0|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  5|         8|         178|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFC7FFFFFF|  0x0003FFFFC7FFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  6|         9|         178|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  7|         0|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  8|         1|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   |  9|         2|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 10|         3|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 11|         4|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 12|         5|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 13|         7|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 14|         8|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 15|         9|         179|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 16|         0|         180|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 17|         2|         180|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 18|         3|         180|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+   | 19|         4|         180|          C-RNTI|           4|           4|      1|     Wideband|    4|Closed-loop spatial multiplexing|  0x0003FFFFFFFFFFFF|  0x0003FFFFFFFFFFFF|          Reserved|        SW Disable|
+   |   |          |            |                |            |            |       |             |     |                                |  0x0000000000000000|  0x0000000000000000|                  |                  |
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB130", packet_length=100,
+                               name="LTE LL1 PDCCH Decoding Result",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.477",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.477  [89]  0xB130  LTE LL1 PDCCH Decoding Result
+Subscription ID = 1
+Version = 163
+Carrier Index = SCC
+Number of Records = 11
+Hypothesis
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |         |      |       |          |          |          |                    |        |        |   |   |                  |           |         |      |          |              |       |        |       |     |                                        |          |        |      |Non Zero|Non  |      |
+   |   |         |System|       |          |Two bits  |Aperiodic |                    |        |        |   |CA |                  |           |         |Search|          |              |       |        |       |     |                                        |Norm      |Symbol  |      |Symbol  |Zero |      |
+   |   |Sub-frame|Frame |Band   |CIF       |CSI       |SRS       |                    |Num eNB |        |   |FDD|                  |Aggregation|         |Space |          |              |Payload|Tail    |Alt TBS|Start|                                        |Energy    |Error   |Energy|Mismatch|Llr  |      |
+   |#  |Number   |Number|Width  |Configured|Configured|configured|Frame Structure     |Antennas|DL CP   |SSC|TDD|Payload           |Level      |Candidate|Type  |DCI Format|Decode Status |Size   |Match   |Enabled|CCE  |Prune Status                            |Metric    |Rate    |Metric|Count   |Count|Normal|
+   -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|        0|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x260C080000000000|       Agg2|        0|  User|         0|        C_RNTI|     43|   Match|      0|   18|                            SUCCESS_DCI0|    0.9810|0.015503|  3412|       2|  129|  3478|
+   |  1|        2|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x260BC88000000000|       Agg2|        3|  User|         0|        C_RNTI|     43|   Match|      0|    6|                            SUCCESS_DCI0|    0.9922|0.007751|  3586|       1|  129|  3614|
+   |  2|        3|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x1E5B690000000000|       Agg2|        5|  User|         0|        C_RNTI|     43|   Match|      0|   14|                            SUCCESS_DCI0|    1.0000|0.000000|  3620|       0|  129|  3620|
+   |  3|        4|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x260B880000000000|       Agg1|        4|  User|         0|        C_RNTI|     43|   Match|      0|   10|                    FAIL_SURVIVOR_SELECT|    0.9961|0.013885|  1738|       1|   72|  1744|
+   |  4|        4|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x260B880000000000|       Agg2|        3|  User|         0|        C_RNTI|     43|   Match|      0|   10|                            SUCCESS_DCI0|    0.9980|0.007751|  3341|       1|  129|  3347|
+   |  5|        5|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x1E3FA88000000000|       Agg2|        3|  User|         0|        C_RNTI|     43|   Match|      0|   18|                            SUCCESS_DCI0|    0.9785|0.015503|  3427|       2|  129|  3501|
+   |  6|        6|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x260B880000000000|       Agg4|        3|Common|         0|        C_RNTI|     43|   Match|      0|   12|                    FAIL_SURVIVOR_SELECT|    1.0000|0.000000|  3461|       0|  129|  3461|
+   |  7|        6|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x260B880000000000|       Agg2|        5|  User|         0|        C_RNTI|     43|   Match|      0|   12|                            SUCCESS_DCI0|    1.0000|0.000000|  3818|       0|  129|  3818|
+   |  8|        7|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x1B1BE80000000000|       Agg2|        0|  User|         0|        C_RNTI|     43|   Match|      0|   14|                            SUCCESS_DCI0|    0.9575|0.023438|  3398|       3|  128|  3548|
+   |  9|        9|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x1E3BA88000000000|       Agg1|        0|  User|         0|        C_RNTI|     43|   Match|      0|    8|                    FAIL_SURVIVOR_SELECT|    0.9136|0.055541|  1777|       4|   72|  1945|
+   | 10|        9|   107| 10 MHz|     false|     false|     false|                 FDD|       4|  NORMAL|  0|  0|0x1E3BA88000000000|       Agg2|        1|  User|         0|        C_RNTI|     43|   Match|      0|    8|                            SUCCESS_DCI0|    0.9321|0.054260|  3263|       7|  129|  3499|
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB132", packet_length=100,
+                               name="LTE LL1 PDSCH Decoding Results",
+                               subtitle="", datetime="2024 Mar 18  11:30:31.362 ",
+                               packet_text=
+                               """
+2024 Jan 15  07:15:50.311  [C4]  0xB132  LTE LL1 PDSCH Decoding Results
+Subscription ID = 1
+Version = 168
+Length = 304
+Drop Cnt = 0
+Num Records = 2
+Common Static Config
+   Context = LTE
+   Variant Id = 0
+   CxN Index = 0
+   Cell Id = 147
+   EARFCN = 66986
+   Carrier Index = 0
+   Variant Carrier Index = 0
+   System BW = 10
+   NIR = 114192
+   Num HARQ = 8
+   UE Category = 20
+   TX Mode = TM4_CL_SM
+   Num eNb Tx Ant = 4
+   Four_Layer_Capability = false
+TB Info Record[0]
+   TB Top
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |     |     |     |    |       |      |    |    |     |    |      |         |        |         |           |         |    |    |     |    |Harq|     |   |   |     |      |      |      |
+      |     |     |MVC  |    |       |      |    |    |     |    |      |         |        |         |           |         |    |IO  |     |Harq|IO  |Num  |   |   |     |      |      |      |
+      |     |     |Clock|    |       |Bypass|    |Num |Start|QREN|RX01  |CB Bundle|TB DMA  |         |           |         |IO  |ST  |Num  |IO  |ST  |Harq |RP |SF |RB   |SC    |TB Ext|CB    |
+      |Frame|SubFN|(MHz)|Rank|LLR BW |Decode|ITER|RX  |CB ID|BMSK|poolID|Size     |Budget  |Onld Size|Offld Size |L2 Mode  |Fail|Fail|IOVec|Fail|Fail|Iovec|Idx|Gap|Start|Index |Enable|Enable|
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  562|    9|  192|  R4|     6B|     0|   1| 2RX|    0|   2|     0|        1|    3778|        0|        136|   HEADER|   0|   0|    1|   0|   0|    1|  0|  0|    0|     0|  TRUE|  TRUE|
+
+   TB Config
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |          |    |      |     |      |   |      |        |     |    |        |               |         |      |Num     |  |      |        |        |Force  |      |Alt|Hi  |    |Excess  |      |Max|        |     |    |
+      |          |HARQ|TB    |CW   |      |Num|      |        |     |Num |NCB     |               |         |      |Channel |  |CB    |        |DMA TO  |HARQ   |Bypass|MCS|MGMT|Max |HI Init |Hi    |HI |TX      |NDI  |Code|
+      |RNTI      |ID  |Index |Index|Num CB|Lay|MCS   |MOD     |ReTx |ReTx|Prime   |Discard Mode   |QED Mode |Num RB|Bits    |RV|Size  |TB Size |Dur     |Offload|HARQ  |En |En  |Iter|State   |Base  |Low|Scheme  |Value|Rate|
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |         C|   3|     0|    0|     1| 4L|     6|    QPSK|  1st|   0|    5676|     NO_DISCARD|   NO_QED|    18|    4176| 0|   236|     233|2.1e+002|  FALSE| FALSE|  0|   0|17HI|       0|     0|  0|     TXD|    1|0.452|
+
+   TB
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Onload                                                        |TB Offload                                                       |                                                              |
+      |Excess    |          |            |                              |Excess    |          |            |                              |TB Decode                                                     |
+      |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |CB CRC Pass Bmsk         |Excess HI State |TB CRC     |TB Pass|
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |        50|      0xFF|        0xFF|            0x0000000000000000|        50|      0xFF|        0xFF|            0x0000000000000000|       0x0000000000000001|               0|   0x000000|      1|
+
+   TB Log Extend
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Ext 0   |TB Ext 1   |TB Ext 2   |TB Ext 3   |TB Ext 4   |TB Ext 5   |TB Ext 6   |TB Ext 7   |TB Ext 8   |TB Ext 9   |TB Ext 10  |TB Ext 11  |TB Ext 12  |
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      | 0x00EC5A03| 0x00400828| 0x84080828| 0xB69C6580| 0x402009A0| 0x00000000| 0x00000000| 0x00000000| 0x00000000| 0x6824A135| 0x07C2D004| 0x00034898| 0x00000000|
+
+   CB
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |   |                                      |                                          |CB Decode                                                             |
+      |   |CB Onload                             |CB Offload                                |             |  |       |   |      |  |    |       |       |Skip  |DHB|
+      |#  |On Dur|On Extract|On Time Remain|ON TO|Off Dur|Off Extract|Off Time Remain|Off TO|Energy Metric|ET|Min LLR|CRC|Num HI|HD|HARQ|CB Disc|CB Pass|Decode|IDX|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|     0|         0|            50|    0|      1|          0|             50|     0|        54571| 1|     31|  1|   1HI| 1|   0|      0|      1|     0|  0|
+
+TB Info Record[1]
+   TB Top
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |     |     |     |    |       |      |    |    |     |    |      |         |        |         |           |         |    |    |     |    |Harq|     |   |   |     |      |      |      |
+      |     |     |MVC  |    |       |      |    |    |     |    |      |         |        |         |           |         |    |IO  |     |Harq|IO  |Num  |   |   |     |      |      |      |
+      |     |     |Clock|    |       |Bypass|    |Num |Start|QREN|RX01  |CB Bundle|TB DMA  |         |           |         |IO  |ST  |Num  |IO  |ST  |Harq |RP |SF |RB   |SC    |TB Ext|CB    |
+      |Frame|SubFN|(MHz)|Rank|LLR BW |Decode|ITER|RX  |CB ID|BMSK|poolID|Size     |Budget  |Onld Size|Offld Size |L2 Mode  |Fail|Fail|IOVec|Fail|Fail|Iovec|Idx|Gap|Start|Index |Enable|Enable|
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  563|    0|  192|  R4|     6B|     0|   1| 2RX|    0|   2|     0|        1|    3778|        0|         40|   HEADER|   0|   0|    1|   0|   0|    1|  0|  0|    0|     0|  TRUE|  TRUE|
+
+   TB Config
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |          |    |      |     |      |   |      |        |     |    |        |               |         |      |Num     |  |      |        |        |Force  |      |Alt|Hi  |    |Excess  |      |Max|        |     |    |
+      |          |HARQ|TB    |CW   |      |Num|      |        |     |Num |NCB     |               |         |      |Channel |  |CB    |        |DMA TO  |HARQ   |Bypass|MCS|MGMT|Max |HI Init |Hi    |HI |TX      |NDI  |Code|
+      |RNTI      |ID  |Index |Index|Num CB|Lay|MCS   |MOD     |ReTx |ReTx|Prime   |Discard Mode   |QED Mode |Num RB|Bits    |RV|Size  |TB Size |Dur     |Offload|HARQ  |En |En  |Iter|State   |Base  |Low|Scheme  |Value|Rate|
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |         C|   4|     0|    0|     1| 4L|     5|    QPSK|  1st|   0|    1596|     NO_DISCARD|   NO_QED|     6|    1392| 0|    66|      63|2.1e+002|  FALSE| FALSE|  0|   0|17HI|       0|     0|  0|     TXD|    1|0.379|
+
+   TB
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Onload                                                        |TB Offload                                                       |                                                              |
+      |Excess    |          |            |                              |Excess    |          |            |                              |TB Decode                                                     |
+      |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |CB CRC Pass Bmsk         |Excess HI State |TB CRC     |TB Pass|
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |        50|      0xFF|        0xFF|            0x0000000000000000|        50|      0xFF|        0xFF|            0x0000000000000000|       0x0000000000000001|               0|   0x000000|      1|
+
+   TB Log Extend
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Ext 0   |TB Ext 1   |TB Ext 2   |TB Ext 3   |TB Ext 4   |TB Ext 5   |TB Ext 6   |TB Ext 7   |TB Ext 8   |TB Ext 9   |TB Ext 10  |TB Ext 11  |TB Ext 12  |
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      | 0x00421983| 0x004002B8| 0x840802B8| 0xB69C6680| 0x401009E0| 0x00000000| 0x00000000| 0x00000000| 0x00000000| 0x6C259DB5| 0x07C2D3F4| 0x00034898| 0x00000000|
+
+   CB
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |   |                                      |                                          |CB Decode                                                             |
+      |   |CB Onload                             |CB Offload                                |             |  |       |   |      |  |    |       |       |Skip  |DHB|
+      |#  |On Dur|On Extract|On Time Remain|ON TO|Off Dur|Off Extract|Off Time Remain|Off TO|Energy Metric|ET|Min LLR|CRC|Num HI|HD|HARQ|CB Disc|CB Pass|Decode|IDX|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|     0|         0|            50|    0|      0|          0|             50|     0|        15119| 1|     62|  1|   1HI| 1|   0|      0|      1|     0|  1|
+                               """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0EE", packet_length=100,
+                               name="LTE NAS EMM State",
+                               subtitle="", datetime="2024 Jan 15  07:18:07.713",
+                               packet_text=
+                               """2024 Jan 15  07:18:07.713  [18]  0xB0EE  LTE NAS EMM State
+Subscription ID = 1
+Version = 2
+EMM state = EMM_DEREGISTERED
+EMM sub-state = EMM_DEREGISTERED_NO_CELL_AVAILABLE
+PLMN_ID:
+   MCC digit 1 = 3
+   MCC digit 2 = 1
+   MCC digit 3 = 3
+   MNC digit 3 = 0
+   MNC digit 1 = 3
+   MNC digit 2 = 4
+Guti valid = False
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB14D", packet_length=100,
+                               name="LTE LL1 PUCCH CSF",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.518",
+                               packet_text=
+                               """2024 Jan 15  07:15:35.518  [26]  0xB14D  LTE LL1 PUCCH CSF
+Subscription ID = 1
+Version = 163
+Start System Sub-frame Number = 0
+Start System Frame Number = 112
+Carrier Index = PCC
+Scell Index = 0
+PUCCH Reporting Mode = MODE_1_1
+PUCCH Report Type = Type 3, RI
+Number of SubBands = 9
+CSF Tx Mode = TM_CL_SM
+Alt Cqi Table = 1
+Num Csirs Ports = 0
+Csi Meas Set Index = CSI0
+Rank Index = Rank 2
+CRI = 0
+UL Frame Number = 112
+UL Channel Type = 0
+UL Subframe Number = 4
+UL Payload Length = 0
+W1 I11 FDMIMO = 0
+W1 I12 FDMIMO = 0
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB809", packet_length=100,
+                               name="NR5G NAS MM5G Security Protected OTA Outgoing Msg",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.244",
+                               packet_text=
+                               """2024 Jan 15  07:17:09.244  [A9]  0xB809  NR5G NAS MM5G Security Protected OTA Outgoing Msg
+Subscription ID = 1
+Misc ID         = 0
+Version = 1
+Std Version = 15
+Std Major Version = 4
+Std Minor Version = 0
+Outgoing OTA Raw Data = { 
+   126, 4, 94, 156, 187, 109, 0, 241, 
+   205, 9, 232, 63, 245, 122, 13, 31, 
+   91, 80, 114, 108, 105, 33, 175, 214, 
+   143, 44, 136, 120, 50, 135, 168, 52, 
+   206, 236, 162, 153, 79, 147, 221, 67, 
+   165, 72, 35, 24, 177, 121, 33, 8, 
+   131, 20, 92, 248, 195, 157, 250, 29, 
+   105, 13, 204, 103, 97, 131, 61, 37, 
+   21, 106, 115, 114, 152, 246, 70, 8, 
+   106, 242, 14, 9, 241, 144, 57, 1, 
+   211, 233, 114, 140, 68, 112, 42, 189, 
+   11, 1, 2, 195, 95, 20, 129, 0, 
+   225, 31, 82, 120, 72, 172, 247, 28, 
+   239, 41, 5, 9, 39, 180, 57, 19, 
+   180, 0, 197, 49, 214, 31, 106, 13, 
+   123
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB808", packet_length=100,
+                               name="NR5G NAS MM5G Security Protected OTA Incoming Msg",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.243",
+                               packet_text=
+                               """2024 Jan 15  07:17:09.243  [3D]  0xB808  NR5G NAS MM5G Security Protected OTA Incoming Msg
+Subscription ID = 1
+Misc ID         = 0
+Version = 1
+Std Version = 15
+Std Major Version = 4
+Std Minor Version = 0
+Incoming OTA Raw Data = { 
+   126, 3, 97, 165, 249, 151, 0, 126, 
+   0, 93, 51, 9, 4, 240, 112, 240, 
+   112, 225, 87, 34, 54, 1, 2, 25, 
+   4, 240, 112, 192, 64
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0E2", packet_length=100,
+                               name="LTE NAS ESM Plain OTA Incoming Message",
+                               subtitle="ESM information request Msg", datetime="2024 Jan 15  07:16:06.121", packet_text=
+                               """2024 Jan 15  07:16:06.121  [62]  0xB0E2  LTE NAS ESM Plain OTA Incoming Message  --  ESM information request Msg
+Subscription ID = 1
+pkt_version = 1 (0x1)
+rel_number = 9 (0x9)
+rel_version_major = 5 (0x5)
+rel_version_minor = 0 (0x0)
+eps_bearer_id_or_skip_id = 0 (0x0)
+prot_disc = 2 (0x2) (EPS session management messages)
+trans_id = 9 (0x9)
+msg_type = 217 (0xd9) (ESM information request)
+lte_esm_msg
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB192", packet_length=100,
+                               name="LTE ML1 Neighbor Cell Meas Request/Response",
+                               subtitle="", datetime="2024 Jan 15  07:17:28.048", packet_text=
+                               """2024 Jan 15  07:17:28.048  [C6]  0xB192  LTE ML1 Neighbor Cell Meas Request/Response
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 26
+Idle Mode Neighbor Cell Measurement Request
+   Version = 2
+   SubPacket Size = 28 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Num Rx Ant = 2
+   Dupexing Mode = FDD
+   Neighbor Cells
+      ------------------------------------------------
+      |   |    |              |Enabled |      |      |
+      |   |Cell|              |Tx      |TTL   |FTL   |
+      |#  |ID  |CP Type       |Antennas|Enable|Enable|
+      ------------------------------------------------
+      |  0| 459|        Normal|       2| false| false|
+
+SubPacket ID = 27
+Neighbor Cell Meas Result
+   Version = 56
+   SubPacket Size = 64 bytes
+   E-ARFCN = 700
+   Num Cells = 1
+   Duplexing Mode = FDD
+   Serving Cell Index = PCell
+   Neighbor Cells
+      ------------------------------------------------------------------------------------------------------------
+      |   |        |           |        |Inst   |Inst   |Inst    |Inst   |Inst   |       |Inst   |Inst   |       |
+      |   |        |FTL        |        |RSRP   |RSRP   |Measured|RSRQ   |RSRQ   |Inst   |RSSI   |RSSI   |Inst   |
+      |   |Physical|Cumulative |        |Rx[0]  |Rx[1]  |RSRP    |Rx[0]  |Rx[1]  |RSRQ   |Rx[0]  |Rx[1]  |RSSI   |
+      |#  |Cell ID |Freq Offset|Bad CER |(dBm)  |(dBm)  |(dBm)   |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |(dBm)  |
+      ------------------------------------------------------------------------------------------------------------
+      |  0|     459|          0|   FALSE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -66.06|
+      |  0|     459|          0|    TRUE|-103.63|-100.88| -100.88| -27.06| -25.81| -25.81| -67.56| -66.06| -76.06|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB186", packet_length=100,
+                               name="LTE ML1 Reselection Candidates",
+                               subtitle="", datetime="2024 Jan 15  07:17:24.246", packet_text=
+                               """2024 Jan 15  07:17:24.246  [64]  0xB186  LTE ML1 Reselection Candidates
+Subscription ID = 1
+Version = 41
+Serving E-ARFCN = 5780
+Serving Cell ID = 147
+Num Reselection Candidates = 2
+Candidates[0]
+   Candidate Priority = 3.0
+   RAT Type = EUTRAN
+   LTE Candidate
+      E-ARFCN = 700
+      Cell ID = 147
+Candidates[1]
+   Candidate Priority = 3.0
+   RAT Type = EUTRAN
+   LTE Candidate
+      E-ARFCN = 66986
+      Cell ID = 147
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB181", packet_length=100,
+                               name="LTE ML1 Intra Frequency Cell Reselection",
+                               subtitle="", datetime="2024 Jan 15  07:15:49.491", packet_text=
+                               """2024 Jan 15  07:15:49.491  [E3]  0xB181  LTE ML1 Intra Frequency Cell Reselection
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 3
+SubPacket ID = 10
+Idle Mode Reselection Measurements Common
+   Version = 56
+   SubPacket Size = 12 bytes
+   Serving Cell E-ARFCN = 66986
+   Serving Cell Physical Cell ID = 147
+   Current UE Mobility State = Normal Mobility
+   Priority Categories Evaluated = NONE
+SubPacket ID = 5
+Idle Meas Serving Frequency Resel Info
+   Version = 25
+   SubPacket Size = 16 bytes
+   Standards Version = Release 9
+   Serving Cell Priority = 3
+   S Non-Intra Search = 4
+   Thresh Serving Low = 4
+   S Non Intra Search Q = 0 dB
+   Thres Serving Low Q = 0 dB
+SubPacket ID = 11
+Idle Mode Reselection Measurements LTE Frequency
+   Version = 58
+   SubPacket Size = 88 bytes
+   Instance = 0
+   Number of Layers = 5
+   Treselection = 0 s
+   Layer[0]
+      E-ARFCN = 66986
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 1
+      Thresh X High = 0
+      Thresh X Low = 4
+      Priority = 3
+      Neighbor Cells
+         -----------------------------------------------------------------------------------------------------
+         |   |        |      |RSSI   |      |RSRP   |RSRP   |RSRQ   |RSRQ   |            |        |          |
+         |   |Physical|Srxlev|Inst   |Q     |Average|Inst   |Average|Inst   |            |Rank    |Rank      |
+         |#  |ID      |(dB)  |(dBm)  |Offset|(dBm)  |(dBm)  |(dBm)  |(dBm)  |TReSelection|Interger|Fractional|
+         -----------------------------------------------------------------------------------------------------
+         |  0|     147|    37| -58.00|  0 dB| -88.75| -88.75| -13.25| -13.75|       65535|      79|     0.258|
+
+   Layer[1]
+      E-ARFCN = 9820
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 8
+      Thresh X Low = 0
+      Priority = 4
+   Layer[2]
+      E-ARFCN = 700
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 0
+      Thresh X Low = 0
+      Priority = 3
+   Layer[3]
+      E-ARFCN = 5780
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 0
+      Thresh X Low = 0
+      Priority = 2
+   Layer[4]
+      E-ARFCN = 5330
+      Treselection = 2 s
+      Q Offset Frequency = 0 dB
+      Number of Cells = 0
+      Thresh X High = 10
+      Thresh X Low = 62
+      Priority = 0
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB17E", packet_length=100,
+                               name="LTE ML1 UE Mobility State change",
+                               subtitle="", datetime="2024 Jan 15  07:16:06.698", packet_text=
+                               """2024 Jan 15  07:16:06.698  [53]  0xB17E  LTE ML1 UE Mobility State change 
+Subscription ID = 1
+Version = 56
+Version 56 {
+   E-ARFCN = 5780
+   Physical Cell ID = 147
+   Previous UE Mobility State = Normal Mobility
+   Current UE Mobility State = Normal Mobility
+   Camp Time = 978611309 ms
+   Current Time = 978612085 ms
+   High State End Time = Invalid
+   Medium State End Time = Invalid
+   t_cr_max = 30s
+   t_cr_max_hyst = 30s
+   n_cr_medium = 6
+   n_cr_high = 11
+   Number Of Cell Switches = 0
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB179", packet_length=100,
+                               name="LTE ML1 Connected Mode LTE Intra-Freq Meas Results",
+                               subtitle="", datetime="2024 Jan 15  07:16:06.024", packet_text=
+                               """2024 Jan 15  07:16:06.024  [0C]  0xB179  LTE ML1 Connected Mode LTE Intra-Freq Meas Results
+Subscription ID = 1
+Version = 56
+Serving Cell Index = PCell
+FW Serving Cell Index = PCell
+E-ARFCN = 5780
+Serving Physical Cell ID = 147
+Sub-frame Number = 908
+Serving Filtered RSRP = -76.56 dBm
+Serving Filtered RSRQ = -12.19 dB
+Number of Neighbor Cells = 1
+Number of Detected Cells = 0
+Neighbor Cells
+   --------------------------------
+   |   |        |Filtered|Filtered|
+   |   |Physical|RSRP    |RSRQ    |
+   |#  |Cell ID |(dBm)   |(dB)    |
+   --------------------------------
+   |  0|      53|  -84.81|  -18.75|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB176", packet_length=100,
+                               name="LTE Initial Acquisition Results",
+                               subtitle="", datetime="2024 Jan 15  07:16:05.831", packet_text=
+                               """2024 Jan 15  07:16:05.831  [47]  0xB176  LTE Initial Acquisition Results
+Subscription ID = 1
+Version = 32
+E-ARFCN = 5780
+Band = 17
+Duplex Mode = FDD
+Result = Success
+Min Search Half Frames = 1
+Min Search Half Frames Early Abort = 1
+Max Search Half Frames = 4
+Max PBCH Frames = 20
+Number of Blocked Cells = 0
+Number PBCH Decode Attemp Cells = 1
+Number of Search Results = 3
+Search Results
+   ----------------------------------------------------------------------
+   |   |       |      |        |        |Frequency|PSS        |         |
+   |   |Frame  |Sample|Physical|        |Offset   |Correlation|SSS Power|
+   |#  |Offset |Offset|Cell ID |CP      |(Hz)     |Result     |Value    |
+   ----------------------------------------------------------------------
+   |  0|Unknown|168914|     147|  Normal|      293|          0| 0.000806|
+   |  1|Unknown| 15330|      53|  Normal|      293|          0| 0.000092|
+   |  2|Unknown|168914|     295|  Normal|      293|          0| 0.000044|
+
+PBCH Decode Attempt Cells
+   ----------------------------------------------------------------------------
+   |   |       |      |          |Updated  |        |Number  |       |        |
+   |   |       |      |          |Frequency|        |of      |       |Number  |
+   |   |Frame  |Sample|MIB       |Offset   |Physical|Decode  |Decode |of Tx   |
+   |#  |Offset |Offset|Payload   |(Hz)     |Cell ID |Attempts|Result |Antennas|
+   ----------------------------------------------------------------------------
+   |  0|Unknown|168914|0x6044E000|        0|     147|       1|Success|       4|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB173", packet_length=100,
+                               name="LTE PDSCH Stat Indication",
+                               subtitle="", datetime="2024 Jan 15  07:15:35.731", packet_text=
+                               """2024 Jan 15  07:15:35.731  [84]  0xB173  LTE PDSCH Stat Indication
+Subscription ID = 1
+Version = 48
+Num Records = 3
+Records
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |        |     |   |      |Num      |       |Transport Blocks                                                                                                                |    |    |     |       |
+   |   |        |     |   |      |Transport|Serving|    |  |   |      |         |     |Discarded|                                   |           |       |   |   |          |        |    |    |Alt  |       |
+   |   |Subframe|Frame|Num|Num   |Blocks   |Cell   |HARQ|  |   |CRC   |         |TB   |reTx     |                                   |Did        |TB Size|   |Num|Modulation|ACK/NACK|PMCH|Area|TBS  |Alt MCS|
+   |#  |Num     |Num  |RBs|Layers|Present  |Index  |ID  |RV|NDI|Result|RNTI Type|Index|Present  |Discarded ReTx                     |Recombining|(bytes)|MCS|RBs|Type      |Decision|ID  |ID  |Index|Enabled|
+   ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|       0|  105|  3|     1|        1|  PCELL|   1| 0|  0|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  false|
+   |  1|       7|  113|  3|     1|        1|  PCELL|   4| 0|  1|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  false|
+   |  2|       5|  120|  3|     1|        1|  PCELL|   6| 0|  1|  Pass|        C|    0|     None|                         NO_DISCARD|         No|     18|  1|  3|      QPSK|     ACK|    |    | NONE|  fals
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB970", packet_length=100,
+                               name="NR5G ML1 Searcher Idle S Criteria",
+                               subtitle="", datetime="2024 Jan 15  07:18:07.523 ", packet_text=
+                               """2024 Jan 15  07:18:07.523  [80]  0xB970  NR5G ML1 Searcher Idle S Criteria
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 2. 4
+System Time
+   Slot Number = 0
+   SubFrame Number = 6
+   System Frame Number = 976
+   SCS = 15KHZ
+NR ARFCN = 129370
+Phy Cell ID = 70
+Serving SSB Index = 3
+Q Rx Level Min = -124 dBm
+Q RX Level Min Offset = NP
+P Max = 23 dBm
+Max UE TX Power = 23 dBm
+Qoffset Temp = 0 dB
+Cell Quality RSRP = -100.45 dBm
+S Rx Level = 24 dB
+Q Qual Min Present = 0
+Q Qual Min = NA
+Q Qualmin Offset = NA
+S Qual = NA
+Cell Quality RSRQ = -18.41 dBm
+Result = SUCCESS
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB828", packet_length=100,
+                               name="NR5G RRC PLMN Search Response",
+                               subtitle="", datetime="2024 Jan 15  07:18:06.923", packet_text=
+                               """2024 Jan 15  07:18:06.923  [03]  0xB828  NR5G RRC PLMN Search Response
+Subscription ID = 1
+Misc ID         = 0
+Version = 6
+PLMN Search Response
+   Source RAT = LTE
+   Current Search RAT = NR5G
+   Network Search Status = COMPLETED
+   Num PLMNs = 1
+   PLMN List
+      -----------------------------------------------------------------------------
+      |   |      |     |     |     |          |munual|          |        |        |
+      |   |      |Plmn |Plmn |Plmn |          |CAG   |          |        |        |
+      |#  |RAT   |byte0|byte1|byte2|CAG ID    |sel   |ARFCN     |SCS     |Band    |
+      -----------------------------------------------------------------------------
+      |  0|  NR5G|   13|   03|   43|        NA|    NA|    401050|   15KHZ|      70|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB88A", packet_length=100,
+                               name="NR5G MAC RACH Attempte",
+                               subtitle="", datetime="2024 Jan 15  07:17:09.147", packet_text=
+                               """2024 Jan 15  07:17:09.147  [49]  0xB88A  NR5G MAC RACH Attempt
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor = 3. 10
+RACH Attempt
+Num Attempts = 1
+Power Ramping Count = 1
+SSB ID = 0
+CSI-RS ID = 0
+Carrier ID = 0
+RACH Result = SUCCESS
+Contention Type = DL_MCE
+RACH MSG Bitmask = F
+Msg1 SCS = 1.25KHZ
+Msg2 SCS = 15KHZ
+UL BWP SCS = 15KHZ
+Power Limited = 0
+RACH Msg1
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  |                   |      |          |      |     |    |   |Cyclic|    |       |        |                   |                   |Backoff |
+  |System Time        |Symbol|Preamble  |PRACH |     |    |   |Shift |    |       |Regular |RAR Window Start   |RAR Window End     |Duration|
+  |Frame|SubFrame|Slot|Start |Format    |Config|Uroot|RAID|FDM|V.    |N_CS|RA_RNTI|Pathloss|Frame|SubFrame|Slot|Frame|SubFrame|Slot|(usec)  |
+  -------------------------------------------------------------------------------------------------------------------------------------------
+  |  257|       4|   0|     0|  FORMAT_0|    13|  160|  20|  0|     0| 167|     57|      99|  257|       5|   0|  258|       5|   0|       0|
+
+RACH Msg2
+  --------------------------------------------------------------------
+  |                   |Max     |      |     |               |        |
+  |System Time        |Backoff |      |TA   |               |RAID    |
+  |Frame|SubFrame|Slot|Duration|T_RNTI|Value|Result         |Received|
+  --------------------------------------------------------------------
+  |  257|       8|   0|       0| 11852|   12|    RAPID_MATCH|      20|
+
+RACH Msg3
+  --------------------------------------------------------------------------------------------------------------------
+  |System Time        |Msg3 Grant|Msg3 Grant|HARQ|      |                                                            |
+  |Frame|SubFrame|Slot|Raw       |Bytes     |ID  |C_RNTI|MAC PDU                                                     |
+  --------------------------------------------------------------------------------------------------------------------
+  |  258|       2|   0|   11A00C0|         0|   0|    NA|   1E   15   6D   9C   87   66    0    0    0    0    0    0|
+
+RACH Msg4
+  --------------------------------------------------------------------
+  |                   |Contention         |Contention         |      |
+  |System Time        |Resolution Start   |Resolution End     |      |
+  |Frame|SubFrame|Slot|Frame|SubFrame|Slot|Frame|SubFrame|Slot|C_RNTI|
+  --------------------------------------------------------------------
+  |  258|       9|   0|  258|       2|   0|  264|       6|   0| 11852|
+""")
+        messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0xB0F7", packet_length=100,
                                name="LTE NAS EMM RRC Service Request",
                                subtitle="", datetime="2024 Jan 15  07:16:05.535", packet_text=
@@ -1623,7 +2749,7 @@ Records
    |#  |Slot|Numerology|Frame|Status|ID     |Id  |Opcode|ID  |Bandwidth|Type|Id     |Cell ID |EARFCN  |Index|TB Size |MU |MCS|Rbs|RV|Id   |RNTI Type     |ID  |TCI|Layers|Index    |State   |Status|Flag|NDI|Mode   |Decode|HARQ  |ReTx|Timeout|Timeout|Timeout|Timeout|Recomb|Valid|Mod Type|Mode |Num RX  |Mapping 0 |Mapping 1 |Mapping 2 |Mapping 3 |
    ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
    |  0|   0|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   10|        C RNTI|   5|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
-   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|        C RNTI|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
+   |  1|   6|     30KHZ|  107|     1|      0|   1|     0|   0|       10|   0|      0|     700|  660768|    0|     123|  1|  0| 16| 0|   11|       C RNTI2|   8|  0|     2|        0|    PASS|  PASS|   1|  0|      0|     0|     0|   0|      0|      0|      0|      0|     0| TRUE|    QPSK|    0|2X2_MIMO|         0|         0|         0|         0|
 """)
         messages.append(msg)
         msg = ParsedRawMessage(index=0, packet_type="0x156A", packet_length=100,
@@ -3201,9 +4327,1369 @@ RACH Trigger
 
                        """)
         messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0x17F2", packet_length=100,
+                               name="IMS Voice Call Statistics",
+                               subtitle="", datetime="2024 Jan 15  07:14:46.813", packet_text=
+                               """
+2024 Jan 15  07:14:46.813  [E7]  0x17F2  IMS Voice Call Statistics
+Subscription ID = 1
+Version = 9
+SipCallDur = 0
+CodecType = AMR_WB
+RTCP Voice Call Stat Params
+   Tx Ssrc = 0xFDAD3D9E
+   Rx Ssrc = 0x1954EBCE
+   Num Tx Rtp = 0
+   Num Rx Rtp = 5
+   Num Rx Lost = 0
+   Ave Rel Jitter = 0
+   Max Rel Jitter = 0
+   Avg Inst Jitter = 0
+   Max Inst Jitter = 4
+QDJ Voice Call Stat Params
+   Num Frames Rcvd = 5
+   Frames Not Enqued = 0
+   Frames UnderFlow = 0
+   Avg UnderFlow Rate = 0
+   Avg Frame Delay = 67
+   Max Frame Delay = 69
+   Avg Q Size = 40
+   Avg Target Delay = 40
+   Frame Drop Count at JB = 0
+Tx Rtp BitRate = 0
+Rx Rtp BitRate = 0
+TX RTP Payload = 0
+RX RTP Payload = 257
+MaxDelta = 4
+MaxDelta Imax = 4
+MaxDelta Imin = 5
+Tx Payload Type = 104
+Rx Payload Type = 104
+IP Version = IPv4
+Call State = ADSP_RESYNC
+Extra Small Bin Count = 0
+Small Bin Count = 0
+Medium Bin Count = 0
+Large Bin Count = 0
+Audio Gap Ratio =                      0.00
+RAT Type = LTE
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0x1D4D", packet_length=100,
+                               name="IMS CALL SUMMARY STATS",
+                               subtitle="", datetime="2024 Jan 15  07:15:24.625", packet_text=
+                               """
+2024 Jan 15  07:15:24.625  [82]  0x1D4D  IMS CALL SUMMARY STATS
+Subscription ID = 1
+Version = 8
+SubId = 1
+CallStatusSummary {
+   Common Call Stats
+      Call ID = 20
+      Call Status = 1
+      CallTypeAtCallOrig = CALL_TYPE_VOICE
+      CallTypeAtCallEnd = CALL_TYPE_VOICE
+      IsTextEnabledinCall = 0
+      IsVTEmergency = 0
+      WasCallEverVT = 0
+      wasCallEverRTT = 0
+      Direction of Call = CALL_MO
+      Disconnect Error Code = 200
+      ClientEndCause = CLIENT_END_CAUSE_NONE
+      CallEndCause = CALL_END_CAUSE_NORMAL
+      WasCallConnected = 1
+      IsCallEndedbyUser = 1
+      IsCallEndedbyRemote = 0
+      Redial Mask = REDIAL_MASK_NONE
+      380EmergencySrvCategory = 0
+      CallSetup Time = 6751 ms
+      CallRingingRingback Time = 2046 ms
+      CallRatatOrig = DCM_RAT_LTE
+      CallRatatEnd = DCM_RAT_LTE
+      IsConfCall = 0
+      IsWPSCall = 0
+      Encryption Status at Call orig = CALL_ENCRYPTION_DISABLED
+      Encryption Status at Call End = CALL_ENCRYPTION_DISABLED
+      MT Accepted Encryption Status = CALL_ENCRYPTION_DISABLED
+      Call End Indication Supressed = 0
+      Redial at IMS layer Call type = ORIGINATE_TYPE_NONE
+      IsCallAutoRejected = 0
+      AutoRejectReason = CALL_REJECT_NONE
+      IsAnyCallonOtherSub = 0
+      Call Information per Sub
+         -------------------------------------------------------
+         |#  |SubId|ActiveCallOnSub|HeldCallOnSub|E911CallonSub|
+         -------------------------------------------------------
+         |  0|    0|              1|            0|            0|
+         |  1|    0|              0|            0|            0|
+
+      ForkedDialogCount = 1
+      EarlyMediaPlayed = 1
+      Operator Mode = IR92
+      SubOperator Mode = DISH
+      MOUpgradesCount = 0
+      MTUpgradesCount = 0
+      MODowngradesCount = 0
+      MTDowngradesCount = 0
+      CallLocalHeldCount = 0
+      CallRemoteHeldCount = 0
+      CallLocalResumeCount = 0
+      CallRemoteResumeCount = 0
+      NoofDialogsEarlyMediaPlayed = 1
+      DowngradeEventsCachedCount = 0
+      LatestPDPStatus
+         IPType = 1
+         PCOValue = 0
+         PDPId = 8
+         PDPState = CONNECTIVITY_UP
+         SourceRAT = DCM_RAT_NONE
+         TargetRAT = DCM_RAT_NONE
+         CurrentRAT = DCM_RAT_LTE
+         ApnType = DCM_APN_IMS
+         FailureCode = 0
+      VerstatInfo
+         isVerstat FT Valid = 0
+         Verstat value for Call = CALL_TN_VALIDATION_NONE
+         is UnwantedCallFT Valid = 0
+         is UnwantedCall = 0
+   RTP/RTCP Stats
+      Media rtprtcp Stats
+         ------------------------------------------------------------------------------------------------
+         |   |     |                   |                    |          |          |RTP       |RTCP      |
+         |   |     |                   |                    |          |          |Inactivty |Inactivty |
+         |   |Media|TimeToOpenRTPStream|TimeToCloseRTPStream|no of RTP |no of RTCP|TimerValue|TimerValue|
+         |#  |Type |(ms) (ms)          |(ms) (ms)           |Inactivity|Inactivity|(s)       |(s)       |
+         ------------------------------------------------------------------------------------------------
+         |  0|AUDIO|                  7|                  11|         0|         0|        20|        20|
+         |  1|VIDEO|                  0|                   0|         0|         0|         0|         0|
+         |  2| TEXT|                  0|                   0|         0|         0|         0|         0|
+
+   CallEndDialog QOS Stats
+      Pre conditionEnabled during Call Setup = 0
+      Pre conditionEnabled Midcall = 0
+      Dialog ID of Call ended = 57
+      SRTP Enabled = 0
+      KPI of QOS for media[0]
+         QOS Enabled = 1
+         Media Allowed on Default Bearer = 0
+         Media Type = AUDIO
+         Time to Establish Dedicated Bearer = 100 ms
+         Time to Re Establish Dedicated Bearer = 0 ms
+         Latest Qos Status = QOS_MODIFIED_AVAILABLE
+         Mbr Status = MBR_MET_SUCCESS
+         No of Times QosLost = 0
+         No of Times QosReGranted = 0
+         No of QOSEvents = 2
+         QOS Event
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            |   |                      |                         |QOS Dir     |                           |                           |                                |Time Stamp  |
+            |#  |QOS Message           |QOS Dir Matched          |Required    |Timer Started Mask         |Timer Stopped Mask         |QOSMBRMetStatus and Action      |of QOSEvent |
+            -------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            |  0|         QOS_AVAILABLE|QOS_FILTR_MATCH_DIR_BIDIR|DIR_SENDRECV|             QOS_TIMER_NONE|             QOS_TIMER_NONE|          MBR_MET_SUCCESS_UPDATE|  2063680152|
+            |  1|QOS_MODIFIED_AVAILABLE|QOS_FILTR_MATCH_DIR_BIDIR|DIR_SENDRECV|             QOS_TIMER_NONE|             QOS_TIMER_NONE|                 MBR_MET_SUCCESS|  2063680152|
+
+      KPI of QOS for media[1]
+         QOS Enabled = 1
+         Media Allowed on Default Bearer = 0
+         Media Type = VIDEO
+         Time to Establish Dedicated Bearer = 0 ms
+         Time to Re Establish Dedicated Bearer = 0 ms
+         Latest Qos Status = QOS_UNKNOWN
+         Mbr Status = MBR_MET_NULL
+         No of Times QosLost = 0
+         No of Times QosReGranted = 0
+         No of QOSEvents = 0
+      KPI of QOS for media[2]
+         QOS Enabled = 1
+         Media Allowed on Default Bearer = 0
+         Media Type = TEXT
+         Time to Establish Dedicated Bearer = 0 ms
+         Time to Re Establish Dedicated Bearer = 0 ms
+         Latest Qos Status = QOS_UNKNOWN
+         Mbr Status = MBR_MET_NULL
+         No of Times QosLost = 0
+         No of Times QosReGranted = 0
+         No of QOSEvents = 0
+   CodecStatsEnabled = 1
+   Codec Stats
+      LatestAudioCodec = AMR_WB
+      LatestVideoCodec = 0
+      LatestTextCodec = 0
+      AudioCodecCachedCount = 3
+      VideoCodecCachedCount = 0
+      TextCodecCachedCount = 0
+      AudioCodecInfo
+         -----------
+         |#  |Codec|
+         -----------
+         |  0|AMR_WB|
+         |  1|AMR_WB|
+         |  2|AMR_WB|
+
+   E911StatsEnabled = 0
+   HandoverStatsEnabled = 0
+   EPSFBStatsEnabled = 0
+   SRVCCStatsEnabled = 0
+   CRBTStatsEnabled = 0
+   CRSStatsEnabled = 0
+   EarlyMediaStatsEnabled = 1
+   EarlyMediaStatistics
+      Dynamic Switch Enabled = 1
+      EarlyMedia Auth State Count = 4
+      Early Media
+         ---------------
+         |#  |Authstate|
+         ---------------
+         |  0|EARLY_MEDIA_STATE_ON|
+         |  1|EARLY_MEDIA_STATE_SENDRECV|
+         |  2|EARLY_MEDIA_STATE_SENDRECV|
+         |  3|EARLY_MEDIA_STATE_NONE|
+
+      EarlyMedia Method Count = 3
+      Early Media Method
+         ------------
+         |#  |Method|
+         ------------
+         |  0|EARLY_MEDIA_METHOD_SIP_MESSAGE_RINGING|
+         |  1|EARLY_MEDIA_METHOD_RTP_ACTIVE|
+         |  2|EARLY_MEDIA_METHOD_SIP_MESSAGE_RINGING|
+
+      EarlyMedia Indication Count = 3
+      Early Media Indication
+         ----------------
+         |#  |indication|
+         ----------------
+         |  0|EARLY_MEDIA_ACTION_EARLY_MEDIA_IND|
+         |  1|EARLY_MEDIA_ACTION_EARLY_MEDIA_IND|
+         |  2|EARLY_MEDIA_ACTION_EARLY_MEDIA_IND|
+
+   MultiTask Stats included = 0
+}
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB16F", packet_length=100,
+                               name="LTE PUCCH Power Control",
+                               subtitle="", datetime="2024 Jan 15  07:14:08.556", packet_text=
+                               """
+ 2024 Jan 15  07:14:08.556  [E1]  0xB16F  LTE PUCCH Power Control
+ Subscription ID = 1
+ Version = 49
+ Number of Records = 50
+ Report
+    -------------------------------------------------------------------------------------
+    |   |    |      |              |        |    |           |   |    |    |PUCCH|PUCCH |
+    |   |    |      |              |        |    |           |   |DL  |    |Tx   |Actual|
+    |   |    |      |              |PUCCH   |N   |           |N  |Path|    |Power|Tx    |
+    |#  |SFN |Sub-fn|DCI Format    |Format  |HARQ|TPC Command|CQI|Loss|g(i)|(dBm)|Power |
+    -------------------------------------------------------------------------------------
+    |  0| 597|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
+    |  1| 599|     3|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
+    |  2| 599|     8|             2|      1b|   2|          0|  0| 111|   1|    1|     1|
+    |  3| 599|     9|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
+    |  4| 600|     1|             2|      1a|   1|          0|  0| 111|   1|   -2|    -2|
+    |  5| 600|     2|              |       1|   0|Not present|  0| 111|   1|   -2|    -2|
+    |  6| 600|     4|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
+    |  7| 600|     5|              |       2|   0|Not present|  0| 111|   1|   -2|    -2|
+    |  8| 604|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    |  9| 604|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 10| 604|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 11| 605|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 12| 607|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 13| 608|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 14| 608|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 15| 609|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 16| 611|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 17| 612|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 18| 612|     4|             2|      2a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 19| 612|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 20| 612|     9|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 21| 613|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 22| 615|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 23| 616|     1|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 24| 616|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 25| 616|     9|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 26| 617|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 27| 617|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 28| 619|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 29| 620|     2|              |       1|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 30| 620|     3|             2|      1a|   1|          0|  0| 110|   1|   -3|    -3|
+    | 31| 620|     4|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 32| 620|     5|              |       2|   0|Not present|  0| 110|   1|   -3|    -3|
+    | 33| 620|     6|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 34| 621|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 35| 623|     3|             2|      1b|   2|          0|  0| 110|   1|    0|     0|
+    | 36| 624|     1|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
+    | 37| 624|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 38| 624|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 39| 624|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 40| 625|     8|             2|      1a|   1|          0|  0| 110|   0|   -4|    -4|
+    | 41| 627|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 42| 628|     4|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 43| 628|     5|              |       2|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 44| 629|     2|              |       1|   0|Not present|  0| 110|   0|   -4|    -4|
+    | 45| 629|     3|             2|      1b|   2|          0|  0| 110|   0|   -1|    -1|
+    | 46| 629|     6|             2|      1a|   1|         -1|  0| 110|  -1|   -5|    -5|
+    | 47| 629|     8|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
+    | 48| 630|     9|             2|      1b|   2|          0|  0| 110|  -1|   -2|    -2|
+    | 49| 632|     2|              |       1|   0|Not present|  0| 110|  -1|   -5|    -5|
+    """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0E3", packet_length=100,
+                               name="LTE NAS ESM Plain OTA Outgoing Message",
+                               subtitle="PDN connectivity request Msg", datetime="2024 Jan 15  07:17:10.651",
+                               packet_text=
+                               """
+2024 Jan 15  07:17:10.651  [70]  0xB0E3  LTE NAS ESM Plain OTA Outgoing Message  --  PDN connectivity request Msg
+Subscription ID = 1
+pkt_version = 1 (0x1)
+rel_number = 9 (0x9)
+rel_version_major = 5 (0x5)
+rel_version_minor = 0 (0x0)
+eps_bearer_id_or_skip_id = 0 (0x0)
+prot_disc = 2 (0x2) (EPS session management messages)
+trans_id = 12 (0xc)
+msg_type = 208 (0xd0) (PDN connectivity request)
+lte_esm_msg
+  pdn_connectivity_req
+    pdn_type = 3 (0x3) (Ipv4v6)
+    req_type = 1 (0x1) (initial request)
+    info_trans_flag_incl = 0 (0x0)
+    access_pt_name_incl = 1 (0x1)
+    access_pt_name_
+      num_acc_pt_val = 4 (0x4)
+      acc_pt_name_val[0] = 3 (0x3) (length)
+      acc_pt_name_val[1] = 105 (0x69) (i)
+      acc_pt_name_val[2] = 109 (0x6d) (m)
+      acc_pt_name_val[3] = 115 (0x73) (s)
+    prot_config_incl = 1 (0x1)
+    prot_config
+      ext = 1 (0x1)
+      conf_prot = 0 (0x0)
+      num_recs = 13 (0xd)
+      prot_or_container[0]
+        id = 32801 (0x8021) (IPCP)
+        prot_or_container
+          prot_len = 16 (0x10)
+          ipcp_prot
+            ipcp_prot_id = 1 (0x1) (CONF_REQ)
+            identifier = 0 (0x0)
+            rfc1332_conf_req
+              num_options = 2 (0x2)
+              conf_options[0]
+                type = 129 (0x81)
+                rfc1877_primary_dns_server_add
+                  length = 6 (0x6)
+                  ip_addr = 0 (0x0) (0.0.0.0)
+              conf_options[1]
+                type = 131 (0x83)
+                rfc1877_sec_dns_server_add
+                  length = 6 (0x6)
+                  ip_addr = 0 (0x0) (0.0.0.0)
+      prot_or_container[1]
+        id = 13 (0xd) (DNS Server IPv4 Address Request)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[2]
+        id = 3 (0x3) (DNS Server IPv6 Address Request)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[3]
+        id = 1 (0x1) (P-CSCF IPv6 Address Request)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[4]
+        id = 12 (0xc) (P-CSCF IPv4 Address Request)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[5]
+        id = 18 (0x12) (P-CSCF Re-selection support)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[6]
+        id = 2 (0x2) (IM CN Subsystem Signalling Flag)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[7]
+        id = 10 (0xa) (IP address allocation via NAS signalling)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[8]
+        id = 5 (0x5) (NWK Req Bearer Control indicator)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[9]
+        id = 16 (0x10) (Ipv4 Link MTU Request)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[10]
+        id = 17 (0x11) (MS support of Local address in TFT indicator)
+        prot_or_container
+          prot_len = 0 (0x0)
+      prot_or_container[11]
+        id = 26 (0x1a) (PDU Session ID)
+        prot_or_container
+          prot_len = 1 (0x1)
+          container
+            container_contents[0] = 2 (0x2)
+      prot_or_container[12]
+        id = 35 (0x23) (QoS Rules with the length of 2 Octs support indicator)
+        prot_or_container
+          prot_id_23_or_24_type
+            Qos_rules_len_2_octets
+              num_qos_rules = 0 (0x0)
+    dev_properties_incl = 0 (0x0)
+    nbifom_incl = 0 (0x0)
+    header_compression_config_inclu = 0 (0x0)
+    ext_prot_config_incl = 0 (0x0)
+                       """)
+        messages.append(msg)
+
+        msg = ParsedRawMessage(index=0, packet_type="0xB16E", packet_length=100,
+                               name="LTE PUSCH Power Control",
+                               subtitle="", datetime="2024 Jan 19  21:46:06.212", packet_text=
+                               """
+2024 Jan 19  21:46:06.212  [10]  0xB16E  LTE PUSCH Power Control
+Subscription ID = 1
+Version = 48
+cell_alpha PCC = 1
+cell_alpha ul_id 1 = 0
+cell_alpha ul_id 2 = 0
+cell_alpha ul_id 3 = 0
+Number of Records = 16
+Report
+   ------------------------------------------------------------------------------------------------
+   |     |    |      |      |               |   |Transport|    |    |      |   |PUSCH|PUSCH |     |
+   |     |    |      |      |               |   |Block    |DL  |    |      |   |Tx   |Actual|     |
+   |Cell |    |      |DCI   |               |Num|Size     |Path|    |TPC   |   |Power|Tx    |Max  |
+   |Index|SFN |Sub-fn|Format|Tx Type        |RBs|(bytes)  |Loss|F(i)|Frozen|TPC|(dBm)|Power |Power|
+   ------------------------------------------------------------------------------------------------
+   |    0| 676|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 685|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 694|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 703|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 712|     5|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 721|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 730|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 735|     5|     0|        Dynamic|  4|       18| 105|   5|     0|  0|   18|    18|   25|
+   |    0| 739|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 748|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 757|     1|     0|        Dynamic|  1|        0| 105|   5|     0|  0|   12|    12|   25|
+   |    0| 765|     5|     0|        Dynamic|  4|      193| 106|   5|     0|  0|   19|    19|   24|
+   |    0| 774|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+   |    0| 783|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+   |    0| 792|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+   |    0| 802|     1|     0|        Dynamic|  1|        0| 106|   5|     0|  0|   13|    13|   25|
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB139", packet_length=100,
+                               name="LTE LL1 PUSCH Tx Report",
+                               subtitle="", datetime="2024 Mar 18  10:46:13.939", packet_text=
+                               """
+2024 Mar 18  10:46:13.939  [D5]  0xB139  LTE LL1 PUSCH Tx Report
+Subscription ID = 1
+Version = 161
+Serving Cell ID = 147
+Number of Records = 1
+Dispatch SFN SF = 238
+Records
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                                                |               |Cyclic   |Cyclic   |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |                                |       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                                                |               |Shift of |Shift of |    |    |
+   |       |       |      |      |      |           |        |      |       |          |Start|Start|   |       |Enable|       |       |Rate   |              |            |                                |ACK/NAK|ACK/NAK|       |   |        |        |PUSCH  |        |        |    |Rate   |         |        |      |    |    |     |PUSCH|                                                |               |DMRS     |DMRS     |DMRS|DMRS|
+   |       |UL     |      |      |      |           |        |      |       |Resource  |RB   |RB   |Num|DL     |UL    |PUSCH  |       |Matched|              |            |                                |Inp    |Inp    |Rate   |   |        |PUSCH   |Digital|        |        |Num |Matched|         |        |Ack   |Ack |    |     |Tx   |                                                |               |Symbols  |Symbols  |Root|Root|
+   |Current|Carrier|      |      |      |Frequency  |Re-tx   |Redund|Mirror |Allocation|Slot |Slot |of |Carrier|DMRS  |TB Size|Coding |ACK    |              |Num RI Bits |                                |Length |Length |Matched|UE |SRS     |Mod     |Gain   |Start RB|Num RB  |CQI |CQI    |         |Num DL  |Nack  |Nack|CSF |Drop |Power|                                                |               |Slot 0   |Slot 1   |Slot|Slot|
+   |SFN SF |Index  |ACK   |CQI   |RI    |Hopping    |Index   |Ver   |Hopping|Type      |0    |1    |RB |Index  |OCC   |(bytes)|Rate   |Bits   |RI Payload    |(bits)      |ACK Payload                     |0      |1      |RI Bits|SRS|Occasion|Order   |(dB)   |Cluster1|Cluster1|Bits|Bits   |reserved4|Carriers|Index |Late|Late|PUSCH|(dBm)|CQI Payload                                     |Tx Resampler   |(Samples)|(Samples)|0   |1   |
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |    232|    PCC|  None|  None|  None|   Disabled|   First|     0|      0|         0|   33|   33|  3|    PCC|     0|     22|  0.231|      0|00000000000000|           0|00000000000000000000000000000000|      0|      0|      0|OFF|     OFF|    QPSK|    195|       0|       0|   0|      0|        0|       1|0x0000|   0|   0|    0|   33|  0x00000000  0x00000000  0x00000000  0x00000000|  -0.3999990381|        7|        0|  28|  28|
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |  0x00000000  0x00000000  0x00000000  0x00000000|               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |  0x00000000  0x00000000  0x00000000            |               |         |         |    |    |
+   |       |       |      |      |      |           |        |      |       |          |     |     |   |       |      |       |       |       |              |            |00000000000000000000000000000000|       |       |       |   |        |        |       |        |        |    |       |         |        |      |    |    |     |     |                                                |               |         |         |    |    |
+                      """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB060", packet_length=100,
+                               name="LTE MAC Configuration",
+                               subtitle="", datetime="2024 Jan 15  07:14:10.390", packet_text=
+                               """
+2024 Jan 15  07:14:10.390  [20]  0xB060  LTE MAC Configuration
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 5
+SubPacket ID = 1
+SubPacket - ( DL Config SubPacket )
+   Version = 2
+   SubPacket Size = 12 bytes
+   DL Config V2
+      Sub Id = 1
+      Num Active Stag = 1
+      Scell Tag Info
+         ------------------------------
+         |   |    |Scell|Ta     |TA   |
+         |   |STAG|Id   |Timer  |Timer|
+         |#  |Id  |Mask |Present|(ms) |
+         ------------------------------
+         |  0| 255|  255|    255|10240|
+
+SubPacket ID = 2
+SubPacket - ( UL Config Subpacket )
+   Version = 2
+   SubPacket Size = 16 bytes
+   UL Config V2
+      Sub Id = 1
+      SR resource present = Yes (1)
+      SR periodicity = 10 ms
+      BSR timer = 5 ms
+      SPS Number of Tx release = 0
+      Retx BSR timer = 320 ms
+SubPacket ID = 14
+SubPacket - (All Rach Config SubPacket) {
+   Version = 2
+   Subpacket Size = 712 bytes
+   Sub Id = 0
+   Valid Cell Cfg Mask = 00000000b
+   New Cell Cfg Mask = 00000000b
+   Cell Rach Info
+      -------------------------------------------------------------------------------------------------------------------------------------
+      |   |     |        |       |      |      |        |          |       |          |        |      |      |     |      |     |    |RA  |
+      |   |     |Preamble|Power  |      |      |        |          |       |          |        |      |      |     |      |     |    |rsp |
+      |   |     |initial |ramping|      |      |Preamble|Contention|Message|Power     |Delta   |      |CS    |Root |PRACH |High |Max |win |
+      |   |Scell|power   |step   |RA    |RA    |trans   |resolution|size   |offset    |preamble|PRACH |zone  |seq  |Freq  |speed|retx|size|
+      |#  |Id   |(dB)    |(dB)   |index1|index2|max     |timer (ms)|Group_A|Group_B   |Msg3    |config|length|index|Offset|flag |Msg3|(ms)|
+      -------------------------------------------------------------------------------------------------------------------------------------
+      |  0|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  1|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  2|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  3|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  4|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  5|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  6|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+      |  7|    0|       0|      0|     0|     0|       0|         0|      0|- Infinity|       0|     0|     0|    0|     0|    0|   0|   0|
+
+}
+SubPacket ID = 4
+SubPacket - ( LC Config Subpacket )
+   Version = 2
+   SubPacket Size = 328 bytes
+   Version 2 {
+      Sub Id = 1
+      Number of deleted LC = 0
+      Number of added/modified LC = 3
+      ---------------------------------------------------
+      |     |          |          |          |Token     |
+      |     |          |          |          |bucket    |
+      |     |PBR       |          |          |size      |
+      |LC ID|(KBytes/s)|Priority  |LC group  |(bytes)   |
+      ---------------------------------------------------
+      |    2|     65535|         3|         0|         0|
+      |    3|     65535|         9|         0|   6553500|
+      |    4|         8|        12|         3|      2400|
+
+   }
+SubPacket ID = 18
+
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0A5", packet_length=100,
+                               name="LTE PDCP DL SRB Integrity Data PDU",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.644", packet_text=
+                               """
+2024 Jan 15  07:14:07.644  [62]  0xB0A5  LTE PDCP DL SRB Integrity Data PDU
+Subscription ID = 1
+Version = 1
+Num Subpackets = 1
+Subpacket[0]
+   Subpacket ID = PDCP DL SRB Integrity PDU (0xC6)
+   DL SRB Integrity Data PDU Subpacket
+      Subpacket Version = 40
+      Subpacket Size = 68 bytes
+      Ciphering keys for SRBs (hex) =  12 B0 63 3E 1E AC 74 B8 EC BE 00 C2 B7 6A 10 E8
+      Integrity Keys for SRBs (hex) =  69 17 91 A4 0A 2F AE C2 0E DC AA 6E 8E 67 9D DF
+      SRB Cipher Algo = LTE AES
+      SRB Integrity Algo = LTE AES
+      Num PDUs = 1
+      -------------------------------------------------------------------------------------------------------------------------
+      |   |    |      |      |     |     |      |      |      |          |     |received  |computed  |                        |
+      |cfg|    |sn    |bearer|valid|pdu  |logged|      |      |count     |     |MAC-I     |MAC-I     |un-ciphered log_buffer  |
+      |idx|mode|length|id    |pdu  |size |bytes |sys_fn|sub_fn|(hex)     |sn   |(hex)     |(hex)     |(hex)                   |
+      -------------------------------------------------------------------------------------------------------------------------
+      | 33|  AM| 5 bit|     0|  Yes|    8|     8|   540|     5|       0x0|    0|0xD18545C2|0xD18545C2| 00 34 02 20 D1 85 45 C2|
+
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0A1", packet_length=100,
+                               name="LTE PDCP DL Data PDU",
+                               subtitle="", datetime="2024 Jan 15  07:14:47.063", packet_text=
+                               """
+2024 Jan 15  07:14:47.063  [B4]  0xB0A1  LTE PDCP DL Data PDU
+Subscription ID = 1
+Version = 53
+Number Of Meta = 17
+Number Of RB = 4
+Log Count = 2
+PDCP State
+   ---------------------------------------------------------
+   |   |RB   |PDCP  |            |            |            |
+   |   |Cfg  |SN    |            |            |            |
+   |#  |Index|Length|RX Deliv    |Rx Next     |Next Count  |
+   ---------------------------------------------------------
+   |  0|   33|     5|          21|          21|           0|
+   |  1|   34|     5|           1|           1|           0|
+   |  2|    4|    12|          21|          21|          21|
+   |  3|    6|    12|           2|           2|           0|
+
+Meta Log Buffer
+   ------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |System  |             |     |     |     |                  |         |         |            |            |            |            |            |
+   |   |Time    |             |RB   |     |     |                  |         |         |            |            |            |            |            |
+   |   |Sub|    |             |Cfg  |Key  |RLC  |                  |IP Packet|IP Packet|            |            |            |Number IP   |Number IP   |
+   |#  |FN |SFN |Rx Timetick  |Index|Index|Path |Route Status      |Header[0]|Header[1]|Start Count |End Count   |RLC end SN  |Pkts        |bytes       |
+   ------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|  8| 343|    0.0100648|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|           4|           5|           1|           2|        1352|
+   |  1|  4| 344|    0.0123723|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|           6|           6|           2|           1|         101|
+   |  2|  5| 346|     0.020407|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|           7|           7|           3|           1|         101|
+   |  3|  8| 348|    0.0292454|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|           8|           8|           4|           1|         101|
+   |  4|  4| 350|     0.035361|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|           9|           9|           5|           1|         101|
+   |  5|  4| 352|    0.0430317|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          10|          10|           6|           1|         101|
+   |  6|  4| 354|     0.050694|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          11|          11|           7|           1|          47|
+   |  7|  4| 360|    0.0736978|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          12|          12|           8|           1|          47|
+   |  8|  9| 369|     0.110042|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          13|          13|           9|           1|         101|
+   |  9|  7| 371|      0.11703|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          14|          14|          10|           1|         101|
+   | 10|  3| 373|      0.12316|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          15|          15|          11|           1|         101|
+   | 11|  4| 374|     0.127381|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          16|          16|          12|           1|         101|
+   | 12|  4| 376|     0.135046|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          17|          17|          13|           1|         101|
+   | 13|  2| 378|     0.141941|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          18|          18|          14|           1|         668|
+   | 14|  4| 378|     0.142707|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          19|          19|          15|           1|         101|
+   | 15|  3| 381|     0.153829|    4|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|          20|          20|          16|           1|         101|
+   | 16|  1| 385|     0.168444|    6|    2|  MCG|      DELIV_DIRECT|      0x0|      0x0|           0|           1|           2|           2|         201|
+
+                       """)
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB06E", packet_length=100,
+                               name="LTE MAC DL RAR Transport Block",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.576", packet_text=
+                               """
+2024 Jan 15  07:14:07.576  [01]  0xB06E  LTE MAC DL RAR Transport Block
+Subscription ID = 1
+Version = 48
+Number of SubPackets = 1
+SubPacket ID = 20
+SubPacket - (DL Transport Block Subpacket)
+   Version = 1
+   Subpacket Size = 48
+   ---------------------------------------------------------------------------------------------------------------------------------------------
+   |   |    |      |   |          |    |       |   |                        |   |     |Absolute|    |      |      |     |   |     |   |        |
+   |Sub|Cell|      |   |          |HARQ|DL TBS |LOG|                        |BI |Rapid|TA Val  |Hop |RB    |Coding|TBS  |TPC|UL   |CQI|        |
+   |Id |Id  |Sub-FN|SFN|RNTI Type |Id  |(bytes)|LEN|RAR TB                  |Val|Val  |(16xTs) |Flag|Assign|Scheme|Index|dB |Delay|Req|T-C-RNTI|
+   ---------------------------------------------------------------------------------------------------------------------------------------------
+   |  0| 147|     7|533|   RA_RNTI|   2|      7|  7| 5B 00 A1 06 78 6B 4F   |   |   27|      10|   0|   131|  QPSK|    3|  6|    0|  0|  0x6B4F|
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB062", packet_length=100,
+                               name="LTE MAC Rach Attempt",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.588", packet_text=
+
+                               """
+2024 Jan 15  07:14:07.588  [7E]  0xB062  LTE MAC Rach Attempt
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 1
+SubPacket ID = 6
+SubPacket - ( RACH Attempt Subpacket )
+   Version = 50
+   Subpacket Size = 56 bytes
+   RACH Attempt V50 {
+      Sub Id = 1
+      CC Id = 0
+      Retx counter = 1
+      Rach result = Success
+      Contention procedure = Contention Based RACH procedure
+      Msg1 - RACH Access Preamble[0]
+         Preamble Index = 27
+         Preamble index mask = Invalid
+         Preamble power offset = -102 dB
+         Pcmaxc = 24
+         Group Chosen = Group A
+      Msg2 - Random Access Response
+         Backoff Value = 0 ms
+         Result = True
+         TCRNTI = 27471
+         TA value = 10 
+      Msg3
+         Grant Raw = 0x010678
+         Grant = 22 bytes
+         Harq ID = 7
+         MAC PDU = 0x20, 0x06, 0x1F, 0x4B, 0x1D, 0x08, 0xE0, 0x00, 0xC8, 0x00
+      Earfcn = 132522
+      P Max = 24
+      SCell ID = 0
+      Max Serv RSRP Present = TRUE
+      Max Serv RSRP Cal = -89
+   }
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB1DA", packet_length=100,
+                               name="LTE ML1 Antenna Switch Diversity",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.597", packet_text=
+
+                               """
+2024 Jan 15  07:14:07.597  [97]  0xB1DA  LTE ML1 Antenna Switch Diversity
+Subscription ID = 1
+Version = 53
+Feature Enabled = TRUE
+PRACH Switch Enabled = TRUE
+Sub Id = 0
+Phy Cell Id = 147
+Call State = CONNECTED
+Switch Type = None
+MTPL Ratio = 16
+EARFCN = 66986
+Gating Thresh = -100 dBm
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+|     |       |          |          |          |Thresh  |Adj     |          |          |          |          |       |      |          |     |       |      |
+|     |Carrier|Curr Delta|Avg Delta |          |High    |Thres   |Filt RSRP0|Filt RSRP1|Filt RSRP2|Filt RSRP3|Antenna|Action|Hysteresis|Cycle|Suspend|Switch|
+|SFN  |Id     |(dBm)     |(dBm)     |Thresh Low|(dBm)   |(dBm)   |(dBm)     |(dBm)     |(dBm)     |(dBm)     |Number |Time  |Count     |Num  |Count  |Reason|
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+| 5360|    PCC|    0.0000|  -15.0000|    3.0000|  5.0000|  5.0000|  -89.6250|  -89.4375| -180.0000| -180.0000|      2|     0|         0|    1|INVALID| UNSET|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB081", packet_length=100,
+                               name="LTE RLC DL Config Log packet",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.591", packet_text=
+
+                               """
+2024 Jan 15  07:14:07.591  [99]  0xB081  LTE RLC DL Config Log packet 
+Subscription ID = 1
+Version = 50
+Submit Reason = RRC_REQ
+Config Mask = RLC_DL | PDCP_DL
+Num RB Logged = 1
+Config Reason = RECFG
+PDCP DRB Rel Mask = 0x00000000
+RLC DRB Rel Mask = 0x00000000
+PDCP SRB Rel mask = 0x00
+RLC SRB Rel Mask = 0x00
+PDCP DRB Changed Mask = 0x00000000
+RLC DRB Changed mask = 0x00000000
+PDCP SRB Changed Mask = 0x01
+RLC SRB Changed mask = 0x01
+RB Config
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |                |     |     |                |PDCP RB Info                                                                                                                                                                  |                                                                            |
+   |   |                |     |     |                |                      |          |          |      |           |       |       |      |PDCP Config                                                                            |RLC RB Info                                                                 |
+   |   |                |     |     |                |                      |          |          |      |           |       |       |      |      |       |    |          |        |        |          |ROHC Config                |    |      |       |           |UM               |AM                        |
+   |   |                |     |     |                |                      |          |          |      |           |       |       |      |      |       |    |          |Rtatus  |Out Of  |          |       |          |DRB     |    |      |       |           |T         |      |T Status|T         |      |
+   |   |                |RB   |     |                |                      |          |          |Config|Reestablish|Discard|Recover|Rohc  |Config|Discard|Sn  |Integrity |Report  |Order   |T         |       |Profile   |Continue|    |      |Config |Reestablish|Reassembly|SN    |Prohibit|Reassembly|SN    |
+   |#  |RB Mode         |Index|EPSID|RB Type         |Config Action         |RLC Path  |PDCP Path |Bmask |Pdcp       |On Pdcp|Pdcp   |Enable|Mask  |Timer  |Size|Protection|Required|Delivery|Reordering|Max CID|Mask      |Rohc    |LCID|Action|Bitmask|RLC        |(ms)      |Length|(ms)    |(ms)      |Length|
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|              AM|    1|    1|             SRB|               ACT_ADD|       LTE|       LTE|     0|      false|  false|  false| false|     0|  65535|   5|     false|   false|   false|     65535|      0|       0x0|   false|   1|     1|   0x00|      false|          |      |       0|        50|    10|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB13C", packet_length=100,
+                               name="LTE LL1 PUCCH Tx Report",
+                               subtitle="", datetime="2024 Jan 15  07:14:46.683", packet_text=
+
+                               """
+2024 Jan 15  07:14:46.683  [84]  0xB13C  LTE LL1 PUCCH Tx Report
+Subscription ID = 1
+Version = 162
+Serving Cell ID = 147
+Number of Records = 10
+Dispatch SFN SF = 3487
+Records
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |       |       |Start|Start|      |SRS        |   |DMRS|DMRS|                            |PUCCH  |PUCCH|        |       |   |     |                                |       |      |       |   |      |       |                 |          |         |      |    |    |     |               |
+   |       |UL     |RB   |RB   |      |Shorting   |   |Seq |Seq |                            |Digital|Tx   |        |DL     |   |     |                                |ACK    |      |       |   |      |Num CSF|                 |          |         |Ack   |Ack |    |     |               |
+   |Current|Carrier|Slot |Slot |      |for 2nd    |UE |Slot|Slot|                            |Gain   |Power|Num DL  |Carrier|Num|CDM  |                                |Payload|Is SR |Is SR  |SR |CSF   |P      |                 |CSF       |         |Nack  |Nack|CSF |Drop |               |
+   |SFN SF |Index  |0    |1    |Format|Slot       |SRS|0   |1   |Cyclic Shift Seq per Symbol |(dB)   |(dBm)|Carriers|Index  |RB |Index|ACK Payload                     |Length |Config|Present|Bit|Length|Reports|DROP_PUCCH_REASON|Payload   |n_1_pucch|Index |Late|Late|Pucch|Tx Resampler   |
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   3477|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   9   0   0   0  11   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111011|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       41|0x0210|   0|   0|    0|  -0.3999987508|
+   |       |       |     |     |      |           |   |    |    |   0   6   0   0   0  11   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3478|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0  11   0   0   0   9   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111111|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       42|0x0210|   0|   0|    0|  -0.3999987508|
+   |       |       |     |     |      |           |   |    |    |   0   0   0   0   0  10   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3479|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   9   0   0   0   3   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111111|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       43|0x0210|   0|   0|    0|  -0.3999987508|
+   |       |       |     |     |      |           |   |    |    |   0  11   0   0   0   6   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3480|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   8   0   0   0   1   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001001000|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       40|0x0210|   0|   0|    0|  -0.3999987515|
+   |       |       |     |     |      |           |   |    |    |   0   9   0   0   0   5   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3481|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   4   0   0   0   1   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111111|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       43|0x0210|   0|   0|    0|  -0.3999987503|
+   |       |       |     |     |      |           |   |    |    |   0   4   0   0   0  10   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3482|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   4   0   0   0   3   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111011|      8|     1|      1|  1|     0|      0|          NO_DROP|0x00000000|       40|0x0210|   0|   0|    0|  -0.3999987494|
+   |       |       |     |     |      |           |   |    |    |   0  11   0   0   0  10   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3483|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   0   0   0   0   0   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111111|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       41|0x0210|   0|   0|    0|  -0.3999987494|
+   |       |       |     |     |      |           |   |    |    |   0   3   0   0   0   9   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3484|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   3   0   0   0  11   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111111|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       41|0x0210|   0|   0|    0|  -0.3999987501|
+   |       |       |     |     |      |           |   |    |    |   0   0   0   0   0   9   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3485|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   5   0   0   0  11   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001001100|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       42|0x0210|   0|   0|    0|  -0.3999987496|
+   |       |       |     |     |      |           |   |    |    |   0  10   0   0   0   9   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |   3486|    PCC|    4|   45|     3|     Normal|OFF|  27|  27|   0   2   0   0   0   4   0|    195|  -10|       4|    PCC|  1|    0|00000000000000000000000001111011|      8|     0|      0|  0|     0|      0|          NO_DROP|0x00000000|       43|0x0210|   0|   0|    0|  -0.3999987503|
+   |       |       |     |     |      |           |   |    |    |   0   8   0   0   0   1   0|       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+   |       |       |     |     |      |           |   |    |    |                            |       |     |        |       |   |     |00000000000000000000000000000000|       |      |       |   |      |       |                 |0x00000000|         |      |    |    |     |               |
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB16C", packet_length=100,
+                               name="LTE DCI Information Report",
+                               subtitle="", datetime="2024 Jan 15  07:14:46.673", packet_text=
+
+                               """
+2024 Jan 15  07:14:46.673  [F1]  0xB16C  LTE DCI Information Report
+Subscription ID = 1
+Version = 49
+Duplex Mode = FDD
+Subframe Cfg = 15
+Number of Records = 20
+DCI Info Records
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |     |      |     |     |       |                                         |UL Grant Info                                                                                                                                                                                                            |DL Grant Info                                                                  |
+   |   |     |      |     |     |       |TPC DCI Info                             |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |Number  |      |        |      |     |     |        |Number  |         |           |DL   |DL    |       |DL     |   |DL   |     |               |           |      |
+   |   |     |      |Num  |Num  |PDCCH  |       |TPC DCI   |              |TPC DCI|     |   |    |   |               |     |         |Redundancy|     |             |          |       |       |Resource  |    |Start of|of      |Cyclic|        |      |     |     |Start of|of      |TX       |           |Grant|Grant |Num    |Grant  |   |Grant|DL   |               |           |      |
+   |   |     |      |UL   |DL   |Order  |TPC DCI|Format    |TPC DCI RNTI  |TPC    |Cell |   |HARQ|   |               |K of |UL       |Version   |MCS  |             |Modulation|CQI    |SRS    |Allocation|Rbg |Resource|Resource|Shift |Hopping |Search|RIV  |RIV  |Resource|Resource|Antenna  |Aggregation|Cell |Format|ACK/NAK|TPC    |   |Srs  |Grant|               |Aggregation|Search|
+   |#  |SFN  |Sub-fn|Grant|Grant|Present|Present|Type      |Type          |Command|Index|NDI|ID  |TPC|Rnti Type      |DCI 0|Index/DAI|Index     |Index|TBS Index    |Type      |Request|Request|Type      |Size|Block   |Blocks  |DMRS  |Flag    |Space |Width|Value|Block 2 |Blocks 2|Selection|Level      |Index|Type  |Bits   |Command|DAI|Req  |N CCE|Rnti Type      |Level      |Space |
+   ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|  345|     7|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      1|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      1|   |   No|    0|         C_RNTI|          0|     0|
+   |  1|  345|     8|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      2|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      2|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      2|   |   No|   24|         C_RNTI|          0|     0|
+   |  2|  345|     9|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      3|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      3|   |   No|   16|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      3|   |   No|   16|         C_RNTI|          0|     0|
+   |  3|  346|     0|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      3|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      3|   |   No|   16|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      3|   |   No|   16|         C_RNTI|          0|     0|
+   |  4|  346|     1|    0|    2|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      0|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      0|   |   No|    4|         C_RNTI|          0|     0|
+   |  5|  346|     2|    1|    4|     No|     No|          |              |       |    0|  0|   2|  1|         C_RNTI|    4|         |         0|   14| TBS_INDEX_20|    64 QAM|      3|     No|         0|   0|      27|      15|     0|Disabled|     1|   11|  727|       0|       0|        0|          1|    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      1|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      1|   |   No|   16|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      1|   |   No|    4|         C_RNTI|          0|     0|
+   |  6|  346|     3|    1|    4|     No|     No|          |              |       |    0|  0|   3|  1|         C_RNTI|    4|         |         0|   17| TBS_INDEX_23|    64 QAM|      2|     No|         0|   0|      31|       4|     1|Disabled|     1|   11|  181|       0|       0|        0|          1|    0|     2|      2|      1|   |   No|    6|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      2|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      2|   |   No|   12|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      2|   |   No|    8|         C_RNTI|          0|     0|
+   |  7|  346|     4|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    6|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      3|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      3|   |   No|   12|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      3|   |   No|    8|         C_RNTI|          0|     0|
+   |  8|  346|     5|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|   34|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      0|   |   No|    0|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      0|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      0|   |   No|    8|         C_RNTI|          0|     0|
+   |  9|  346|     6|    0|    2|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      3|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      3|   |   No|    8|         C_RNTI|          0|     0|
+   | 10|  346|     7|    0|    2|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      0|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      0|   |   No|   12|         C_RNTI|          0|     0|
+   | 11|  346|     8|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|   20|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      1|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      1|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      1|   |   No|    4|         C_RNTI|          0|     0|
+   | 12|  346|     9|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      2|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      2|   |   No|   16|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      2|   |   No|   12|         C_RNTI|          0|     0|
+   | 13|  347|     0|    0|    3|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      2|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      2|   |   No|   16|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      2|   |   No|   16|         C_RNTI|          0|     0|
+   | 14|  347|     1|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      3|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      3|   |   No|   16|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      3|   |   No|    0|         C_RNTI|          0|     0|
+   | 15|  347|     2|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      0|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      0|   |   No|   12|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      0|   |   No|   16|         C_RNTI|          0|     0|
+   | 16|  347|     3|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    2|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      1|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      1|   |   No|   12|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      1|   |   No|   12|         C_RNTI|          0|     0|
+   | 17|  347|     4|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|    6|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      2|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      2|   |   No|   12|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      2|   |   No|   24|         C_RNTI|          0|     0|
+   | 18|  347|     5|    0|    4|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    0|     2|      2|      1|   |   No|   34|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      3|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    2|     2|      2|      3|   |   No|    8|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      3|   |   No|    8|         C_RNTI|          0|     0|
+   | 19|  347|     6|    0|    2|     No|     No|          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    1|     2|      2|      0|   |   No|    4|         C_RNTI|          0|     0|
+   |   |     |      |     |     |       |       |          |              |       |     |   |    |   |               |     |         |          |     |             |          |       |       |          |    |        |        |      |        |      |     |     |        |        |         |           |    3|     2|      1|      0|   |   No|    8|         C_RNTI|          0|     0|
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB064", packet_length=100,
+                               name="LTE MAC UL Transport Block",
+                               subtitle="", datetime="2024 Jan 15  07:14:46.604", packet_text=
+
+                               """
+2024 Jan 15  07:14:46.604  [3F]  0xB064  LTE MAC UL Transport Block
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 1
+SubPacket ID = 8
+SubPacket - ( UL Transport Block Subpacket )
+   Version = 3
+   Subpacket Size = 148
+   Uplink Transport Block V3
+      Number of samples = 5
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |          |        |     |     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |DC-   |DC- PHR|DC-   |DC- PHR|
+      |Sub|Cell|       |          |      |     |Grant  |RLC  |Padding|                 |               |HDR  |                        |          |        |     |BSR  |BSR  |BSR  |BSR  |       |BSR LCG 0|BSR LCG 1|BSR LCG 2|BSR LCG 3|            |       |PH    |Pcmax_c|PH    |Pcmax_c|DC- PHR|PHR PH|Pcmax_c|PHR PH|Pcmax_c|
+      |Id |Id  |HARQ ID|RNTI Type |Sub-FN|SFN  |(bytes)|PDUs |(bytes)|BSR event        |BSR trig       |LEN  |Mac Hdr + CE            |LC ID     |e-LC ID |LEN  |LCG 0|LCG 1|LCG 2|LCG 3|PHR Ind|(bytes)  |(bytes)  |(bytes)  |(bytes)  |SCC Bitmap  |Pcmax_c|SCell1|SCell1 |SCell2|SCell2 |Pcmax_c|SCell1|SCell1 |SCell2|SCell2 |
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  1|   0|      7|    C-RNTI|     1|  331|    301|    1|    283|High Data Arrival|          S-BSR|   14| 3D 38 07 25 04 1F C0 00|     S-BSR|        |    1|     |     |     |    0|       |         |         |         |        0|            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     | 01 00 00 9B 34 7F      |    DC-PHR|        |    7|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |         5|        |    4|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |   Padding|        |   -1|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |  1|   0|      1|    C-RNTI|     9|  332|    285|    1|    269|High Data Arrival|          S-BSR|   14| 3D 38 07 25 02 1F C0 00|     S-BSR|        |    1|     |     |     |    0|       |         |         |         |        0|            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     | 01 00 00 9B 34 7F      |    DC-PHR|        |    7|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |         5|        |    2|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |   Padding|        |   -1|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |  1|   0|      7|    C-RNTI|     9|  335|    285|    1|    267|High Data Arrival|          S-BSR|   14| 3D 38 07 25 04 1F C0 00|     S-BSR|        |    1|     |     |     |    0|       |         |         |         |        0|            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     | 01 00 00 9B 34 7F      |    DC-PHR|        |    7|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |         5|        |    4|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |   Padding|        |   -1|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |  1|   0|      3|    C-RNTI|     9|  337|    285|    1|    269|High Data Arrival|          S-BSR|   14| 3D 38 07 25 02 1F C0 00|     S-BSR|        |    1|     |     |     |    0|       |         |         |         |        0|            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     | 01 00 00 9B 34 7F      |    DC-PHR|        |    7|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |         5|        |    2|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |   Padding|        |   -1|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |  1|   0|      7|    C-RNTI|     9|  339|    249|    1|    233|High Data Arrival|          S-BSR|   14| 3D 38 07 25 02 1F C0 00|     S-BSR|        |    1|     |     |     |    0|       |         |         |         |        0|            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     | 01 00 00 9B 34 7F      |    DC-PHR|        |    7|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |         5|        |    2|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+      |   |    |       |          |      |     |       |     |       |                 |               |     |                        |   Padding|        |   -1|     |     |     |     |       |         |         |         |         |            |       |      |       |      |       |       |      |       |      |       |
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0EF", packet_length=100,
+                               name="LTE NAS EMM USIM card mode",
+                               subtitle="", datetime="2024 Jan 15  07:15:51.068", packet_text=
+
+                               """
+2024 Jan 15  07:15:51.068  [5C]  0xB0EF  LTE NAS EMM USIM card mode
+Subscription ID = 1
+Version = 1
+Card Mode = 3
+LTE service support = True
+IMSI = { 57, 49, 67, 32, 0, 149, 135, 6 }
+EPSLOCI = { 
+   11, 246, 19, 0, 20, 255, 73, 177, 
+   208, 142, 0, 12, 19, 0, 20, 145, 
+   13, 0
+}
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0B5", packet_length=100,
+                               name="LTE PDCP UL SRB Integrity Data PDU",
+                               subtitle="", datetime="2024 Jan 15  07:14:07.591", packet_text=
+
+                               """
+2024 Jan 15  07:14:07.591  [78]  0xB0B5  LTE PDCP UL SRB Integrity Data PDU
+Subscription ID = 1
+Version = 56
+SRB Ciphering Keys (hex) =  12 B0 63 3E 1E AC 74 B8 EC BE 00 C2 B7 6A 10 E8
+SRB Integrity Keys (hex) =  69 17 91 A4 0A 2F AE C2 0E DC AA 6E 8E 67 9D DF
+SRB Cipher Algo = NONE
+SRB Integrity Algo = NONE
+Num PDUs = 1
+Entry
+   --------------------------------------------------------------------------------------------------------------------------
+   |   |Rb Info                            |     |      |             |            |               |                        |
+   |   |Cfg|Rb  |Seq   |Bearer|            |PDU  |Logged|System Time  |            |Computed Mac-I |un-ciphered log_buffer  |
+   |#  |Idx|Mode|Len   |Id    |Valid Pdu   |Size |Bytes |sys_fn|sub_fn|Count (hex) |(hex)          |(hex)                   |
+   --------------------------------------------------------------------------------------------------------------------------
+   |  0| 33|  AM| 5 bit|     0|   VALID PDU|   14|    14|   N/A|   N/A|  0x00000000|     0x00000000| 00 24 10 09 8E 5B D9 B2|
+   |   |   |    |      |      |            |     |      |      |      |            |               | 85 80 00 00 00 00      |
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0B4", packet_length=100,
+                               name="LTE PDCP UL Statistics Pkt",
+                               subtitle="", datetime="2024 Jan 15  07:14:29.446", packet_text=
+
+                               """
+2024 Jan 15  07:14:29.446  [AF]  0xB0B4  LTE PDCP UL Statistics Pkt
+Subscription ID = 1
+Version = 59
+Meta {
+   Reason = PERIODIC
+   Num Rb Logged = 4
+   Num Error = 0
+}
+Per RB
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |        |      |        |        |    |            |                |                |                |                |            |            |            |            |            |            |            |                             |            |                                                                             |              |ROHC Info                                             |                                                                                                                                                         |
+   |   |        |      |        |        |    |            |                |                |                |                |            |            |            |            |            |            |            |                             |            |                                                                             |              |          |          |Num       |          |          |                                                                                                                                                         |
+   |   |        |      |        |        |Num |            |                |                |                |                |            |            |            |            |            |            |            |                             |            |                                                                             |              |          |          |Piggyback |          |          |UDC Info                                                                                                                                                 |
+   |   |        |RB    |        |        |Flow|            |                |                |                |                |            |            |            |            |            |            |            |                             |            |Wm Flow Control Stats                                                        |              |Num ROHC  |          |Rohc      |Num Rohc  |Num Rohc  |          |          |Num UDC Fc|UDC Fc    |Num UDC   |UDC Reenq |          |          |          |Num Enb   |Num UDC   |Num UDC   |Num UDC   |Num UDC   |
+   |   |Bearer  |Config|        |        |Ctrl|            |                |Data Bytes From |Num Pdcp Ul Buf |Data SDUs From  |Num Control |Control Pdu |Num Status  |Num Discard |Discard SDU |Num PDU HO  |Num PDU HO  |                             |Num Pdcp    |            |            |            |            |Count       |Count Dne   |              |Ctrl PDU  |Num ROHC  |Feedback  |Pdu Drop  |Pdu Drop  |Num UDC   |UDC Comp  |Uncomp    |Uncomp    |Reenq Pkts|Bytes     |Num UDC   |Num UDC   |Num UDC UE|UDC Ctrl  |Dsm Fc    |CPU Fc    |Dsm Fc    |CPU Fc    |
+   |#  |Type    |Index |RB Type |RB Mode |Trig|Num Data Pdu|Data Pdu Bytes  |Wm              |Bytes           |Wm              |Pdu         |Bytes       |Report      |SDU         |Bytes       |ReTx        |ReTx Bytes  |Pdcp Flow State              |Window Stall|Total Count |Count Low   |Count High  |Count Empty |NonEmpty    |Bytes       |Wm Flow State |Tx        |Fail      |Rcvd      |Ho        |Ho Bytes  |Comp Pkts |Bytes     |Pkts      |Bytes     |Highest Q |Highest Q |Fail      |ENB Reset |Reset     |Pdus      |Down      |Down      |Shutdown  |Freeze    |
+   ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0| DEFAULT|    33|     SRB|      AM|   0|          25|           12978|           12978|               0|              25|           0|           0|           0|           0|           0|           0|           0|                       ENABLE|           0|           0|           0|           0|           0|           0|           0|   LOW_ENABLED|          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |
+   |  1| DEFAULT|    34|     SRB|      AM|   0|           0|               0|               0|               0|               0|           0|           0|           0|           0|           0|           0|           0|                       ENABLE|           0|           0|           0|           0|           0|           0|           0|   LOW_ENABLED|          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |
+   |  2| DEFAULT|     4|     DRB|      AM|   0|           0|               0|               0|               0|               0|           0|           0|           0|           0|           0|           0|           0|                       ENABLE|           0|       12443|           1|           0|          79|          75|           0|   LOW_ENABLED|          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |
+   |  3| DEFAULT|     5|     DRB|      AM|   0|         714|          146825|          144683|               0|             714|           0|           0|           0|           0|           0|           2|         104|                       ENABLE|           0|           1|           1|           0|           0|           0|           0|   LOW_ENABLED|          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |          |
 
 
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB0B1", packet_length=100,
+                               name="LTE PDCP UL Data PDU",
+                               subtitle="", datetime="2024 Jan 15  07:14:24.391", packet_text=
 
+                               """
+2024 Jan 15  07:14:24.391  [C8]  0xB0B1  LTE PDCP UL Data PDU
+Subscription ID = 1
+Version = 60
+Num RB ID Configured = 4
+Num PDUs = 1
+PDUs
+   -------------------------------------------------------------------------------------------------------------------------------
+   |   |      |System Time  |      |       |            |   |                                                                    |
+   |   |RB    |      |System|      |RLC    |            |   |LSM                                                                 |
+   |   |Config|Slot  |Frame |      |Payload|Start PDCP  |Num|   |               |Num|NLO                                         |
+   |#  |Index |Number|Number|RLC SN|Length |Count       |LSM|#  |PDCP Count     |NLO|#  |PDCP Payload                            |
+   -------------------------------------------------------------------------------------------------------------------------------
+   |  0|    33|     2|   165|    49|      7|          24|  1|  0|             24|  1|  0| 0x18 0x12 0x00 0x83                    |
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0x1568", packet_length=100,
+                               name="IMS RTP SN and Payload",
+                               subtitle="", datetime="2024 Jan 15  07:14:46.689", packet_text=
+
+                               """
+2024 Jan 15  07:14:46.689  [EF]  0x1568  IMS RTP SN and Payload
+Subscription ID = 1
+Version = 17
+Direction = NETWORK_TO_UE
+Rat Type = LTE
+Sequence = 4
+Ssrc = 424995790
+Rtp Time stamp = 1280
+CodecType = AMR-WB
+mediaType = AUDIO
+PayLoad Size = 73
+Logged Payload Size = 61
+Audio AMR-WB
+   Marker = 0
+   Codec mode Request = 15
+   isMoreFrame = false
+   Frame Type Index = AMR-WB 23.85 KBIT/S
+   isFrameGood = true
+   Mode = BANDWIDTH EFFICIENT
+Latency Info Present = 0
+Latency Block None
+Rtp Raw Payload = { 
+   244, 80, 17, 128, 25, 153, 102, 141, 
+   252, 25, 64, 0, 21, 188, 2, 129, 
+   199, 236, 148, 24, 132, 216, 7, 96, 
+   1, 8, 97, 96, 191, 4, 134, 250, 
+   17, 188, 240, 76, 236, 148, 2, 69, 
+   76, 66, 129, 97, 184, 8, 4, 162, 
+   5, 157, 129, 52, 240, 74, 18, 84, 
+   200, 4, 168, 24, 16
+}
+Rtp Redundant Indicator = Original RTP Packet
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB061", packet_length=100,
+                               name="LTE MAC Rach Trigger",
+                               subtitle="", datetime="2024 Jan 19  21:46:04.008", packet_text=
+
+                               """
+2024 Jan 19  21:46:04.008  [8B]  0xB061  LTE MAC Rach Trigger
+Subscription ID = 1
+Version = 1
+Number of SubPackets = 2
+SubPacket ID = 3
+SubPacket - ( RACH Config Subpacket )
+   Version = 9
+   SubPacket Size = 28
+   RACH Config V9
+      Sub Id = 1
+      Num Active Cell = 1
+      Cell Rach Info[0]
+         CC Id = 0
+         Preamble initial power = -104 dB
+         Power ramping step = 2 dB
+         RA index1 = 32
+         RA index2 = 48
+         Preamble trans max = 10
+         Contention resolution timer = 64 ms
+         Message size Group_A = 18
+         Power offset Group_B = -10 dB
+         Delta preamble Msg3 = 6
+         PRACH config = 3
+         CS zone length = 12
+         Root seq index = 0
+         PRACH Freq Offset = 7
+         High speed flag = 0
+         Max retx Msg3 = 5
+         RA rsp win size = 10 ms
+SubPacket ID = 5
+SubPacket - ( RACH Reason Subpacket )
+   Version = 5
+   Subpacket Size = 20 bytes
+   RACH Reason V5
+      Sub Id = 1
+      CC Id = 0
+      Rach reason = CONNECTION_REQ
+      Maching ID = 0x5A, 0x72, 0x86, 0x7B, 0xC1, 0xE6
+      RACH Contention = Contention Based RACH procedure
+      Preamble = 0
+      Preamble RA mask = 0xFF
+      Msg3 size = 6 bytes
+      Radio condn = 105 dB
+      CRNTI = 0x7DEC
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB873", packet_length=100,
+                               name="NR5G L2 UL BSR",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.333", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.333  [F5]  0xB873  NR5G L2 UL BSR
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 3
+Meta
+   Num TTI = 11
+   LCID Prio Bitmask = 0
+TTI Info
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |             |    |       |                                                            |                    |      |          |     |    |BSR MCE Buffer                              |
+   |   |             |    |       |                                                            |                    |      |          |     |    |      |Short OR Short|Long OR Long Truncated|
+   |   |SysTime      |    |       |                                                            |                    |      |          |     |    |      |Truncated Bsr |Bsr                   |
+   |   |Slot  |      |Harq|Carrier|                                                            |                    |BSR   |LCG       |Num  |QOS |      |        |BSR  |                |BSR  |
+   |#  |Number|FN    |ID  |ID     |BSR Trigger Reason                                          |BSR Type            |Length|Bitmask   |LCIDs|LCID|Length|BSR LCG |Index|LCGx            |Index|
+   --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|    14|   978|   0|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000010|    1|   4|      |       1|   13|                |     |
+   |  1|     4|   980|   3|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000010|    1|   4|      |       1|    8|                |     |
+   |  2|     5|   981|   5|      0|                                       T_PERIODIC_EXPIRY_BSR|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  3|    14|   981|   6|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  4|     4|   982|   7|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  5|    14|   982|   8|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  6|     4|   983|   9|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  7|    14|   983|  10|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  8|     5|   984|  11|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   |  9|    14|   984|  12|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+   | 10|     4|   985|  13|      0|                                           HIGH_DATA_ARRIVAL|           SHORT_BSR|     2|  00000001|    1|   4|      |       0|    0|                |     |
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB840", packet_length=100,
+                               name="NR5G PDCP DL Data Pdu",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.319", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.319  [E7]  0xB840  NR5G PDCP DL Data Pdu
+Subscription ID = 1
+Misc ID         = 0
+Major.Minor Version = 3. 0
+Number Of Meta = 100
+Number Of RB = 1
+Number Of Log Count = 40
+PDCP State
+   ------------------------------------------------------------
+   |   |RB   |PDCP  |             |             |             |
+   |   |Cfg  |SN    |             |             |             |
+   |#  |Index|Length|RX_DELIV     |RX_NEXT      |NEXT COUNT   |
+   ------------------------------------------------------------
+   |  0|    5|    18|         2726|         2835|         2726|
+
+Meta Log Buffer
+   --------------------------------------------------------------------------------------------------------------------------------------------------------
+   |   |System    |        |   |RB   |     |    |               |         |         |             |             |             |             |             |
+   |   |Time      |RX      |Num|Cfg  |Key  |RLC |               |IP Packet|IP Packet|             |             |             |Number IP    |Number IP    |
+   |#  |Slot|Frame|Timetick|NLO|Index|Index|Path|Route Status   |Header[0]|Header[1]|Start Count  |End Count    |RLC end SN   |Pkts         |bytes        |
+   --------------------------------------------------------------------------------------------------------------------------------------------------------
+   |  0|   0|  983|0.164870|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2568|         2568|          154|            1|         1430|
+   |  1|   3|  982|0.157799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2569|         2571|          154|            3|         4290|
+   |  2|   3|  982|0.157799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2572|         2572|          155|            1|         1430|
+   |  3|   3|  982|0.157883|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2573|         2573|          155|            1|         1430|
+   |  4|   3|  982|0.157883|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2574|         2574|          156|            1|         1430|
+   |  5|   4|  982|0.158798|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2575|         2577|          156|            3|         4290|
+   |  6|   4|  982|0.158798|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2578|         2578|          157|            1|         1430|
+   |  7|   4|  982|0.158881|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2579|         2579|          157|            1|         1430|
+   |  8|   4|  982|0.158881|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2580|         2580|          158|            1|         1430|
+   |  9|   7|  983|0.171792|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2581|         2582|          158|            2|         2860|
+   | 10|   7|  983|0.171792|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2583|         2583|          159|            1|         1430|
+   | 11|   8|  982|0.162863|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2584|         2585|          159|            2|         2860|
+   | 12|   8|  982|0.162863|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2586|         2586|          160|            1|         1430|
+   | 13|   9|  982|0.163793|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2587|         2588|          160|            2|         2860|
+   | 14|   9|  982|0.163793|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2589|         2589|          161|            1|         1430|
+   | 15|   9|  982|0.163870|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2590|         2591|          161|            2|         2860|
+   | 16|   9|  982|0.163870|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2592|         2592|          162|            1|         1430|
+   | 17|   1|  983|0.165799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2593|         2594|          162|            2|         2860|
+   | 18|   1|  983|0.165799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2595|         2595|          163|            1|         1430|
+   | 19|   1|  983|0.165882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2596|         2597|          163|            2|         2860|
+   | 20|   1|  983|0.165882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2598|         2598|          164|            1|         1430|
+   | 21|   2|  983|0.166800|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2599|         2600|          164|            2|         2860|
+   | 22|   2|  983|0.166800|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2601|         2601|          165|            1|         1430|
+   | 23|   2|  983|0.166884|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2602|         2603|          165|            2|         2860|
+   | 24|   2|  983|0.166884|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2604|         2604|          166|            1|         1430|
+   | 25|   4|  983|0.168799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2605|         2606|          166|            2|         2860|
+   | 26|   4|  983|0.168799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2607|         2607|          167|            1|         1430|
+   | 27|   4|  983|0.168882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2608|         2609|          167|            2|         2860|
+   | 28|   4|  983|0.168882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2610|         2610|          168|            1|         1430|
+   | 29|   5|  983|0.169772|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2611|         2612|          168|            2|         2860|
+   | 30|   5|  983|0.169772|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2613|         2613|          169|            1|         1430|
+   | 31|   5|  983|0.169850|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2614|         2615|          169|            2|         2860|
+   | 32|   5|  983|0.169850|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2616|         2616|          170|            1|         1430|
+   | 33|   7|  983|0.171866|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2617|         2617|          170|            1|         1430|
+   | 34|   7|  983|0.171866|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2618|         2618|          171|            1|         1430|
+   | 35|   8|  983|0.172799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2619|         2620|          171|            2|         2860|
+   | 36|   8|  983|0.172799|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2621|         2621|          172|            1|         1430|
+   | 37|   8|  983|0.172882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2622|         2623|          172|            2|         2860|
+   | 38|   8|  983|0.172882|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2624|         2624|          173|            1|         1430|
+   | 39|   9|  983|0.173796|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2625|         2626|          173|            2|         2860|
+   | 40|   9|  983|0.173796|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2627|         2627|          174|            1|         1430|
+   | 41|   9|  983|0.173875|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2628|         2628|          174|            1|         1430|
+   | 42|   9|  983|0.173875|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2629|         2629|          175|            1|         1430|
+   | 43|   0|  984|0.174762|  1|    5|   16| MCG|   DELIV_DIRECT|      0x0|      0x0|         2630|         2630|          176|            1|         1430|
+   | 44|   8|  979|0.127693|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2631|         2631|            0|            1|         1430|
+   | 45|   9|  979|0.128193|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2632|         2632|            1|            1|         1430|
+   | 46|  11|  979|0.129190|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2633|         2633|            2|            1|         1430|
+   | 47|  10|  980|0.138696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2634|         2634|            3|            1|         1430|
+   | 48|  11|  980|0.139196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2635|         2635|            4|            1|         1430|
+   | 49|  16|  980|0.141696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2636|         2636|            5|            1|         1430|
+   | 50|  17|  980|0.142196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2637|         2637|            6|            1|         1430|
+   | 51|  19|  980|0.143196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2638|         2638|            7|            1|         1430|
+   | 52|   1|  981|0.144196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2639|         2639|            8|            1|         1430|
+   | 53|   6|  981|0.146696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2640|         2640|            9|            1|         1430|
+   | 54|   7|  981|0.147196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2641|         2641|           10|            1|         1430|
+   | 55|   9|  981|0.148196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2642|         2642|           11|            1|         1430|
+   | 56|  10|  981|0.148696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2643|         2643|           12|            1|         1430|
+   | 57|  11|  981|0.149196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2644|         2644|           13|            1|         1430|
+   | 58|  12|  981|0.149696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2645|         2645|           14|            1|         1430|
+   | 59|  16|  981|0.151696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2646|         2646|           15|            1|         1430|
+   | 60|  17|  981|0.152196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2647|         2647|           16|            1|         1430|
+   | 61|  18|  981|0.152696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2648|         2648|           17|            1|         1430|
+   | 62|  19|  981|0.153197|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2649|         2649|           18|            1|         1430|
+   | 63|   0|  982|0.153687|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2650|         2651|           20|            2|         2860|
+   | 64|   0|  982|0.153687|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2652|         2652|           21|            1|         1430|
+   | 65|   1|  982|0.154183|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2653|         2653|           22|            1|         1430|
+   | 66|   2|  982|0.154683|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2654|         2654|           23|            1|         1430|
+   | 67|   2|  982|0.154683|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2655|         2655|           24|            1|         1430|
+   | 68|   3|  982|0.154898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2656|         2656|           25|            1|         1430|
+   | 69|   6|  982|0.156696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2657|         2658|           27|            2|         2860|
+   | 70|   6|  982|0.156696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2659|         2659|           28|            1|         1430|
+   | 71|   7|  982|0.157197|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2660|         2660|           29|            1|         1430|
+   | 72|   7|  982|0.157197|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2661|         2661|           30|            1|         1430|
+   | 73|   8|  982|0.157696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2662|         2663|           32|            2|         2860|
+   | 74|   8|  982|0.157696|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2664|         2664|           33|            1|         1430|
+   | 75|   9|  982|0.158196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2665|         2666|           35|            2|         2860|
+   | 76|   9|  982|0.158196|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2667|         2667|           36|            1|         1430|
+   | 77|  10|  982|0.158709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2668|         2671|           40|            4|         5720|
+   | 78|  10|  982|0.158709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2672|         2672|           41|            1|         1430|
+   | 79|  11|  982|0.159203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2673|         2675|           44|            3|         4290|
+   | 80|  11|  982|0.159203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2676|         2676|           45|            1|         1430|
+   | 81|  12|  982|0.159703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2677|         2680|           49|            4|         5720|
+   | 82|  12|  982|0.159703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2681|         2681|           50|            1|         1430|
+   | 83|  13|  982|0.159898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2682|         2682|           51|            1|         1430|
+   | 84|  16|  982|0.161709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2683|         2686|           55|            4|         5720|
+   | 85|  16|  982|0.161709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2687|         2687|           56|            1|         1430|
+   | 86|  17|  982|0.162209|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2688|         2691|           60|            4|         5720|
+   | 87|  17|  982|0.162209|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2692|         2692|           61|            1|         1430|
+   | 88|  18|  982|0.162709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2693|         2695|           64|            3|         4290|
+   | 89|  18|  982|0.162709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2696|         2696|           65|            1|         1430|
+   | 90|  19|  982|0.163210|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2697|         2701|           70|            5|         7150|
+   | 91|  19|  982|0.163210|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2702|         2702|           71|            1|         1430|
+   | 92|   0|  983|0.163709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2703|         2709|           78|            7|        10010|
+   | 93|   0|  983|0.163709|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2710|         2710|           79|            1|         1430|
+   | 94|   1|  983|0.164203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2711|         2715|           84|            5|         7150|
+   | 95|   1|  983|0.164203|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2716|         2716|           85|            1|         1430|
+   | 96|   2|  983|0.164703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2717|         2721|           90|            5|         7150|
+   | 97|   2|  983|0.164703|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2722|         2722|           91|            1|         1430|
+   | 98|   3|  983|0.164898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2723|         2724|           93|            2|         2860|
+   | 99|   3|  983|0.164898|  1|    5|   16| SCG|   DELIV_DIRECT|      0x0|      0x0|         2725|         2725|           94|            1|         1430|
+
+
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB841", packet_length=100,
+                               name="NR5G PDCP DL Control Pdu",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.180", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.180  [AD]  0xB841  NR5G PDCP DL Control Pdu
+Subscription ID = 1
+Misc ID         = 0
+Version = 4
+System Time
+   Frame = 970
+   Slot = 2
+Control PDU Size = 5
+Control PDU Type = STATUS_REPORT
+DC Bit = 0
+PDCP Type = STATUS_REPORT
+PDCP Status Report
+   FMC = 713
+""")
+        messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB111", packet_length=100,
+                               name="LTE LL1 Rx Agc Log",
+                               subtitle="", datetime="2024 Jan 15  07:14:22.171", packet_text=
+
+                               """
+2024 Jan 15  07:14:22.171  [0E]  0xB111  LTE LL1 Rx Agc Log
+Subscription ID = 1
+Version = 164
+Number of Records = 16
+AGC Mode = Traffic
+Carrier Index = PCC
+is_lte_nr_slna = 0
+sf_offset = 2
+Records
+   ---------------------------------------------------------------------------------
+   |   |       |     |     |     |        |   |        |Broadband|Measured|Measured|
+   |   |Rx     |     |     |LNA  |Sub     |   |        |RSSI     |Total   |Inband  |
+   |   |Antenna|     |Sub  |Gain |frame   |LNA|DVGA    |Estimate |RSSI    |RSSI    |
+   |#  |Index  |Frame|Frame|State|Type    |ID |(dB)    |(dBm)    |(dBm)   |(dBm)   |
+   ---------------------------------------------------------------------------------
+   |  0|    Rx0|  969|    1|    1|      DL|  0|   -5.26|   -68.44|  -59.50|  -64.75|
+   |  1|    Rx1|  969|    1|    1|      DL|  1|   -3.39|   -67.06|  -61.00|  -66.25|
+   |  2|    Rx2|  969|    1|    0|      DL|  2|   -5.89|   -72.25|  -63.50|  -69.75|
+   |  3|    Rx3|  969|    1|    0|      DL|  3|   -8.47|   -72.13|  -62.50|  -68.75|
+   |  4|    Rx0|  969|    2|    1|      DL|  0|   -5.23|   -74.63|  -59.50|  -69.25|
+   |  5|    Rx1|  969|    2|    1|      DL|  1|   -3.36|   -71.06|  -61.00|  -71.25|
+   |  6|    Rx2|  969|    2|    0|      DL|  2|   -5.85|   -77.38|  -63.50|  -74.00|
+   |  7|    Rx3|  969|    2|    0|      DL|  3|   -8.45|   -77.69|  -62.50|  -72.50|
+   |  8|    Rx0|  969|    3|    1|      DL|  0|   -5.25|   -61.94|  -59.50|  -65.00|
+   |  9|    Rx1|  969|    3|    1|      DL|  1|   -3.37|   -63.88|  -61.25|  -67.75|
+   | 10|    Rx2|  969|    3|    0|      DL|  2|   -5.86|   -66.63|  -63.50|  -70.25|
+   | 11|    Rx3|  969|    3|    0|      DL|  3|   -8.47|   -65.69|  -62.50|  -68.75|
+   | 12|    Rx0|  969|    4|    1|      DL|  0|   -5.23|   -73.94|  -59.50|  -67.00|
+   | 13|    Rx1|  969|    4|    1|      DL|  1|   -3.36|   -70.75|  -61.25|  -69.25|
+   | 14|    Rx2|  969|    4|    0|      DL|  2|   -5.84|   -76.81|  -63.50|  -71.75|
+   | 15|    Rx3|  969|    4|    0|      DL|  3|   -8.45|   -76.50|  -62.50|  -70.25|
+
+""")
+        messages.append(msg)
 
         #     msg = ParsedRawMessage(index = 0, packet_type = "0x1FE7", packet_length=100, name="QTrace Event", subtitle="QEVENT 84 - 2", datetime="", packet_text=
         #     """2023 Nov 17  01:59:04.733  [BC]  0x1FE7  QTrace Event  --  QEVENT 84 - 2
@@ -3266,3 +5752,4 @@ RACH Trigger
 
 if __name__ == "__main__":
     test_parsing()
+
