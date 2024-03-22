@@ -23,9 +23,10 @@
     "__frequency": "Event [One]",
     "__cell": "IMS",
     "Packet_Type": [
-      "if 'Packet_Type' in entry:",
-      "    entry['Packet_Type'] = entry['Direction']"
-    ],
+    "if 'Direction' in entry:",
+    "    entry['Packet_Type'] = entry['Direction']",
+    "    entry.pop('Direction')"
+  ],
     "__Raw_Data": true
   },
   "0x1831  IMS VoLTE Session End": {
@@ -56,7 +57,7 @@
     "__frequency": "Event [One]",
     "__cell": "IMS",
     "Packet_Type": [
-    "if 'Packet_Type' in entry:",
+    "if 'Direction' in entry:",
     "    entry['Packet_Type'] = entry['Direction']",
     "    entry.pop('Direction')"
   ],
