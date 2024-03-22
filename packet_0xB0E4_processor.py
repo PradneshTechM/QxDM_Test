@@ -1,4 +1,5 @@
 import regex as re
+from parser.kpi_utils import simple_map_entry
 class Packet_0xB0E4:
     # def __int__(self):
     #     print("New")
@@ -11,36 +12,12 @@ class Packet_0xB0E4:
 
         match = re.match(pattern, lines, re.DOTALL)
 
+
         if match:
-            # _obj["State"] = 1
-            # print(lines)
-            # _obj.update(match.groupdict())
-            entry.update(match.groupdict())
-
-            # entry = match.groupdict()
-            # print(entry)
-
-            key_mapping = {'subscription_id': config['Subscription ID']['DB Field'],
-                           'bearer_id': config['Bearer ID']['DB Field'],
-                           'bearer_state': config['Bearer State']['DB Field'],
-                           'connection_id': config['Connection ID']['DB Field'],
-                           }
-
-
-            # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
-            mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
-            mapped_entry['Source'] = 'QxDM'
-
-            mapped_entry["__collection"] = config.get('__collection')
-            mapped_entry["__cell"] = config.get('__cell')
-            if "Packet_Type" in config:
-                mapped_entry["Packet_Type"] = config.get('Packet_Type')
-            mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
-
-            # print(entry)
-            # print(dict)
-            # return True
-            return mapped_entry
+            entry1 = match.groupdict()
+            data = simple_map_entry(entry1, config)
+            entry.update(data)
+            return entry
         else:
-
+            # Return None or an empty dictionary if there is no match
             return None
