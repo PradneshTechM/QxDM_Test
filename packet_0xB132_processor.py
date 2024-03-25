@@ -6,8 +6,8 @@ class Packet_0xB132:
         self.config = config
         self.entry = entry
         self.pattern1 = r'Subscription ID = (?P<subs_id>\d+).*?Cell Id = (?P<cell_id>[\d]+).*?EARFCN = (?P<earfcn>[\d]+).*?System BW = (?P<system_bw>[\d]+).*?Num HARQ = (?P<num_harq>[\d]+).*?UE Category = (?P<ue_category>[\d]+).*?TX Mode = (?P<tx_mode>[\w]+).*?Num eNb Tx Ant = (?P<num_enb_Tx_Ant>[\d]+)'
-        self.pattern2 = r'.*?TB Top.*?Enable.*?\|Enable.*?\|.*?-+\n(?P<table>.*?)(?=\n.*?(?:TB Config|TB|TB Log Extend|CB|TB Info Record\[1\]))'
-        self.pattern3 = r'.*?TB Config.*?Value.*?\|Rate.*?\|.*?-+\n(?P<table>.*?)(?=\n.*?(?:TB|TB Log Extend|CB|TB Info Record\[1\]))'
+        self.pattern2 = r'.*?TB Info Record\[0\].*?TB Top.*?Enable.*?\|Enable.*?\|.*?-+\n(?P<table>.*?)(?=\n.*?(?:TB Config|TB|TB Log Extend|CB|TB Info Record\[1\]))'
+        self.pattern3 = r'.*?TB Info Record\[0\].*?TB Top.*?TB Config.*?Value.*?\|Rate.*?\|.*?-+\n(?P<table>.*?)(?=\n.*?(?:TB|TB Log Extend|CB|TB Info Record\[1\]))'
         self.dict = {}
         self.result = []
 
