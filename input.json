@@ -1068,15 +1068,10 @@
       "DB Field": "MCC"
     },
     "MNC": {
-      "DB Field": "MNC"
-    },
-    "MCC & MNC": {
-      "DB Field": "MCCMNC",
+      "DB Field": "MNC",
       "__comments": [
-        "if 'MCC & MNC' in config:",
-        "mcc_mnc_field = config['MCC & MNC']['DB Field']",
-        "mcc_mnc_value = f'{entry['mcc']}-{entry['mnc']}'",
-        "entry[mcc_mnc_field] = mcc_mnc_value"
+        "if 'MCC' and 'MNC' in entry:",
+        " entry['MCCMNC'] = str(int(entry['MCC']) + int(entry['MNC']))"
       ]
     },
     "__collection": "Event",

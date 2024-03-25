@@ -1,4 +1,5 @@
-import re
+import regex as re
+from kpi_utils import simple_map_entry
 class Packet_0xB0C2:
     # def __int__(self):
     #     print("New")
@@ -11,44 +12,11 @@ class Packet_0xB0C2:
 
         match = re.match(pattern, lines, re.DOTALL)
 
-
         if match:
-            # _obj["State"] = 1
-            # print(lines)
-            # _obj.update(match.groupdict())
-            entry.update(match.groupdict())
-
-            # entry = match.groupdict()
-            # print(entry)
-            key_mapping = {'subscription_id': config['Subscription ID']['DB Field'],
-                           'physical_cell_id': config['Physical Cell ID']['DB Field'],
-                           'dl_freq': config['DL FREQ']['DB Field'],
-                           'ul_freq': config['UL FREQ']['DB Field'],
-                           'dl_bandwidth': config['DL Bandwidth']['DB Field'],
-                           'ul_bandwidth': config['UL Bandwidth']['DB Field'],
-                           'cell_identity': config['Cell Identity']['DB Field'],
-                           'tracking_area_code': config['Tracking area code']['DB Field'],
-                           }
-            if 'MCC & MNC' in config:
-                # mcc_mnc_comment = config['MCC & MNC'].get('__comments', '')
-                mcc_mnc_field = config['MCC & MNC']['DB Field']
-                mcc_mnc_value = f"{entry['mcc']}-{entry['mnc']}"
-                entry[mcc_mnc_field] = mcc_mnc_value
-                entry.pop('mcc', None)
-                entry.pop('mnc', None)
-                # if mcc_mnc_comment:
-                #     entry['Comment'] = mcc_mnc_comment
-
-
-            # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
-            mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
-            mapped_entry["__collection"] = config.get('__collection')
-            mapped_entry["__cell"] = config.get('__cell')
-            if "Packet_Type" in config:
-                mapped_entry["Packet_Type"] = config.get('Packet_Type')
-            # print(entry)
-            # print(dict)
-            # return True
-            return mapped_entry
+            entry1 = match.groupdict()
+            data = simple_map_entry(entry1, config)
+            entry.update(data)
+            return entry
         else:
+            # Return None or an empty dictionary if there is no match
             return None
