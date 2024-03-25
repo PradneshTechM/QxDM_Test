@@ -47,6 +47,8 @@ def simple_map_entry(data, config):
     for i, (config_key, config_value) in enumerate(config.items(), start=0):
 
         if i < len(data_values):
+            if not data_values[i]:
+                continue
             mapped_value = data_values[i]  # Use original value, adjusted for index starting at 0
 
             # Process the value based on 'Field Type' specified in config
@@ -65,15 +67,24 @@ def simple_map_entry(data, config):
             #     # Handle result, e.g., add to mapped_data if result is not None
             #     if result is not None:
             #         mapped_data[some_key] = result
+            # if '__comments' in config_value and isinstance(config_value['__comments'], list):
+            #     code_arr = [line.replace("\\", "") for line in config_value['__comments']]
+            #     result = evaluate(code_arr, mapped_value)
+            #     if result is not None:
+            #         mapped_data.update(result)  # Example of using the result. Adjust as needed.
+            #
+            #     else:
+            #         # If __cell doesn't meet the criteria, skip execution
+            #         continue
 
             new_key = config_value.get('DB Field', config_key)  # Get the new key name
             mapped_data[new_key] = mapped_value  # Assign the processed value to the new key
 
     # After the loop, add additional keys to ensure they appear at the end
-    for additional_key in ['__collection', '__cell', '__Raw_Data', '__KPI_type', '__frequency']:
+    for additional_key in ['__Raw_Data','__KPI_type','__collection','__cell', 'Packet_Type','__frequency']:
         if additional_key in config:
             # Inside simple_map_entry, when processing __cell:
-            if additional_key == '__cell' and isinstance(config[additional_key], list):
+            if additional_key in ['__cell', 'Packet_Type'] and isinstance(config[additional_key], list):
                 code_arr = [line.replace("\\", "") for line in config[additional_key]]
                 #evaluate(config[additionalkey], mapped_data)
                 # Pass mapped_data to evaluate, allowing the executed code to access/modify it
@@ -128,15 +139,17 @@ def table_config(data, config_table, config):
                 key, value = entry
                 db_field = value['DB Field']
                 index = value['index'] + 1
+                if not index:
+                    continue
                 if index < len(row_values):  # Check if the index is within the bounds of row_values
                     row_value = row_values[index].strip()
                     if row_value:  # Add to dict_1 only if row_value is not empty
                         dict_1[db_field] = row_value
             if dict_1:  # Check if dict_1 is not empty before printing or adding to carrier_ids
-                for additional_key in ['Raw_Data','__KPI_type','__cell', '__collection', '__Raw_Data', '__frequency']:
+                for additional_key in ['__Raw_Data','__collection','__cell', 'Packet_Type','__frequency']:
                     if additional_key in config:
                         # Inside simple_map_entry, when processing __cell:
-                        if additional_key == '__cell' and isinstance(config[additional_key], list):
+                        if additional_key in ['__cell','Packet_Type','__Raw_Data'] and isinstance(config[additional_key], list):
                             code_arr = [line.replace("\\", "") for line in config[additional_key]]
                             # evaluate(config[additionalkey], mapped_data)
                             # Pass mapped_data to evaluate, allowing the executed code to access/modify it
