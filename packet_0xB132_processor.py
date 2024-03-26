@@ -6,10 +6,8 @@ class Packet_0xB132:
         self.config = config
         self.entry = entry
         self.pattern1 = r'Subscription ID = (?P<subs_id>\d+).*?Cell Id = (?P<cell_id>[\d]+).*?EARFCN = (?P<earfcn>[\d]+).*?System BW = (?P<system_bw>[\d]+).*?Num HARQ = (?P<num_harq>[\d]+).*?UE Category = (?P<ue_category>[\d]+).*?TX Mode = (?P<tx_mode>[\w]+).*?Num eNb Tx Ant = (?P<num_enb_Tx_Ant>[\d]+)'
-        self.pattern2 = r'.*?TB Top.*?Enable.*?\|Enable.*?\|.*?-+.*?\n(?P<table>[\s\S]*).*?TB Config.*?TB Info Record\[1\]'
-        self.pattern5 = r'.*?TB Top.*?Enable.*?\|Enable.*?\|.*?-+.*?\n(?P<table>[\s\S]*).*?TB Config'
-        self.pattern3 = r'.*?TB Config.*?Value.*?\|Rate.*?\|.*?-+.*?\n(?P<table>[\s\S]*).*?TB\n.*?TB Info Record\[1\]'
-        self.pattern4 = r'.*?TB Config.*?Value.*?\|Rate.*?\|.*?-+.*?\n(?P<table>[\s\S]*).*?TB\n.*?'
+        self.pattern2 = r'.*?TB Info Record\[0\].*?TB Top.*?Enable.*?\|Enable.*?\|.*?-+\n(?P<table>.*?)(?=\n.*?(?:TB Config|TB|TB Log Extend|CB|TB Info Record\[1\]))'
+        self.pattern3 = r'.*?TB Info Record\[0\].*?TB Top.*?TB Config.*?Value.*?\|Rate.*?\|.*?-+\n(?P<table>.*?)(?=\n.*?(?:TB|TB Log Extend|CB|TB Info Record\[1\]))'
         self.dict = {}
         self.result = []
 
@@ -43,35 +41,17 @@ class Packet_0xB132:
             return None
 
     def table_pattern(self):
-        tb_info_record_1_present = "TB Info Record[1]" in  self.packet_text
-        if tb_info_record_1_present:
-            match = re.search(self.pattern2, self.packet_text, re.DOTALL)
-            if match:
-                data = table_config(match, self.config['TB Config'], self.config)
-                return data
-            else:
-                print("No data rows found.")
+        match = re.search(self.pattern2, self.packet_text, re.DOTALL)
+        if match:
+            data = table_config(match, self.config['TB Info Record[0]'], self.config)
+            return data
         else:
-            match = re.search(self.pattern5, self.packet_text, re.DOTALL)
-            if match:
-                data = table_config(match, self.config['TB Config'], self.config)
-                return data
-            else:
-                print("No data rows found.")
+            return None
 
     def table_pattern2(self):
-        tb_info_record_1_present = "TB Info Record[1]" in  self.packet_text
-        if tb_info_record_1_present:
-            match = re.search(self.pattern3, self.packet_text, re.DOTALL)
-            if match:
-                data = table_config(match, self.config['TB Config'], self.config)
-                return data
-            else:
-                print("No data rows found.")
+        match = re.search(self.pattern3, self.packet_text, re.DOTALL)
+        if match:
+            data = table_config(match, self.config['TB Config'], self.config)
+            return data
         else:
-            match = re.search(self.pattern4, self.packet_text, re.DOTALL)
-            if match:
-                data = table_config(match, self.config['TB Config'], self.config)
-                return data
-            else:
-                print("No data rows found.")
+            return None

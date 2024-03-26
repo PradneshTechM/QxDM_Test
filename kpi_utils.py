@@ -59,26 +59,25 @@ def simple_map_entry(data, config):
                     mapped_value = float(mapped_value)
                 elif config_value['Field Type'] == 'String':
                     mapped_value = str(mapped_value)
-
-            # Check for __comments and evaluate if present
-            # if '__comments' in config_value:
-            #     code_arr = [config_value['__comments'].replace("\\", "")]
-            #     result = self.evaluate(code_arr, {'_obj': data}, data)
-            #     # Handle result, e.g., add to mapped_data if result is not None
-            #     if result is not None:
-            #         mapped_data[some_key] = result
+            # # Check for __comments and evaluate if present
             # if '__comments' in config_value and isinstance(config_value['__comments'], list):
+            #     new_key = config_value.get('DB Field', config_key)  # Get the new key name
+            #     mapped_data[new_key] = mapped_value  # Assign the processed value to the new key
             #     code_arr = [line.replace("\\", "") for line in config_value['__comments']]
-            #     result = evaluate(code_arr, mapped_value)
+            #     result = evaluate(code_arr, mapped_data)
             #     if result is not None:
-            #         mapped_data.update(result)  # Example of using the result. Adjust as needed.
-            #
-            #     else:
-            #         # If __cell doesn't meet the criteria, skip execution
-            #         continue
-
+            #         mapped_data.update(result)
             new_key = config_value.get('DB Field', config_key)  # Get the new key name
             mapped_data[new_key] = mapped_value  # Assign the processed value to the new key
+            # Check for __comments and evaluate if present
+            if '__comments' in config_value and isinstance(config_value['__comments'], list):
+                new_key = config_value.get('DB Field', config_key)  # Get the new key name
+                mapped_data[new_key] = mapped_value  # Assign the processed value to the new key
+                code_arr = [line.replace("\\", "") for line in config_value['__comments']]
+                result = evaluate(code_arr, mapped_data)
+                if result is not None:
+                    mapped_data.update(result)
+
 
     # After the loop, add additional keys to ensure they appear at the end
     for additional_key in ['__Raw_Data','__KPI_type','__collection','__cell', 'Packet_Type','__frequency']:
@@ -99,6 +98,7 @@ def simple_map_entry(data, config):
 
             else:
                 mapped_data[additional_key] = config[additional_key]
+
     return mapped_data
 
 def map_entry(data, config):

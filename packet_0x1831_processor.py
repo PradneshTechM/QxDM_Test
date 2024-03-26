@@ -1,43 +1,15 @@
 import regex as re
-# import json
+from parser.kpi_utils import simple_map_entry
 class Packet_0x1831:
-    def extract_info(lines, config, entry):
-        # print(lines)
-        # pattern = r'(?P<timestamp>\d+ \w+ \d+\s+\d+:\d+:\d+\.\d+)\s+\[\d+\]\s+0x1569.*?Subscription ID = (?P<subscription_id>\d+).*?Sequence Number = (?P<sequence_number>\d+).*?SSRC = (?P<ssrc>\d+).*?codecType = (?P<codec_type>\w+).*?LossType = (?P<loss_type>[\w\s]+).*?Total Packets Count = (?P<total_packets_count>\d+)'
-        pattern = r'.*?0x1831.*?Subscription ID = (?P<subscription_id>\d+).*?Direction = (?P<direction>\w+).*?End Cause = (?P<end_cause>[A-Z\s]+)\n.*?Call Setup Delay = (?P<call_setup_delay>\d+).*?RAT = (?P<rat>\w+).*?Client End Cause = (?P<client_end_cause>[A-Z_]+)'
+    def extract_info(packet_text,config=None, entry=None):
+        pattern = r'.*?Subscription ID = (?P<subscription_id>\d+).*?Direction = (?P<Direction>\w+).*?End Cause = (?P<end_cause>[A-Z\s]+)\n.*?Call Setup Delay = (?P<call_setup_delay>\d+).*?RAT = (?P<rat>\w+).*?Client End Cause = (?P<client_end_cause>[A-Z_]+)'
+        match = re.search(pattern, packet_text, re.DOTALL)
 
-        match = re.match(pattern, lines, re.DOTALL)
         if match:
-            entry.update(match.groupdict())
-            # entry = match.groupdict()
-            # print(entry)
-            key_mapping = {
-                'subscription_id': config['Subscription ID']['DB Field'],
-                'end_cause': config['End Cause']['DB Field'],
-                'call_setup_delay': config['Call Setup Delay']['DB Field'],
-                'rat': config['RAT']['DB Field'],
-                'client_end_cause': config['Client End Cause']['DB Field']
-
-            }
-
-
-            # mapped_entry = {key_mapping[key]: value for key, value in entry.items() if key in key_mapping}
-            mapped_entry = {key_mapping.get(key,key): value for key, value in entry.items()}
-            if '__collection' in config:
-                mapped_entry["__collection"] = config.get('__collection')
-            if '__frequency' in config:
-                mapped_entry["__frequency"] = config.get('__frequency')
-            if '__cell' in config:
-                mapped_entry["__cell"] = config.get("__cell")
-            if "Packet_Type" in config:
-                mapped_entry["Packet_Type"] = mapped_entry["direction"]
-                mapped_entry.pop("direction", None)
-            if '__Raw_Data' in config:
-                mapped_entry["__Raw_Data"] = config.get('__Raw_Data')
-            if '__KPI_type' in config:
-                mapped_entry["__KPI_type"] = config.get('__KPI_type')
-
-            # print(lines)
-            return mapped_entry
+            entry1 = match.groupdict()
+            data = simple_map_entry(entry1, config)
+            entry.update(data)
+            return entry
         else:
+            # Return None or an empty dictionary if there is no match
             return None

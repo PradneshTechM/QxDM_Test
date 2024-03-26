@@ -23,9 +23,10 @@
     "__frequency": "Event [One]",
     "__cell": "IMS",
     "Packet_Type": [
-      "if 'Packet_Type' in entry:",
-      "    entry['Packet_Type'] = entry['Direction']"
-    ],
+    "if 'Direction' in entry:",
+    "    entry['Packet_Type'] = entry['Direction']",
+    "    entry.pop('Direction')"
+  ],
     "__Raw_Data": true
   },
   "0x1831  IMS VoLTE Session End": {
@@ -56,7 +57,7 @@
     "__frequency": "Event [One]",
     "__cell": "IMS",
     "Packet_Type": [
-    "if 'Packet_Type' in entry:",
+    "if 'Direction' in entry:",
     "    entry['Packet_Type'] = entry['Direction']",
     "    entry.pop('Direction')"
   ],
@@ -1067,15 +1068,10 @@
       "DB Field": "MCC"
     },
     "MNC": {
-      "DB Field": "MNC"
-    },
-    "MCC & MNC": {
-      "DB Field": "MCCMNC",
+      "DB Field": "MNC",
       "__comments": [
-        "if 'MCC & MNC' in config:",
-        "mcc_mnc_field = config['MCC & MNC']['DB Field']",
-        "mcc_mnc_value = f'{entry['mcc']}-{entry['mnc']}'",
-        "entry[mcc_mnc_field] = mcc_mnc_value"
+        "if 'MCC' and 'MNC' in entry:",
+        " entry['MCCMNC'] = str(int(entry['MCC']) + int(entry['MNC']))"
       ]
     },
     "__collection": "Event",

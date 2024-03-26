@@ -7,7 +7,6 @@ import json
 import datetime
 from typing import List, Tuple, Any, Dict
 
-from parser.packet_0xB16D_processor import Packet_0xB16D
 from parser.packet_0xB193_processor import Packet_0xB193
 from parser.packet_0xB195_processor import Packet_0xB195
 from parser.packet_0xB172_processor import Packet_0xB172
@@ -1018,9 +1017,9 @@ class ParsedRawMessage:
             elif packet_name == '0xB139':
                 print('0xB139')
                 return Packet_0xB139(packet_text, config2['0xB139  LTE LL1 PUSCH Tx Report'], entry).extract_info()
-            # elif packet_name == '0xB060':
-            #     print('0xB060')
-            #     return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
+            elif packet_name == '0xB060':
+                print('0xB060')
+                return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
             elif packet_name == '0xB0EE':
                 print('0xB0EE')
                 return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE  LTE NAS EMM State'], entry)
