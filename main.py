@@ -1273,278 +1273,278 @@ class ParsedRawMessage:
                 config4 = json.load(f)
             with open('P5.json') as f:
                 config5 = json.load(f)
-            # if packet_name == '0xB0E5':
-            #     print("0xB0E5")
-            #     return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5  LTE NAS ESM Bearer Context Info'], entry)
-            # elif packet_name == "0x156E":
-            #     print("0x156E")
-            #     return Packet_0x156E.extract_info(packet_text, config['0x156E  IMS SIP Message'],entry)
-            # elif packet_name == "0x156A":
-            #     print("0x156A")
-            #     return Packet_0x156A.extract_info(packet_text, config['0x156A  IMS RTCP'],entry)
-            # elif packet_name == "0xB0C1":
-            #     print("0xB0C1")
-            #     return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1  LTE RRC MIB Message Log Packet'],entry)
-            # elif packet_name == "0xB0F7":
-            #     print("0xB0F7")
-            #     return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7  LTE NAS EMM RRC Service Request'],entry)
-            # elif packet_name == "0xB80B":
-            #     print("0xB80B")
-            #     return Packet_0xB80B.extract_info(packet_text, config['0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg'],entry)
-            # elif packet_name == "0xB800":
-            #     print("0xB800")
-            #     return Packet_0xB800.extract_info(packet_text, config['0xB800  NR5G NAS SM5G Plain OTA Incoming Msg'],entry)
-            # elif packet_name =="0xB0EC":
-            #     print("0xB0EC")
-            #     return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC  LTE NAS EMM Plain OTA Incoming Message"],entry)
-            # elif packet_name =="0xB0E4":
-            #     print("0xB0E4")
-            #     return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4  LTE NAS ESM Bearer Context State"],entry)
-            # elif packet_name =="0xB0C2":
-            #     print("0xB0C2")
-            #     return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2  LTE RRC Serving Cell Info Log Pkt"],entry)
-            # elif packet_name == "0x1832":
-            #     print("0x1832")
-            #     return Packet_0x1832.extract_info(packet_text, config["0x1832  IMS Registration"],entry)
-            # elif packet_name == '0xB822':
-            #     print("0xB822")
-            #     return Packet_0xB822.extract_info(packet_text, config['NR5G RRC MIB Info'], entry)
-            # elif packet_name == '0xB115':
-            #     print("0xB115")
-            #     return Packet_0xB115(packet_text, config['0xB115  LTE LL1 SSS Results'], entry).extract_info()
-            # elif packet_name == "0x1831":
-            #     print("0x1831")
-            #     return Packet_0x1831.extract_info(packet_text, config["0x1831  IMS VoLTE Session End"],entry)
-            # elif packet_name == "0x1830":
-            #     print("0x1830")
-            #     return Packet_0x1830.extract_info(packet_text, config["0x1830  IMS VoLTE Session Setup"],entry)
-            # elif packet_name == '0xB166':
-            #     print("0xB166")
-            #     return Packet_0xB166.extract_info(packet_text, config['0xB166  LTE PRACH Configuration'], entry)
-            # elif packet_name == '0xB168':
-            #     print("0xB168")
-            #     return Packet_0xB168.extract_info(packet_text, config['0xB168  LTE Random Access Response (MSG2) Report'], entry)
-            # elif packet_name == '0xB169':
-            #     print("0xB169")
-            #     return Packet_0xB169.extract_info(packet_text, config['0xB169  LTE UE Identification Message (MSG3) Report'], entry)
-            # elif packet_name == '0xB16A':
-            #     print("0xB16A")
-            #     return Packet_0xB16A.extract_info(packet_text, config['0xB16A  LTE Contention Resolution Message (MSG4) Report'], entry)
-            # elif packet_name == '0xB8D8':
-            #     print("0xB8D8")
-            #     return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8  NR5G LL1 LOG SERVING SNR'],entry)
-            # elif packet_name == '0xB167':
-            #     print("0xB167")
-            #     return Packet_0xB167.extract_info(packet_text, config["0xB167  LTE Random Access Request (MSG1) Report"],entry)
-            # elif packet_name == "0x1569":
-            #     print("0x1569")
-            #     return Packet_0x1569.extract_info(packet_text, config['0x1569  IMS RTP Packet Loss'], entry)
-            # elif packet_name == '0xB823':
-            #     print("0xB823")
-            #     return Packet_0xB823.extract_info(packet_text, config['0xB823  NR5G RRC Serving Cell Info'], entry)
-            # elif packet_name == '0xB887':
-            #     print('0xB887')
-            #     return Packet_0xB887(packet_text, config['0xB887  NR5G MAC PDSCH Status'], entry).extract_info()
-            # elif packet_name == '0xB801':
-            #     print('0xB801')
-            #     return Packet_0xB801.extract_info(packet_text, config["0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg"], entry)
-            # elif packet_name == '0xB80A':
-            #     print('0xB80A')
-            #     return Packet_0xB80A.extract_info(packet_text, config["0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg"], entry)
-            # elif packet_name == '0xB825':
-            #     print('0xB825')
-            #     return Packet_0xB825.extract_info(packet_text, config["0xB825  NR5G RRC Configuration Info"], entry)
-            # elif packet_name == "0xB97F":
-            #     print("0xB97F")
-            #     return Packet_0xB97F(packet_text, config['0xB97F  NR5G ML1 Searcher Measurement Database Update Ext'], entry).extract_info()
-            #     # entry,table_lines = Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
-            #     # return _tables(table_lines, entry)
-            # elif packet_name == '0xB8A7':
-            #     print('0xB8A7')
-            #     return Packet_0xB8A7(packet_text, config['0xB8A7  NR5G MAC CSF Report'], entry).extract_info()
-            # elif packet_name == '0xB827':
-            #     print('0xB827')
-            #     return Packet_0xB827(packet_text, config['0xB827  NR5G RRC PLMN Search Request'], entry).extract_info()
-            # elif packet_name == '0xB18F':
-            #     print('0xB18F')
-            #     return Packet_0xB18F(packet_text, config['0xB18F  LTE ML1 AdvRx IC Cell List'], entry).extract_info()
-            # elif packet_name == '0xB821':
-            #     print('0xB821')
-            #     return Packet_0xB821.extract_info(packet_text, config['0xB821  NR5G RRC OTA Packet'], entry)
-            # elif packet_name == '0xB0C0':
-            #     print('0xB0C0')
-            #     return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0   LTE RRC OTA Packet'], entry)
-            # elif packet_name == '0xB113':
-            #     print('0xB113')
-            #     return Packet_0xB113(packet_text, config['0xB113  LTE LL1 PSS Results'], entry).extract_info()
-            # elif packet_name == '0xB171':
-            #     print('0xB171')
-            #     return Packet_0xB171(packet_text, config['0xB171  LTE SRS Power Control Report'], entry).extract_info()
-            # elif packet_name == '0xB18E':
-            #     print('0xB18E')
-            #     return Packet_0xB18E(packet_text, config['0xB18E  LTE ML1 System Scan Results'], entry).extract_info()
-            # elif packet_name == '0xB196':
-            #     print('0xB196')
-            #     return Packet_0xB196(packet_text, config['0xB196  LTE ML1 Cell Measurement Results'], entry).extract_info()
-            # elif packet_name == '0xB88A':
-            #     print('0xB88A')
-            #     return Packet_0xB88A.extract_info(packet_text, config2['0xB88A  NR5G MAC RACH Attempt'], entry)
-            # elif packet_name == '0xB828':
-            #     print('0xB828')
-            #     return Packet_0xB828(packet_text, config2['0xB828  NR5G RRC PLMN Search Response'], entry).extract_info()
-            # elif packet_name == '0xB970':
-            #     print('0xB970')
-            #     return Packet_0xB970.extract_info(packet_text, config2['0xB970  NR5G ML1 Searcher Idle S Criteria'], entry)
-            # elif packet_name == '0xB883':
-            #     print('0xB883')
-            #     return Packet_0xB883(packet_text, config2['0xB883  NR5G MAC UL Physical Channel Schedule Report'], entry).extract_info()
-            # elif packet_name == '0xB884':
-            #     print('0xB884')
-            #     return Packet_0xB884(packet_text, config2['0xB884  NR5G MAC UL Physical Channel Power Control'], entry).extract_info()
-            # elif packet_name == '0xB889':
-            #     print('0xB889')
-            #     return Packet_0xB889(packet_text, config2['0xB889  NR5G MAC RACH Trigger'], entry).extract_info()
-            # elif packet_name == '0xB173':
-            #     print('0xB173')
-            #     return Packet_0xB173(packet_text, config2['0xB173 LTE PDSCH Stat Indication'], entry).extract_info()
-            # elif packet_name == '0xB176':
-            #     print('0xB176')
-            #     return Packet_0xB176.extract_info(packet_text, config2['0xB176  LTE Initial Acquisition Results'], entry)
-            # elif packet_name == '0xB179':
-            #     print('0xB179')
-            #     return Packet_0xB179.extract_info(packet_text, config2['0xB179  LTE ML1 Connected Mode LTE Intra-Freq Meas Results'], entry)
-            # elif packet_name == '0xB17E':
-            #     print('0xB17E')
-            #     return Packet_0xB17E.extract_info(packet_text, config2['0xB17E  LTE ML1 UE Mobility State change'], entry)
-            # elif packet_name == '0xB181':
-            #     print('0xB181')
-            #     return Packet_0xB181.extract_info(packet_text, config2['0xB181  LTE ML1 Intra Frequency Cell Reselection'], entry)
-            # elif packet_name == '0xB186':
-            #     print('0xB186')
-            #     return Packet_0xB186.extract_info(packet_text, config2['0xB186  LTE ML1 Reselection Candidates'], entry)
-            # elif packet_name == '0xB192':
-            #     print('0xB192')
-            #     return Packet_0xB192(packet_text, config2['0xB192  LTE ML1 Neighbor Cell Meas Request/Response'], entry).extract_info()
-            # elif packet_name == '0x17F2':
-            #     print('0x17F2')
-            #     return Packet_0x17F2.extract_info(packet_text, config2['0x17F2  IMS Voice Call Statistics'], entry)
-            # elif packet_name == '0x1D4D':
-            #     print('0x1D4D')
-            #     return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D  IMS CALL SUMMARY STATS'], entry)
-            # elif packet_name == '0xB16F':
-            #     print('0xB16F')
-            #     return Packet_0xB16F(packet_text, config2['0xB16F  LTE PUCCH Power Control'], entry).extract_info()
-            # elif packet_name == '0xB0E3':
-            #     print('0xB0E3')
-            #     return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3  LTE NAS ESM Plain OTA Outgoing Message'], entry)
-            # elif packet_name == '0xB0E2':
-            #     print('0xB0E2')
-            #     return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2  LTE NAS ESM Plain OTA Incoming Message'], entry)
-            # elif packet_name == '0xB808':
-            #     print('0xB808')
-            #     return Packet_0xB808.extract_info(packet_text, config2['0xB808  NR5G NAS MM5G Security Protected OTA Incoming Msg'], entry)
-            # elif packet_name == '0xB809':
-            #     print('0xB809')
-            #     return Packet_0xB809.extract_info(packet_text, config2['0xB809  NR5G NAS MM5G Security Protected OTA Outgoing Msg'], entry)
-            # elif packet_name == '0xB16E':
-            #     print('0xB16E')
-            #     return Packet_0xB16E(packet_text, config2['0xB16E  LTE PUSCH Power Control'], entry).extract_info()
-            # elif packet_name == '0xB139':
-            #     print('0xB139')
-            #     return Packet_0xB139(packet_text, config2['0xB139  LTE LL1 PUSCH Tx Report'], entry).extract_info()
-            # elif packet_name == '0xB060':
-            #     print('0xB060')
-            #     return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
-            # elif packet_name == '0xB0EE':
-            #     print('0xB0EE')
-            #     return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE  LTE NAS EMM State'], entry)
-            # elif packet_name == '0xB14D':
-            #     print('0xB14D')
-            #     return Packet_0xB14D.extract_info(packet_text, config3['0xB14D  LTE LL1 PUCCH CSF'], entry)
-            if packet_name == '0xB132':
+            if packet_name == '0xB0E5':
+                print("0xB0E5")
+                return Packet_0xB0E5.extract_info(packet_text, config['0xB0E5  LTE NAS ESM Bearer Context Info'], entry)
+            elif packet_name == "0x156E":
+                print("0x156E")
+                return Packet_0x156E.extract_info(packet_text, config['0x156E  IMS SIP Message'],entry)
+            elif packet_name == "0x156A":
+                print("0x156A")
+                return Packet_0x156A.extract_info(packet_text, config['0x156A  IMS RTCP'],entry)
+            elif packet_name == "0xB0C1":
+                print("0xB0C1")
+                return Packet_0xB0C1.extract_info(packet_text, config['0xB0C1  LTE RRC MIB Message Log Packet'],entry)
+            elif packet_name == "0xB0F7":
+                print("0xB0F7")
+                return Packet_0xB0F7.extract_info(packet_text, config['0xB0F7  LTE NAS EMM RRC Service Request'],entry)
+            elif packet_name == "0xB80B":
+                print("0xB80B")
+                return Packet_0xB80B.extract_info(packet_text, config['0xB80B  NR5G NAS MM5G Plain OTA Outgoing Msg'],entry)
+            elif packet_name == "0xB800":
+                print("0xB800")
+                return Packet_0xB800.extract_info(packet_text, config['0xB800  NR5G NAS SM5G Plain OTA Incoming Msg'],entry)
+            elif packet_name =="0xB0EC":
+                print("0xB0EC")
+                return Packet_0xB0EC.extract_info(packet_text, config["0xB0EC  LTE NAS EMM Plain OTA Incoming Message"],entry)
+            elif packet_name =="0xB0E4":
+                print("0xB0E4")
+                return Packet_0xB0E4.extract_info(packet_text, config["0xB0E4  LTE NAS ESM Bearer Context State"],entry)
+            elif packet_name =="0xB0C2":
+                print("0xB0C2")
+                return Packet_0xB0C2.extract_info(packet_text, config["0xB0C2  LTE RRC Serving Cell Info Log Pkt"],entry)
+            elif packet_name == "0x1832":
+                print("0x1832")
+                return Packet_0x1832.extract_info(packet_text, config["0x1832  IMS Registration"],entry)
+            elif packet_name == '0xB822':
+                print("0xB822")
+                return Packet_0xB822.extract_info(packet_text, config['NR5G RRC MIB Info'], entry)
+            elif packet_name == '0xB115':
+                print("0xB115")
+                return Packet_0xB115(packet_text, config['0xB115  LTE LL1 SSS Results'], entry).extract_info()
+            elif packet_name == "0x1831":
+                print("0x1831")
+                return Packet_0x1831.extract_info(packet_text, config["0x1831  IMS VoLTE Session End"],entry)
+            elif packet_name == "0x1830":
+                print("0x1830")
+                return Packet_0x1830.extract_info(packet_text, config["0x1830  IMS VoLTE Session Setup"],entry)
+            elif packet_name == '0xB166':
+                print("0xB166")
+                return Packet_0xB166.extract_info(packet_text, config['0xB166  LTE PRACH Configuration'], entry)
+            elif packet_name == '0xB168':
+                print("0xB168")
+                return Packet_0xB168.extract_info(packet_text, config['0xB168  LTE Random Access Response (MSG2) Report'], entry)
+            elif packet_name == '0xB169':
+                print("0xB169")
+                return Packet_0xB169.extract_info(packet_text, config['0xB169  LTE UE Identification Message (MSG3) Report'], entry)
+            elif packet_name == '0xB16A':
+                print("0xB16A")
+                return Packet_0xB16A.extract_info(packet_text, config['0xB16A  LTE Contention Resolution Message (MSG4) Report'], entry)
+            elif packet_name == '0xB8D8':
+                print("0xB8D8")
+                return Packet_0xB8D8.extract_info(packet_text, config['0xB8D8  NR5G LL1 LOG SERVING SNR'],entry)
+            elif packet_name == '0xB167':
+                print("0xB167")
+                return Packet_0xB167.extract_info(packet_text, config["0xB167  LTE Random Access Request (MSG1) Report"],entry)
+            elif packet_name == "0x1569":
+                print("0x1569")
+                return Packet_0x1569.extract_info(packet_text, config['0x1569  IMS RTP Packet Loss'], entry)
+            elif packet_name == '0xB823':
+                print("0xB823")
+                return Packet_0xB823.extract_info(packet_text, config['0xB823  NR5G RRC Serving Cell Info'], entry)
+            elif packet_name == '0xB887':
+                print('0xB887')
+                return Packet_0xB887(packet_text, config['0xB887  NR5G MAC PDSCH Status'], entry).extract_info()
+            elif packet_name == '0xB801':
+                print('0xB801')
+                return Packet_0xB801.extract_info(packet_text, config["0xB801  NR5G NAS SM5G Plain OTA Outgoing Msg"], entry)
+            elif packet_name == '0xB80A':
+                print('0xB80A')
+                return Packet_0xB80A.extract_info(packet_text, config["0xB80A  NR5G NAS MM5G Plain OTA Incoming Msg"], entry)
+            elif packet_name == '0xB825':
+                print('0xB825')
+                return Packet_0xB825.extract_info(packet_text, config["0xB825  NR5G RRC Configuration Info"], entry)
+            elif packet_name == "0xB97F":
+                print("0xB97F")
+                return Packet_0xB97F(packet_text, config['0xB97F  NR5G ML1 Searcher Measurement Database Update Ext'], entry).extract_info()
+                # entry,table_lines = Packet_0xB825.extract_info(packet_text, config["0xB825 -- PCC -- NSA"], entry)
+                # return _tables(table_lines, entry)
+            elif packet_name == '0xB8A7':
+                print('0xB8A7')
+                return Packet_0xB8A7(packet_text, config['0xB8A7  NR5G MAC CSF Report'], entry).extract_info()
+            elif packet_name == '0xB827':
+                print('0xB827')
+                return Packet_0xB827(packet_text, config['0xB827  NR5G RRC PLMN Search Request'], entry).extract_info()
+            elif packet_name == '0xB18F':
+                print('0xB18F')
+                return Packet_0xB18F(packet_text, config['0xB18F  LTE ML1 AdvRx IC Cell List'], entry).extract_info()
+            elif packet_name == '0xB821':
+                print('0xB821')
+                return Packet_0xB821.extract_info(packet_text, config['0xB821  NR5G RRC OTA Packet'], entry)
+            elif packet_name == '0xB0C0':
+                print('0xB0C0')
+                return Packet_0xB0C0.extract_info(packet_text, config['0xB0C0   LTE RRC OTA Packet'], entry)
+            elif packet_name == '0xB113':
+                print('0xB113')
+                return Packet_0xB113(packet_text, config['0xB113  LTE LL1 PSS Results'], entry).extract_info()
+            elif packet_name == '0xB171':
+                print('0xB171')
+                return Packet_0xB171(packet_text, config['0xB171  LTE SRS Power Control Report'], entry).extract_info()
+            elif packet_name == '0xB18E':
+                print('0xB18E')
+                return Packet_0xB18E(packet_text, config['0xB18E  LTE ML1 System Scan Results'], entry).extract_info()
+            elif packet_name == '0xB196':
+                print('0xB196')
+                return Packet_0xB196(packet_text, config['0xB196  LTE ML1 Cell Measurement Results'], entry).extract_info()
+            elif packet_name == '0xB88A':
+                print('0xB88A')
+                return Packet_0xB88A.extract_info(packet_text, config2['0xB88A  NR5G MAC RACH Attempt'], entry)
+            elif packet_name == '0xB828':
+                print('0xB828')
+                return Packet_0xB828(packet_text, config2['0xB828  NR5G RRC PLMN Search Response'], entry).extract_info()
+            elif packet_name == '0xB970':
+                print('0xB970')
+                return Packet_0xB970.extract_info(packet_text, config2['0xB970  NR5G ML1 Searcher Idle S Criteria'], entry)
+            elif packet_name == '0xB883':
+                print('0xB883')
+                return Packet_0xB883(packet_text, config2['0xB883  NR5G MAC UL Physical Channel Schedule Report'], entry).extract_info()
+            elif packet_name == '0xB884':
+                print('0xB884')
+                return Packet_0xB884(packet_text, config2['0xB884  NR5G MAC UL Physical Channel Power Control'], entry).extract_info()
+            elif packet_name == '0xB889':
+                print('0xB889')
+                return Packet_0xB889(packet_text, config2['0xB889  NR5G MAC RACH Trigger'], entry).extract_info()
+            elif packet_name == '0xB173':
+                print('0xB173')
+                return Packet_0xB173(packet_text, config2['0xB173 LTE PDSCH Stat Indication'], entry).extract_info()
+            elif packet_name == '0xB176':
+                print('0xB176')
+                return Packet_0xB176.extract_info(packet_text, config2['0xB176  LTE Initial Acquisition Results'], entry)
+            elif packet_name == '0xB179':
+                print('0xB179')
+                return Packet_0xB179.extract_info(packet_text, config2['0xB179  LTE ML1 Connected Mode LTE Intra-Freq Meas Results'], entry)
+            elif packet_name == '0xB17E':
+                print('0xB17E')
+                return Packet_0xB17E.extract_info(packet_text, config2['0xB17E  LTE ML1 UE Mobility State change'], entry)
+            elif packet_name == '0xB181':
+                print('0xB181')
+                return Packet_0xB181.extract_info(packet_text, config2['0xB181  LTE ML1 Intra Frequency Cell Reselection'], entry)
+            elif packet_name == '0xB186':
+                print('0xB186')
+                return Packet_0xB186.extract_info(packet_text, config2['0xB186  LTE ML1 Reselection Candidates'], entry)
+            elif packet_name == '0xB192':
+                print('0xB192')
+                return Packet_0xB192(packet_text, config2['0xB192  LTE ML1 Neighbor Cell Meas Request/Response'], entry).extract_info()
+            elif packet_name == '0x17F2':
+                print('0x17F2')
+                return Packet_0x17F2.extract_info(packet_text, config2['0x17F2  IMS Voice Call Statistics'], entry)
+            elif packet_name == '0x1D4D':
+                print('0x1D4D')
+                return Packet_0x1D4D.extract_info(packet_text, config2['0x1D4D  IMS CALL SUMMARY STATS'], entry)
+            elif packet_name == '0xB16F':
+                print('0xB16F')
+                return Packet_0xB16F(packet_text, config2['0xB16F  LTE PUCCH Power Control'], entry).extract_info()
+            elif packet_name == '0xB0E3':
+                print('0xB0E3')
+                return Packet_0xB0E3.extract_info(packet_text, config2['0xB0E3  LTE NAS ESM Plain OTA Outgoing Message'], entry)
+            elif packet_name == '0xB0E2':
+                print('0xB0E2')
+                return Packet_0xB0E2.extract_info(packet_text, config2['0xB0E2  LTE NAS ESM Plain OTA Incoming Message'], entry)
+            elif packet_name == '0xB808':
+                print('0xB808')
+                return Packet_0xB808.extract_info(packet_text, config2['0xB808  NR5G NAS MM5G Security Protected OTA Incoming Msg'], entry)
+            elif packet_name == '0xB809':
+                print('0xB809')
+                return Packet_0xB809.extract_info(packet_text, config2['0xB809  NR5G NAS MM5G Security Protected OTA Outgoing Msg'], entry)
+            elif packet_name == '0xB16E':
+                print('0xB16E')
+                return Packet_0xB16E(packet_text, config2['0xB16E  LTE PUSCH Power Control'], entry).extract_info()
+            elif packet_name == '0xB139':
+                print('0xB139')
+                return Packet_0xB139(packet_text, config2['0xB139  LTE LL1 PUSCH Tx Report'], entry).extract_info()
+            elif packet_name == '0xB060':
+                print('0xB060')
+                return Packet_0xB060(packet_text, config2['0xB060  LTE MAC Configuration'], entry).extract_info()
+            elif packet_name == '0xB0EE':
+                print('0xB0EE')
+                return Packet_0xB0EE.extract_info(packet_text, config3['0xB0EE  LTE NAS EMM State'], entry)
+            elif packet_name == '0xB14D':
+                print('0xB14D')
+                return Packet_0xB14D.extract_info(packet_text, config3['0xB14D  LTE LL1 PUCCH CSF'], entry)
+            elif packet_name == '0xB132':
                 print('0xB132')
                 return Packet_0xB132(packet_text, config3['0xB132  LTE LL1 PDSCH Decoding Results'], entry).extract_info()
-            # elif packet_name == '0xB130':
-            #     print('0xB130')
-            #     return Packet_0xB130(packet_text, config3['0xB130  LTE LL1 PDCCH Decoding Result'], entry).extract_info()
-            # elif packet_name == '0xB126':
-            #     print('0xB126')
-            #     return Packet_0xB126(packet_text, config3['0xB126  LTE LL1 PDSCH Demapper Configuration'], entry).extract_info()
-            # elif packet_name == '0xB16B':
-            #     print('0xB16B')
-            #     return Packet_0xB16B(packet_text, config3['0xB16B  LTE PDCCH-PHICH Indication Report'], entry).extract_info()
-            # elif packet_name == '0xB063':
-            #     print('0xB063')
-            #     return Packet_0xB063(packet_text, config3['0xB063  LTE MAC DL Transport Block'], entry).extract_info()
-            # elif packet_name == '0xB0A5':
-            #     print('0xB0A5')
-            #     return Packet_0xB0A5(packet_text, config3['0xB0A5  LTE PDCP DL SRB Integrity Data PDU'], entry).extract_info()
-            # elif packet_name == '0xB0A1':
-            #     print('0xB0A1')
-            #     return Packet_0xB0A1(packet_text, config3['0xB0A1  LTE PDCP DL Data PDU'], entry).extract_info()
-            # elif packet_name == '0xB06E':
-            #     print('0xB06E')
-            #     return Packet_0xB06E(packet_text, config3['0xB06E  LTE MAC DL RAR Transport Block'], entry).extract_info()
-            # elif packet_name == '0xB062':
-            #     print('0xB062')
-            #     return Packet_0xB062.extract_info(packet_text, config3['0xB062  LTE MAC Rach Attempt'], entry)
-            # elif packet_name == '0xB1DA':
-            #     print('0xB1DA')
-            #     return Packet_0xB1DA(packet_text, config3['0xB1DA  LTE ML1 Antenna Switch Diversity'], entry).extract_info()
-            # elif packet_name == '0xB081':
-            #     print('0xB081')
-            #     return Packet_0xB081(packet_text, config3['0xB081  LTE RLC DL Config Log packet'], entry).extract_info()
-            # elif packet_name == '0xB13C':
-            #     print('0xB13C')
-            #     return Packet_0xB13C(packet_text, config3['0xB13C  LTE LL1 PUCCH Tx Report'], entry).extract_info()
-            # elif packet_name == '0xB16C':
-            #     print('0xB16C')
-            #     return Packet_0xB16C(packet_text, config3['0xB16C  LTE DCI Information Report'], entry).extract_info()
-            # elif packet_name == '0xB064':
-            #     print('0xB064')
-            #     return Packet_0xB064(packet_text, config3['0xB064  LTE MAC UL Transport Block'], entry).extract_info()
-            # elif packet_name == '0xB0EF':
-            #     print('0xB0EF')
-            #     return Packet_0xB0EF.extract_info(packet_text, config3['0xB0EF  LTE NAS EMM USIM card mode'], entry)
-            # elif packet_name == '0xB0B5':
-            #     print('0xB0B5')
-            #     return Packet_0xB0B5(packet_text, config3['0xB0B5  LTE PDCP UL SRB Integrity Data PDU'], entry).extract_info()
-            # elif packet_name == '0xB0B4':
-            #     print('0xB0B4')
-            #     return Packet_0xB0B4(packet_text, config3['0xB0B4  LTE PDCP UL Statistics Pkt'], entry).extract_info()
-            # elif packet_name == '0xB0B1':
-            #     print('0xB0B1')
-            #     return Packet_0xB0B1(packet_text, config3['0xB0B1  LTE PDCP UL Data PDU'], entry).extract_info()
-            # elif packet_name == '0x1568':
-            #     print('0x1568')
-            #     return Packet_0x1568.extract_info(packet_text, config3['0x1568  IMS RTP SN and Payload'], entry)
-            # elif packet_name == '0xB061':
-            #     print('0xB061')
-            #     return Packet_0xB061.extract_info(packet_text, config3['0xB061  LTE MAC Rach Trigger'], entry)
-            # elif packet_name == '0xB16D':
-            #     print('0xB16D')
-            #     return Packet_0xB16D.extract_info(packet_text, config4['0xB16D  LTE GM TX Report'], entry)
-            # elif packet_name == '0xB172':
-            #     print('0xB172')
-            #     return Packet_0xB172(packet_text, config4['0xB172  LTE Uplink PKT Build Indication'], entry).extract_info()
-            # elif packet_name == '0xB195':
-            #     print('0xB195')
-            #     return Packet_0xB195.extract_info(packet_text, config4['0xB195  LTE ML1 Connected Neighbor Meas Request/Response'], entry)
-            # elif packet_name == '0xB840':
-            #     print('0xB840')
-            #     return Packet_0xB840.extract_info(packet_text, config4['0xB840  NR5G PDCP DL Data Pdu'], entry)
-            # elif packet_name == '0xB841':
-            #     print('0xB841')
-            #     return Packet_0xB841.extract_info(packet_text, config4['0xB841  NR5G PDCP DL Control Pdu'], entry)
-            # elif packet_name == '0xB873':
-            #     print('0xB873')
-            #     return Packet_0xB873.extract_info(packet_text, config4['0xB873  NR5G L2 UL BSR'], entry)
-            # elif packet_name == '0xB111':
-            #     print('0xB111')
-            #     return Packet_0xB111(packet_text, config5['0xB111  LTE LL1 Rx Agc Log'], entry).extract_info()
-            # elif packet_name == '0xB193':
-            #     print('0xB193')
-            #     return Packet_0xB193.extract_info(packet_text, config3['0xB193  LTE ML1 Serving Cell Meas Response'], entry)
+            elif packet_name == '0xB130':
+                print('0xB130')
+                return Packet_0xB130(packet_text, config3['0xB130  LTE LL1 PDCCH Decoding Result'], entry).extract_info()
+            elif packet_name == '0xB126':
+                print('0xB126')
+                return Packet_0xB126(packet_text, config3['0xB126  LTE LL1 PDSCH Demapper Configuration'], entry).extract_info()
+            elif packet_name == '0xB16B':
+                print('0xB16B')
+                return Packet_0xB16B(packet_text, config3['0xB16B  LTE PDCCH-PHICH Indication Report'], entry).extract_info()
+            elif packet_name == '0xB063':
+                print('0xB063')
+                return Packet_0xB063(packet_text, config3['0xB063  LTE MAC DL Transport Block'], entry).extract_info()
+            elif packet_name == '0xB0A5':
+                print('0xB0A5')
+                return Packet_0xB0A5(packet_text, config3['0xB0A5  LTE PDCP DL SRB Integrity Data PDU'], entry).extract_info()
+            elif packet_name == '0xB0A1':
+                print('0xB0A1')
+                return Packet_0xB0A1(packet_text, config3['0xB0A1  LTE PDCP DL Data PDU'], entry).extract_info()
+            elif packet_name == '0xB06E':
+                print('0xB06E')
+                return Packet_0xB06E(packet_text, config3['0xB06E  LTE MAC DL RAR Transport Block'], entry).extract_info()
+            elif packet_name == '0xB062':
+                print('0xB062')
+                return Packet_0xB062.extract_info(packet_text, config3['0xB062  LTE MAC Rach Attempt'], entry)
+            elif packet_name == '0xB1DA':
+                print('0xB1DA')
+                return Packet_0xB1DA(packet_text, config3['0xB1DA  LTE ML1 Antenna Switch Diversity'], entry).extract_info()
+            elif packet_name == '0xB081':
+                print('0xB081')
+                return Packet_0xB081(packet_text, config3['0xB081  LTE RLC DL Config Log packet'], entry).extract_info()
+            elif packet_name == '0xB13C':
+                print('0xB13C')
+                return Packet_0xB13C(packet_text, config3['0xB13C  LTE LL1 PUCCH Tx Report'], entry).extract_info()
+            elif packet_name == '0xB16C':
+                print('0xB16C')
+                return Packet_0xB16C(packet_text, config3['0xB16C  LTE DCI Information Report'], entry).extract_info()
+            elif packet_name == '0xB064':
+                print('0xB064')
+                return Packet_0xB064(packet_text, config3['0xB064  LTE MAC UL Transport Block'], entry).extract_info()
+            elif packet_name == '0xB0EF':
+                print('0xB0EF')
+                return Packet_0xB0EF.extract_info(packet_text, config3['0xB0EF  LTE NAS EMM USIM card mode'], entry)
+            elif packet_name == '0xB0B5':
+                print('0xB0B5')
+                return Packet_0xB0B5(packet_text, config3['0xB0B5  LTE PDCP UL SRB Integrity Data PDU'], entry).extract_info()
+            elif packet_name == '0xB0B4':
+                print('0xB0B4')
+                return Packet_0xB0B4(packet_text, config3['0xB0B4  LTE PDCP UL Statistics Pkt'], entry).extract_info()
+            elif packet_name == '0xB0B1':
+                print('0xB0B1')
+                return Packet_0xB0B1(packet_text, config3['0xB0B1  LTE PDCP UL Data PDU'], entry).extract_info()
+            elif packet_name == '0x1568':
+                print('0x1568')
+                return Packet_0x1568.extract_info(packet_text, config3['0x1568  IMS RTP SN and Payload'], entry)
+            elif packet_name == '0xB061':
+                print('0xB061')
+                return Packet_0xB061.extract_info(packet_text, config3['0xB061  LTE MAC Rach Trigger'], entry)
+            elif packet_name == '0xB16D':
+                print('0xB16D')
+                return Packet_0xB16D.extract_info(packet_text, config4['0xB16D  LTE GM TX Report'], entry)
+            elif packet_name == '0xB172':
+                print('0xB172')
+                return Packet_0xB172(packet_text, config4['0xB172  LTE Uplink PKT Build Indication'], entry).extract_info()
+            elif packet_name == '0xB195':
+                print('0xB195')
+                return Packet_0xB195.extract_info(packet_text, config4['0xB195  LTE ML1 Connected Neighbor Meas Request/Response'], entry)
+            elif packet_name == '0xB840':
+                print('0xB840')
+                return Packet_0xB840.extract_info(packet_text, config4['0xB840  NR5G PDCP DL Data Pdu'], entry)
+            elif packet_name == '0xB841':
+                print('0xB841')
+                return Packet_0xB841.extract_info(packet_text, config4['0xB841  NR5G PDCP DL Control Pdu'], entry)
+            elif packet_name == '0xB873':
+                print('0xB873')
+                return Packet_0xB873.extract_info(packet_text, config4['0xB873  NR5G L2 UL BSR'], entry)
+            elif packet_name == '0xB111':
+                print('0xB111')
+                return Packet_0xB111(packet_text, config5['0xB111  LTE LL1 Rx Agc Log'], entry).extract_info()
+            elif packet_name == '0xB193':
+                print('0xB193')
+                return Packet_0xB193.extract_info(packet_text, config3['0xB193  LTE ML1 Serving Cell Meas Response'], entry)
         # start here
 
         # remove empty (only whitespace) lines
@@ -3182,8 +3182,114 @@ TB Info Record[27]
       --------------------------------------------------------------------------------------------------------------------------------------------------------------
       |  0|     0|         0|            50|    0|      0|          0|             50|     0|        42310| 1|      3|  1|   3HI| 1|   0|      0|      1|     0|  2|
 
-                               """)
+                           """)
         messages.append(msg)
+        msg = ParsedRawMessage(index=0, packet_type="0xB132", packet_length=100,
+                               name="LTE LL1 PDSCH Decoding Results",
+                               subtitle="", datetime="2024 Jan 19  21:46:22.929",
+                               packet_text=
+                               """2024 Jan 19  21:46:22.929  [7E]  0xB132  LTE LL1 PDSCH Decoding Results
+Subscription ID = 1
+Version = 168
+Length = 304
+Drop Cnt = 0
+Num Records = 2
+Common Static Config
+   Context = LTE
+   Variant Id = 0
+   CxN Index = 0
+   Cell Id = 147
+   EARFCN = 700
+   Carrier Index = 0
+   Variant Carrier Index = 0
+   System BW = 20
+   NIR = 228384
+   Num HARQ = 8
+   UE Category = 20
+   TX Mode = TM4_CL_SM
+   Num eNb Tx Ant = 4
+   Four_Layer_Capability = true
+TB Info Record[0]
+   TB Top
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |     |     |     |    |       |      |    |    |     |    |      |         |        |         |           |         |    |    |     |    |Harq|     |   |   |     |      |      |      |
+      |     |     |MVC  |    |       |      |    |    |     |    |      |         |        |         |           |         |    |IO  |     |Harq|IO  |Num  |   |   |     |      |      |      |
+      |     |     |Clock|    |       |Bypass|    |Num |Start|QREN|RX01  |CB Bundle|TB DMA  |         |           |         |IO  |ST  |Num  |IO  |ST  |Harq |RP |SF |RB   |SC    |TB Ext|CB    |
+      |Frame|SubFN|(MHz)|Rank|LLR BW |Decode|ITER|RX  |CB ID|BMSK|poolID|Size     |Budget  |Onld Size|Offld Size |L2 Mode  |Fail|Fail|IOVec|Fail|Fail|Iovec|Idx|Gap|Start|Index |Enable|Enable|
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  421|    8|  192|  R2|     6B|     0|   1| 2RX|    0|   2|     0|        1|    3778|        0|        408|   HEADER|   0|   0|    1|   0|   0|    1|  0|  0|    0|     0|  TRUE|  TRUE|
+
+   TB Config
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |          |    |      |     |      |   |      |        |     |    |        |               |         |      |Num     |  |      |        |        |Force  |      |Alt|Hi  |    |Excess  |      |Max|        |     |    |
+      |          |HARQ|TB    |CW   |      |Num|      |        |     |Num |NCB     |               |         |      |Channel |  |CB    |        |DMA TO  |HARQ   |Bypass|MCS|MGMT|Max |HI Init |Hi    |HI |TX      |NDI  |Code|
+      |RNTI      |ID  |Index |Index|Num CB|Lay|MCS   |MOD     |ReTx |ReTx|Prime   |Discard Mode   |QED Mode |Num RB|Bits    |RV|Size  |TB Size |Dur     |Offload|HARQ  |En |En  |Iter|State   |Base  |Low|Scheme  |Value|Rate|
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |         C|   0|     0|    0|     1| 1L|    19|   64QAM|  1st|   0|   17292|     NO_DISCARD|   NO_QED|    16|   11136| 0|   720|     717|2.1e+002|  FALSE| FALSE|  0|   0|17HI|       0|     0|  0|   CL_SP|    0|0.517|
+
+   TB
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Onload                                                        |TB Offload                                                       |                                                              |
+      |Excess    |          |            |                              |Excess    |          |            |                              |TB Decode                                                     |
+      |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |CB CRC Pass Bmsk         |Excess HI State |TB CRC     |TB Pass|
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |        50|      0xFF|        0xFF|            0x0000000000000000|        50|      0xFF|        0xFF|            0x0000000000000000|       0x0000000000000001|               0|   0x000000|      1|
+
+   TB Log Extend
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Ext 0   |TB Ext 1   |TB Ext 2   |TB Ext 3   |TB Ext 4   |TB Ext 5   |TB Ext 6   |TB Ext 7   |TB Ext 8   |TB Ext 9   |TB Ext 10  |TB Ext 11  |TB Ext 12  |
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      | 0x02D10F83| 0x00400740| 0x84080740| 0xB7191400| 0x40602140| 0x00000000| 0x00000000| 0x00000000| 0x00000000| 0x1C20B4CD| 0x07C23C14| 0x00034898| 0x00000000|
+
+   CB
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |   |                                      |                                          |CB Decode                                                             |
+      |   |CB Onload                             |CB Offload                                |             |  |       |   |      |  |    |       |       |Skip  |DHB|
+      |#  |On Dur|On Extract|On Time Remain|ON TO|Off Dur|Off Extract|Off Time Remain|Off TO|Energy Metric|ET|Min LLR|CRC|Num HI|HD|HARQ|CB Disc|CB Pass|Decode|IDX|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|     0|         0|            50|    0|      1|          0|             50|     0|       157167| 1|     99|  1|   3HI| 1|   0|      0|      1|     0|  0|
+
+TB Info Record[1]
+   TB Top
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |     |     |     |    |       |      |    |    |     |    |      |         |        |         |           |         |    |    |     |    |Harq|     |   |   |     |      |      |      |
+      |     |     |MVC  |    |       |      |    |    |     |    |      |         |        |         |           |         |    |IO  |     |Harq|IO  |Num  |   |   |     |      |      |      |
+      |     |     |Clock|    |       |Bypass|    |Num |Start|QREN|RX01  |CB Bundle|TB DMA  |         |           |         |IO  |ST  |Num  |IO  |ST  |Harq |RP |SF |RB   |SC    |TB Ext|CB    |
+      |Frame|SubFN|(MHz)|Rank|LLR BW |Decode|ITER|RX  |CB ID|BMSK|poolID|Size     |Budget  |Onld Size|Offld Size |L2 Mode  |Fail|Fail|IOVec|Fail|Fail|Iovec|Idx|Gap|Start|Index |Enable|Enable|
+      -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  421|    8|  192|  R2|     6B|     0|   1| 2RX|    0|   2|     0|        1|    3778|        0|        328|   HEADER|   0|   0|    1|   0|   0|    1|  0|  0|    0|     0|  TRUE|  TRUE|
+
+   TB Config
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |          |    |      |     |      |   |      |        |     |    |        |               |         |      |Num     |  |      |        |        |Force  |      |Alt|Hi  |    |Excess  |      |Max|        |     |    |
+      |          |HARQ|TB    |CW   |      |Num|      |        |     |Num |NCB     |               |         |      |Channel |  |CB    |        |DMA TO  |HARQ   |Bypass|MCS|MGMT|Max |HI Init |Hi    |HI |TX      |NDI  |Code|
+      |RNTI      |ID  |Index |Index|Num CB|Lay|MCS   |MOD     |ReTx |ReTx|Prime   |Discard Mode   |QED Mode |Num RB|Bits    |RV|Size  |TB Size |Dur     |Offload|HARQ  |En |En  |Iter|State   |Base  |Low|Scheme  |Value|Rate|
+      ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |         C|   0|     1|    1|     1| 1L|    15|   16QAM|  1st|   0|   13836|     NO_DISCARD|   NO_QED|    16|    7424| 0|   576|     573|2.1e+002|  FALSE| FALSE|  0|   0|17HI|       0|     0|  0|   CL_SP|    1|0.621|
+
+   TB
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Onload                                                        |TB Offload                                                       |                                                              |
+      |Excess    |          |            |                              |Excess    |          |            |                              |TB Decode                                                     |
+      |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |Time      |TB Pass HD|TB Pass HARQ|CB Timeout Status             |CB CRC Pass Bmsk         |Excess HI State |TB CRC     |TB Pass|
+      ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |        50|      0xFF|        0xFF|            0x0000000000000000|        50|      0xFF|        0xFF|            0x0000000000000000|       0x0000000000000001|               0|   0x000000|      1|
+
+   TB Log Extend
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |TB Ext 0   |TB Ext 1   |TB Ext 2   |TB Ext 3   |TB Ext 4   |TB Ext 5   |TB Ext 6   |TB Ext 7   |TB Ext 8   |TB Ext 9   |TB Ext 10  |TB Ext 11  |TB Ext 12  |
+      -------------------------------------------------------------------------------------------------------------------------------------------------------------
+      | 0x0240D983| 0x00400740| 0x84080740| 0xB7191700| 0x40502200| 0x00000000| 0x00000000| 0x00000000| 0x00000000| 0x2020BEF1| 0x07C24004| 0x00034898| 0x00000000|
+
+   CB
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |   |                                      |                                          |CB Decode                                                             |
+      |   |CB Onload                             |CB Offload                                |             |  |       |   |      |  |    |       |       |Skip  |DHB|
+      |#  |On Dur|On Extract|On Time Remain|ON TO|Off Dur|Off Extract|Off Time Remain|Off TO|Energy Metric|ET|Min LLR|CRC|Num HI|HD|HARQ|CB Disc|CB Pass|Decode|IDX|
+      --------------------------------------------------------------------------------------------------------------------------------------------------------------
+      |  0|     0|         0|            50|    0|      1|          0|             50|     0|       130383| 1|     11|  1|   1HI| 1|   0|      0|      1|     0|  1|""")
+        messages.append(msg)
+        
         msg = ParsedRawMessage(index=0, packet_type="0xB0EE", packet_length=100,
                                name="LTE NAS EMM State",
                                subtitle="", datetime="2024 Jan 15  07:18:07.713",
