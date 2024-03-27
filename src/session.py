@@ -94,6 +94,8 @@ class LogSession(Session):
                   traceback.print_exc()
                   sys.stderr.flush()
                   sys.stdout.flush()
+              finally:
+                f.close()
         
     print(self.packet_config_json)
     print(self.packet_types)
