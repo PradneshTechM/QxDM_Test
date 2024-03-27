@@ -1026,9 +1026,9 @@ class ParsedRawMessage:
             elif packet_name == '0xB14D':
                 print('0xB14D')
                 return Packet_0xB14D.extract_info(packet_text, config3['0xB14D  LTE LL1 PUCCH CSF'], entry)
-            # elif packet_name == '0xB132':
-            #     print('0xB132')
-            #     return Packet_0xB132(packet_text, config3['0xB132  LTE LL1 PDSCH Decoding Results'], entry).extract_info()
+            elif packet_name == '0xB132':
+                print('0xB132')
+                return Packet_0xB132(packet_text, config3['0xB132  LTE LL1 PDSCH Decoding Results'], entry).extract_info()
             elif packet_name == '0xB130':
                 print('0xB130')
                 return Packet_0xB130(packet_text, config3['0xB130  LTE LL1 PDCCH Decoding Result'], entry).extract_info()
