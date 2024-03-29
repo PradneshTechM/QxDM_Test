@@ -16,7 +16,6 @@ import threading
 import yaml
 import parser.main as parser
 from datetime import datetime
-from utils import unaware_datetime_to_utc
 
 import message
 from message import ParsedRawMessage
@@ -429,6 +428,11 @@ class QCATWorker(threading.Thread):
                         count += 1
                         
                         timestamp: datetime = payload["Time"]
+                        if(self.log_session.has_locations()):
+                            location = self.log_session.get_closest_location(timestamp)
+                            metadata["Longitude"] = location["longitude"]
+                            metadata["Latitude"] = location["latitude"]
+                            
                         # timestamp directly from QCAT is already in UTC
                         # timestamp_as_utc = unaware_datetime_to_utc(timestamp)
                         payload["Time"] = timestamp

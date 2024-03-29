@@ -7,6 +7,7 @@ from pymongo import MongoClient, GEO2D
 import traceback
 import json
 import re
+from utils import str_to_datetime
 
 from db import DB
 
@@ -41,6 +42,44 @@ class LogSession(Session):
   db_client: MongoClient = None
   packet_config_json: dict = {}
   packet_frequency: dict = {}
+  locations: List[dict] = []
+  
+  def set_locations(self, locations: dict[str, List[dict]]):
+    def map_locs(loc: dict):
+      return ({
+        "latitude": loc["latitude"],
+        "longitude": loc["longitude"],
+        "timestamp": str_to_datetime(loc["timestamp"]),
+      })
+    
+    device_locs = list(map(map_locs, locations["deviceLocations"]))
+    server_locs = list(map(map_locs, locations["serverLocations"]))
+    
+    self.locations = []
+    i = j = 0
+
+    while i < len(device_locs) and j < len(server_locs):
+      if device_locs[i]["timestamp"] < server_locs[j]["timestamp"]:
+        self.locations.append(device_locs[i])
+        i += 1
+      else:
+        self.locations.append(server_locs[j])
+        j += 1
+
+    while i < len(device_locs):
+      self.locations.append(device_locs[i])
+      i += 1
+
+    while j < len(server_locs):
+      self.locations.append(server_locs[j])
+      j += 1
+      
+  def has_locations(self) -> bool:
+    return len(self.locations) > 0 
+    
+  def get_closest_location(self, timestamp) -> dict:
+    closest = min(self.locations, key=lambda obj: abs(obj["timestamp"] - timestamp))
+    return closest
   
   def parse_config_json(self, packet_filter: list[str] | None):
     DOUBLE_SPACE = "  "

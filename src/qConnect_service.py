@@ -231,6 +231,11 @@ def QUTS_log_stop(sid, data):
       log_sessions[log_id].db = data['db']
       logging.info(f"Using custom db {data['db']}")
       sys.stdout.flush()
+    
+    if 'locations' in data:
+      log_sessions[log_id].set_locations(data['locations'])
+      logging.info(f"Using gps locations")
+      sys.stdout.flush()
       
     log_sessions[log_id].init_db_and_collection() 
 

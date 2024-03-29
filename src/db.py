@@ -86,12 +86,12 @@ class DB:
       # if log_session.config_file:
       #   metadata["_configFile"] = os.path.basename(log_session.config_file)
       # metadata["_filePath"] = os.path.basename(log_session.raw_logs[0])
-      if log_session.device:
-        if "location" in log_session.device: 
-          if "longitude" in log_session.device["location"] and log_session.device["location"]["longitude"] != 0:
-            metadata["Longitude"] = log_session.device["location"]["longitude"]
-          if "latitude" in log_session.device["location"] and log_session.device["location"]["latitude"] != 0:
-            metadata["Latitude"] = log_session.device["location"]["latitude"]
+      # if log_session.device:
+      #   if "location" in log_session.device: 
+      #     if "longitude" in log_session.device["location"] and log_session.device["location"]["longitude"] != 0:
+      #       metadata["Longitude"] = log_session.device["location"]["longitude"]
+      #     if "latitude" in log_session.device["location"] and log_session.device["location"]["latitude"] != 0:
+      #       metadata["Latitude"] = log_session.device["location"]["latitude"]
         # metadata["_server"] = {
         #   "url": log_session.app_url,
         #   "location": [log_session.device["location"]["longitude"] if "location" in log_session.device and "longitude" in log_session.device["location"] else 0,
@@ -124,6 +124,8 @@ class DB:
       return { **metadata, **log }
     
     deserialized_logs = list(map(deserialize, logs))
+    # print(deserialized_logs[len(deserialized_logs)-1])
+    # sys.stdout.flush()
     
     try:
       if(len(deserialized_logs) > 0):

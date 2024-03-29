@@ -119,7 +119,6 @@ demoRouter.post('/logs', (request, response) => {
   if (request.body.id === undefined) {
     return response.status(400).send({ error : 'missing id' })
   }
-  console.log(request.body)
   const data = {
     id: request.body.id,
     log_id: generateShortId(4),
@@ -143,6 +142,9 @@ demoRouter.delete('/logs/:log_id', (request, response) => {
   
   if(request.body && request.body.db) {
     data.db = request.body.db
+  }
+  if(request.body && request.body.locations) {
+    data.locations = request.body.locations
   }
   
   const socket = request.app.get('socketio')
