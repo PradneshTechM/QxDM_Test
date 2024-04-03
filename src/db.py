@@ -25,7 +25,10 @@ class DB:
         DB._DB_CLIENT = MongoClient("localhost", 27017)
       else:
         print(f'Initializing database instance @{DB._DB_HOST}:{DB._DB_PORT}')
-        DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT), username=DB._DB_USER, password=DB._DB_PASS) # authSource=DB._DB_NAME
+        if DB._DB_USER and DB._DB_PASS:
+          DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT), username=DB._DB_USER, password=DB._DB_PASS) # authSource=DB._DB_NAME
+        else:
+          DB._DB_CLIENT = MongoClient(DB._DB_HOST, int(DB._DB_PORT))
     if not DB._DB_INSTANCE:
       DB._DB_INSTANCE = DB._DB_CLIENT[DB._DB_NAME]
     print(f'Initialized database instance {DB._DB_NAME}')
@@ -33,7 +36,8 @@ class DB:
     self._create_indexes()
     
   def _create_indexes(self): 
-    DB._DB_INSTANCE[DB._DB_TABLE].create_index([("_server.location", GEO2D)])
+    # DB._DB_INSTANCE[DB._DB_TABLE].create_index([("_server.location", GEO2D)])
+    pass
     
   def get_instance():
     return DB._DB_INSTANCE

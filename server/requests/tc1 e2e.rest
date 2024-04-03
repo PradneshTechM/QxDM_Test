@@ -1,13 +1,13 @@
 # replace @hostname with the current server domain name
-@hostname = tm-reddemo08.oasisofsolution.com
+@hostname = localhost
 @port = 2000
-@protocol = https
+@protocol = http
 @host = {{hostname}}:{{port}}
-@device = N0NADA0108
+@device = N5MA270108
 @test_case = TC1
 @username = "xyz"
 @email = "ry@techm.com"
-@appUrl = http://tm-wind01.oasisofsolution.com/
+@appUrl = localhost
 ###
 
 # @name connect
