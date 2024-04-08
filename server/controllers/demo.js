@@ -6,6 +6,7 @@ const crypto = require('crypto')
 const AdmZip = require('adm-zip')
 const logger = require('../utils/logger')
 const config = require('../utils/config')
+const { getAvailableMemory } = require('../utils/misc')
 
 const DEFAULT_LOG_REQUEST_TIMEOUT = 5000
 
@@ -47,6 +48,90 @@ const handleErrors = (message) => {
   }
 }
 
+const qcatParserQueue = []
+let qcatParserPoller = null
+const qcatParserManager = async (request, response) => {
+  const freeMemory = getAvailableMemory()
+  logger.info(`Free memory: ${freeMemory}`)
+  
+  const logID = request.params.log_id
+  const socket = request.app.get('socketio')
+  
+  return new Promise(async (resolve, reject) => {
+    if(qcatParserQueue.length == 0 && freeMemory > config.MEM_THRESHOLD) {
+      logger.info("Starting parser...")
+      try {
+        const res = await startQcatParsing(logID, socket)
+        return resolve(response.send(res))
+      } catch (e) {
+        return resolve(response.status(400).send(e))
+      }
+    } else {
+      logger.info("Not enough memory, queueing parser...")
+      try {
+        const getSessionData = await new Promise((reso, reje) => {
+          socket.emit('get_session', { log_id: logID }, (res) => {
+            if (res && res.data) {
+              return reso(res.data)
+            }
+            return reje(new Error('Session not found...'))
+          })
+        }) 
+        resolve(response.send({
+          data: {
+            ...getSessionData,
+            'status': 'Not enough memory, parsing queued...',
+          }
+        }))
+      } catch (err) {
+        return reject(err)
+      }
+      qcatParserQueue.unshift({ logID, socket })
+    }
+    
+    if (!qcatParserPoller) {
+      logger.info("Polling for memory...")
+      qcatParserPoller = setInterval(async () => {
+        if (qcatParserQueue.length > 0) {
+          const freeMemory = getAvailableMemory()
+          logger.info(`Free memory: ${freeMemory}`)
+
+          if (freeMemory > config.MEM_THRESHOLD) {
+            logger.info("Memory available for parsing, starting parser...")
+            const { logID, socket } = qcatParserQueue.pop()
+            await startQcatParsing(logID, socket)
+            if (qcatParserQueue.length == 0) {
+              clearInterval(qcatParserPoller)
+              qcatParserPoller = null
+            }
+          } else {
+            logger.info("Not enough memory, waiting...")
+          }
+        } else {
+          clearInterval(qcatParserPoller)
+          qcatParserPoller = null
+        }
+      }, 60 * 1000)
+    } else {
+      logger.info("Memory poller already running...")
+    }
+  })
+}
+
+const startQcatParsing = (logID, socket) => {
+  const data = {
+    log_id: logID
+  }
+  
+  return new Promise((resolve, reject) => {
+    socket.emit('QCAT_parse_all', data, (res) => {
+      if (res && res.error) {
+        return reject(res)
+      }
+      return resolve(res)
+    })
+  })
+}
 
 demoRouter.post('/diag', (request, response) => {
   // starts logging
@@ -234,17 +319,8 @@ demoRouter.get('/logs/:log_id/process', (request, response) => {
 
 demoRouter.post('/logs/:log_id/parse', (request, response) => {
   // parses the entire log file
-  const data = {
-    log_id: request.params.log_id,
-  }
 
-  const socket = request.app.get('socketio')
-  socket.emit('QCAT_parse_all', data, (res) => {
-    if (res && res.error) {
-      return response.status(400).send(res)
-    }
-    response.send(res)
-  })
+  return qcatParserManager(request, response)
 })
 
 demoRouter.post('/AT', (request, response) => {
