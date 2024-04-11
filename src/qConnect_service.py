@@ -242,6 +242,7 @@ def QUTS_log_start(sid, data):
 @sio.event
 def QUTS_log_stop(sid, data):
   try:
+    print('data in quts_log_stop', data['onParseAndUploadDone'])
     log_id = data['log_id']
     if log_id not in log_sessions:
       raise Exception(f'log_id not found: {log_id}')
@@ -259,6 +260,7 @@ def QUTS_log_stop(sid, data):
       sys.stdout.flush()
       
     log_sessions[log_id].init_db_and_collection() 
+    log_sessions['onParseAndUploadDone'] = data['onParseAndUploadDone']
 
     user = log_sessions[log_id].user
     user_id = user["email"].split('@', 1)[0]
@@ -278,7 +280,8 @@ def QUTS_log_stop(sid, data):
         'startLogTimestamp': log_sessions[log_id].start_log_timestamp.isoformat(),
         'endLogTimestamp': log_sessions[log_id].end_log_timestamp.isoformat(),
         'status': 'saved log',
-        'services': get_services_status()
+        'services': get_services_status(),
+        'url': log_sessions['onParseAndUploadDone']
       }
     }
   except Exception as e:

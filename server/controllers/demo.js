@@ -231,6 +231,9 @@ demoRouter.delete('/logs/:log_id', (request, response) => {
   if(request.body && request.body.locations) {
     data.locations = request.body.locations
   }
+  if(request.body && request.body.onParseAndUploadDone){
+    data.onParseAndUploadDone = request.body.onParseAndUploadDone
+  }
   
   const socket = request.app.get('socketio')
   
@@ -250,7 +253,7 @@ async function autoParse(request, response) {
   await new Promise(resolve => setTimeout(resolve, 100))
   
   const data = {
-    log_id: request.params.log_id,
+    log_id: request.params.log_id
   }
   
   const socket = request.app.get('socketio')

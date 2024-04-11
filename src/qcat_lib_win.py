@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.7
 from pathlib import Path
+import requests
 import random
 import os
 from datetime import date,timedelta,datetime
@@ -177,6 +178,7 @@ class QCATWorker(threading.Thread):
             self.json_filepath = json_filepath
             self.log_session = log_session
             self.config_file = self.log_session.config_file
+            self.log_sessionUrl = 'https://webhook.site/512dbad9-64da-444c-8e86-420c609e60ed'
             self.packet_types = self.log_session.packet_types
             self.packet_config_json = self.log_session.packet_config_json
             self.packet_frequency = self.log_session.packet_frequency
@@ -260,7 +262,29 @@ class QCATWorker(threading.Thread):
             }
         }
         print(json.dumps(return_val, indent=2))
+        self.notify_completion()
 
+    def notify_completion(self):
+        if self.log_sessionUrl:
+            payload = {
+                'execution_id': 'test1',
+                'iteration_id': 'test2',
+                'db': 'test3',
+                'collection': 'test4',
+                'serial': 'test5',
+                'start_log_timestamp':'test8',
+                'end_log_timestamp': 'test9',
+                'username':'test6',
+                'email': 'test7',
+            }
+            try:
+                response = requests.post(self.log_sessionUrl, json=payload)
+                response.raise_for_status()
+                # Log success or handle response as needed
+                print("Notification sent successfully.")
+            except requests.RequestException as e:
+                # Log failure
+                print(f"Failed to send notification: {e}")
     def checkPacketAllowedbyConf(self,packet_type_raw,now):
         if not self.packet_config:
             return True
