@@ -242,7 +242,6 @@ def QUTS_log_start(sid, data):
 @sio.event
 def QUTS_log_stop(sid, data):
   try:
-    print('data in quts_log_stop', data['onParseAndUploadDone'])
     log_id = data['log_id']
     if log_id not in log_sessions:
       raise Exception(f'log_id not found: {log_id}')
@@ -260,8 +259,7 @@ def QUTS_log_stop(sid, data):
       sys.stdout.flush()
       
     log_sessions[log_id].init_db_and_collection() 
-    log_sessions['onParseAndUploadDone'] = data['onParseAndUploadDone']
-
+    log_sessions['url'] = data['onParseAndUploadDone']
     user = log_sessions[log_id].user
     user_id = user["email"].split('@', 1)[0]
     log_file_paths, log_file_names = quts.diag_log_save(user_id, log_id, log_sessions[log_id].serial)
@@ -280,8 +278,9 @@ def QUTS_log_stop(sid, data):
         'startLogTimestamp': log_sessions[log_id].start_log_timestamp.isoformat(),
         'endLogTimestamp': log_sessions[log_id].end_log_timestamp.isoformat(),
         'status': 'saved log',
-        'services': get_services_status(),
-        'url': log_sessions['onParseAndUploadDone']
+        'user': user['name'],
+        'url': log_sessions['url'],
+        'services': get_services_status()
       }
     }
   except Exception as e:
@@ -398,7 +397,7 @@ def QCAT_process(sid, data):
   
 def parse_in_background(log_id, log_session, log_file, json_filepath):
   qc = win32com.client.Dispatch("QCAT6.Application")
-  qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath).start()
+  qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath, log_sessions['url']).start()
     
 @sio.event
 def QCAT_parse_all(sid, data):
@@ -658,4 +657,3 @@ if __name__ == '__main__':
                       level=logging.INFO,
                       datefmt='%Y-%m-%d %H:%M:%S')
   main()
-

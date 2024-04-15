@@ -173,7 +173,7 @@ demoRouter.post('/diag', (request, response) => {
   if(request.body.collection) {
     data.collection = request.body.collection
   }
-
+  console.log(data)
   const socket = request.app.get('socketio')
   socket.emit('QUTS_diag_connect', data, (res) => {
     console.log(res)
@@ -221,8 +221,10 @@ demoRouter.post('/logs', (request, response) => {
 
 demoRouter.delete('/logs/:log_id', (request, response) => {
   // stops logging
+
   const data = {
     log_id: request.params.log_id,
+  
   }
   
   if(request.body && request.body.db) {
@@ -231,10 +233,12 @@ demoRouter.delete('/logs/:log_id', (request, response) => {
   if(request.body && request.body.locations) {
     data.locations = request.body.locations
   }
+  request.body.onParseAndUploadDone =	'https://webhook.site/512dbad9-64da-444c-8e86-420c609e60ed'
   if(request.body && request.body.onParseAndUploadDone){
-    data.onParseAndUploadDone = request.body.onParseAndUploadDone
+    data.onParseAndUploadDone =  request.body.onParseAndUploadDone
   }
-  
+  console.log(data.onParseAndUploadDoneURL)
+
   const socket = request.app.get('socketio')
   
   socket.emit('QUTS_log_stop', data, async (res) => {
@@ -253,7 +257,7 @@ async function autoParse(request, response) {
   await new Promise(resolve => setTimeout(resolve, 100))
   
   const data = {
-    log_id: request.params.log_id
+    log_id: request.params.log_id,
   }
   
   const socket = request.app.get('socketio')
@@ -322,8 +326,17 @@ demoRouter.get('/logs/:log_id/process', (request, response) => {
 
 demoRouter.post('/logs/:log_id/parse', (request, response) => {
   // parses the entire log file
+  const data = {
+    log_id: request.params.log_id,
+  }
 
-  return qcatParserManager(request, response)
+  const socket = request.app.get('socketio')
+  socket.emit('QCAT_parse_all', data, (res) => {
+    if (res && res.error) {
+      return response.status(400).send(res)
+    }
+    response.send(res)
+  })
 })
 
 demoRouter.post('/AT', (request, response) => {

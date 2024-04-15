@@ -7,7 +7,7 @@ const config = require('./utils/config')
 // const win = require('./utils/win')
 
 let server
-
+console.log(config,'==================================================<><><<<<<<<<<<<<<<<<<<<<<<<<<<<<')
 if (config.NODE_ENV === 'development') {
   const http = require('http')
 
@@ -23,7 +23,8 @@ if (config.NODE_ENV === 'development') {
   server = https.createServer(credentials, app)
 }
 
-const serverAddr = config.NODE_ENV === 'development' ? "localhost" : config.ADDRESS
+const serverAddr = config.NODE_ENV === 'development' ? "localhost" : config.DOMAIN
+console.log(config.DOMAIN)
 server.listen(config.PORT, serverAddr, () => {
   logger.info(`qConnect server now listening for requests at ${config.PROTOCOL}://${serverAddr}:${config.PORT}`)
 })

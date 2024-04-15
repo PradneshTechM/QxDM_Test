@@ -167,7 +167,7 @@ class QCATWorker(threading.Thread):
     packet_frequency = {}
     packet_types = []
     
-    def __init__(self, qcat, log_id, log_session: LogSession, log_file, json_filepath):
+    def __init__(self, qcat, log_id, log_session: LogSession, log_file, json_filepath, callbackurl):
         threading.Thread.__init__(self)
         super().__init__()
         
@@ -178,10 +178,11 @@ class QCATWorker(threading.Thread):
             self.json_filepath = json_filepath
             self.log_session = log_session
             self.config_file = self.log_session.config_file
-            self.log_sessionUrl = 'https://webhook.site/512dbad9-64da-444c-8e86-420c609e60ed'
+            self.log_sessionUrl = callbackurl
             self.packet_types = self.log_session.packet_types
             self.packet_config_json = self.log_session.packet_config_json
             self.packet_frequency = self.log_session.packet_frequency
+
             sys.stdout.flush()
             
             self.marshalled_qcat = pythoncom.CoMarshalInterThreadInterfaceInStream(pythoncom.IID_IDispatch, self.qcat)
@@ -265,17 +266,18 @@ class QCATWorker(threading.Thread):
         self.notify_completion()
 
     def notify_completion(self):
+
         if self.log_sessionUrl:
             payload = {
-                'execution_id': 'test1',
-                'iteration_id': 'test2',
-                'db': 'test3',
-                'collection': 'test4',
-                'serial': 'test5',
-                'start_log_timestamp':'test8',
-                'end_log_timestamp': 'test9',
-                'username':'test6',
-                'email': 'test7',
+                'execution_id': self.log_session.execution_id,
+                'iteration_id': self.log_session.iteration_id,
+                'db': self.log_session.db,
+                'collection': self.log_session.collection,
+                'serial': self.log_session.serial,
+                'start_log_timestamp': self.log_session.start_log_timestamp.isoformat(),
+                'end_log_timestamp': self.log_session.end_log_timestamp.isoformat(),
+                'username': self.log_session.user['name'],
+                'email': self.log_session.user['email'],
             }
             try:
                 response = requests.post(self.log_sessionUrl, json=payload)

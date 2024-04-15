@@ -2,7 +2,7 @@
 @hostname = tm-reddev05.oasisofsolution.com
 @port = 2000
 @protocol = https
-@host = {{hostname}}/qconnect
+@host = {{hostname}}:{{port}}
 @device = R5CR120DPHN
 @test_case = TC1
 @username = "xyz"
