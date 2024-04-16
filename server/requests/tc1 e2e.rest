@@ -3,7 +3,7 @@
 @port = 2000
 @protocol = https
 @host = {{hostname}}:{{port}}
-@device = NDZA470158
+@device = NNIA230174
 @test_case = TC1
 @username = "xyz"
 @email = "ry@techm.com"
