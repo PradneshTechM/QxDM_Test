@@ -43,6 +43,7 @@ class LogSession(Session):
   packet_config_json: dict = {}
   packet_frequency: dict = {}
   locations: List[dict] = []
+  url: str = 'https://webhook.site/512dbad9-64da-444c-8e86-420c609e60ed'
   
   def set_locations(self, locations: dict[str, List[dict]]):
     def map_locs(loc: dict):

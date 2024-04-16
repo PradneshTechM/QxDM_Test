@@ -173,7 +173,6 @@ demoRouter.post('/diag', (request, response) => {
   if(request.body.collection) {
     data.collection = request.body.collection
   }
-  console.log(data)
   const socket = request.app.get('socketio')
   socket.emit('QUTS_diag_connect', data, (res) => {
     console.log(res)
@@ -233,11 +232,11 @@ demoRouter.delete('/logs/:log_id', (request, response) => {
   if(request.body && request.body.locations) {
     data.locations = request.body.locations
   }
-  request.body.onParseAndUploadDone =	'https://webhook.site/512dbad9-64da-444c-8e86-420c609e60ed'
-  if(request.body && request.body.onParseAndUploadDone){
-    data.onParseAndUploadDone =  request.body.onParseAndUploadDone
-  }
-  console.log(data.onParseAndUploadDoneURL)
+  // request.body.onParseAndUploadDone =	'https://webhook.site/512dbad9-64da-444c-8e86-420c609e60ed'
+  // if(request.body && request.body.onParseAndUploadDone){
+  //   data.onParseAndUploadDone =  request.body.onParseAndUploadDone
+  // }
+  // console.log(data.onParseAndUploadDoneURL)
 
   const socket = request.app.get('socketio')
   

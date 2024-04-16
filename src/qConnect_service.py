@@ -259,7 +259,7 @@ def QUTS_log_stop(sid, data):
       sys.stdout.flush()
       
     log_sessions[log_id].init_db_and_collection() 
-    log_sessions['url'] = data['onParseAndUploadDone']
+    # log_sessions['url'] = data['onParseAndUploadDone']
     user = log_sessions[log_id].user
     user_id = user["email"].split('@', 1)[0]
     log_file_paths, log_file_names = quts.diag_log_save(user_id, log_id, log_sessions[log_id].serial)
@@ -279,7 +279,6 @@ def QUTS_log_stop(sid, data):
         'endLogTimestamp': log_sessions[log_id].end_log_timestamp.isoformat(),
         'status': 'saved log',
         'user': user['name'],
-        'url': log_sessions['url'],
         'services': get_services_status()
       }
     }
@@ -397,7 +396,7 @@ def QCAT_process(sid, data):
   
 def parse_in_background(log_id, log_session, log_file, json_filepath):
   qc = win32com.client.Dispatch("QCAT6.Application")
-  qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath, log_sessions['url']).start()
+  qcat_lib.QCATWorker(qc, log_id, log_session, log_file, json_filepath).start()
     
 @sio.event
 def QCAT_parse_all(sid, data):

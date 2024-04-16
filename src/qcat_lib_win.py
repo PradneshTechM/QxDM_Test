@@ -167,7 +167,7 @@ class QCATWorker(threading.Thread):
     packet_frequency = {}
     packet_types = []
     
-    def __init__(self, qcat, log_id, log_session: LogSession, log_file, json_filepath, callbackurl):
+    def __init__(self, qcat, log_id, log_session: LogSession, log_file, json_filepath):
         threading.Thread.__init__(self)
         super().__init__()
         
@@ -178,7 +178,7 @@ class QCATWorker(threading.Thread):
             self.json_filepath = json_filepath
             self.log_session = log_session
             self.config_file = self.log_session.config_file
-            self.log_sessionUrl = callbackurl
+            self.log_sessionUrl = self.log_session.url
             self.packet_types = self.log_session.packet_types
             self.packet_config_json = self.log_session.packet_config_json
             self.packet_frequency = self.log_session.packet_frequency
