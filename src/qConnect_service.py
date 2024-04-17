@@ -259,7 +259,7 @@ def QUTS_log_stop(sid, data):
       sys.stdout.flush()
       
     log_sessions[log_id].init_db_and_collection() 
-    # log_sessions['url'] = data['onParseAndUploadDone']
+    log_sessions[log_id].url = data['onParseAndUploadDone']
     user = log_sessions[log_id].user
     user_id = user["email"].split('@', 1)[0]
     log_file_paths, log_file_names = quts.diag_log_save(user_id, log_id, log_sessions[log_id].serial)
@@ -332,7 +332,7 @@ def QCAT_process(sid, data):
       raise Exception(f'log_id not found: {log_id}')
     
     log_session = log_sessions[log_id]
-
+    log_session['url'] = log_sessions['url']
     log_file = log_session.raw_logs[0]  # USE FIRST LOG FILE
 
     test_config = None

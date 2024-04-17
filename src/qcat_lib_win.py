@@ -266,7 +266,7 @@ class QCATWorker(threading.Thread):
         self.notify_completion()
 
     def notify_completion(self):
-
+        print('-------------------------------------------------------------------------',self.log_sessionUrl)
         if self.log_sessionUrl:
             payload = {
                 'execution_id': self.log_session.execution_id,
