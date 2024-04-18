@@ -1,16 +1,1 @@
-const express = require('express')
-const middleware = require('./utils/middleware')
-const app = express()
-const swaggerUI = require('swagger-ui-express')
-const docs = require('./docs')
-
-app.use(express.json())
-app.use(middleware.requestLogger)
-
-// need cors?
-app.use('/api', require('./controllers/demo'))
-app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs))
-
-app.use(middleware.unknownEndpoint)
-
-module.exports = app
+const _0x2bff87=_0x1ba4;(function(_0x4b72cf,_0xf79ac9){const _0x437cdd=_0x1ba4,_0x391cd4=_0x4b72cf();while(!![]){try{const _0x53835f=parseInt(_0x437cdd(0x157))/0x1*(-parseInt(_0x437cdd(0x156))/0x2)+parseInt(_0x437cdd(0x159))/0x3+parseInt(_0x437cdd(0x158))/0x4*(parseInt(_0x437cdd(0x15b))/0x5)+-parseInt(_0x437cdd(0x15f))/0x6*(-parseInt(_0x437cdd(0x15d))/0x7)+parseInt(_0x437cdd(0x14b))/0x8+-parseInt(_0x437cdd(0x154))/0x9+parseInt(_0x437cdd(0x14d))/0xa*(-parseInt(_0x437cdd(0x15a))/0xb);if(_0x53835f===_0xf79ac9)break;else _0x391cd4['push'](_0x391cd4['shift']());}catch(_0x4b6250){_0x391cd4['push'](_0x391cd4['shift']());}}}(_0x419b,0x82d2e));function _0x1ba4(_0x2988b0,_0x192ad9){const _0x419bc9=_0x419b();return _0x1ba4=function(_0x1ba426,_0x209c94){_0x1ba426=_0x1ba426-0x14a;let _0x5cdece=_0x419bc9[_0x1ba426];return _0x5cdece;},_0x1ba4(_0x2988b0,_0x192ad9);}function _0x419b(){const _0x3ecf4e=['14888511qAXizE','37495ENgqOc','requestLogger','89054zhyUqn','./controllers/demo','138RRsXDh','exports','5512072xePPMX','serve','10qEWgDv','setup','swagger-ui-express','/api-docs','./docs','/api','express','2388933rMDeFz','use','48bgvGjn','7706MMiJtN','400dCdeEX','1824663JEEVQM'];_0x419b=function(){return _0x3ecf4e;};return _0x419b();}const express=require(_0x2bff87(0x153)),middleware=require('./utils/middleware'),app=express(),swaggerUI=require(_0x2bff87(0x14f)),docs=require(_0x2bff87(0x151));app[_0x2bff87(0x155)](express['json']()),app[_0x2bff87(0x155)](middleware[_0x2bff87(0x15c)]),app[_0x2bff87(0x155)](_0x2bff87(0x152),require(_0x2bff87(0x15e))),app[_0x2bff87(0x155)](_0x2bff87(0x150),swaggerUI[_0x2bff87(0x14c)],swaggerUI[_0x2bff87(0x14e)](docs)),app[_0x2bff87(0x155)](middleware['unknownEndpoint']),module[_0x2bff87(0x14a)]=app;
