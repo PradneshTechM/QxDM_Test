@@ -1,55 +1,56 @@
 const { remote } = require('webdriverio');
 const appiumManager = require('./appium-manager');
+const adb = require('adbkit');
 const logger = require('./utils/logger');
+const client = adb.createClient();
 
-async function runTest(deviceConfig) {
-    const client = await remote({
-        path: '/wd/hub',
-        port: deviceConfig.port,
-        capabilities: {
-            platformName: "Android",
-            deviceName: deviceConfig.deviceName,
-            udid: deviceConfig.udid,
-            platformVersion: deviceConfig.platformVersion,
-            appPackage: "com.cooingdv.rcfpv",
-            appActivity: "com.cooingdv.rcfpv.activity.MainActivity",
-            noReset: true,
-            autoAcceptAlerts: true
-        }
-    });
+async function validateDeviceServerMatching() {
+    // Initialize Appium Manager to manage servers
+    appiumManager.initialize();
+    console.log("Initializing Appium Manager...");
 
-    try {
-        console.log(`Running test on device: ${deviceConfig.deviceName}`);
-        // Insert your test actions here, e.g., navigating the app or checking UI elements.
-        console.log(`Test passed on device ${deviceConfig.deviceName}`);
-    } catch (error) {
-        console.error(`Test failed on device ${deviceConfig.deviceName}: ${error}`);
-    } finally {
-        await client.deleteSession();
+    // Wait for servers to stabilize
+    await new Promise(resolve => setTimeout(resolve, 10000));
+
+    // Retrieve current server and device details from Appium Manager
+    const managedServers = appiumManager.getCurrentServerDetails();
+    const connectedDevices = await client.listDevices();
+
+    // Check if the number of managed servers matches the number of connected devices
+    if (managedServers.length !== connectedDevices.length) {
+        logger.error(`Mismatch! Managed servers: ${managedServers.length}, Connected devices: ${connectedDevices.length}`);
+        return false; // Indicates a mismatch
     }
+
+    // Further validate that every managed server corresponds to a connected device
+    const managedDeviceIds = managedServers.map(server => server.udid);
+    const connectedDeviceIds = connectedDevices.map(device => device.id);
+
+    // Check if every device ID from managed servers is present in the list of connected device IDs
+    const allDevicesMatched = managedDeviceIds.every(id => connectedDeviceIds.includes(id));
+    if (!allDevicesMatched) {
+        logger.error('Some managed servers do not correspond to currently connected devices.');
+        return false;
+    }
+
+    // All checks passed, now print UDID and port of each device
+    logger.info('All managed servers correctly correspond to connected devices.');
+    managedServers.forEach(server => {
+        console.log(`Device UDID: ${server.udid}, Server Port: ${server.port}`);
+    });
+    return true; // All checks passed
 }
 
 async function main() {
     try {
-        // Initialize the Appium Manager to manage Appium servers
-        appiumManager.initialize();
-        console.log("Appium Manager is initializing. Waiting for servers to be ready...");
-
-        // Wait for the server management to stabilize
-        await new Promise(resolve => setTimeout(resolve, 10000)); // 10-second delay for server setup
-
-        // Retrieve current server and device details from Appium Manager
-        const devices = appiumManager.getCurrentServerDetails();
-        for (let device of devices) {
-            await runTest({
-                deviceName: device.deviceName,
-                port: device.port,
-                udid: device.udid,
-                platformVersion: device.platformVersion
-            });
+        const isValid = await validateDeviceServerMatching();
+        if (!isValid) {
+            throw new Error('Device and server validation failed.');
         }
+
+        // Continue with additional testing or operations...
     } catch (error) {
-        logger.error(`Failed to run tests: ${error}`);
+        logger.error(`Failed during validation or subsequent operations: ${error}`);
     }
 }
 
