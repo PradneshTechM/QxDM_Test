@@ -38,14 +38,14 @@ async function main() {
         // Wait for the server management to stabilize
         await new Promise(resolve => setTimeout(resolve, 10000)); // 10-second delay for server setup
 
-        // Retrieve current server and device details
-        const devices = appiumManager.getCurrentServerPorts();
-        for (let deviceId in devices) {
+        // Retrieve current server and device details from Appium Manager
+        const devices = appiumManager.getCurrentServerDetails();
+        for (let device of devices) {
             await runTest({
-                deviceName: deviceId,
-                port: devices[deviceId],
-                udid: deviceId,  // Assuming deviceId is the udid in this context
-                platformVersion: "11"  // Assuming all devices are Android 11 for simplicity
+                deviceName: device.deviceName,
+                port: device.port,
+                udid: device.udid,
+                platformVersion: device.platformVersion
             });
         }
     } catch (error) {
