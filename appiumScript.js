@@ -5,6 +5,11 @@ const logger = require('./utils/logger');
 const client = adb.createClient();
 
 async function validateDeviceServerMatching() {
+    appiumManager.initialize();
+    console.log("Initializing Appium Manager...");
+
+    // Wait for servers to stabilize
+    await new Promise(resolve => setTimeout(resolve, 10000));
 
     // Retrieve current server and device details from Appium Manager
     const managedServers = appiumManager.getCurrentServerDetails();
