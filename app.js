@@ -1,68 +1,101 @@
-const express = require('express');
-const fs = require('fs');
-const cors = require('cors');
-const socket = require('socket.io');
-const logger = require('./utils/logger');
-const config = require('./utils/config');
-const path = require('path');
-const http = require('http');
-const https = require('https');
+const bodyParser = require('body-parser')
+const express = require('express')
+const fs = require('fs')
+const cors = require('cors')
+const socket = require('socket.io')
+const appiumManager = require('./appium-manager')
+const logger = require('./utils/logger')
+const config = require('./utils/config')
+const processutil = require('./utils/processutil')
+const path = require('path')
 
-// Import the new Appium Manager
-const appiumManager = require('./appium-manager');
+const app = express()
 
-const app = express();
+// process.env["NODE_TLS_REJECT_UNAUTHORIZED"] = 0 // REMOVE AFTER SSL CERT UPDATED
 
 let server;
 
-process.on('uncaughtException', async (err) => {
-    logger.error(`${new Date().toISOString()}: process error is: ${err.message}`);
-    // Restart management if there's a relevant error
-    if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
-        await appiumManager.restartAll();
-    }
-    process.exit(1);
+process.on('uncaughtException', async (err)=>{  
+  logger.error(`${new Date().toISOString()}: process error is: ${err.message}`);  
+  if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
+    await processutil.restartAll()
+  }
+
+  process.exit(1);
 });
 
-process.on('unhandledRejection', async (err) => {
-    logger.error(`${new Date().toISOString()}: unhandledRejection error is: ${err.message}`);
-    await appiumManager.restartAll();
-    process.exit(1);
+process.on('unhandledRejection', async (err)=>{  
+  logger.error(`${new Date().toISOString()}: unhandledRejection error is: ${err.message}`);
+  if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
+    await processutil.restartAll()
+  }
+
+  process.exit(1);
 });
 
 if (config.NODE_ENV === 'development') {
-    server = http.createServer(app);
+  const http = require('http')
+
+  server = http.createServer(app)
 } else {
-    const credentials = {
-        cert: fs.readFileSync(path.resolve(__dirname + '/../stf-ssl-certs/fullchain.pem')),
-        key: fs.readFileSync(path.resolve(__dirname + '/../stf-ssl-certs/private.pem'))
-    };
-    server = https.createServer(credentials, app);
+  const https = require('https')
+
+  const credentials = {
+    cert: fs.readFileSync(path.resolve(__dirname+'./../stf-ssl-certs/fullchain.pem')),
+    key: fs.readFileSync(path.resolve(__dirname+'./../stf-ssl-certs/private.pem'))
+  }
+  server = https.createServer(credentials, app)
 }
 
-const io = socket(server);
+const io = socket(server)
 
-app.use(cors());
-app.use(express.json());
-app.use('/api', require('./routes/api')(io));
+app.use(cors())
+app.use(bodyParser.json())
+app.use('/api', require('./routes/api')(io))
 
-app.use((req, res, next) => {
-    res.status(404).send({ error: 'unknown endpoint' });
-});
-
-// Initialize Appium management
-async function initializeAppiumManagement() {
-    await appiumManager.initialize();
-    setInterval(() => appiumManager.manageDevices(), config.FREQUENCY * 1000);
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
 }
 
-// Clean up and start management
-initializeAppiumManagement();
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
 
-server.listen(config.PORT, config.ADDRESS, () => {
-    logger.info(`Server listening on ${config.PROTOCOL}://${config.ADDRESS}:${config.PORT}`);
-    logger.info(`Updating every ${config.FREQUENCY} seconds`);
+// removes existing device-container map file
+fs.stat('device_container_map.txt', (err, stats) => {
+  if (err) {
+    return console.log(err);
+  }
+  fs.unlinkSync('device_container_map.txt')
+})
+
+// removes any existing Appium server on startup
+async function cleanUpExistingServers() {
+  await setTimeout(() => appiumManager.removeExistingServers(), 500)
+}
+
+// manages Appium server every frequency seconds
+function manageServers() {
+  setInterval(async () => {
+    try {
+      appiumManager.manage()
+    }
+    catch (err) {
+      logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
+      if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
+        await processutil.restartAll()
+        appiumManager.manage()
+      }
+    }
+  }, config.FREQUENCY * 1000)
+}
+
+cleanUpExistingServers().then(() => manageServers())
+
+// listen for requests
+server.listen(config.PORT, config.ADDRESS, function () {
+  logger.info(`Appium Manager Server now listening for requests at ${config.PROTOCOL}://${config.ADDRESS}:${config.PORT}`)
+  logger.info(`Appium Manager Server updating every ${config.FREQUENCY} seconds`)
 }).on('error', (err) => {
-    logger.error(`Server error: ${err}`);
-    processutil.solveAddressInUse(config.PORT);
+  logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
+  processutil.solveAddressInUse(config.PORT)
 });
