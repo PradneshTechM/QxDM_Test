@@ -70,7 +70,7 @@ fs.stat('device_container_map.txt', (err, stats) => {
 
 // removes any existing Appium server on startup
 async function cleanUpExistingServers() {
-  await setTimeout(() => appiumManager.removeExistingServers(), 500)
+    await appiumManager.cleanUpExistingServers();
 }
 
 // manages Appium server every frequency seconds
