@@ -43,7 +43,7 @@ async function startServer(device) {
     };
 }
 
-async function manageDevices() {
+async function autoManage() {
     const devices = await client.listDevices();
     devices.forEach(async device => {
         if (!servers.hasOwnProperty(device.id)) {
@@ -58,6 +58,15 @@ async function manageDevices() {
         }
     });
 }
+
+async function cleanUpExistingServers(){
+    const serverIds= object.keys(servers);
+    await Promise.all(serverIds.map(async (deviceId) => {
+        await stopServer(deviceId);
+        logger.info('Cleaned up and stopped server for device ${deviceId}')
+    }));
+}
+
 
 function stopServer(deviceId) {
     const server = servers[deviceId];
@@ -79,9 +88,6 @@ function getCurrentServerDetails() {
     }));
 }
 
-function initialize() {
-    manageDevices();  // Initial call to setup devices immediately
-    setInterval(manageDevices, 10000);  // Check and manage devices every 10 seconds
-}
 
-module.exports = { initialize, stopServer, getCurrentServerDetails };
+
+module.exports = { initialize, stopServer, getCurrentServerDetails, cleanUpExistingServers};
