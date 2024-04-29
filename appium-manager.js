@@ -26,11 +26,11 @@ async function startServer(device) {
     appiumServer.stdout.on('data', data => logger.info(`Appium-${device.id}: ${data.toString()}`));
     appiumServer.stderr.on('data', data => logger.error(`Appium-${device.id} Error: ${data.toString()}`));
 
-    appiumServer.on('close', code => {
-        logger.info(`Appium server for device ${device.id} stopped with code ${code}`);
-        usedPorts.delete(port);
-        delete servers[device.id];
-    });
+    // appiumServer.on('close', code => {
+    //     logger.info(`Appium server for device ${device.id} stopped with code ${code}`);
+    //     usedPorts.delete(port);
+    //     delete servers[device.id];
+    // });
 
     servers[device.id] = {
         process: appiumServer,
