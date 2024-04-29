@@ -59,15 +59,6 @@ async function autoManage() {
     });
 }
 
-async function cleanUpExistingServers(){
-    const serverIds= object.keys(servers);
-    await Promise.all(serverIds.map(async (deviceId) => {
-        await stopServer(deviceId);
-        logger.info('Cleaned up and stopped server for device ${deviceId}')
-    }));
-}
-
-
 function stopServer(deviceId) {
     const server = servers[deviceId];
     if (server) {
@@ -90,4 +81,4 @@ function getCurrentServerDetails() {
 
 
 
-module.exports = { initialize, stopServer, getCurrentServerDetails, cleanUpExistingServers};
+module.exports = { initialize, stopServer, getCurrentServerDetails};
