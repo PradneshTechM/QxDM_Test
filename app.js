@@ -68,27 +68,17 @@ fs.stat('device_container_map.txt', (err, stats) => {
   fs.unlinkSync('device_container_map.txt')
 })
 
-// removes any existing Appium server on startup
-async function cleanUpExistingServers() {
-    await appiumManager.cleanUpExistingServers();
+
+// intializes appium servers
+function manageServers() {
+    try {
+        appiumManager.initialize(); 
+    } catch (err) {
+        logger.error(`Error during Appium Manager initialization: ${err}`);
+    }
 }
 
-// manages Appium server every frequency seconds
-function manageServers() {
-  setInterval(async () => {
-    try {
-      appiumManager.autoManage(); 
-    }
-    catch (err) {
-      logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`);
-      if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
-        await processutil.restartAll();
-        appiumManager.autoManage(); // Make sure to retry with the correct function
-      }
-    }
-  }, config.FREQUENCY * 1000);
-}
-cleanUpExistingServers().then(() => manageServers())
+manageServers())
 
 // listen for requests
 server.listen(config.PORT, config.ADDRESS, function () {
