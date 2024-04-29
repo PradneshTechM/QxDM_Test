@@ -85,6 +85,30 @@ function getCurrentServerDetails() {
     }));
 }
 
+async function deleteServerRequest(serial) {
+  await stopServer(serial);
+  return {
+    status: 200,
+    statusText: 'Server stopped',
+    serial: serial
+  };
+}
+
+async function getCapabilitiesRequest(serial) {
+  const serverDetails = getCurrentServerDetails().find(s => s.deviceId === serial);
+  if (serverDetails) {
+    return {
+      status: 200,
+      capabilities: serverDetails.deviceDetails,
+      statusText: 'Capabilities fetched'
+    };
+  } else {
+    return {
+      status: 404,
+      statusText: 'No server for this device'
+    };
+  }
+}
 
 
-module.exports = { initialize, stopServer, getCurrentServerDetails};
+module.exports = { initialize, stopServer, getCurrentServerDetails, deleteServerRequest, getCapabilitiesRequest};
