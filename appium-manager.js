@@ -43,7 +43,7 @@ async function startServer(device) {
     };
 }
 
-async function autoManage() {
+async function manageDevices() {
     const devices = await client.listDevices();
     devices.forEach(async device => {
         if (!servers.hasOwnProperty(device.id)) {
@@ -58,6 +58,12 @@ async function autoManage() {
         }
     });
 }
+
+function initialize() {
+    manageDevices();  // Initial call to setup devices immediately
+    setInterval(manageDevices, 10000);  // Check and manage devices every 10 seconds
+}
+
 
 function stopServer(deviceId) {
     const server = servers[deviceId];
