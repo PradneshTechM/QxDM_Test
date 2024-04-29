@@ -3,7 +3,7 @@ require('dotenv').config()
 const NODE_ENV = process.env.NODE_ENV
 const PORT = process.env.PORT != undefined
   ? process.env.PORT
-  : 4000
+  : 4020
 const ADDRESS = process.env.ADDRESS != undefined
   ? process.env.ADDRESS
   : '0.0.0.0'
