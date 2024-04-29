@@ -77,18 +77,17 @@ async function cleanUpExistingServers() {
 function manageServers() {
   setInterval(async () => {
     try {
-      appiumManager.manage()
+      appiumManager.autoManage(); 
     }
     catch (err) {
-      logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`)
+      logger.error(`${new Date().toISOString()}: Appium Manager crashed with ${err}`);
       if (err.message.toLowerCase().includes("5037") || err.message.toLowerCase().includes("android") || err.message.toLowerCase().includes("adb")) {
-        await processutil.restartAll()
-        appiumManager.manage()
+        await processutil.restartAll();
+        appiumManager.autoManage(); // Make sure to retry with the correct function
       }
     }
-  }, config.FREQUENCY * 1000)
+  }, config.FREQUENCY * 1000);
 }
-
 cleanUpExistingServers().then(() => manageServers())
 
 // listen for requests
