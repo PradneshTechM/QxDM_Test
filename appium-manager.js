@@ -25,6 +25,7 @@ async function startServer(device) {
 
     appiumServer.stdout.on('data', data => logger.info(`Appium-${device.id}: ${data.toString()}`));
     appiumServer.stderr.on('data', data => logger.error(`Appium-${device.id} Error: ${data.toString()}`));
+    // console.log('start server', device);
 
     // appiumServer.on('close', code => {
     //     logger.info(`Appium server for device ${device.id} stopped with code ${code}`);
@@ -38,9 +39,13 @@ async function startServer(device) {
         deviceDetails: {
             name: device.model || device.id,  // Using device model or ID as name
             platformVersion: device.version,  // Assuming 'version' is available in device info
-            udid: device.id
+            udid: device.id,
+            appPackage: 'com.android.settings',
+            platformName: 'Android',
+            appActivity: 'com.android.settings.Settings'
         }
     };
+        //  console.log(device);
 }
 
 async function manageDevices() {
@@ -80,8 +85,11 @@ function getCurrentServerDetails() {
         deviceId,
         port,
         deviceName: deviceDetails.name,
-        platformVersion: deviceDetails.platformVersion,
-        udid: deviceDetails.udid
+        udid: deviceDetails.udid,
+        appPackage: 'com.android.settings',
+        platformName: 'Android',
+        appActivity: 'com.android.settings.Settings' 
+
     }));
 }
 
@@ -97,10 +105,18 @@ async function deleteServerRequest(serial) {
 async function getCapabilitiesRequest(serial) {
   const serverDetails = getCurrentServerDetails().find(s => s.deviceId === serial);
   if (serverDetails) {
+    // console.log('server details', serverDetails)
     return {
       status: 200,
-      capabilities: serverDetails.deviceDetails,
-      statusText: 'Capabilities fetched'
+      statusText: 'Found device with given serial number',
+      capabilities: {
+        deviceName: serverDetails.deviceName,
+        udid: serverDetails.udid,
+        appPackage: 'com.android.Settings',
+        platformName: 'Android',
+        appActivity: 'com.android.settings.Settings'
+      },
+      
     };
   } else {
     return {
@@ -110,5 +126,21 @@ async function getCapabilitiesRequest(serial) {
   }
 }
 
+async function getServerRequest(serial) {
+    const serverDetails = getCurrentServerDetails().find(s => s.deviceId === serial);
+    if (serverDetails) {
+      return {
+        status: 200,
+        port: serverDetails.port,
+        statusText: 'Found device with given serial number'
+      };
+    } else {
+      return {
+        status: 404,
+        statusText: 'No server for this device'
+      };
+    }
+  }
 
-module.exports = { initialize, stopServer, getCurrentServerDetails, deleteServerRequest, getCapabilitiesRequest};
+
+module.exports = { initialize, stopServer, getCurrentServerDetails, deleteServerRequest, getCapabilitiesRequest, getServerRequest};
