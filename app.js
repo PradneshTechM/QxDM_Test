@@ -78,7 +78,7 @@ function manageServers() {
     }
 }
 
-manageServers())
+manageServers()
 
 // listen for requests
 server.listen(config.PORT, config.ADDRESS, function () {
